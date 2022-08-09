@@ -104,7 +104,7 @@ theme: landscape
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: 'git'
-  # repo: git@github.com:all-smile/blog.git # https://github.com/all-smile/blog.git
+  repo: git@github.com:all-smile/blog.git # https://github.com/all-smile/blog.git
   # 下方的gh_token会被.travis.yml中sed命令替换
-  repo: https://gh_token@github.com/all-smile/blog.git
+  # repo: https://gh_token@github.com/all-smile/blog.git
   branch: gh-pages
