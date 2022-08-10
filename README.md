@@ -56,3 +56,11 @@ hexo s                # 本地预览
 hexo clean            # 清除缓存文件 (db.json) 和已生成的静态文件 (public)。在某些情况（尤其是更换主题后），如果发现您对站点的更改无论如何也不生效，您可能需要运行该命令。
 hexo help             # 帮助
 ```
+
+## 安装主题
+
+配置 GitHub Actions step
+
+```
+git submodule add git@github.com:all-smile/tenacity.git themes/tenacity
+```
