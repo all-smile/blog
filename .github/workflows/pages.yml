@@ -22,8 +22,9 @@ jobs:
           key: ${{ runner.OS }}-npm-cache
           restore-keys: |
             ${{ runner.OS }}-npm-cache
-      - name: Install Dependencies
-        run: npm install
+      # 第一次或者依赖发生变化的时候执行 Install Dependencies，其它构建的时候不需要这一步
+      # - name: Install Dependencies
+      #   run: npm install
       - name: Build
         run: npm run build
       - name: Deploy
