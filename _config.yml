@@ -98,7 +98,8 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: tenacity # landscape stellar tenacity
+theme: tenacity
+# landscape stellar tenacity Yelee Bcxm Amazing hexo-theme-cola Async
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
