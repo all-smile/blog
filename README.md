@@ -62,5 +62,5 @@ hexo help             # 帮助
 配置 GitHub Actions step
 
 ```
-git submodule add git@github.com:all-smile/tenacity.git themes/tenacity
+git submodule add https://github.com/all-smile/tenacity.git themes/tenacity
 ```
