@@ -1,0 +1,12 @@
+sidebar:
+  # logo:
+    # title: '[<img no-lazy height="32px" src="https://raw.githubusercontent.com/all-smile/nav/master/static/images/cattle.jpg"/>](/)'
+  menu:
+    post: '[btn.blog](/)'
+    wiki: '[btn.wiki](/wiki/)'
+    notes: '[笔记](/notes/)'
+    more: '[更多](/more/)'
+  comments:
+    service: beaudar
+    beaudar:
+      repo: xaoxuu/blog-comments

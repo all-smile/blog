@@ -8,7 +8,11 @@ subtitle: ''
 description: '甜点cc的博客'
 keywords:
 author: Xiao Juntao
-language: zh-CN
+avatar: https://raw.githubusercontent.com/all-smile/nav/master/static/images/cattle.jpg
+# 多语言
+language:
+  - zh-CN
+  - en
 timezone: 'Asia/Shanghai'
 
 # URL
