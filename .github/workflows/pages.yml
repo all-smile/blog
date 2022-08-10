@@ -25,6 +25,8 @@ jobs:
       # 第一次或者依赖发生变化的时候执行 Install Dependencies，其它构建的时候不需要这一步
       # - name: Install Dependencies
       #   run: npm install
+      - name: Clean
+        run: npm run clean
       - name: Build
         run: npm run build
       - name: Deploy
