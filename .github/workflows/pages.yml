@@ -25,7 +25,7 @@ jobs:
       # 第一次或者依赖发生变化的时候执行 Install Dependencies，其它构建的时候不需要这一步
       # - name: Install Dependencies
       #   run: npm install
-      安装主题
+      # 安装主题
       - name: Install Theme
         run: git submodule add https://github.com/all-smile/tenacity.git themes/tenacity
       - name: Clean
