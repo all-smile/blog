@@ -15,31 +15,42 @@ jobs:
         with:
           node-version: '16.14.1'
       # - run: node -v # 查看node版本号
+      # 缓存依赖项: https://docs.github.com/cn/actions/using-workflows/caching-dependencies-to-speed-up-workflows
       - name: Cache NPM dependencies
         uses: actions/cache@v2
         with:
-          path: node_modules
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          # path: node_modules
           key: ${{ runner.OS }}-npm-cache
           restore-keys: |
             ${{ runner.OS }}-npm-cache
-      # 查看路径
-      - name: Look Path
-        run: pwd
+      # 查看路径 : /home/runner/work/blog/blog
+      # - name: Look Path
+      #   run: pwd
       # 查看文件
-      - name: Look Dir List
-        run: ls
+      # - name: Look Dir List
+      #   run: ls
       # 第一次或者依赖发生变化的时候执行 Install Dependencies，其它构建的时候不需要这一步
       # - name: Install Dependencies
       #   run: npm install
       # 安装主题
-      # - name: Install Theme
-      #   run: git submodule add https://github.com/all-smile/tenacity.git themes/tenacity
-      - name: Clean
-        run: npm run clean
+      - name: Install Theme
+        run: git submodule add https://github.com/all-smile/tenacity.git themes/tenacity
+      # - name: Clean
+      #   run: npm run clean
       - name: Build
         run: npm run build
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
+          deploy_key: ${{ secrets.DEPLOY_KEY }}
+          user_name: xiao
+          user_email: allblue95@126.com
+          commit_msg: ${{ github.event.head_commit.message }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+      # Use the output from the `deploy` step(use for test action)
+      - name: Get the output
+        run: |
+          echo "${{ steps.deploy.outputs.notify }}"

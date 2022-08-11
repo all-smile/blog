@@ -113,3 +113,8 @@ deploy:
   # 下方的gh_token会被.travis.yml中sed命令替换
   # repo: https://gh_token@github.com/all-smile/blog.git
   branch: gh-pages
+  # 默认提交信息： Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }}
+  message: ${{ github.event.head_commit.message }} # 直接将提交消息传输到 GitHub Pages 存储库
+
+# 通知
+# notify
