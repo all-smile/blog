@@ -34,6 +34,8 @@ jobs:
       # 第一次或者依赖发生变化的时候执行 Install Dependencies，其它构建的时候不需要这一步
       - name: Install Dependencies
         run: npm install
+      - name: Look Dir List
+        run: ls
       # 安装主题
       - name: Install Theme
         run: git submodule add https://github.com/all-smile/tenacity.git themes/tenacity
@@ -47,7 +49,7 @@ jobs:
           deploy_key: ${{ secrets.DEPLOY_KEY }}
           user_name: xiao
           user_email: allblue95@126.com
-          commit_message: ${{ github.event.head_commit.message }}
+          commit_msg: ${{ github.event.head_commit.message }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
       # Use the output from the `deploy` step(use for test action)
