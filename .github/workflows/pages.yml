@@ -47,7 +47,7 @@ jobs:
           deploy_key: ${{ secrets.DEPLOY_KEY }}
           user_name: xiao
           user_email: allblue95@126.com
-          commit_msg: ${{ github.event.head_commit.message }}
+          commit_message: ${{ github.event.head_commit.message }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
       # Use the output from the `deploy` step(use for test action)
