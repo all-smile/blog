@@ -50,7 +50,9 @@ jobs:
           user_name: xiao
           user_email: allblue95@126.com
           commit_message: ${{ github.event.head_commit.message }}
-          github_token: ${{ secrets.ACCESS_TOKEN }}
+          full_commit_message: ${{ github.event.head_commit.message }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # GITHUB_TOKEN不是个人访问令牌，GitHub Actions 运行器会自动创建一个GITHUB_TOKEN密钥以在您的工作流程中进行身份验证。因此，您无需任何配置即可立即开始部​​署
           publish_dir: ./public
       # Use the output from the `deploy` step(use for test action)
       - name: Get the output
