@@ -34,7 +34,7 @@ jobs:
       #   run: pwd
       # 查看文件
       - name: Look Dir List
-        run: ls
+        run: tree -L 3
       # 第一次或者依赖发生变化的时候执行 Install Dependencies，其它构建的时候不需要这一步
       - name: Install Dependencies
         run: npm install
