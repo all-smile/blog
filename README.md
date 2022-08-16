@@ -67,4 +67,8 @@ git clone https://github.com/all-smile/tenacity.git themes/tenacity
 
 # 删除
 git rm -f --cached themes/tenacity
+
+
+git submodule deinit themes/tenacity
+git rm themes/tenacity
 ```
