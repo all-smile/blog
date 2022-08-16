@@ -1,6 +1,6 @@
 # 整体流程概览
 1. 搭建hexo环境（一系列软件安装，配置）
-2. hexo new post “文章名称”
+2. hexo new post "文章名称"
 3. 编写md文档
 4. hexo clean
 5. hexo generate
