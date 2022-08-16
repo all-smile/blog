@@ -11,9 +11,9 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
-          fetch-depth: 0
+        # with:
+        #   submodules: true
+        #   fetch-depth: 0
       - name: Use Node.js 16.x
         uses: actions/setup-node@v2
         with:
