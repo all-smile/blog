@@ -71,4 +71,8 @@ git rm -f --cached themes/tenacity
 
 git submodule deinit themes/tenacity
 git rm themes/tenacity
+
+# 更新
+git submodule init
+git submodule update
 ```
