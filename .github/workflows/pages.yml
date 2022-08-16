@@ -40,8 +40,8 @@ jobs:
         run: npm install
       - name: Look Dir List
         run: tree -L 3 -a
-      - name: clean theme cache
-        run: git rm -f --cached themes/tenacity
+      # - name: clean theme cache
+      #   run: git rm -f --cached themes/tenacity
         # run: git submodule deinit themes/tenacity && git rm themes/tenacity
       # 安装主题
       - name: Install Theme
