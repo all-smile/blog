@@ -63,6 +63,7 @@ hexo help             # 帮助
 
 ```bash
 git submodule add https://github.com/all-smile/tenacity.git themes/tenacity
+git clone https://github.com/all-smile/tenacity.git themes/tenacity
 
 # 删除
 git rm --cached themes/tenacity
