@@ -66,5 +66,5 @@ git submodule add https://github.com/all-smile/tenacity.git themes/tenacity
 git clone https://github.com/all-smile/tenacity.git themes/tenacity
 
 # 删除
-git rm --cached themes/tenacity
+git rm -f --cached themes/tenacity
 ```

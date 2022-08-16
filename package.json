@@ -6,7 +6,8 @@
         "build": "hexo generate",
         "clean": "hexo clean",
         "deploy": "hexo deploy -c 2",
-        "server": "hexo server"
+        "server": "hexo server",
+        "rmtheme": "git rm -f --cached themes/tenacity"
     },
     "hexo": {
         "version": "6.2.0"
