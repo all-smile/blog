@@ -7,7 +7,7 @@
         "clean": "hexo clean",
         "deploy": "hexo deploy -c 2",
         "server": "hexo server",
-        "rmtheme": "git rm -f --cached themes/tenacity"
+        "rmtheme": "git submodule deinit themes/tenacity && git rm -rf --cached themes/tenacity"
     },
     "hexo": {
         "version": "6.2.0"
