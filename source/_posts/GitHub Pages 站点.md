@@ -11,25 +11,38 @@ description: 利用 GitHub Pages 搭建个人站点、博客。
 - 您可以使用 GitHub Pages 来展示一些开源项目、博客甚或分享您的简历，有内存限制，可以绑定个人域名。
 
 - 启动和运行的最快方法是使用 [Jekyll](https://jekyllcn.com/) 主题选择器加载预置主题。 然后，您可以修改 GitHub Pages 的内容和样式。👉 [文档](https://docs.github.com/cn/pages/getting-started-with-github-pages/about-github-pages)
+
 ## 2、创建仓库
 仓库名： `<username>.github.io`
 `username` 是GitHub的用户名
 ## 3、创建站点
-在 `repo` 下创建 `README.md`文件，随便写点东西保存。然后，点击 `**settings**`选项卡，单机左侧 `** Pages**`进行设置，如下图：
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/2932776/1660704179385-c870ea1c-ab8e-458b-a50d-8126426823ad.png#clientId=uf4f225fb-d7e6-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=673&id=u0b5f5bfd&margin=%5Bobject%20Object%5D&name=image.png&originHeight=841&originWidth=1116&originalType=binary&ratio=1&rotation=0&showTitle=false&size=94547&status=done&style=none&taskId=ub7818fcc-d5b1-4899-9ed1-9ae1524aa2a&title=&width=892.8)
+在 `repo` 下创建 `README.md`文件，随便写点东西保存。然后，点击 `settings`选项卡，单机左侧 `Pages`进行设置，如下图：
+
+![](https://files.mdnice.com/user/34064/42531bfd-6a95-4b93-aef1-2132eb036186.png)
+
+🔊 此时站点已经建成，可以放为 `https://<username>.github.io/` 查看，如果已经有个人域名了，也可以绑定个人域名，继续往下看👇
+
 ## 4、仓库文件目录
-![8a86b6eafeb3b84631795e7e0d20414.png](https://cdn.nlark.com/yuque/0/2022/png/2932776/1660704809822-56b53b4f-a5bf-4948-a709-fa04bca57048.png#clientId=uf4f225fb-d7e6-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=147&id=pK850&margin=%5Bobject%20Object%5D&name=8a86b6eafeb3b84631795e7e0d20414.png&originHeight=184&originWidth=802&originalType=binary&ratio=1&rotation=0&showTitle=false&size=72939&status=done&style=none&taskId=u61562c3b-35d4-4bf8-b9a8-aafa3e13e10&title=&width=641.6)
+
+![](https://files.mdnice.com/user/34064/8f9a125b-767d-45af-b91f-e998f10a2267.png)
+
 ## 5、绑定域名
 我个人购买的一级域名是 i-xiao ，域名后缀是 space，专门给GitHub Pages 增加一个CNAME记录（blog），解析二级域名，绑定 <username>github.io 域名。
+
 ### 5.1、域名相关知识
+
 - www：主机名，i-xiao : 域名主体(一级域名)，.space : 域名后缀
 注册一级域名的时候是需要付费的
 - 二级域名，是依附一级域名的存在而存在的，也就是说要是顶级域名消失了，二级域名也也会不复存在。反而来说，二级域名的网站不做了，主域名网站是不受影响的。
 - 一级域名、二级域名区别：
 DNS收录一级域名更快；还有就是解析速度，下一跳路由就不说了，找到目的主机之后，二级域名层级更深，需要多一层计算（其实这是我瞎写的🤣，猜测应该跟 nginx location匹配类似）
+
 ### 5.2、GitHub上配置自定义域名
+
 进入 <username>github.io 仓库，进入设置页面，点击左边 Pages 选项卡，进行下面的配置。
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/2932776/1659859671053-1b3cec07-9fb3-4b2b-b3b9-9c3170e83a86.png#clientId=u5aa68951-db50-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=158&id=u6bee0c57&margin=%5Bobject%20Object%5D&name=image.png&originHeight=198&originWidth=837&originalType=binary&ratio=1&rotation=0&showTitle=false&size=18542&status=done&style=none&taskId=u3e106c6d-9f86-4f7f-bef6-0996001ba66&title=&width=669.6)
+
+![](https://files.mdnice.com/user/34064/7b148b05-ea65-410c-8bb7-ded42d8f2538.png)
+
 ## 6、配置域名映射
 **各记录类型使用目的**
 
@@ -45,10 +58,29 @@ DNS收录一级域名更快；还有就是解析速度，下一跳路由就不�
 | [隐、显性 URL 记录](https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ced/) | 将一个域名指向另外一个已经存在的站点。 |
 
 **如下图**
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/2932776/1659860149541-42025559-b1fa-4684-b606-2cf6721f35b4.png#clientId=u5aa68951-db50-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=50&id=ud53a1c36&margin=%5Bobject%20Object%5D&name=image.png&originHeight=63&originWidth=1442&originalType=binary&ratio=1&rotation=0&showTitle=false&size=8016&status=done&style=none&taskId=ucac529b8-4560-41c7-a22c-fb7d6561095&title=&width=1153.6)
+
+![](https://files.mdnice.com/user/34064/18e6f450-c21d-4db6-9e42-ba21b06b2134.png)
+
 ## 7、DNS检测
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/2932776/1659859665670-f315be12-8b89-4d8f-9fa9-efbb900117cd.png#clientId=u5aa68951-db50-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=166&id=u40683a38&margin=%5Bobject%20Object%5D&name=image.png&originHeight=207&originWidth=858&originalType=binary&ratio=1&rotation=0&showTitle=false&size=19069&status=done&style=none&taskId=ubb029b67-dc71-43b2-8f46-f5fbfaeacdc&title=&width=686.4)
+
+![](https://files.mdnice.com/user/34064/32c6f3d8-902c-4de9-a544-24f38c98836c.png)
+
 ## 8、查看Pages
 成功解析之后，还存在DNS缓存，一般还需要再等待一会（一般十分钟，或许更长时间）才能生效，如下图成功显示👇
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/2932776/1659860369230-78c272ad-4a6b-4fd7-8606-9462b1dbc219.png#clientId=u5aa68951-db50-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=598&id=u90942f11&margin=%5Bobject%20Object%5D&name=image.png&originHeight=748&originWidth=1420&originalType=binary&ratio=1&rotation=0&showTitle=false&size=279220&status=done&style=none&taskId=ubde5e060-f529-4068-846e-7efd67f8cab&title=&width=1136)
+
+![](https://files.mdnice.com/user/34064/fbe4c739-db6f-4870-b17f-20207247bd54.png)
+
+## 最后
+站点绑定的域名已经更换，访问请到👉 [这里](https://home.i-xiao.space/)
+
+---
+🎈🎈🎈
+
+🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。
+
+🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉
+
+🎁 欢迎大家评论交流, 蟹蟹😊
+
+
 
