@@ -76,3 +76,5 @@ git rm themes/tenacity
 git submodule init
 git submodule update
 ```
+
+- `menu_id` 用来高亮页面所属菜单导航

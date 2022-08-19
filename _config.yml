@@ -13,6 +13,7 @@ avatar: https://raw.githubusercontent.com/all-smile/nav/master/static/images/cat
 language:
   - zh-CN
   - en
+  - zh-TW
 timezone: 'Asia/Shanghai'
 
 # URL
@@ -37,7 +38,7 @@ skip_render:
 
 # Writing
 new_post_name: :title.md # File name of new posts
-default_layout: post
+default_layout: post # 预设布局
 titlecase: false # Transform title into titlecase
 external_link:
   enable: true # Open external links in new tab
@@ -45,7 +46,7 @@ external_link:
   exclude: ''
 filename_case: 0
 render_drafts: false
-post_asset_folder: false
+post_asset_folder: false # 是否开启本地静态资源目录
 relative_link: false
 future: true
 highlight:
@@ -73,11 +74,20 @@ index_generator:
 # Category & Tag
 default_category: uncategorized
 category_map:
+  # 编程: programming
+	# 生活: life
+	# 其他: other
 tag_map:
+
+# categories:
+# - Diary
+# tags:
+# - PS3
+# - Games
 
 # Metadata elements
 ## https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
-meta_generator: true
+meta_generator: true # Hexo 头部是否插入meta标签
 
 # Date / Time format
 ## Hexo uses Moment.js to parse and display date

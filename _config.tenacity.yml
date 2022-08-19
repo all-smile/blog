@@ -10,3 +10,9 @@ sidebar:
     service: beaudar
     beaudar:
       repo: all-smile/blog-comments
+article:
+  auto_cover: true # 根据 tags 作为关键词为每一篇文章在线搜索封面
+  # npm i hexo-related-popular-posts
+  related_posts:
+    enable: true # 相关文章推荐
+    title: 您可能感兴趣的文章
