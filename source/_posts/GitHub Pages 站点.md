@@ -16,11 +16,11 @@ description: 利用 GitHub Pages 搭建个人站点、博客。
 仓库名： `<username>.github.io`
 `username` 是GitHub的用户名
 ## 3、创建站点
-在 `repo` 下创建 `README.md`文件，随便写点东西保存。然后，点击 `settings`选项卡，单机左侧 `Pages`进行设置，如下图：
+在 `repo` 下创建 `index.md`文件，随便写点东西保存。然后，点击 `settings`选项卡，单机左侧 `Pages`进行设置，如下图：
 
 ![](https://files.mdnice.com/user/34064/42531bfd-6a95-4b93-aef1-2132eb036186.png)
 
-🔊 此时站点已经建成，可以放为 `https://<username>.github.io/` 查看，如果已经有个人域名了，也可以绑定个人域名，继续往下看👇
+🔊 此时站点已经建成，可以访问 `https://<username>.github.io/` 查看，如果已经有个人域名了，也可以绑定个人域名，继续往下看👇
 
 ## 4、仓库文件目录
 
