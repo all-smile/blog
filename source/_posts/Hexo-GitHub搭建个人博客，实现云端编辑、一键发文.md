@@ -380,6 +380,14 @@ and the repository exists.
 
 👉👉 如果还有其它问题也可以看一下[这里](https://github.com/peaceiris/actions-gh-pages#readme)，应该会有帮助的😊
 
+# 最后
+
+- 本地写文只需要在写完之后`push`到远程仓库即可发布
+
+- 其它电脑本地使用，有git就可以了，直接拉取远程仓库源码，在本地创建文件、编辑、推送远端，即可发布
+
+- 也可以用`github.dev`在线创建、编辑、发文
+
 ---
 
 🎈🎈🎈
