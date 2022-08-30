@@ -1,0 +1,3 @@
+[submodule "themes/tenacity"]
+	path = themes/tenacity
+	url = https://github.com/all-smile/tenacity.git
