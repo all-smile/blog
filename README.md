@@ -1,3 +1,4 @@
+![pages workflow](https://github.com/all-smile/blog/actions/workflows/pages.yml/badge.svg)
 # 整体流程概览
 1. 搭建hexo环境（一系列软件安装，配置）
 2. hexo new post "文章名称"
@@ -67,6 +68,8 @@ git clone https://github.com/all-smile/tenacity.git themes/tenacity
 
 # 删除
 git rm -f --cached themes/tenacity
+
+git rm -r --cached themes/tenacity
 
 
 git submodule deinit themes/tenacity
