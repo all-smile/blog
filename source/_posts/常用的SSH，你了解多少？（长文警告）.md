@@ -23,7 +23,7 @@ description: 本文从SSH工作原理、加密方式探究开始，引出多主�
 **ssh连接远程git仓库时的登录验证原理**：本地主机向远程主机发送登录请求，远程主机收到请求后，返回给本地主机一个随机字符串A，本地主机用私钥加密字符串A得到密文B，并把密文B发送给远程主机，远程主机用公钥解密密文A得到字符串B，并判断A是否等于B，如果相等，则认证成功，反之，则反之。
 不在要求使用密码登录，以公私钥的方式实现免密登录
 
-![](https://files.mdnice.com/user/34064/cd89718b-c964-4dd1-8530-d3dcf59689c7.png)
+![](https://pic.imgdb.cn/item/63119b6b16f2c2beb1e029b5.png)
 
 ## 1.3、基于口令和公钥认证
 
@@ -56,7 +56,7 @@ gitcode.net,119.3.229.170 ssh-rsa AAAAB3NzaC1yc2EAAAL......
 
 - 当远程主机的公钥被接受以后，它就会被永久保存在文件 `~/.ssh/known_hosts` 文件之中，下次再登录就会跳过`Warning`部分
 
-![](https://files.mdnice.com/user/34064/02d5db74-2ae2-4661-8f27-ed6ea35a907b.png)
+![该图来源网络，侵删](https://pic.imgdb.cn/item/63119b8216f2c2beb1e035eb.png)
 上图来源网络，侵删
 
 > 下面以多个主机配置`ssh`连接时怎么指定使用哪个公钥为切入点，讲解`ssh config`。讲透、看爽！
@@ -211,7 +211,7 @@ ssh jeery@dev1.example.com
 
 ### 3.3.3、git 仓库连接别名设置例子
 
-![](https://files.mdnice.com/user/34064/d7507839-c774-42cd-8c39-50f72a6a2753.png)
+![](https://pic.imgdb.cn/item/63119ba916f2c2beb1e0475e.png)
 
 ## 3.4、连接问题
 
@@ -242,13 +242,13 @@ ssh-keygen -o -t rsa -C "yourmail" -b 4096
 
 🔊 记得设置`key`的名字哟，默认是 `id_rsa`（如果不设置`key`，新生成的 `id_rsa` 文件会覆盖原有的`id_rsa`文件，之前添加过的就不能用啦！），参考下图👇
 
-![](https://files.mdnice.com/user/34064/548c5356-5741-4b5b-b5d2-5a1713c191c1.png)
+![](https://pic.imgdb.cn/item/63119bba16f2c2beb1e054d6.png)
 
 ## 4.2、配置远程主机ssh
 
 登录要连接的远程主机，这里演示 [gitcode](https://gitcode.net/dashboard/projects/home) 平台
 
-![](https://files.mdnice.com/user/34064/42a053ee-d7ce-4a20-8cb2-f7ce1bc782d7.png)
+![](https://pic.imgdb.cn/item/63119bc716f2c2beb1e06187.png)
 
 ## 4.3、设置 ssh_config
 
@@ -302,8 +302,12 @@ SSH东西超多的，光 SSH 配置选项就几十个，本文抛砖引玉，大
 
 ---
 
-🌹 持续更文，关注我，你会发现一个踏实努力的宝藏程序员😊，让我们一起学习，共同成长吧。
 
-🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉
+![](https://files.mdnice.com/user/34064/27dc0961-1b17-43f4-951a-ff421816df4f.gif)
 
-🎁 欢迎大家评论交流, 蟹蟹😊
+
+我是 [**甜点cc**](https://home.i-xiao.space/)
+
+热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。
+
+我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。数风流人物还看今朝、看中国、看你我。
