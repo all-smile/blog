@@ -16,3 +16,8 @@ article:
   related_posts:
     enable: true # 相关文章推荐
     title: 您可能感兴趣的文章
+######## Tag Plugins ########
+tag_plugins:
+  # {% image %}
+  image:
+    fancybox: true
