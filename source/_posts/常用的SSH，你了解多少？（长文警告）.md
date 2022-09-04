@@ -303,7 +303,7 @@ SSH东西超多的，光 SSH 配置选项就几十个，本文抛砖引玉，大
 ---
 
 
-![](https://files.mdnice.com/user/34064/27dc0961-1b17-43f4-951a-ff421816df4f.gif)
+![](https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp)
 
 
 我是 [**甜点cc**](https://home.i-xiao.space/)

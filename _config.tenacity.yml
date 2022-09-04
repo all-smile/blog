@@ -6,10 +6,11 @@ sidebar:
     wiki: '[btn.wiki](/wiki/)'
     notes: '[笔记](/notes/)'
     more: '[更多](/more/)'
-  comments:
-    service: beaudar
-    beaudar:
-      repo: all-smile/blog-comments
+# 评论 [beaudar](https://beaudar.lipk.org/) 插件
+comments:
+  service: beaudar
+  beaudar:
+    repo: all-smile/blog-comments
 article:
   auto_cover: false # 根据 tags 作为关键词为每一篇文章在线搜索封面
   # npm i hexo-related-popular-posts
@@ -20,4 +21,4 @@ article:
 tag_plugins:
   # {% image %}
   image:
-    fancybox: true
+    fancybox: true # 支持 Fancybox 插件点击放大
