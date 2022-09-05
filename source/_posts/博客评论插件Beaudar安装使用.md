@@ -17,6 +17,8 @@ Beaudar 加载时，将使用 GitHub issue 搜索 API 根据 url，“路径名�
 
 ## 配置使用
 
+1. 准备
+
 Beaudar 的配置方法很简单，创建一个仓库[`blog-comments`](https://github.com/all-smile/blog-comments)，在仓库中创建一个域名白名单文件`beaudar.json`，然后在[此处](https://github.com/apps/beaudar)授权安装即可。
 
 `beaudar.json`文件
@@ -27,6 +29,18 @@ Beaudar 的配置方法很简单，创建一个仓库[`blog-comments`](https://g
     "http://localhost:4000"
   ]
 }
+```
+
+2. `Hexo`配置
+
+在主题配置文件里`_config_[theme].yml`里面增加如下配置
+
+```yml
+# 评论 [beaudar](https://beaudar.lipk.org/) 插件
+comments:
+  service: beaudar
+  beaudar:
+    repo: all-smile/blog-comments # 指向你自己的repo
 ```
 
 ## 效果展示
