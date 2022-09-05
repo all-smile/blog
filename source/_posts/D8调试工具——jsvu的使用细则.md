@@ -1,9 +1,12 @@
 ---
 title: D8调试工具——jsvu的使用细则
-date: 2022-08-17 10:09:09
-tags: [V8]
-categories: [前端]
+tags:
+  - V8
+categories:
+  - 前端
 description: D8 是一个非常有用的调试工具，可以使用 d8 来查看 V8 在编译执行 JavaScript 过程中的各种中间数据，本文通过jsvu安装D8。
+abbrlink: 1327063303
+date: 2022-08-17 10:09:09
 ---
 
 >[`d8`](https://source.chromium.org/chromium/chromium/src/+/main:v8/src/d8/) is V8’s own developer shell.

@@ -1,10 +1,13 @@
 ---
 title: GitHub Pages 站点建设
-date: 2022-08-17 10:24:33
-tags: [GitHub]
-categories: [GitHub]
+tags:
+  - GitHub
+categories:
+  - GitHub
 description: 利用 GitHub Pages 搭建个人站点、博客。
-cover: workout,strava
+cover: 'workout,strava'
+abbrlink: 899051033
+date: 2022-08-17 10:24:33
 ---
 ## 1、简介
 - GitHub Pages 是通过 GitHub 托管和发布的公共网页，将纯文本转换为静态博客网站。

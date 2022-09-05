@@ -1,9 +1,13 @@
 ---
 title: Hexo+GitHub搭建个人博客
-date: 2022-08-20 20:26:50
-tags: [Hexo,GitHub Actions]
-categories: [Hexo]
+tags:
+  - Hexo
+  - GitHub Actions
+categories:
+  - Hexo
 description: 使用Hexo搭建静态博客，并结合GitHub Actions从手动发布实现自动发布，一站式教程，Hexo写博客真香。
+abbrlink: 3616955208
+date: 2022-08-20 20:26:50
 ---
 
 > 操作环境：Windows10、Node、Git、ssh

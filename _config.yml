@@ -21,8 +21,18 @@ timezone: 'Asia/Shanghai'
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
 url: https://all-smile.github.io/blog
 root: /blog/
-permalink: :year/:month/:day/:title/
-permalink_defaults:
+
+permalink: posts/:abbrlink.html # 添加了 .html 的后缀， 利于seo
+
+# abbrlink config
+abbrlink:
+  alg: crc32  #support crc16(default) and crc32
+  rep: dec    #support dec(default) and hex
+  # alg 是算法。有 crc16 和 crc32 两种。
+  # rep 是进制。有 dec（十进制） 和 hex（十六进制） 两种。
+
+# permalink: :year/:month/:day/:title/
+# permalink_defaults:
 pretty_urls:
   trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
   trailing_html: true # Set to false to remove trailing '.html' from permalinks
@@ -68,7 +78,7 @@ prismjs:
 # per_page: Posts displayed per page. (0 = disable pagination)
 # order_by: Posts order. (Order by date descending by default)
 index_generator:
-  path: ''
+  path: '/'
   per_page: 10
   order_by: -date
 
@@ -129,3 +139,61 @@ deploy:
 
 # 通知
 # notify
+
+# npm i hexo-permalink-pinyin --save 中文链接转拼音
+# 它有助于搜索引擎的抓取我们的博客页面
+permalink_pinyin:
+  enable: false
+  separator: '-' # default: '-'
+
+
+# 注意需要将下列配置增加在 theme_config 中，并保持相对缩进
+# npm install hexo-symbols-count-time --save # 统计文章字数、估计阅读时间的工具
+symbols_count_time:
+# 文章上部是否显示字数
+  symbols: true
+  # 文章上部是否显示阅读时间
+  time: true
+  # 站点底端是否显示站点总字数
+  total_symbols: true
+  # 站点底端是否显示总阅读时间
+  total_time: false
+  # 是否移除代码块
+  exclude_codeblock: false
+  # separated_meta: true
+  # item_text_post: true
+  # item_text_total: false
+  # exclude_codeblock: true
+  # awl: 2
+  # wpm: 300
+
+
+# Lazyload
+## Depends on hexo-lazyload-image
+lazyload:
+  enable: true
+  onlypost: false
+  # 图片尚未加载完时，显示指定图片。目录地址为博客根目录下的 source/
+  # 变量引用 ${root}
+  loadingImg: /blog/images/base/gloading.gif
+
+# 站内搜索
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
+
+# npm install hexo-generator-sitemap --save
+# 是一个生成网站 sitemap 工具，你可以主动将生成的 sitemap.xml 提交给搜索引擎，
+# 这样搜索引擎就可以更好的抓取你的博文
+sitemap:
+  path: sitemap.xml
+  rel: false
+
+
+# `Follow me on GitHub` banner in the top-right corner.
+github_banner:
+  enable: false
+  permalink: https://github.com/all-smile
+  title: Follow me on GitHub

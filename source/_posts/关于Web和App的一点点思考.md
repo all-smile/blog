@@ -1,9 +1,12 @@
 ---
-title: Web和App的一点点思考
-date: 2022-09-05 12:54:09
-tags: [Web]
-categories: [前端]
+title: 关于Web和App的一点点思考
+tags:
+  - Web
+categories:
+  - 前端
 description: 本篇记录关于Web和App的的一点点思考，一家之言，请多多包涵
+abbrlink: 4136692609
+date: 2022-09-05 12:54:09
 ---
 
 ## 现象

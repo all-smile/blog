@@ -1,9 +1,12 @@
 ---
 title: 认识HTTP缓存
-date: 2022-08-26 22:42:26
-tags: [HTTP]
-categories: [前端]
+tags:
+  - HTTP
+categories:
+  - 前端
 description: http缓存在开发以及面试中经常会遇到，掌握http缓存技术对产品性能提升也有很大帮助。本片讲解缓存的技术、种类和机制，快在项目中运用起来吧。
+abbrlink: 2358217424
+date: 2022-08-26 22:42:26
 ---
 
 > 通常针对静态资源。内存缓存/磁盘缓存

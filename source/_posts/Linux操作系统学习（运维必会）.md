@@ -1,10 +1,13 @@
 ---
 title: Linux操作系统学习（运维必会）
-date: 2022-08-19 13:24:53
-tags: [Linux]
-categories: [运维]
+tags:
+  - Linux
+categories:
+  - 运维
 description: Linux一切皆文件，最高权限的账户root。一起来学习Linux系统的常用操作吧，前端人员熟悉一下也会很有帮助的。
-cover: https://fastly.jsdelivr.net/gh/cdn-x/xaoxuu/blog/2020-0927a@1x.svg
+cover: 'https://fastly.jsdelivr.net/gh/cdn-x/xaoxuu/blog/2020-0927a@1x.svg'
+abbrlink: 1915044345
+date: 2022-08-19 13:24:53
 ---
 
 > Linux一切皆文件，最高权限的账户root。

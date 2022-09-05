@@ -1,9 +1,13 @@
 ---
 title: 认识Chrome扩展插件
-date: 2022-08-26 15:54:12
-tags: [前端, Chrome插件]
-categories: [前端]
+tags:
+  - 前端
+  - Chrome插件
+categories:
+  - 前端
 description: 本文从插件的基本概念、组成、运行机制、特性功能以及插件的使用等方面介绍chrome 扩展插件，旨在让读者有一个清晰的认识，激发探索、开发插件的热情
+abbrlink: 9575625
+date: 2022-08-26 15:54:12
 ---
 ---
 ## 1、前言

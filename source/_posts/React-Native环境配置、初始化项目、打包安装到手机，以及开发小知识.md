@@ -1,9 +1,12 @@
 ---
 title: React Native环境配置、初始化项目、打包安装到手机，以及开发小知识
-date: 2022-08-31 18:14:29
-tags: [React Native]
-categories: [React Native]
+tags:
+  - React Native
+categories:
+  - React Native
 description: React Native环境配置、初始化项目、打包安装到手机，以及开发中的小问题解决，后面继续分享如何调试react native项目。
+abbrlink: 252268106
+date: 2022-08-31 18:14:29
 ---
 
 # 1、前言
