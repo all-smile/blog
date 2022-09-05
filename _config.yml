@@ -4,11 +4,12 @@
 
 # Site
 title: 甜点cc
-subtitle: ''
+subtitle: '看见另一种可能'
 description: '甜点cc'
-keywords:
-author: Xiao Juntao
-avatar: https://raw.githubusercontent.com/all-smile/nav/master/static/images/cattle.jpg
+keywords: '前端,JavaScript,Vue,React,Golang,Nginx,DevOps'
+author: 甜点cc
+avatar: https://pic.imgdb.cn/item/6315700316f2c2beb119d392.jpg
+# https://raw.githubusercontent.com/all-smile/nav/master/static/images/cattle.jpg
 # 多语言
 language:
   - zh-CN
