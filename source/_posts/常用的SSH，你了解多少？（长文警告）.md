@@ -4,7 +4,7 @@ tags:
   - SSH
 categories:
   - 前端
-description: 本文从SSH工作原理、加密方式探究开始，引出多主机配置ssh连接的密钥选择问题，继续分析ssh_config配置，配以示例配置，干货慢慢。
+description: 本文从SSH工作原理、加密方式探究开始，引出多主机配置ssh连接的密钥选择问题，继续分析ssh_config配置，配以示例配置，干货满满。
 abbrlink: 184663689
 date: 2022-09-01 15:35:32
 ---

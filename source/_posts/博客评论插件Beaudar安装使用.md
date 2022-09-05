@@ -1,12 +1,16 @@
 ---
-title: 博客评论插件安装使用
+title: 博客评论插件Beaudar安装使用
 date: 2022-09-05 15:52:21
 tags:
+  - Hexo
+categories:
+  - 前端
+description: Beaudar 是基于 GitHub issue 的轻量评论插件，Utterances 的中文版本，本篇记录怎么集成到博客里面使用
 ---
 
-[Beaudar](https://github.com/apps/beaudar)
+## Beaudar
 
-基于 GitHub issue 的轻量评论插件，Utterances 的中文版本
+基于 GitHub issue 的轻量评论插件，Utterances 的中文版本，官网在[这里](https://beaudar.lipk.org/)
 
 ## Beaudar 是如何工作的？
 Beaudar 加载时，将使用 GitHub issue 搜索 API 根据 url，“路径名”或“标题”查找与页面相关的 issue。如果找不到与页面匹配的 issue，即没有评论，当有人首次发表评论时，Beaudar-bot 会自动创建一个 issue。
