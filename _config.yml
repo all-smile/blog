@@ -123,7 +123,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: tenacity
+theme: next # tenacity
 # landscape stellar tenacity Yelee Bcxm Amazing hexo-theme-cola Async
 
 # Deployment
@@ -177,12 +177,12 @@ lazyload:
   # 变量引用 ${root}
   loadingImg: /blog/images/base/gloading.gif
 
-# 站内搜索
+# 站内搜索 - 同时设置 _config_next.yml local_search
 search:
   path: search.xml
   field: post
+  content: true
   format: html
-  limit: 10000
 
 # npm install hexo-generator-sitemap --save
 # 是一个生成网站 sitemap 工具，你可以主动将生成的 sitemap.xml 提交给搜索引擎，
