@@ -63,7 +63,7 @@ hexo help             # 帮助
 配置 GitHub Actions step
 
 ```bash
-git submodule add https://github.com/all-smile/tenacity.git themes/tenacity
+git submodule add -f https://github.com/all-smile/tenacity.git themes/tenacity
 git clone https://github.com/all-smile/tenacity.git themes/tenacity
 
 # 删除
