@@ -23,13 +23,13 @@
 <p>安装指定版本的引擎可以参考下面的命令</p>
 <p><code>jsvu --os=win64 --engines=v8,v8-debug</code></p>
 </blockquote>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ec1bc890f23c4bf0a1e35ad19c19a71a~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ec1bc890f23c4bf0a1e35ad19c19a71a~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <p>执行 jsvu安装引擎，可在 <em>%USERPROFILE%</em> <em>&#x2F;.jsvu</em> 目录下查看安装的引擎</p>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3c578fcbdc094598aa80fcd39bb99097~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3c578fcbdc094598aa80fcd39bb99097~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <p>安装 v8-debug</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jsvu --os=win64 --engines=v8-debug</span><br></pre></td></tr></table></figure>
 
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4012a84ed1af4d818829669dbf3271a7~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4012a84ed1af4d818829669dbf3271a7~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <h3 id="操作系统支持的引擎"><a href="#操作系统支持的引擎" class="headerlink" title="操作系统支持的引擎"></a>操作系统支持的引擎</h3><table>
 <thead>
 <tr>
@@ -149,7 +149,7 @@
 
 <h3 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h3><figure class="highlight moonscript"><table><tr><td class="code"><pre><span class="line"><span class="name">C</span>:\Users\xiao.jsvu&gt;eshost <span class="comment">--configure-jsvu</span></span><br><span class="line">Using config <span class="string">&quot;C:\Users\xiao.eshost-config.json&quot;</span></span><br><span class="line">┌──────────────┬──────┬──────────────────────────────────┬───────────┬─────────────┐</span><br><span class="line">│ name         │ <span class="built_in">type</span> │ path                             │ args      │ tags        │</span><br><span class="line">├──────────────┼──────┼──────────────────────────────────┼───────────┼─────────────┤</span><br><span class="line">│ ChakraCore   │ ch   │ <span class="name">C</span>:\Users\xiao.jsvu\chakra.cmd   │           │ <span class="number">1.11</span><span class="number">.24</span>,web │</span><br><span class="line">├──────────────┼──────┼──────────────────────────────────┼───────────┼─────────────┤</span><br><span class="line">│ V8 <span class="comment">--harmony │ d8   │ C:\Users\xiao.jsvu\v8.cmd       │ --harmony │             │</span></span><br><span class="line">├──────────────┼──────┼──────────────────────────────────┼───────────┼─────────────┤</span><br><span class="line">│ V8           │ d8   │ <span class="name">C</span>:\Users\xiao.jsvu\v8.cmd       │           │             │</span><br><span class="line">├──────────────┼──────┼──────────────────────────────────┼───────────┼─────────────┤</span><br><span class="line">│ V8-<span class="built_in">debug</span>     │ d8   │ <span class="name">C</span>:\Users\xiao.jsvu\v8-<span class="built_in">debug</span>.cmd │           │             │</span><br><span class="line">└──────────────┴──────┴──────────────────────────────────┴───────────┴─────────────┘</span><br><span class="line"></span><br><span class="line"><span class="name">C</span>:\Users\xiao.jsvu&gt;</span><br></pre></td></tr></table></figure>
 
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/23fed6bc37864292bfc7bad09af4374e~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/23fed6bc37864292bfc7bad09af4374e~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <p>有大佬知道上面问题在哪，麻烦您指点一下，感谢😊</p>
 <h3 id="说明："><a href="#说明：" class="headerlink" title="说明："></a>说明：</h3><ol>
 <li><p>%USERPROFILE% &#x3D;C:\Users\用户名</p>
@@ -157,7 +157,7 @@
 <p>在cmd窗口下输入 set 回车，可以查看系统变量（想要了解更多 set 命令请看👉 <a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/set_1">这里</a>）</p>
 </li>
 </ol>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0a47c2e7fd614e39ac078bd9cd0d1dbb~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0a47c2e7fd614e39ac078bd9cd0d1dbb~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <h2 id="3、先简单了解一下抽象语法树"><a href="#3、先简单了解一下抽象语法树" class="headerlink" title="3、先简单了解一下抽象语法树"></a>3、先简单了解一下抽象语法树</h2><p>在传统的编译语言的流程中，程序的一段源代码在执行之前会经历三个步骤，统称为”编译”:</p>
 <ol>
 <li>分词&#x2F;词法分析</li>
@@ -172,10 +172,10 @@
 <li>代码生成</li>
 </ol>
 <p>将AST转换成可执行代码的过程被称为代码生成。</p>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/86f054da794c45cbac28b645ce4eb9ef~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/86f054da794c45cbac28b645ce4eb9ef~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <p align=center>图片来源网络（侵删）</p>
 
-<p>下面看一下<a href="https://astexplorer.net/">在线解析AST</a>的示例👇<br><img data-src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/301453d0b408409fbfbbb02511725bf9~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<p>下面看一下<a href="https://astexplorer.net/">在线解析AST</a>的示例👇<br><img data-src="/blog/images/base/loading8.svg" data-original="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/301453d0b408409fbfbbb02511725bf9~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
 <h2 id="4、使用V8调试分析代码"><a href="#4、使用V8调试分析代码" class="headerlink" title="4、使用V8调试分析代码"></a>4、使用V8调试分析代码</h2><h3 id="文档查看"><a href="#文档查看" class="headerlink" title="文档查看"></a>文档查看</h3><p>由于文档较长，可以使用命令输出一份本地的帮助文档，方便查看</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 进入到要输出文档的目录下，生成v8-help.txt、v8-debug-help.txt</span></span><br><span class="line"></span><br><span class="line">v8 --<span class="built_in">help</span> &gt;&gt; v8-help.txt</span><br><span class="line">v8-debug --<span class="built_in">help</span> &gt;&gt; v8-debug-help.txt</span><br></pre></td></tr></table></figure>
 
@@ -188,7 +188,7 @@
 <p>接收到代码后，第一步就是“解释”，即解释器生成 AST 和作用域。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">C:\Users\xiao&gt;v8-debug -e --print-ast <span class="string">&quot;const name=&#x27;xiao&#x27;&quot;</span></span><br><span class="line">[generating bytecode <span class="keyword">for</span> <span class="keyword">function</span>: ]</span><br><span class="line">--- AST ---</span><br><span class="line">FUNC at 0</span><br><span class="line">. KIND 0</span><br><span class="line">. LITERAL ID 0</span><br><span class="line">. SUSPEND COUNT 0</span><br><span class="line">. NAME <span class="string">&quot;&quot;</span></span><br><span class="line">. INFERRED NAME <span class="string">&quot;&quot;</span></span><br><span class="line">. DECLS</span><br><span class="line">. . VARIABLE (000001FA12EFAF80) (mode = CONST, assigned = <span class="literal">false</span>) <span class="string">&quot;name&quot;</span></span><br><span class="line">. BLOCK NOCOMPLETIONS at -1</span><br><span class="line">. . EXPRESSION STATEMENT at 11</span><br><span class="line">. . . INIT at 11</span><br><span class="line">. . . . VAR PROXY context[2] (000001FA12EFAF80) (mode = CONST, assigned = <span class="literal">false</span>) <span class="string">&quot;name&quot;</span></span><br><span class="line">. . . . LITERAL <span class="string">&quot;xiao&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">C:\Users\xiao&gt;</span><br></pre></td></tr></table></figure>
 
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/32a274ef18a6401d8175b4f5e5bc99d3~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/32a274ef18a6401d8175b4f5e5bc99d3~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <h3 id="4-2、查看作用域"><a href="#4-2、查看作用域" class="headerlink" title="4.2、查看作用域"></a>4.2、查看作用域</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">v8-debug -e --print-scopes <span class="string">&quot;const name=&#x27;xiao&#x27;&quot;</span></span><br></pre></td></tr></table></figure>
 
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">C:\Users\xiao&gt;v8-debug -e --print-scopes <span class="string">&quot;const name=&#x27;xiao&#x27;&quot;</span></span><br><span class="line">Global scope:</span><br><span class="line">global &#123; // (000001DB6010D600) (0, 17)</span><br><span class="line">  // will be compiled</span><br><span class="line">  // NormalFunction</span><br><span class="line">  // 1 stack slots</span><br><span class="line">  // 3 heap slots</span><br><span class="line">  // temporary vars:</span><br><span class="line">  TEMPORARY .result;  // (000001DB6010D910) <span class="built_in">local</span>[0]</span><br><span class="line">  // <span class="built_in">local</span> vars:</span><br><span class="line">  CONST name;  // (000001DB6010D820) context[2], never assigned</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">C:\Users\xiao&gt;</span><br></pre></td></tr></table></figure>
@@ -204,7 +204,7 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">v8-debug --allow-natives-syntax .\src\libs\demo.js</span><br></pre></td></tr></table></figure>
 
 <p>输出</p>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b597a8a32caa4daebe19dc86d9e4e880~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b597a8a32caa4daebe19dc86d9e4e880~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <h2 id="相关文章一览"><a href="#相关文章一览" class="headerlink" title="相关文章一览"></a>相关文章一览</h2><ul>
 <li><p><a href="https://juejin.cn/post/7125763016582234142">V8中的快慢属性</a></p>
 </li>
@@ -269,7 +269,7 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it cb1922b95b93 /bin/bash</span><br><span class="line">ping 172.17.0.2</span><br><span class="line"></span><br><span class="line"><span class="comment"># docker0不支持容器名连接访问</span></span><br><span class="line">ping mysql01</span><br><span class="line">ping: mysql01: Name or service not known</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">docker run 启动镜像的时候docker都会分配一个网卡地址</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看运行容器的ip</span></span><br><span class="line">docker inspect 容器ID | grep IPAddress</span><br></pre></td></tr></table></figure>
 
 <p>如下图👇</p>
-<p><img data-src="https://files.mdnice.com/user/34064/322be90a-063f-429b-9241-0293a832757f.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/322be90a-063f-429b-9241-0293a832757f.png"></p>
 <h2 id="5、容器通信原理"><a href="#5、容器通信原理" class="headerlink" title="5、容器通信原理"></a>5、容器通信原理</h2><ul>
 <li><p>只要我们安装了docker，就会有一个网卡docker0（相当于一个路由器），每启动一个docker容器，docker都会给docker容器分配一个ip（连接路由器的终端，同一网段下终端可以互相通信），</p>
 </li>
@@ -280,16 +280,16 @@
 <li><p>删除容器之后，虚拟网卡就自动消失了。（<strong>虚拟网卡传递效率高！</strong>）</p>
 </li>
 </ul>
-<p><img data-src="https://files.mdnice.com/user/34064/08caee17-aad2-473f-bd89-adafd9a08caf.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/08caee17-aad2-473f-bd89-adafd9a08caf.png"></p>
 <p>启动容器不设置网络，容器ip由docker0自动分配情况下，容器间的通信，要经过<code>evth-pair</code>技术实现，<strong>并不是直连的</strong>。(跟计算机网络通信类似，分层模型，TCP&#x2F;IP协议数据报封装解封装)</p>
-<p><img data-src="https://files.mdnice.com/user/34064/05840b3b-e40f-4b39-9a78-78c43838f9dc.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/05840b3b-e40f-4b39-9a78-78c43838f9dc.png"></p>
 <h3 id="5-1、结论"><a href="#5-1、结论" class="headerlink" title="5.1、结论"></a>5.1、结论</h3><ol>
 <li><p><code>tomcat01</code>,<code>tomcat02</code>是共用的一个路由器，docker0</p>
 </li>
 <li><p>所有的容器启动时，如果不指定网络的情况下，都是docker0路由的。65535</p>
 </li>
 </ol>
-<p><img data-src="https://files.mdnice.com/user/34064/348baac0-815d-4df3-b9b8-fe9dd07c8bfb.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/348baac0-815d-4df3-b9b8-fe9dd07c8bfb.png"></p>
 <h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>上面<code>docker0</code>不支持容器名连接访问，容器通信只可以通过容器<code>ip</code>通信，docker也无法保证容器重启后的IP地址不变，所以更好的方式是<strong>通过别名进行互联</strong>，下篇继续讲解怎么通过别名进行容器通信，😊😊。</p>
 <hr>
 <p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
@@ -461,9 +461,9 @@
 </ul>
 <h2 id="2、创建仓库"><a href="#2、创建仓库" class="headerlink" title="2、创建仓库"></a>2、创建仓库</h2><p>仓库名： <code>&lt;username&gt;.github.io</code><br><code>username</code> 是GitHub的用户名</p>
 <h2 id="3、创建站点"><a href="#3、创建站点" class="headerlink" title="3、创建站点"></a>3、创建站点</h2><p>在 <code>repo</code> 下创建 <code>index.md</code>文件，随便写点东西保存。然后，点击 <code>settings</code>选项卡，单机左侧 <code>Pages</code>进行设置，如下图：</p>
-<p><img data-src="https://files.mdnice.com/user/34064/42531bfd-6a95-4b93-aef1-2132eb036186.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/42531bfd-6a95-4b93-aef1-2132eb036186.png"></p>
 <p>🔊 此时站点已经建成，可以访问 <code>https://&lt;username&gt;.github.io/</code> 查看，如果已经有个人域名了，也可以绑定个人域名，继续往下看👇</p>
-<h2 id="4、仓库文件目录"><a href="#4、仓库文件目录" class="headerlink" title="4、仓库文件目录"></a>4、仓库文件目录</h2><p><img data-src="https://files.mdnice.com/user/34064/8f9a125b-767d-45af-b91f-e998f10a2267.png"></p>
+<h2 id="4、仓库文件目录"><a href="#4、仓库文件目录" class="headerlink" title="4、仓库文件目录"></a>4、仓库文件目录</h2><p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/8f9a125b-767d-45af-b91f-e998f10a2267.png"></p>
 <h2 id="5、绑定域名"><a href="#5、绑定域名" class="headerlink" title="5、绑定域名"></a>5、绑定域名</h2><p>我个人购买的一级域名是 i-xiao ，域名后缀是 space，专门给GitHub Pages 增加一个CNAME记录（blog），解析二级域名，绑定 <username>github.io 域名。</p>
 <h3 id="5-1、域名相关知识"><a href="#5-1、域名相关知识" class="headerlink" title="5.1、域名相关知识"></a>5.1、域名相关知识</h3><ul>
 <li>www：主机名，i-xiao : 域名主体(一级域名)，.space : 域名后缀<br>注册一级域名的时候是需要付费的</li>
@@ -471,7 +471,7 @@
 <li>一级域名、二级域名区别：<br>DNS收录一级域名更快；还有就是解析速度，下一跳路由就不说了，找到目的主机之后，二级域名层级更深，需要多一层计算（其实这是我瞎写的🤣，猜测应该跟 nginx location匹配类似）</li>
 </ul>
 <h3 id="5-2、GitHub上配置自定义域名"><a href="#5-2、GitHub上配置自定义域名" class="headerlink" title="5.2、GitHub上配置自定义域名"></a>5.2、GitHub上配置自定义域名</h3><p>进入 <username>github.io 仓库，进入设置页面，点击左边 Pages 选项卡，进行下面的配置。</p>
-<p><img data-src="https://files.mdnice.com/user/34064/7b148b05-ea65-410c-8bb7-ded42d8f2538.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/7b148b05-ea65-410c-8bb7-ded42d8f2538.png"></p>
 <h2 id="6、配置域名映射"><a href="#6、配置域名映射" class="headerlink" title="6、配置域名映射"></a>6、配置域名映射</h2><p><strong>各记录类型使用目的</strong></p>
 <table>
 <thead>
@@ -514,10 +514,10 @@
 </tr>
 </tbody></table>
 <p><strong>如下图</strong></p>
-<p><img data-src="https://files.mdnice.com/user/34064/18e6f450-c21d-4db6-9e42-ba21b06b2134.png"></p>
-<h2 id="7、DNS检测"><a href="#7、DNS检测" class="headerlink" title="7、DNS检测"></a>7、DNS检测</h2><p><img data-src="https://files.mdnice.com/user/34064/32c6f3d8-902c-4de9-a544-24f38c98836c.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/18e6f450-c21d-4db6-9e42-ba21b06b2134.png"></p>
+<h2 id="7、DNS检测"><a href="#7、DNS检测" class="headerlink" title="7、DNS检测"></a>7、DNS检测</h2><p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/32c6f3d8-902c-4de9-a544-24f38c98836c.png"></p>
 <h2 id="8、查看Pages"><a href="#8、查看Pages" class="headerlink" title="8、查看Pages"></a>8、查看Pages</h2><p>成功解析之后，还存在DNS缓存，一般还需要再等待一会（一般十分钟，或许更长时间）才能生效，如下图成功显示👇</p>
-<p><img data-src="https://files.mdnice.com/user/34064/fbe4c739-db6f-4870-b17f-20207247bd54.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/fbe4c739-db6f-4870-b17f-20207247bd54.png"></p>
 <h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>站点绑定的域名已经更换，访问请到👉 <a href="https://home.i-xiao.space/">这里</a></p>
 <hr>
 <p>🎈🎈🎈</p>
@@ -589,7 +589,7 @@
 <p><a href="https://hexo.io/docs/">文档</a></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br><span class="line"><span class="built_in">cd</span> [workspace]</span><br><span class="line">hexo init &lt;folder:blog&gt;</span><br><span class="line"><span class="built_in">cd</span> &lt;folder:blog&gt;</span><br><span class="line">npm install</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
 
-<p><img data-src="https://files.mdnice.com/user/34064/5dd21663-e0b3-4304-9bb4-a65dded21137.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/5dd21663-e0b3-4304-9bb4-a65dded21137.png"></p>
 <p>网站基础配置修改参考<a href="https://hexo.io/docs/configuration">这里</a></p>
 <h1 id="3、GitHub-托管-Hexo-博客"><a href="#3、GitHub-托管-Hexo-博客" class="headerlink" title="3、GitHub 托管 Hexo 博客"></a>3、GitHub 托管 Hexo 博客</h1><blockquote>
 <p>可以采取<code>分支管理</code>的方式，也可以新建repo，在ci配置上略有不同，这里我采用的是将<code>hexo</code>博客源码托管到<code>独立的repo上</code>，将 <code>Hexo</code> 项目编译生成静态页面，部署到 <code>gh-pages</code> 分支</p>
@@ -622,18 +622,18 @@
 <li>远程仓库开启 github pages</li>
 </ol>
 <p>指定部署分支：gh-pages</p>
-<p><img data-src="https://files.mdnice.com/user/34064/a973732c-bccb-4fbd-ba95-8fb1ef2945fa.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/a973732c-bccb-4fbd-ba95-8fb1ef2945fa.png"></p>
 <h1 id="4、手动部署"><a href="#4、手动部署" class="headerlink" title="4、手动部署"></a>4、手动部署</h1><p>本地项目执行命令：</p>
 <figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">hexo clean</span></span><br><span class="line"><span class="attribute">hexo g</span></span><br><span class="line"><span class="attribute">hexo deploy</span></span><br></pre></td></tr></table></figure>
 
 <p>hexo模板引擎生成静态文件，并推送到<code>gh-pages</code>分支下（替换原先分支下的所有文件）</p>
-<p><img data-src="https://files.mdnice.com/user/34064/ff1f8baa-c9cb-4570-97a5-bee921649715.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/ff1f8baa-c9cb-4570-97a5-bee921649715.png"></p>
 <p>到这里就已经完成了博客的搭建</p>
 <blockquote>
 <p>需要注意的是：<code>hexo deploy</code> 命令并不会帮助我们同步本地的修改到远程仓库，所以当在本地写完博文之后，要做两件事：一是发布站点，二是同步远程仓库，这样做比较麻烦，下面会讲解如何配置<code>持续集成</code></p>
 </blockquote>
 <h2 id="4-1、查看效果"><a href="#4-1、查看效果" class="headerlink" title="4.1、查看效果"></a>4.1、查看效果</h2><p>这里我配置了自定义域名</p>
-<p><img data-src="https://files.mdnice.com/user/34064/b9ccbe53-b080-41ba-8b10-fd9810d6b1e3.jpg"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/b9ccbe53-b080-41ba-8b10-fd9810d6b1e3.jpg"></p>
 <h1 id="5、自动部署"><a href="#5、自动部署" class="headerlink" title="5、自动部署"></a>5、自动部署</h1><blockquote>
 <p>就是DevOps，可以理解成 <code>GitHub</code> 通过一些<code>流水线</code>的配置（CI&#x2F;CD），然后在本地推送代码的时候触发<code>流水线</code>执行，自动部署站点。</p>
 </blockquote>
@@ -645,7 +645,7 @@
 <p>使用<code>Github Action</code>来部署<code>hexo</code>，这样电脑本地就不需要安装npm相关的东西了。另外利用<code>github.dev</code>也可以实现在页面上编辑了。</p>
 <p>在线编辑:<br><code>Github</code>有提供一个在线编辑的页面，在Repo页面按下按键<code>.</code>就可以打开编辑页面了</p>
 </blockquote>
-<p><img data-src="https://files.mdnice.com/user/34064/8818f33d-14ce-4d4d-ae58-079f5e90b023.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/8818f33d-14ce-4d4d-ae58-079f5e90b023.png"></p>
 <p>每个 <code>action</code> 就是一个独立脚本，因此可以做成代码仓库，使用<code>userName/repoName</code>的语法引用 <code>action</code>。比如，<code>actions/setup-node</code>就表示<a href="https://github.com/actions/setup-node"><code>github.com/actions/setup-node</code></a>这个仓库，它代表一个 <code>action</code>，作用是安装 Node.js。事实上，GitHub 官方的 actions 都放在 <a href="https://github.com/actions"><code>github.com/actions</code></a> 里面。</p>
 <h2 id="6-1、支持的令牌"><a href="#6-1、支持的令牌" class="headerlink" title="6.1、支持的令牌"></a>6.1、支持的令牌</h2><p>支持三个令牌。</p>
 <table>
@@ -733,11 +733,11 @@
 <ul>
 <li>转到<code>Deploy Keys</code>并使用<code>Allow write access</code>添加您的公钥 <code>gh-pages.pub</code>，name写为<code>public key of ACTIONS_DEPLOY_KEY</code>，指定用途，方便后面维护</li>
 </ul>
-<p><img data-src="https://files.mdnice.com/user/34064/16070f38-5c57-482d-a1bc-5d2fa3318221.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/16070f38-5c57-482d-a1bc-5d2fa3318221.png"></p>
 <ul>
 <li>转到<code>Actions secrets</code>并将您的私钥 <code>gh-pages</code> 添加为 <code>ACTIONS_DEPLOY_KEY</code>（这个名称在yml文件中需要使用）</li>
 </ul>
-<p><img data-src="https://files.mdnice.com/user/34064/e2f6afbc-71e8-4fc2-bcdd-181d2dd96a6c.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/e2f6afbc-71e8-4fc2-bcdd-181d2dd96a6c.png"></p>
 <h2 id="7-2、新建-github-x2F-workflows-x2F-pages-yml-文件"><a href="#7-2、新建-github-x2F-workflows-x2F-pages-yml-文件" class="headerlink" title="7.2、新建 .github&#x2F;workflows&#x2F;pages.yml 文件"></a>7.2、新建 .github&#x2F;workflows&#x2F;pages.yml 文件</h2><p><code>yml</code>文件通过缩进（空格，不是tab）来表示层级关系。</p>
 <p><code>yaml</code>不会的，可以去看一下<a href="https://www.runoob.com/w3cnote/yaml-intro.html">这里</a>，了解一下语法即可。</p>
 <p>以下文件是我个人的配置的一部分，不建议直接使用</p>
@@ -746,12 +746,12 @@
 <h2 id="7-3、修改-config-yml-文件中的Deploy配置"><a href="#7-3、修改-config-yml-文件中的Deploy配置" class="headerlink" title="7.3、修改 _config.yml 文件中的Deploy配置"></a>7.3、修改 <code>_config.yml</code> 文件中的<code>Deploy</code>配置</h2><figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/one-command-deployment</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">&#x27;git&#x27;</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:all-smile/blog.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">gh-pages</span></span><br><span class="line">  <span class="comment"># 默认提交信息： Site updated: &#123;&#123; now(&#x27;YYYY-MM-DD HH:mm:ss&#x27;) &#125;&#125;</span></span><br><span class="line">  <span class="attr">message:</span> <span class="string">$&#123;&#123;</span> <span class="string">github.event.head_commit.message</span> <span class="string">&#125;&#125;</span> <span class="comment"># 直接将提交消息传输到 GitHub Pages 存储库</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="发布效果"><a href="#发布效果" class="headerlink" title="发布效果"></a>发布效果</h2><p>本地仓库直接<code>push</code>，触发 <code>GitHub Actions</code> 自动构建发布</p>
-<p><img data-src="https://files.mdnice.com/user/34064/3428f5ca-7730-4128-9c51-1fce5c063e99.png"></p>
-<p><img data-src="https://files.mdnice.com/user/34064/13a98b38-a16c-4997-8a33-f825bb86fb07.png"></p>
-<p><img data-src="https://files.mdnice.com/user/34064/9952cb44-cc50-467c-a6b4-36cab774f436.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/3428f5ca-7730-4128-9c51-1fce5c063e99.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/13a98b38-a16c-4997-8a33-f825bb86fb07.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/9952cb44-cc50-467c-a6b4-36cab774f436.png"></p>
 <h2 id="Hexo主题"><a href="#Hexo主题" class="headerlink" title="Hexo主题"></a>Hexo主题</h2><p>请查看<a href="https://hexo.io/zh-cn/docs/themes.html">文档</a> ，自行安装配置</p>
 <h1 id="8、GitHub-Actions问题解决"><a href="#8、GitHub-Actions问题解决" class="headerlink" title="8、GitHub Actions问题解决"></a>8、GitHub Actions问题解决</h1><h2 id="8-1、非法输入值"><a href="#8-1、非法输入值" class="headerlink" title="8.1、非法输入值"></a>8.1、非法输入值</h2><p>在 <code>pages.yml</code> 文件的 <code>Deploy</code> 步骤下，发布的时候需要一些参数配置，这些参数名是指定好的，不可以随便写，比如 <code>commit_msg</code>应该使用 <code>commit_message</code></p>
-<p><img data-src="https://files.mdnice.com/user/34064/81d50c5b-188b-4925-b1f8-0da53d697b65.jpg"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/81d50c5b-188b-4925-b1f8-0da53d697b65.jpg"></p>
 <figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">commit_message:</span> <span class="string">$&#123;&#123;</span> <span class="string">github.event.head_commit.message</span> <span class="string">&#125;&#125;</span></span><br></pre></td></tr></table></figure>
 
 <blockquote>
@@ -759,7 +759,7 @@
 </blockquote>
 <h2 id="8-2、The-process-‘-x2F-usr-x2F-bin-x2F-git’-failed-with-exit-code-128"><a href="#8-2、The-process-‘-x2F-usr-x2F-bin-x2F-git’-failed-with-exit-code-128" class="headerlink" title="8.2、The process ‘&#x2F;usr&#x2F;bin&#x2F;git’ failed with exit code 128"></a>8.2、The process ‘&#x2F;usr&#x2F;bin&#x2F;git’ failed with exit code 128</h2><p>这个问题大概率是 <code>GITHUB_TOKEN</code> 造成的，参考<a href="https://docs.github.com/en/actions/security-guides/automatic-token-authentication">配置文档</a></p>
 <p><code>GITHUB_TOKEN</code> 是一种 <code>GitHub</code> 应用程序安装访问令牌。 可以使用安装访问令牌代表仓库中安装的 <code>GitHub</code> 应用程序进行身份验证。令牌的权限仅限于包含您的工作流程的仓库。</p>
-<p><img data-src="https://files.mdnice.com/user/34064/909ecbe7-ad36-4d09-a511-6236bdc317c5.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/909ecbe7-ad36-4d09-a511-6236bdc317c5.png"></p>
 <p>解决：</p>
 <ul>
 <li>查看 <code>yml</code> 文件中的名字是否写错</li>
@@ -769,7 +769,7 @@
 <ul>
 <li>在 仓库 <code>Settings/Actions/general</code> 下，修改 <code>GITHUB_TOKEN</code> 的权限</li>
 </ul>
-<p><img data-src="https://files.mdnice.com/user/34064/99653c2c-38e5-4a03-a190-1dad2586c372.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/99653c2c-38e5-4a03-a190-1dad2586c372.png"></p>
 <h2 id="8-3、deploy-key问题"><a href="#8-3、deploy-key问题" class="headerlink" title="8.3、deploy key问题"></a>8.3、deploy key问题</h2><figure class="highlight subunit"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ERROR: </span>Permission to all-smile/blog.git denied to deploy key</span><br><span class="line">fatal: Could not read from remote repository.</span><br><span class="line"></span><br><span class="line">Please make sure you have the correct access rights</span><br><span class="line">and the repository exists.</span><br></pre></td></tr></table></figure>
 
 <p>解决：</p>
@@ -823,8 +823,8 @@
 
 <h1 id="3、根目录结构"><a href="#3、根目录结构" class="headerlink" title="3、根目录结构"></a>3、根目录结构</h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">/bin        # Binary的缩写，存在最经常使用的命令</span><br><span class="line">/boot       # 存放启动Linux时要使用的一些核心文件，包括链接文件和镜像文件</span><br><span class="line">/dev        # Device的缩写，存放Linux的外部设备</span><br><span class="line">/etc        # 存放系统管理所需的配置文件和子目录</span><br><span class="line">/home       # 用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录以用户的账号命名</span><br><span class="line">/lib        # 存放系统最基本的动态链接共享库，其作用类似于Windows里的DLL文件</span><br><span class="line">/lost+found # 这个目录一般是空的，当用户非正常关机时就会在这里存放一些文件</span><br><span class="line">/media      # Linux系统识别出来的设备，例如U盘，光驱，Linux把识别到的设备挂载到这个目录下</span><br><span class="line">/mnt        # 让用户临时挂载别的文件系统</span><br><span class="line">/opt        # 给主机额外安装软件所存放的目录，比如安装Oracle数据库可以放到这个目录下面</span><br><span class="line">/proc       # 虚拟目录，系统内存的映射，可以通过访问这个目录来获取系统信息</span><br><span class="line">/root       # 该目录为系统管理员，也称作超级权限的用户主目录</span><br><span class="line">/sbin       # s 就是 Super User的意思，这里存放系统管理员使用的系统管理程序</span><br><span class="line">/srv        # 存放一些服务启动之后需要提取的数据</span><br><span class="line">/sys        # Linux2.6内核一个很大的变化，该目录下安装了2.6内核中新出现的一个文件系统sysfs</span><br><span class="line">/tmp        # 存放临时文件的目录</span><br><span class="line">/usr        # 用户的很多应用程序和文件都存放在这个目录，类似于Windows下的program files</span><br><span class="line">/usr/bin    # 系统用户使用的应用程序</span><br><span class="line"></span><br><span class="line">/www        # 存放服务器网站相关的资源，环境、网站的项目-----------</span><br><span class="line">						#	LNMP: Linux、Nginx、MySQL、Php</span><br><span class="line">            # LTMP: Linux、tomcat、MySQL、Php</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p><img data-src="https://files.mdnice.com/user/34064/aff0bdac-3d98-4b92-bb66-31b64553af07.png"></p>
-<p><img data-src="https://gitee.com/hey-u/nav/raw/master/static/images/Golden_Leaf.jpg" alt="图片测试"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/aff0bdac-3d98-4b92-bb66-31b64553af07.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://gitee.com/hey-u/nav/raw/master/static/images/Golden_Leaf.jpg" alt="图片测试"></p>
 <h1 id="4、文件属性"><a href="#4、文件属性" class="headerlink" title="4、文件属性"></a>4、文件属性</h1><ul>
 <li><p>r：read</p>
 </li>
@@ -865,7 +865,7 @@
 <li><p>3、6、9：可执行</p>
 </li>
 </ul>
-<p><img data-src="https://files.mdnice.com/user/34064/add9ba6d-077c-418b-8cf1-07bd8718b247.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/add9ba6d-077c-418b-8cf1-07bd8718b247.png"></p>
 <h2 id="4-1、更改文件权限"><a href="#4-1、更改文件权限" class="headerlink" title="4.1、更改文件权限"></a>4.1、更改文件权限</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 更改9个文件属性</span><br><span class="line"></span><br><span class="line">[-rwxrwxrwx] 这九个权限属性，三个一组，</span><br><span class="line">用数字代表权限</span><br><span class="line">r: 4   w: 2   x: 1   4+2+1=7</span><br><span class="line"><span class="built_in">chmod</span> 777  可读可写可执行     <span class="built_in">chmod</span> rwxrwxrwx</span><br><span class="line"><span class="built_in">chmod</span> 666  可读可写不可执行   <span class="built_in">chmod</span> rw-rw-rw-</span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -874,7 +874,7 @@
 <h1 id="5、硬链接、软链接"><a href="#5、硬链接、软链接" class="headerlink" title="5、硬链接、软链接"></a>5、硬链接、软链接</h1><p>软链接跟Windows上的快捷方式类似，删除源文件，快捷方式也访问不了了。</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">硬链接</span></span><br><span class="line">ln 01 02  # 给01文件创建一个硬链接02，01和02指向同一个文件，允许一个文件有多个路径，用户通过这种机制建立硬链接到一些重要文件上，以防误删！</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">软链接</span></span><br><span class="line">ln -s 01 03</span><br></pre></td></tr></table></figure>
 
-<p><img data-src="https://files.mdnice.com/user/34064/a522099f-11fd-419d-9e45-b934fca5f2fd.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/a522099f-11fd-419d-9e45-b934fca5f2fd.png"></p>
 <h1 id="6、账号管理"><a href="#6、账号管理" class="headerlink" title="6、账号管理"></a>6、账号管理</h1><p>属主、属组</p>
 <h2 id="6-1、添加用户"><a href="#6-1、添加用户" class="headerlink" title="6.1、添加用户"></a>6.1、添加用户</h2><p>一切皆文件，相当于在 &#x2F;etc&#x2F;passwd 文件中写入用户信息</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">useradd -参数 用户名</span><br><span class="line">-m 使用者主目录不存在，则自动在/home目录下创建用户名目录</span><br><span class="line"></span><br><span class="line">-G 给用户分配属组</span><br><span class="line"></span><br><span class="line">useradd -m xiaotest</span><br><span class="line"></span><br><span class="line">[root@--- home]# cat /etc/passwd</span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">adm:x:3:4:adm:/var/adm:/sbin/nologin</span><br><span class="line">lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin</span><br><span class="line">sync:x:5:0:sync:/sbin:/bin/sync</span><br><span class="line">shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown</span><br><span class="line">halt:x:7:0:halt:/sbin:/sbin/halt</span><br><span class="line">mail:x:8:12:mail:/var/spool/mail:/sbin/nologin</span><br><span class="line">operator:x:11:0:operator:/root:/sbin/nologin</span><br><span class="line">games:x:12:100:games:/usr/games:/sbin/nologin</span><br><span class="line">ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin</span><br><span class="line">nobody:x:99:99:Nobody:/:/sbin/nologin</span><br><span class="line">systemd-network:x:192:192:systemd Network Management:/:/sbin/nologin</span><br><span class="line">dbus:x:81:81:System message bus:/:/sbin/nologin</span><br><span class="line">polkitd:x:999:998:User for polkitd:/:/sbin/nologin</span><br><span class="line">sshd:x:74:74:Privilege-separated SSH:/var/empty/sshd:/sbin/nologin</span><br><span class="line">postfix:x:89:89::/var/spool/postfix:/sbin/nologin</span><br><span class="line">chrony:x:998:996::/var/lib/chrony:/sbin/nologin</span><br><span class="line">ntp:x:38:38::/etc/ntp:/sbin/nologin</span><br><span class="line">tcpdump:x:72:72::/:/sbin/nologin</span><br><span class="line">nscd:x:28:28:NSCD Daemon:/:/sbin/nologin</span><br><span class="line">mysql:x:27:27:MySQL Server:/var/lib/mysql:/bin/bash</span><br><span class="line">redis:x:997:995:Redis Database Server:/var/lib/redis:/sbin/nologin</span><br><span class="line">jenkins:x:996:992:Jenkins Automation Server:/var/lib/jenkins:/bin/false</span><br><span class="line">tss:x:59:59:Account used by the trousers package to sandbox the tcsd daemon:/dev/null:/sbin/nologin</span><br><span class="line">xiao:x:1000:1000::/home/xiao:/bin/bash</span><br><span class="line">xiaotest:x:1001:1001::/home/xiaotest:/bin/bash      # /home/xiaotest 用户主目录</span><br><span class="line">[root@--- home]#</span><br><span class="line"></span><br></pre></td></tr></table></figure>
@@ -895,7 +895,7 @@
 <p>使用场景: 某员工辞职，或者合伙人设置</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">passwd -l xiaotest  # -l  lock 锁定用户，不能继续登录</span><br><span class="line">passwd -d xiaotest  # -d  删除密码，给用户输入空口令，没有密码也不能登录</span><br><span class="line"></span><br><span class="line">-u：解锁用户</span><br><span class="line">passwd -u xiaotest</span><br></pre></td></tr></table></figure>
 
-<p><img data-src="https://files.mdnice.com/user/34064/61f7e942-9401-4aa7-a001-81b97b19a115.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/61f7e942-9401-4aa7-a001-81b97b19a115.png"></p>
 <h1 id="7、用户组管理"><a href="#7、用户组管理" class="headerlink" title="7、用户组管理"></a>7、用户组管理</h1><p><code>/etc/group</code> 文件</p>
 <p>每个用户都有一个用户组，系统可以对一个用户组下面的所有用户进行集中管理（开发、测试、运维、root）</p>
 <h2 id="7-1、创建用户组"><a href="#7-1、创建用户组" class="headerlink" title="7.1、创建用户组"></a>7.1、创建用户组</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">groupadd test01</span><br><span class="line"></span><br><span class="line">[root@xiao ~]# cat /etc/group</span><br><span class="line">root:x:0:</span><br><span class="line">bin:x:1:</span><br><span class="line">daemon:x:2:</span><br><span class="line">sys:x:3:</span><br><span class="line">adm:x:4:</span><br><span class="line">tty:x:5:</span><br><span class="line">disk:x:6:</span><br><span class="line">lp:x:7:</span><br><span class="line">mem:x:8:</span><br><span class="line">kmem:x:9:</span><br><span class="line">wheel:x:10:</span><br><span class="line">cdrom:x:11:</span><br><span class="line">mail:x:12:postfix</span><br><span class="line">man:x:15:</span><br><span class="line">dialout:x:18:</span><br><span class="line">floppy:x:19:</span><br><span class="line">games:x:20:</span><br><span class="line">tape:x:33:</span><br><span class="line">video:x:39:</span><br><span class="line">ftp:x:50:</span><br><span class="line">lock:x:54:</span><br><span class="line">audio:x:63:</span><br><span class="line">nobody:x:99:</span><br><span class="line">users:x:100:</span><br><span class="line">utmp:x:22:</span><br><span class="line">utempter:x:35:</span><br><span class="line">input:x:999:</span><br><span class="line">systemd-journal:x:190:</span><br><span class="line">systemd-network:x:192:</span><br><span class="line">dbus:x:81:</span><br><span class="line">polkitd:x:998:</span><br><span class="line">ssh_keys:x:997:</span><br><span class="line">sshd:x:74:</span><br><span class="line">postdrop:x:90:</span><br><span class="line">postfix:x:89:</span><br><span class="line">chrony:x:996:</span><br><span class="line">ntp:x:38:</span><br><span class="line">tcpdump:x:72:</span><br><span class="line">nscd:x:28:</span><br><span class="line">mysql:x:27:</span><br><span class="line">redis:x:995:</span><br><span class="line">cgred:x:994:</span><br><span class="line">docker:x:993:</span><br><span class="line">jenkins:x:992:</span><br><span class="line">tss:x:59:</span><br><span class="line">xiao:x:1000:</span><br><span class="line">xiaotest:x:1001:</span><br><span class="line">allblue:x:1002:</span><br><span class="line">test01:x:1003:</span><br><span class="line">test02:x:520:      # 通过使用 -g 参数制定id</span><br><span class="line">dev:x:1003:dev01   # dev组 该组下有dev01用户 新建用户是通过-G参数指定</span><br><span class="line">dev01:x:1004:</span><br><span class="line">[root@xiao ~]#</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">通过使用 -g 参数指定id</span><br><span class="line">groupadd -g 520 test02</span><br></pre></td></tr></table></figure>
@@ -914,8 +914,8 @@
 <h1 id="8、磁盘管理"><a href="#8、磁盘管理" class="headerlink" title="8、磁盘管理"></a>8、磁盘管理</h1><p><code>du - disk usage</code></p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">df  查看系统整体磁盘的使用量</span><br><span class="line">df -h 以兆(m)为单位显示</span><br><span class="line"></span><br><span class="line">du  查看当前磁盘的空间使用量</span><br><span class="line">du -a # 查看全部文件，包括隐藏文件和子文件</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看根目录下每个目录多占用的容量</span></span><br><span class="line">du -sm /*</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">寻找当前目录，哪个文件夹占用空间最大</span></span><br><span class="line">du -h --max-depth=1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p><img data-src="https://files.mdnice.com/user/34064/ceab08f4-9ec2-4cf8-b3c7-55f8b8e59491.png"></p>
-<p><img data-src="https://files.mdnice.com/user/34064/38149daa-3e4b-460d-b8df-75b08375bd23.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/ceab08f4-9ec2-4cf8-b3c7-55f8b8e59491.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/38149daa-3e4b-460d-b8df-75b08375bd23.png"></p>
 <h2 id="8-1、释放空间"><a href="#8-1、释放空间" class="headerlink" title="8.1、释放空间"></a>8.1、释放空间</h2><p>使用 <code>du -h --max-depth=1</code>  命令查找大文件</p>
 <h3 id="x2F-var-x2F-log-x2F-journal-x2F-垃圾日志清理"><a href="#x2F-var-x2F-log-x2F-journal-x2F-垃圾日志清理" class="headerlink" title="&#x2F;var&#x2F;log&#x2F;journal&#x2F; 垃圾日志清理"></a><strong>&#x2F;var&#x2F;log&#x2F;journal&#x2F; 垃圾日志清理</strong></h3><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">// <span class="number">1</span>. 只保留近一周的日志</span><br><span class="line">journalctl <span class="literal">--vacuum-time</span>=<span class="number">1</span>w</span><br><span class="line"></span><br><span class="line">// <span class="number">2</span>. 只保留<span class="number">500</span>MB的日志</span><br><span class="line">journalctl <span class="literal">--vacuum-size</span>=<span class="number">500</span>M</span><br></pre></td></tr></table></figure>
 
@@ -952,8 +952,8 @@
 <h2 id="9-3、进程树（目录树）"><a href="#9-3、进程树（目录树）" class="headerlink" title="9.3、进程树（目录树）"></a>9.3、进程树（目录树）</h2><p>看父进程可以通过目录树来查看</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pstree</span><br><span class="line">-p # 显示父id (PPID)</span><br><span class="line">-u # 显示用户组</span><br><span class="line"></span><br><span class="line">pstree -pu</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p><img data-src="https://files.mdnice.com/user/34064/915527df-3b7d-45df-95ab-440ed0444969.png"></p>
-<h2 id="9-4、top命令"><a href="#9-4、top命令" class="headerlink" title="9.4、top命令"></a>9.4、top命令</h2><p><img data-src="https://files.mdnice.com/user/34064/b211a66e-8f66-47f7-9281-1bc7f6356a79.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/915527df-3b7d-45df-95ab-440ed0444969.png"></p>
+<h2 id="9-4、top命令"><a href="#9-4、top命令" class="headerlink" title="9.4、top命令"></a>9.4、top命令</h2><p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/b211a66e-8f66-47f7-9281-1bc7f6356a79.png"></p>
 <h2 id="9-5、结束进程"><a href="#9-5、结束进程" class="headerlink" title="9.5、结束进程"></a>9.5、结束进程</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">kill pid # 终止进程</span><br><span class="line">kill -9 pid # 强制终止进程</span><br></pre></td></tr></table></figure>
 
 <h2 id="9-6、nohup-后台运行进程"><a href="#9-6、nohup-后台运行进程" class="headerlink" title="9.6、nohup 后台运行进程"></a>9.6、nohup 后台运行进程</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nohup java -jar jenkins.war &amp;</span><br></pre></td></tr></table></figure>
@@ -993,17 +993,17 @@
 <h1 id="2、Android-Studio下载安装"><a href="#2、Android-Studio下载安装" class="headerlink" title="2、Android Studio下载安装"></a>2、Android Studio下载安装</h1><ul>
 <li><a href="https://developer.android.google.cn/studio/">下载地址</a></li>
 </ul>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/14f24334e0744e9cbb662908447e5921~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/14f24334e0744e9cbb662908447e5921~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <h1 id="3、Android-SDK-下载安装"><a href="#3、Android-SDK-下载安装" class="headerlink" title="3、Android SDK 下载安装"></a>3、Android SDK 下载安装</h1><ul>
 <li>安装 android sdk</li>
 </ul>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4d9bc195ebc6458482c4574f0f740128~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ba817702a1684af6a16f86fcb59f2f7d~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6e446d5e4bf74136af62df252fd56eea~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7d8ad488eaf7457c96b14e64c1e8ac14~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3e4146b0ea4d44a8932051b9dce2d7db~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4d9bc195ebc6458482c4574f0f740128~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ba817702a1684af6a16f86fcb59f2f7d~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6e446d5e4bf74136af62df252fd56eea~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7d8ad488eaf7457c96b14e64c1e8ac14~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3e4146b0ea4d44a8932051b9dce2d7db~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <h2 id="3-1、环境变量配置"><a href="#3-1、环境变量配置" class="headerlink" title="3.1、环境变量配置"></a>3.1、环境变量配置</h2><ul>
-<li><p>配置系统变量<br><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/afa360280fe1419e8e6586443eb6c345~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<li><p>配置系统变量<br><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/afa360280fe1419e8e6586443eb6c345~tplv-k3u1fbpfcp-zoom-1.image"></p>
 </li>
 <li><p>Path 配置：</p>
 </li>
@@ -1013,10 +1013,10 @@
 <h1 id="4、Scrcpy-手机模拟器下载安装使用"><a href="#4、Scrcpy-手机模拟器下载安装使用" class="headerlink" title="4、Scrcpy 手机模拟器下载安装使用"></a>4、Scrcpy 手机模拟器下载安装使用</h1><ul>
 <li><a href="https://github.com/Genymobile/scrcpy">下载地址</a></li>
 </ul>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5597618b2c424d92890e8f272395a0bd~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5597618b2c424d92890e8f272395a0bd~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <p>下载zip文件，解压，双击运行 <code>scrcpy.exe</code> 可执行文件即可在电脑上投影手机屏幕，如下图👇</p>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e1a38a71aa8b42c5b4b809a8dd2b21e8~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<p><img data-src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f4f4f5f4725c42c480e2eed50a1199d6~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e1a38a71aa8b42c5b4b809a8dd2b21e8~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f4f4f5f4725c42c480e2eed50a1199d6~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
 <blockquote>
 <p>运行可执行文件之前，使用<strong>数据线</strong>连接Android手机，进行开发者选项设置（不同的手机进入开发者模式略有差异，自行搜索，我用的是华为手机）</p>
 </blockquote>
@@ -1036,10 +1036,10 @@
 <h2 id="7-2、打开-android-studio-编辑器，运行项目"><a href="#7-2、打开-android-studio-编辑器，运行项目" class="headerlink" title="7.2、打开 android studio 编辑器，运行项目"></a>7.2、打开 android studio 编辑器，运行项目</h2><figure class="highlight asciidoc"><table><tr><td class="code"><pre><span class="line">npm run android</span><br><span class="line"></span><br><span class="line"><span class="section">or</span></span><br><span class="line"><span class="section">-------------------</span></span><br><span class="line">cd AwesomeProject</span><br><span class="line">yarn android</span><br><span class="line"># 或者</span><br><span class="line">yarn react-native run-android</span><br></pre></td></tr></table></figure>
 
 <p>运行的时候会在手机上弹窗 “是否统一安装软件”之类的提示，点击同意即可</p>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b90b3f05d1f84550a4b36daf6c62d2b6~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b79e872b58ad4ab5b7901eab1f34e3d4~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b90b3f05d1f84550a4b36daf6c62d2b6~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b79e872b58ad4ab5b7901eab1f34e3d4~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <h2 id="7-3、adb-reverse-命令使用"><a href="#7-3、adb-reverse-命令使用" class="headerlink" title="7.3、adb reverse  命令使用"></a>7.3、adb reverse  命令使用</h2><p><a href="https://developer.android.google.cn/studio/command-line/adb?hl=zh-cn">adb 文档</a></p>
-<h4 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h4><p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6e692862aded418cb3f25d4b47bd63b2~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h4 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h4><p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6e692862aded418cb3f25d4b47bd63b2~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <p>猜测是多设备连接受影响了，可以尝试重启手机解决<br>也可以尝试如下步骤： 启停 adb 服务器</p>
 <blockquote>
 <p>在某些情况下，您可能需要终止 adb 服务器进程，然后重启以解决问题（例如，如果 adb 不响应命令）。</p>
@@ -1055,7 +1055,7 @@
 <li>必须是在连接数据线usb的前提下才能使用该方案进行代码调试。</li>
 <li>(Android 5.0 及以上)使用 adb reverse 命令，这个选项只能在 5.0 以上版本(API 21+)的安卓设备上使用。</li>
 </ol>
-<h1 id="8、react-native开发小知识"><a href="#8、react-native开发小知识" class="headerlink" title="8、react-native开发小知识"></a>8、react-native开发小知识</h1><h2 id="8-1、vscode-上代码飘红"><a href="#8-1、vscode-上代码飘红" class="headerlink" title="8.1、vscode 上代码飘红"></a>8.1、vscode 上代码飘红</h2><p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c8fd66fbd3154e30863186824b46a2ed~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h1 id="8、react-native开发小知识"><a href="#8、react-native开发小知识" class="headerlink" title="8、react-native开发小知识"></a>8、react-native开发小知识</h1><h2 id="8-1、vscode-上代码飘红"><a href="#8-1、vscode-上代码飘红" class="headerlink" title="8.1、vscode 上代码飘红"></a>8.1、vscode 上代码飘红</h2><p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c8fd66fbd3154e30863186824b46a2ed~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <ul>
 <li>问题原因：</li>
 </ul>
@@ -1112,10 +1112,10 @@
 <p>如果一个数组中所有位置均有值，我们称之为<code>全填充</code>（<strong>Packed</strong>）数组；</p>
 <p>若某些位置在初始化时未定义（如 <code>const arr = [1, , 3]</code> 中的 arr[1]），或定义后被删除（delete，如上述例子），称之为<code>带孔</code>（<strong>Holey</strong>）数组。</p>
 <p>该例子在 V8 的访问可以通过下图解释：</p>
-<p><img data-src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/819317cc4d4142bea00e155929af1fae~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/819317cc4d4142bea00e155929af1fae~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
 <p>一开始数组 o 是 packed 的，所以访问 o[1] 时可以直接获取值，而不需要访问原型。</p>
 <p>而行 4：<code>delete o[1]</code> 为数组引入了一个孔洞（<code>the_hole</code>），用于标记不存在的属性，同时又行 6 为 o 定义了原型上的 1 属性，当再次获取 o[1] 时会<strong>穿孔</strong>进而继续往原型链上查询。原型链上的查询是昂贵的，<em>可以根据是否有 the_hole 来降低这部分查询开销</em>。</p>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5cd8c5fcb1764d669c875a742877de72~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5cd8c5fcb1764d669c875a742877de72~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
 <h1 id="2、快慢数组"><a href="#2、快慢数组" class="headerlink" title="2、快慢数组"></a>2、快慢数组</h1><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">arr[<span class="number">1999</span>] = <span class="number">1999</span></span><br><span class="line"><span class="comment">// arr 会如何存储？</span></span><br></pre></td></tr></table></figure>
 
 <p>这个例子中，在行 1 声明完毕后 arr 是一个全填充的数组，但在行 2 马上又定义索引 1999 处值为 1999，此时如果为 arr 创建一个长度为 2000 的完整数组来存储这样的稀疏数据将会非常占用内存，为了应对这种情况，V8 会将数组降级为<code>慢数组</code>，创建一个字典来存储<code>「键、值、描述符」</code>（<strong>key、value、descriptor</strong>） 三元组。这就是 <code>Object.defineProperty(object, key, descriptor)</code> API 同样会做的事情。</p>
@@ -1128,7 +1128,7 @@
 </ol>
 </blockquote>
 <p>那究竟什么是快数组和慢数组呢？我们看下V8底层对于数组的定义：👉 <a href="https://source.chromium.org/chromium/chromium/src/+/master:v8/src/objects/js-array.h">源代码：v8&#x2F;src&#x2F;objects&#x2F;js-array.h</a></p>
-<p><img data-src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c62c161602f244b0b516b57a50e65b88~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c62c161602f244b0b516b57a50e65b88~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
 <ul>
 <li><p>快模式：数组实现的是 V8 里一个叫 <code>FixedArray</code> 的类，它在内存中是<strong>连续的空间</strong>，直接通过索引读写值，非常快。如果有 push 或 pop 操作，它会动态地扩容或收缩。</p>
 </li>
@@ -1139,7 +1139,7 @@
 <p>数组内部也是用key-value的存储形式</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> testArr = [<span class="number">1</span>, <span class="string">&quot;hello&quot;</span>, <span class="literal">true</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
 
-<p><img data-src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/540021a06a2e43379f6141d37d450b75~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/540021a06a2e43379f6141d37d450b75~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
 <h2 id="2-1、快数组何时转换为慢数组"><a href="#2-1、快数组何时转换为慢数组" class="headerlink" title="2.1、快数组何时转换为慢数组"></a>2.1、快数组何时转换为慢数组</h2><h3 id="1-、看一下源码先👇"><a href="#1-、看一下源码先👇" class="headerlink" title="(1)、看一下源码先👇"></a>(1)、看一下源码先👇</h3><ol>
 <li><p>path:v8&#x2F;src&#x2F;objects&#x2F;js-objects-inl.h</p>
 <p> 快慢模式转化： <code>ShouldConvertToSlowElements</code></p>
@@ -1161,9 +1161,9 @@
 <ul>
 <li>修改arr之前:</li>
 </ul>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bae16e0c9bcb4866a16f15ad5b71f53f~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bae16e0c9bcb4866a16f15ad5b71f53f~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
 <ul>
-<li>修改arr之后：<br><img data-src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/05f44d5f19f840c4a7aa25eba2aef089~tplv-k3u1fbpfcp-watermark.image" alt="9c1a1af43947b4da39b9c554d56c312.png"></li>
+<li>修改arr之后：<br><img data-src="/blog/images/base/loading8.svg" data-original="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/05f44d5f19f840c4a7aa25eba2aef089~tplv-k3u1fbpfcp-watermark.image" alt="9c1a1af43947b4da39b9c554d56c312.png"></li>
 </ul>
 <h2 id="2-2、慢数组何时转换为快数组"><a href="#2-2、慢数组何时转换为快数组" class="headerlink" title="2.2、慢数组何时转换为快数组"></a>2.2、慢数组何时转换为快数组</h2><h3 id="1-、看一下源码先👇-1"><a href="#1-、看一下源码先👇-1" class="headerlink" title="(1)、看一下源码先👇"></a>(1)、看一下源码先👇</h3><ol>
 <li>path:v8&#x2F;src&#x2F;objects&#x2F;js-objects.cc</li>
@@ -1199,12 +1199,12 @@
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</span><br><span class="line">arr.<span class="title function_">push</span>(<span class="number">5</span>);</span><br><span class="line">%<span class="title class_">DebugPrint</span>(arr);</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li><p>arr.push 之前：<br><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/469c1808dc7f4a288a507e3d77c0e20e~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<li><p>arr.push 之前：<br><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/469c1808dc7f4a288a507e3d77c0e20e~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
 </li>
 <li><p>arr.push 后：</p>
 </li>
 </ul>
-<p><img data-src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d059832a1fd5480da0b6e62b224ef908~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d059832a1fd5480da0b6e62b224ef908~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
 <p><strong>具体分析如下：</strong><br>👇</p>
 <ol>
 <li><p>向数组 [1, 2, 3, 4] push 5 时，首先判断到当前容量已满，需要计算新容量。</p>
@@ -1262,7 +1262,7 @@
 <h2 id="期待"><a href="#期待" class="headerlink" title="期待"></a>期待</h2><p>前端的细分领域真的是太多太多了，期待Web技术会有更好的发展，不要往那些不能长久的、可持续发展的事物上投入太多精力，让那些细枝末节快点走进历史吧。</p>
 <hr>
 <hr>
-<p><img data-src="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
 <p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
 <p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
 <p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
@@ -1284,11 +1284,11 @@
 <ul>
 <li>效果预览：</li>
 </ul>
-<p><img data-src="https://files.mdnice.com/user/34064/db0e1b60-9601-4013-83e4-1c8d76d21afe.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/db0e1b60-9601-4013-83e4-1c8d76d21afe.png"></p>
 <h2 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h2><h3 id="1-选项"><a href="#1-选项" class="headerlink" title="1. 选项"></a>1. 选项</h3><p>勾选 “公告”</p>
-<p><img data-src="https://files.mdnice.com/user/34064/b2253cad-548a-4813-bfe1-2a9b7a71cd21.jpg"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/b2253cad-548a-4813-bfe1-2a9b7a71cd21.jpg"></p>
 <h3 id="2-基本设置、代码高亮、开通JS权限"><a href="#2-基本设置、代码高亮、开通JS权限" class="headerlink" title="2. 基本设置、代码高亮、开通JS权限"></a>2. 基本设置、代码高亮、开通JS权限</h3><p>皮肤选择 <code>SimpleMemory</code></p>
-<p><img data-src="https://files.mdnice.com/user/34064/7cdee491-6774-47fb-aa74-f2e023266c9e.jpg"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/7cdee491-6774-47fb-aa74-f2e023266c9e.jpg"></p>
 <h3 id="3-页面定制CSS代码"><a href="#3-页面定制CSS代码" class="headerlink" title="3. 页面定制CSS代码"></a>3. 页面定制CSS代码</h3><p>这里我选择的是 Cnblogs-Theme-SimpleMemory <code>V2.1.0</code> 版本</p>
 <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="keyword">@import</span> url(<span class="attribute">https</span>://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@<span class="number">2.1</span>.<span class="number">0</span>/dist/simpleMemory.css);</span><br></pre></td></tr></table></figure>
 
@@ -1301,7 +1301,7 @@
 </li>
 </ol>
 </blockquote>
-<h3 id="4-博客侧边栏公告设置"><a href="#4-博客侧边栏公告设置" class="headerlink" title="4. 博客侧边栏公告设置"></a>4. 博客侧边栏公告设置</h3><p><img data-src="https://files.mdnice.com/user/34064/594cbc1a-ee2f-4c76-b340-d9e52a26a737.png"></p>
+<h3 id="4-博客侧边栏公告设置"><a href="#4-博客侧边栏公告设置" class="headerlink" title="4. 博客侧边栏公告设置"></a>4. 博客侧边栏公告设置</h3><p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/594cbc1a-ee2f-4c76-b340-d9e52a26a737.png"></p>
 <p>下面是我的配置（仅供参考）</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;script type=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">cnblogsConfig</span> = &#123;</span><br><span class="line">      <span class="comment">// iconfont（我个人的，可以自己建一个iconfont项目维护使用）</span></span><br><span class="line">      <span class="attr">fontIconExtend</span>: <span class="string">&quot;//at.alicdn.com/t/c/font_3603036_keyavmcqbhn.css&quot;</span>,</span><br><span class="line">      <span class="attr">info</span>: &#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;甜点cc&#x27;</span>, <span class="comment">// 用户名</span></span><br><span class="line">        <span class="attr">startDate</span>: <span class="string">&#x27;2016-10-08&#x27;</span>, <span class="comment">// 入园时间，年-月-日。入园时间查看方法：鼠标停留园龄时间上，会显示入园时间</span></span><br><span class="line">        <span class="attr">avatar</span>: <span class="string">&#x27;https://pic.cnblogs.com/avatar/1037867/20220801164532.png&#x27;</span>, <span class="comment">// 用户头像</span></span><br><span class="line">        <span class="attr">blogIcon</span>: <span class="string">&#x27;https://pic.cnblogs.com/avatar/1037867/20220801164532.png&#x27;</span>, <span class="comment">// 网站图标 favicon.ico</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">sidebar</span>: &#123;</span><br><span class="line">        <span class="attr">infoBackground</span>: <span class="string">&#x27;https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/Machine_tool.jpg&#x27;</span>, <span class="comment">// 个人信息背景</span></span><br><span class="line">        <span class="attr">titleMsg</span>: <span class="string">&#x27;宝宝等你很久啦~🌹🌹&#x27;</span>, <span class="comment">// 侧边栏title信息</span></span><br><span class="line">        <span class="attr">navList</span>: [</span><br><span class="line">            [<span class="string">&#x27;友链&#x27;</span>, <span class="string">&#x27;https://www.cnblogs.com/all-smile/p/16612170.html&#x27;</span>, <span class="string">&#x27;icon-pengyoufill&#x27;</span>],</span><br><span class="line">            [<span class="string">&#x27;个人主页&#x27;</span>, <span class="string">&#x27;https://home.i-xiao.space/&#x27;</span>, <span class="string">&#x27;icon-zhuye&#x27;</span>],</span><br><span class="line">        ],</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">banner</span>: &#123;</span><br><span class="line">        <span class="attr">home</span>: &#123;</span><br><span class="line">          <span class="comment">// 主页banner标语, 随机从数组中获取一条文字显示</span></span><br><span class="line">          <span class="attr">title</span>: [<span class="string">&#x27;每一个不曾起舞的日子，都是对生命的辜负。&#x27;</span>, <span class="string">&#x27;为者常成，行者常至。&#x27;</span>, <span class="string">&#x27;逝者如斯夫，不舍昼夜。&#x27;</span>, <span class="string">&quot;相逢的还会再相逢。&quot;</span>],</span><br><span class="line">          <span class="comment">// 主页banner图片</span></span><br><span class="line">          <span class="attr">background</span>: [</span><br><span class="line">              <span class="string">&quot;https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/Machine_tool.jpg&quot;</span>,</span><br><span class="line">              <span class="string">&quot;https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/horse.jpg&quot;</span>,</span><br><span class="line">              <span class="string">&quot;https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/background.jpg&quot;</span>,</span><br><span class="line">              <span class="string">&quot;https://raw.githubusercontent.com/all-smile/nav/master/static/images/sunset.jpg&quot;</span>,</span><br><span class="line">              <span class="string">&quot;https://raw.githubusercontent.com/all-smile/nav/master/static/images/sunset02.jpg&quot;</span></span><br><span class="line">          ],</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// 失去焦点标签文字</span></span><br><span class="line">      <span class="attr">title</span>: &#123;</span><br><span class="line">        <span class="attr">onblur</span>: <span class="string">&#x27;(oﾟvﾟ)ノ Hi&#x27;</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// 页面加载loading。</span></span><br><span class="line">      <span class="attr">loading</span>: &#123;</span><br><span class="line">        <span class="attr">rebound</span>: &#123;</span><br><span class="line">          <span class="attr">tension</span>: <span class="number">16</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">spinner</span>: &#123;</span><br><span class="line">          <span class="attr">id</span>: <span class="string">&#x27;spinner&#x27;</span>,</span><br><span class="line">          <span class="attr">radius</span>: <span class="number">90</span>,</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// 页脚模式</span></span><br><span class="line">      <span class="attr">footer</span>: &#123;</span><br><span class="line">        <span class="attr">style</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="attr">text</span>: &#123;</span><br><span class="line">          <span class="attr">left</span>: <span class="string">&#x27;蓄之既久，其发必速。&#x27;</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// 友情链接</span></span><br><span class="line">      <span class="attr">links</span>: &#123;</span><br><span class="line">        <span class="comment">// 文章底部显示添加友链入口（博客园发送消息）</span></span><br><span class="line">        <span class="attr">footer</span>: [</span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">            格式：</span></span><br><span class="line"><span class="comment">            Key	Description</span></span><br><span class="line"><span class="comment">            name	昵称</span></span><br><span class="line"><span class="comment">            introduction	简介</span></span><br><span class="line"><span class="comment">            avatar	头像</span></span><br><span class="line"><span class="comment">            url	友链地址</span></span><br><span class="line"><span class="comment">            */</span></span><br><span class="line">            [<span class="string">&quot;添加友链&quot;</span>, <span class="string">&#x27;https://msg.cnblogs.com/send/甜点cc&#x27;</span>],</span><br><span class="line">        ],</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// 右下角菜单</span></span><br><span class="line">      <span class="attr">rtMenu</span>: &#123;</span><br><span class="line">        <span class="attr">qrCode</span>: <span class="string">&#x27;https://xxx.jpg&#x27;</span>, <span class="comment">// 自己设置</span></span><br><span class="line">        <span class="attr">reward</span>: &#123;</span><br><span class="line">          <span class="attr">wechatpay</span>: <span class="string">&#x27;https:xxx.jpg&#x27;</span> <span class="comment">// 自己设置</span></span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">animate</span>: &#123;</span><br><span class="line">        <span class="comment">// 主页banner动效配置。</span></span><br><span class="line">        <span class="attr">homeBanner</span>: &#123;</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">true</span>,</span><br><span class="line">          <span class="attr">options</span>: &#123;</span><br><span class="line">            <span class="attr">radius</span>: <span class="number">15</span>,</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">// 文章页标题动效配置。</span></span><br><span class="line">        <span class="attr">articleTitle</span>: &#123;</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">true</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">// 文章页banner动效配置</span></span><br><span class="line">        <span class="attr">articleBanner</span>: &#123;</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">true</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">// 背景动效。</span></span><br><span class="line">        <span class="attr">background</span>: &#123;</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">false</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">// 跟随鼠标动效。</span></span><br><span class="line">        <span class="attr">mouse</span>: &#123;</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">false</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// 友链配置</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">cnblogsConfig</span>.<span class="property">links</span>.<span class="property">page</span> = [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;甜点cc&#x27;</span>, <span class="comment">// 昵称</span></span><br><span class="line">        <span class="attr">introduction</span>: <span class="string">&#x27;博客&#x27;</span>, <span class="comment">// 简介</span></span><br><span class="line">        <span class="attr">avatar</span>: <span class="string">&#x27;https://pic.cnblogs.com/avatar/1037867/20220801164532.png&#x27;</span>, <span class="comment">// 头像</span></span><br><span class="line">        <span class="attr">url</span>: <span class="string">&#x27;https://home.i-xiao.space/blog/&#x27;</span> <span class="comment">// 友链地址</span></span><br><span class="line">      &#125;,</span><br><span class="line">    ]</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@v2.1.0/dist/simpleMemory.js&quot;</span> <span class="attr">defer</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
 
@@ -1319,7 +1319,7 @@
 <li><p>托管到博客园上</p>
 </li>
 </ol>
-<p><img data-src="https://files.mdnice.com/user/34064/a78174d3-0b7f-4ac3-8bb8-b0e86f79751e.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/a78174d3-0b7f-4ac3-8bb8-b0e86f79751e.png"></p>
 <ol start="4">
 <li>图片等静态资源也可以自行搭建云盘使用😏</li>
 </ol>
@@ -1358,23 +1358,23 @@
 <figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 评论 [beaudar](https://beaudar.lipk.org/) 插件</span></span><br><span class="line"><span class="attr">comments:</span></span><br><span class="line">  <span class="attr">service:</span> <span class="string">beaudar</span></span><br><span class="line">  <span class="attr">beaudar:</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">all-smile/blog-comments</span> <span class="comment"># 指向你自己的repo</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p>使用<code>GitHub</code>登录后评论</p>
-<p><img data-src="https://pic.imgdb.cn/item/6315b40c16f2c2beb16136d9.jpg"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://pic.imgdb.cn/item/6315b40c16f2c2beb16136d9.jpg"></p>
 <h2 id="问题处理"><a href="#问题处理" class="headerlink" title="问题处理"></a>问题处理</h2><ol>
 <li><code>blog-comments</code> 仓库默认分支为<code>main</code></li>
 </ol>
-<p><img data-src="https://pic.imgdb.cn/item/6315b22716f2c2beb15ee173.jpg"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://pic.imgdb.cn/item/6315b22716f2c2beb15ee173.jpg"></p>
 <p><strong>解决：</strong></p>
 <p>进入<code>blog-comments</code> 仓库，在 settings -&gt; branches 里面，修改 <code>Default branch</code> 为 <code>main</code></p>
 <ol start="2">
 <li><code>Hexo</code> 本地服务测试<code>Beaudar</code>，添加白名单配置</li>
 </ol>
-<p><img data-src="https://pic.imgdb.cn/item/6315b2a816f2c2beb15f64b2.jpg"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://pic.imgdb.cn/item/6315b2a816f2c2beb15f64b2.jpg"></p>
 <p><strong>解决：</strong></p>
 <p>修改<code>beaudar.json</code>文件</p>
 <figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;origins&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;https://...&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;http://localhost:4000&quot;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
 <hr>
-<p><img data-src="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
 <p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
 <p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
 <p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
@@ -1472,7 +1472,7 @@
 </li>
 </ol>
 <p>使用<code>beforeRouteUpdate</code>的时候，如果路由里面通过<a href="https://router.vuejs.org/zh/guide/essentials/passing-props.html#%E5%B8%83%E5%B0%94%E6%A8%A1%E5%BC%8F">布尔模式</a>：<code>props: true</code> <em>将组件和路由解耦</em>，这个时候会出现<code>props</code>获取错误的情况，比方说从<code>/foo/1</code>页面切换到<code>/foo/2</code>页面的时候，在<code>beforeRouteUpdate</code>获取到的还是失活页面组件的id</p>
-<p><img data-src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0e3239903789492b9d80745409c3afa9~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0e3239903789492b9d80745409c3afa9~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
 <blockquote>
 <p><em>在<code>beforeRouteUpdate</code>钩子中，在<code>next</code>回调函数中编写代码并没有执行，仿佛没有调用，但是去掉<code>next()</code>，路由就不会放行，有点奇怪。需要阅读源码实现逻辑…</em></p>
 </blockquote>
@@ -1525,7 +1525,7 @@
 </blockquote>
 <p>为了解决对称加密的漏洞，就出现了非对称加密。非对称加密有两个密钥：“公钥”和“私钥”。公钥加密后的密文，只能通过对应的私钥进行解密。想从公钥推理出私钥几乎不可能，所以非对称加密的安全性比较高。</p>
 <h2 id="1-2、非对称加密"><a href="#1-2、非对称加密" class="headerlink" title="1.2、非对称加密"></a>1.2、非对称加密</h2><p><strong>ssh连接远程git仓库时的登录验证原理</strong>：本地主机向远程主机发送登录请求，远程主机收到请求后，返回给本地主机一个随机字符串A，本地主机用私钥加密字符串A得到密文B，并把密文B发送给远程主机，远程主机用公钥解密密文A得到字符串B，并判断A是否等于B，如果相等，则认证成功，反之，则反之。<br>不在要求使用密码登录，以公私钥的方式实现免密登录</p>
-<p><img data-src="https://pic.imgdb.cn/item/63119b6b16f2c2beb1e029b5.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://pic.imgdb.cn/item/63119b6b16f2c2beb1e029b5.png"></p>
 <h2 id="1-3、基于口令和公钥认证"><a href="#1-3、基于口令和公钥认证" class="headerlink" title="1.3、基于口令和公钥认证"></a>1.3、基于口令和公钥认证</h2><p>只有在第一次连接的时候需要，通信双方验证身份之后就可以通过在客户端的私钥和你存放在服务器的公钥进行认证。(通过服务器上的公钥加密，客户端的私钥解密来验证)</p>
 <p><strong>第一次登录：</strong></p>
 <blockquote>
@@ -1547,7 +1547,7 @@
 <li><p>当远程主机的公钥被接受以后，它就会被永久保存在文件 <code>~/.ssh/known_hosts</code> 文件之中，下次再登录就会跳过<code>Warning</code>部分</p>
 </li>
 </ul>
-<p><img data-src="https://pic.imgdb.cn/item/63119b8216f2c2beb1e035eb.png" alt="该图来源网络，侵删"><br>上图来源网络，侵删</p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://pic.imgdb.cn/item/63119b8216f2c2beb1e035eb.png" alt="该图来源网络，侵删"><br>上图来源网络，侵删</p>
 <blockquote>
 <p>下面以多个主机配置<code>ssh</code>连接时怎么指定使用哪个公钥为切入点，讲解<code>ssh config</code>。讲透、看爽！</p>
 </blockquote>
@@ -1612,7 +1612,7 @@
 <p>现在要连接到 <code>jeery@dev1.example.com</code>，就可以通过在命令行中输入如下命令：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh dev1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 相当于</span></span><br><span class="line">ssh jeery@dev1.example.com</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-3-3、git-仓库连接别名设置例子"><a href="#3-3-3、git-仓库连接别名设置例子" class="headerlink" title="3.3.3、git 仓库连接别名设置例子"></a>3.3.3、git 仓库连接别名设置例子</h3><p><img data-src="https://pic.imgdb.cn/item/63119ba916f2c2beb1e0475e.png"></p>
+<h3 id="3-3-3、git-仓库连接别名设置例子"><a href="#3-3-3、git-仓库连接别名设置例子" class="headerlink" title="3.3.3、git 仓库连接别名设置例子"></a>3.3.3、git 仓库连接别名设置例子</h3><p><img data-src="/blog/images/base/loading8.svg" data-original="https://pic.imgdb.cn/item/63119ba916f2c2beb1e0475e.png"></p>
 <h2 id="3-4、连接问题"><a href="#3-4、连接问题" class="headerlink" title="3.4、连接问题"></a>3.4、连接问题</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">PS C:\Users\xiao\.ssh&gt;vim .\config</span><br><span class="line">PS C:\Users\xiao\.ssh&gt;ssh -T git@gitcode.net</span><br><span class="line">Bad owner or permissions on C:\\Users\\xiao/.ssh/config</span><br><span class="line">PS C:\Users\xiao\.ssh&gt;</span><br></pre></td></tr></table></figure>
 
 <p><strong>解决：</strong></p>
@@ -1623,9 +1623,9 @@
 <h2 id="4-1、本地生成公私钥对"><a href="#4-1、本地生成公私钥对" class="headerlink" title="4.1、本地生成公私钥对"></a>4.1、本地生成公私钥对</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh-keygen -o -t rsa -C <span class="string">&quot;yourmail&quot;</span> -b 4096</span><br></pre></td></tr></table></figure>
 
 <p>🔊 记得设置<code>key</code>的名字哟，默认是 <code>id_rsa</code>（如果不设置<code>key</code>，新生成的 <code>id_rsa</code> 文件会覆盖原有的<code>id_rsa</code>文件，之前添加过的就不能用啦！），参考下图👇</p>
-<p><img data-src="https://pic.imgdb.cn/item/63119bba16f2c2beb1e054d6.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://pic.imgdb.cn/item/63119bba16f2c2beb1e054d6.png"></p>
 <h2 id="4-2、配置远程主机ssh"><a href="#4-2、配置远程主机ssh" class="headerlink" title="4.2、配置远程主机ssh"></a>4.2、配置远程主机ssh</h2><p>登录要连接的远程主机，这里演示 <a href="https://gitcode.net/dashboard/projects/home">gitcode</a> 平台</p>
-<p><img data-src="https://pic.imgdb.cn/item/63119bc716f2c2beb1e06187.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://pic.imgdb.cn/item/63119bc716f2c2beb1e06187.png"></p>
 <h2 id="4-3、设置-ssh-config"><a href="#4-3、设置-ssh-config" class="headerlink" title="4.3、设置 ssh_config"></a>4.3、设置 ssh_config</h2><p>这里我统一维护在 <code>~/.ssh/config</code>里面维护，增加<code>gitcode</code>主机定义配置， 如下：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># gitcode - csdn</span></span><br><span class="line">Host gitcode.net</span><br><span class="line">  HostName gitcode.net</span><br><span class="line">  IdentityFile ~/.ssh/gitcode</span><br><span class="line"></span><br><span class="line"><span class="comment"># 共用配置，文件最下面</span></span><br><span class="line">Host *</span><br><span class="line">  <span class="comment"># 认证方式首选 publickey(公钥), 可选: publickey,gssapi-keyex,gssapi-with-mic,password</span></span><br><span class="line">  PreferredAuthentications publickey</span><br><span class="line">  User git <span class="comment"># ssh [Host] === ssh [User]@[HostName]</span></span><br></pre></td></tr></table></figure>
 
@@ -1652,7 +1652,7 @@
 </li>
 </ul>
 <hr>
-<p><img data-src="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
 <p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
 <p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
 <p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
@@ -1753,12 +1753,12 @@
 <p>要创建扩展，您需要组合一些资源清单: <code>manifest.json</code>、 <code>JavaScript</code>、 <code>HTML</code> 和 <code>CSS</code> 文件、图片等。</p>
 <h2 id="4、Chrome扩展文件"><a href="#4、Chrome扩展文件" class="headerlink" title="4、Chrome扩展文件"></a>4、Chrome扩展文件</h2><p>Chrome扩展文件以.crx为后缀名，.crx实际上是一个压缩文件，使用解压文件打开这个文件就可以看到其中的文件目录</p>
 <p>下图是 <code>Axure</code> 扩展插件原文件：</p>
-<p><img data-src="https://files.mdnice.com/user/34064/ca2c331a-28cf-4cb9-bfcb-10d11f6fff6a.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/ca2c331a-28cf-4cb9-bfcb-10d11f6fff6a.png"></p>
 <p>因此可以认为，我们实际上就是写一个Web应用，然后将按照Chrome的规定将一个<strong>快捷方式</strong>放在Chrome工具栏上。如下图：</p>
-<p><img data-src="https://files.mdnice.com/user/34064/ec58ffac-c63b-46a1-b690-42518f1c2fa1.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/ec58ffac-c63b-46a1-b690-42518f1c2fa1.png"></p>
 <p>上图中左边地址栏内部的按钮是page action（Chrome插件，直接内置在Chrome里的），右边地址栏外部的是 browser action（Chrome 扩展插件）</p>
 <h2 id="5、扩展插件使用"><a href="#5、扩展插件使用" class="headerlink" title="5、扩展插件使用"></a>5、扩展插件使用</h2><p>对于开发和测试，您可以使用扩展开发者模式将这些“解压”加载到 Chrome 中，或者直接拖动<code>crx</code>文件到管理扩展插件页面。如果扩展感到满意，也可以打包并分享给小伙伴使用。</p>
-<p><img data-src="https://files.mdnice.com/user/34064/6339f49c-6dae-4f62-b258-92d082173444.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/6339f49c-6dae-4f62-b258-92d082173444.png"></p>
 <h2 id="6、popup弹出窗口"><a href="#6、popup弹出窗口" class="headerlink" title="6、popup弹出窗口"></a>6、popup弹出窗口</h2><ul>
 <li><p><code>popup.html</code>可以在里面放置任何<code>html</code>元素，它的宽度是自适应的。当然，这个弹出窗口不会被Chrome拦截</p>
 </li>
@@ -1766,11 +1766,11 @@
 </li>
 </ul>
 <p>下图是 <code>FeHelper</code> 扩展插件的弹出窗👇</p>
-<p><img data-src="https://files.mdnice.com/user/34064/14200a5e-9f68-4d3b-acb5-ab07a13fbe30.png"></p>
-<h2 id="7、Background-Pages后台页面"><a href="#7、Background-Pages后台页面" class="headerlink" title="7、Background Pages后台页面"></a>7、Background Pages后台页面</h2><p><img data-src="https://files.mdnice.com/user/34064/4bc20695-7737-4bc3-8b56-791933620bf6.png"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/14200a5e-9f68-4d3b-acb5-ab07a13fbe30.png"></p>
+<h2 id="7、Background-Pages后台页面"><a href="#7、Background-Pages后台页面" class="headerlink" title="7、Background Pages后台页面"></a>7、Background Pages后台页面</h2><p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/4bc20695-7737-4bc3-8b56-791933620bf6.png"></p>
 <h2 id="8、Chrome扩展插件运行的核心机制"><a href="#8、Chrome扩展插件运行的核心机制" class="headerlink" title="8、Chrome扩展插件运行的核心机制"></a>8、Chrome扩展插件运行的核心机制</h2><p>Chrome扩展插件中比较核心的几个概念：<code>Extension Page</code>、<code>background.js</code>、<code>content_script.js</code></p>
 <p>下图展示他们之间的关系，以及如何通信</p>
-<p><img data-src="https://files.mdnice.com/user/34064/7ddafef3-f22d-4269-b637-e253a38b3c2d.png"><br>（图片来源网络，侵删）</p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://files.mdnice.com/user/34064/7ddafef3-f22d-4269-b637-e253a38b3c2d.png"><br>（图片来源网络，侵删）</p>
 <p>运行时的三个进程：</p>
 <ul>
 <li><p>扩展进程（Extension Process）</p>
@@ -1834,7 +1834,7 @@
 </li>
 </ul>
 <p>响应头设置：</p>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8eccface9efa421b8430e62444edf4b7~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8eccface9efa421b8430e62444edf4b7~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <h3 id="4-1、cache-control（http1-1）"><a href="#4-1、cache-control（http1-1）" class="headerlink" title="4.1、cache-control（http1.1）"></a>4.1、cache-control（http1.1）</h3><p><code>cache-control</code>属性值：</p>
 <ul>
 <li><p>no-cache  强制进行协商缓存</p>
@@ -1853,9 +1853,9 @@
 </ul>
 <figure class="highlight lasso"><table><tr><td class="code"><pre><span class="line"><span class="keyword">cache</span><span class="params">-control</span>: <span class="keyword">public</span>, <span class="keyword">max</span><span class="params">-age</span>=<span class="number">10</span>;</span><br></pre></td></tr></table></figure>
 
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4e506a323ebc49449aa316ff302b2116~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ab505a1c9bde44c2a1d3d9ae05bc2266~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/483abb75d50347a081dd4cb7562d6817~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4e506a323ebc49449aa316ff302b2116~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ab505a1c9bde44c2a1d3d9ae05bc2266~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/483abb75d50347a081dd4cb7562d6817~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">last-modified:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="attr">if-modified-since:</span></span><br><span class="line"><span class="attr">cache-control:</span> <span class="literal">no</span><span class="string">-cache</span></span><br></pre></td></tr></table></figure>
 <p><strong>原理</strong>:是根据资源最后的<em>修改时间</em>来判断是否需要读取缓存</p>
 <blockquote>
@@ -1897,10 +1897,10 @@
 <li><p>协商缓存由服务器决定是否使用缓存，若协商缓存失效，那么代表该请求的缓存失效，返回200，重新返回资源和缓存标识，再存入浏览器缓存中；生效则返回304，继续使用缓存。</p>
 </li>
 </ol>
-<h2 id="8、缓存策略树🎉"><a href="#8、缓存策略树🎉" class="headerlink" title="8、缓存策略树🎉"></a>8、缓存策略树🎉</h2><p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4b20c21694e940d5acf2b343148bfbbf~tplv-k3u1fbpfcp-zoom-1.image" alt="缓存策略树，很早很早之前画的🤣，现在看看也是醉了😂"></p>
+<h2 id="8、缓存策略树🎉"><a href="#8、缓存策略树🎉" class="headerlink" title="8、缓存策略树🎉"></a>8、缓存策略树🎉</h2><p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4b20c21694e940d5acf2b343148bfbbf~tplv-k3u1fbpfcp-zoom-1.image" alt="缓存策略树，很早很早之前画的🤣，现在看看也是醉了😂"></p>
 <p align=center>缓存策略树，很早很早之前画的🤣，现在看看也是醉了😂</p>
 
-<p><img data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cc8e06075df24102b9989fc1ff0eb797~tplv-k3u1fbpfcp-zoom-1.image" alt="该图来源网络，侵删"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cc8e06075df24102b9989fc1ff0eb797~tplv-k3u1fbpfcp-zoom-1.image" alt="该图来源网络，侵删"></p>
 <p align=center>该图来源网络，侵删</p>
 
 <p>更多看<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Caching">这里</a></p>
@@ -1952,7 +1952,7 @@
 <ul>
 <li>先配置 <code>unique-opened</code> 参数为 <code>false</code> ，以保证 <code>openedMenus</code> 只有一个（ <code>openedMenus</code> 是<code>el-menu</code>内部维护的属性, 可以自行打印看一下）</li>
 </ul>
-<p><img data-src="https://pic.imgdb.cn/item/6311ebfb16f2c2beb1163942.jpg"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://pic.imgdb.cn/item/6311ebfb16f2c2beb1163942.jpg"></p>
 <blockquote>
 <p>一开始我想在子菜单展开折叠的回调事件（<code>open</code>、<code>close</code>）里写逻辑判断，但是不知道什么原因回调事件不触发（注意：<code>open方法</code>和<code>open事件</code>不一样，组件三大要素：<strong>属性、事件、方法</strong>），所以我就考虑在<code>select</code>回调事件里写逻辑了</p>
 </blockquote>
@@ -1971,10 +1971,10 @@
 </ul>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 登录系统的时候，记录展开的菜单信息，</span></span><br><span class="line"><span class="comment">// 在 mounted 里面获取 openedMenus ，并记录信息</span></span><br><span class="line"><span class="title function_">mounted</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 获取当前展开的菜单 - array</span></span><br><span class="line">  <span class="comment">// 手风琴模式，只有一个展开菜单</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// openedMenus 是内部属性</span></span><br><span class="line">  <span class="keyword">const</span> &#123;openedMenus = []&#125; = <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (openedMenus &amp;&amp; openedMenus.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="comment">// 获取展开菜单的 index</span></span><br><span class="line">    <span class="keyword">const</span> index = openedMenus[<span class="number">0</span>];</span><br><span class="line">    sessionStorage.<span class="title function_">put</span>(<span class="string">&#x27;preActiveMenu&#x27;</span>, index)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="attr">methods</span>: &#123;</span><br><span class="line">  <span class="title function_">handleOpen</span>(<span class="params">indexPath</span>) &#123;</span><br><span class="line">    <span class="comment">// 调用 open 方法, 打开close,</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">open</span>(indexPath);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handleClose</span>(<span class="params">indexPath</span>) &#123;</span><br><span class="line">    <span class="comment">// 调用 close 方法, 关闭close</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(indexPath);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handlerSelect</span>(<span class="params">index, indexPath</span>) &#123;</span><br><span class="line">    <span class="comment">// 1. 获取上次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">const</span> _preActiveMenu = sessionStorage.<span class="title function_">get</span>(<span class="string">&#x27;preActiveMenu&#x27;</span>) || <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    <span class="keyword">if</span> (_preActiveMenu) &#123;</span><br><span class="line">      <span class="comment">// 如果存在，则关闭该菜单，再打开新的</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(_preActiveMenu);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 记录这次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">if</span> (indexPath.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      sessionStorage.<span class="title function_">put</span>(<span class="string">&#x27;preActiveMenu&#x27;</span>, indexPath[<span class="number">0</span>])</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="最终效果展示"><a href="#最终效果展示" class="headerlink" title="最终效果展示"></a>最终效果展示</h2><p><img data-src="https://pic.imgdb.cn/item/6311ec1816f2c2beb1164933.jpg"></p>
+<h2 id="最终效果展示"><a href="#最终效果展示" class="headerlink" title="最终效果展示"></a>最终效果展示</h2><p><img data-src="/blog/images/base/loading8.svg" data-original="https://pic.imgdb.cn/item/6311ec1816f2c2beb1164933.jpg"></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>用了<code>UI</code>框架之后就不可避免的会跟产品设计风格向左，这就需要在框架基础之上进行修改。框架也是一个个组件组成的，抓住组件设计的三要素：属性、事件、方法，了解框架组件的工作原理，就可以轻松的进行修改啦🎉🎉</p>
 <hr>
-<p><img data-src="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
 <p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
 <p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
 <p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>

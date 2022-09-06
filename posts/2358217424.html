@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/blue/pace-theme-minimal.css">
   <script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"all-smile.github.io","root":"/blog/","images":"/blog/images","scheme":"Gemini","darkmode":false,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":true,"nav":{"livere":{"text":"来必力","order":-1},"gitalk":{"text":"gitalk","order":-2}},"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.13.0/source/js/config.min.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"all-smile.github.io","root":"/blog/","images":"/blog/images","scheme":"Gemini","darkmode":false,"version":"8.13.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":true,"nav":{"livere":{"text":"来必力","order":-1},"gitalk":{"text":"gitalk","order":-2}},"activeClass":"livere"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.13.0/source/js/config.min.js"></script>
 
     <meta name="description" content="http缓存在开发以及面试中经常会遇到，掌握http缓存技术对产品性能提升也有很大帮助。本片讲解缓存的技术、种类和机制，快在项目中运用起来吧。">
 <meta property="og:type" content="blog">
@@ -30,18 +30,18 @@
 <meta property="og:site_name" content="甜点cc">
 <meta property="og:description" content="http缓存在开发以及面试中经常会遇到，掌握http缓存技术对产品性能提升也有很大帮助。本片讲解缓存的技术、种类和机制，快在项目中运用起来吧。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8eccface9efa421b8430e62444edf4b7~tplv-k3u1fbpfcp-zoom-1.image">
-<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4e506a323ebc49449aa316ff302b2116~tplv-k3u1fbpfcp-zoom-1.image">
-<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ab505a1c9bde44c2a1d3d9ae05bc2266~tplv-k3u1fbpfcp-zoom-1.image">
-<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/483abb75d50347a081dd4cb7562d6817~tplv-k3u1fbpfcp-zoom-1.image">
-<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4b20c21694e940d5acf2b343148bfbbf~tplv-k3u1fbpfcp-zoom-1.image">
-<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cc8e06075df24102b9989fc1ff0eb797~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://all-smile.github.io/blog/images/base/loading8.svg">
+<meta property="og:image" content="https://all-smile.github.io/blog/images/base/loading8.svg">
+<meta property="og:image" content="https://all-smile.github.io/blog/images/base/loading8.svg">
+<meta property="og:image" content="https://all-smile.github.io/blog/images/base/loading8.svg">
+<meta property="og:image" content="https://all-smile.github.io/blog/images/base/loading8.svg">
+<meta property="og:image" content="https://all-smile.github.io/blog/images/base/loading8.svg">
 <meta property="article:published_time" content="2022-08-26T14:42:26.000Z">
-<meta property="article:modified_time" content="2022-09-06T05:57:45.003Z">
+<meta property="article:modified_time" content="2022-09-06T12:19:09.375Z">
 <meta property="article:author" content="甜点cc">
 <meta property="article:tag" content="HTTP">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8eccface9efa421b8430e62444edf4b7~tplv-k3u1fbpfcp-zoom-1.image">
+<meta name="twitter:image" content="https://all-smile.github.io/blog/images/base/loading8.svg">
 
 
 <link rel="canonical" href="https://all-smile.github.io/blog/posts/2358217424.html">
@@ -59,9 +59,11 @@
 
 
 
+<script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
   <noscript>
     <link rel="stylesheet" href="/blog/css/noscript.css">
   </noscript>
+<link rel="alternate" href="/blog/atom.xml" title="甜点cc" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -86,7 +88,7 @@
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">看见另一种可能</p>
-      <img class="custom-logo-image" src="/blog/images/base/gloading.gif" data-original="/blog/images/base/lion.png" alt="甜点cc">
+      <img class="custom-logo-image" src="/blog/images/base/lion.png" alt="甜点cc">
   </div>
 
   <div class="site-nav-right">
@@ -167,13 +169,58 @@
   <p class="site-author-name" itemprop="name">甜点cc</p>
   <div class="site-description" itemprop="description">甜点cc</div>
 </div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/blog/archives/">
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
   <div class="sidebar-button site-overview-item animated">
     <button class="js-gitter-toggle-chat-button"><i class="fa fa-comment"></i>
       Chat
     </button>
   </div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/all-smile" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;all-smile" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:find_onepiece@163.com" title="E-Mail → mailto:find_onepiece@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/TO_ALLBLUE" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;TO_ALLBLUE" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/juntao.xiao.104" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;juntao.xiao.104" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
+      </span>
+  </div>
 
 
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://juejin.cn/user/852876755212814/posts" title="https:&#x2F;&#x2F;juejin.cn&#x2F;user&#x2F;852876755212814&#x2F;posts" rel="noopener" target="_blank">掘金</a>
+        </li>
+    </ul>
+  </div>
+<div class="cc-license animated" itemprop="sponsor">
+  <a href="https://www.netlify.com" class="cc-opacity" title="Deploy with Netlify → https://www.netlify.com" target="_blank"><img width="80" src="https://www.netlify.com/img/global/badges/netlify-dark.svg" alt="Netlify"></a>
+</div>
 
         </div>
       </div>
@@ -189,6 +236,10 @@
     <i class="fa fa-arrow-up"></i>
     <span>0%</span>
   </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/all-smile" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
 
 <noscript>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
@@ -242,7 +293,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-09-06 13:57:45" itemprop="dateModified" datetime="2022-09-06T13:57:45+08:00">2022-09-06</time>
+      <time title="修改时间：2022-09-06 20:19:09" itemprop="dateModified" datetime="2022-09-06T20:19:09+08:00">2022-09-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -309,7 +360,7 @@
 </li>
 </ul>
 <p>响应头设置：</p>
-<p><img data-src="/blog/images/base/gloading.gif" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8eccface9efa421b8430e62444edf4b7~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8eccface9efa421b8430e62444edf4b7~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <h3 id="4-1、cache-control（http1-1）"><a href="#4-1、cache-control（http1-1）" class="headerlink" title="4.1、cache-control（http1.1）"></a>4.1、cache-control（http1.1）</h3><p><code>cache-control</code>属性值：</p>
 <ul>
 <li><p>no-cache  强制进行协商缓存</p>
@@ -328,9 +379,9 @@
 </ul>
 <figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cache</span><span class="params">-control</span>: <span class="keyword">public</span>, <span class="keyword">max</span><span class="params">-age</span>=<span class="number">10</span>;</span><br></pre></td></tr></table></figure>
 
-<p><img data-src="/blog/images/base/gloading.gif" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4e506a323ebc49449aa316ff302b2116~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<p><img data-src="/blog/images/base/gloading.gif" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ab505a1c9bde44c2a1d3d9ae05bc2266~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<p><img data-src="/blog/images/base/gloading.gif" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/483abb75d50347a081dd4cb7562d6817~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4e506a323ebc49449aa316ff302b2116~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ab505a1c9bde44c2a1d3d9ae05bc2266~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/483abb75d50347a081dd4cb7562d6817~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">last-modified:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="attr">if-modified-since:</span></span><br><span class="line"><span class="attr">cache-control:</span> <span class="literal">no</span><span class="string">-cache</span></span><br></pre></td></tr></table></figure>
 <p><strong>原理</strong>:是根据资源最后的<em>修改时间</em>来判断是否需要读取缓存</p>
 <blockquote>
@@ -372,10 +423,10 @@
 <li><p>协商缓存由服务器决定是否使用缓存，若协商缓存失效，那么代表该请求的缓存失效，返回200，重新返回资源和缓存标识，再存入浏览器缓存中；生效则返回304，继续使用缓存。</p>
 </li>
 </ol>
-<h2 id="8、缓存策略树🎉"><a href="#8、缓存策略树🎉" class="headerlink" title="8、缓存策略树🎉"></a>8、缓存策略树🎉</h2><p><img data-src="/blog/images/base/gloading.gif" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4b20c21694e940d5acf2b343148bfbbf~tplv-k3u1fbpfcp-zoom-1.image" alt="缓存策略树，很早很早之前画的🤣，现在看看也是醉了😂"></p>
+<h2 id="8、缓存策略树🎉"><a href="#8、缓存策略树🎉" class="headerlink" title="8、缓存策略树🎉"></a>8、缓存策略树🎉</h2><p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4b20c21694e940d5acf2b343148bfbbf~tplv-k3u1fbpfcp-zoom-1.image" alt="缓存策略树，很早很早之前画的🤣，现在看看也是醉了😂"></p>
 <p align=center>缓存策略树，很早很早之前画的🤣，现在看看也是醉了😂</p>
 
-<p><img data-src="/blog/images/base/gloading.gif" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cc8e06075df24102b9989fc1ff0eb797~tplv-k3u1fbpfcp-zoom-1.image" alt="该图来源网络，侵删"></p>
+<p><img data-src="/blog/images/base/loading8.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cc8e06075df24102b9989fc1ff0eb797~tplv-k3u1fbpfcp-zoom-1.image" alt="该图来源网络，侵删"></p>
 <p align=center>该图来源网络，侵删</p>
 
 <p>更多看<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Caching">这里</a></p>
@@ -391,8 +442,39 @@
     
 
     <footer class="post-footer">
+          <div class="reward-container">
+  <div></div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="https://pic.imgdb.cn/item/6317312116f2c2beb1e0b5a4.jpg" alt="甜点cc 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+        <a target="_blank" class="social-link" href="https://pic.imgdb.cn/item/631730b316f2c2beb1e0442f.jpg">
+          <span class="icon">
+            <i class="fab fa-weixin"></i>
+          </span>
+
+          <span class="label">WeChat</span>
+        </a>
+      </div>
+  </div>
+</div>
+
           <div class="post-tags">
-              <a href="/blog/tags/HTTP/" rel="tag"># HTTP</a>
+              <a href="/blog/tags/HTTP/" rel="tag"><i class="fa fa-tag"></i> HTTP</a>
           </div>
 
         
@@ -438,6 +520,9 @@
   <footer class="footer">
     <div class="footer-inner">
 
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">豫ICP备 2021026631号-1 </a>
+      <img src="https://pic.imgdb.cn/item/63172d6316f2c2beb1dcfe0c.png" alt=""><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=2021026631" rel="noopener" target="_blank">豫公网安备 2021026631 号 </a>
+  </div>
 
 <div class="copyright">
   &copy; 
@@ -452,7 +537,15 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
+      <span>站点总字数：</span>
     <span title="站点总字数">69k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:02</span>
   </span>
 </div>
 <div class="busuanzi-count">
@@ -473,8 +566,6 @@
       </span>
     </span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
-  </div>
 
     </div>
   </footer>
@@ -488,7 +579,7 @@
   <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.13.0/source/js/comments.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.13.0/source/js/utils.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.13.0/source/js/motion.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.13.0/source/js/next-boot.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.13.0/source/js/pjax.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.13.0/source/js/comments.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.13.0/source/js/utils.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.13.0/source/js/motion.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.13.0/source/js/next-boot.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.13.0/source/js/bookmark.min.js"></script><script src="https://cdn.jsdelivr.net/npm/hexo-theme-next@8.13.0/source/js/pjax.min.js"></script>
 
   
 <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
