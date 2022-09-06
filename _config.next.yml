@@ -378,16 +378,16 @@ codeblock:
   # Code Highlight theme
   # All available themes: https://theme-next.js.org/highlight/
   theme:
-    light: default
-    dark: stackoverflow-dark
+    light: xt256 # default a11y-dark
+    dark: xt256 # stackoverflow-dark a11y-dark
   prism:
     light: prism
     dark: prism-dark
   # Add copy button on codeblock
   copy_button:
-    enable: false
+    enable: true
     # Available values: default | flat | mac
-    style:
+    style: default
 
 back2top:
   enable: true
@@ -595,8 +595,12 @@ comments:
     #disqus:
     #  text: Load Disqus
     #  order: -1
-    #gitalk:
-    #  order: -2
+    livere:
+      text: 来必力 # 描述
+      order: -1
+    gitalk:
+      text: gitalk # 描述
+      order: -2
 
 # Disqus
 # For more information: https://disqus.com
@@ -634,16 +638,16 @@ gitalk:
   enable: true
   github_id: all-smile # GitHub repo owner
   repo: blog-comments # Repository name to store issues
-  client_id: 2517cadef198080ada74 # GitHub Application Client ID
-  client_secret: cfb0098441c8baa12135577e5d93e42d13b68d76 # GitHub Application Client Secret
-  admin_user: # GitHub repo owner and collaborators, only these guys can initialize gitHub issues
+  client_id: c0e4644dc71118574f29 # 2517cadef198080ada74 # GitHub Application Client ID
+  client_secret: d8adb63b27078f4a8034af7c9579894dd3ba78e1 # cfb0098441c8baa12135577e5d93e42d13b68d76 # GitHub Application Client Secret
+  admin_user: all-smile # GitHub repo owner and collaborators, only these guys can initialize gitHub issues
   distraction_free_mode: true # Facebook-like distraction free mode
   # When the official proxy is not available, you can change it to your own proxy address
   proxy: https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token # This is official proxy address
   # Gitalk's display language depends on user's browser or system environment
   # If you want everyone visiting your site to see a uniform language, you can set a force language value
   # Available values: en | es-ES | fr | ru | zh-CN | zh-TW
-  language:
+  language: zh-CN
 
 # Utterances
 # For more information: https://utteranc.es
