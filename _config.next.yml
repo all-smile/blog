@@ -381,8 +381,8 @@ codeblock:
     light: xt256 # default a11y-dark
     dark: xt256 # stackoverflow-dark a11y-dark
   prism:
-    light: prism
-    dark: prism-dark
+    light: prism-z-touch # prism-okaidia prism-holi-theme prism-z-touch
+    dark: prism-z-touch
   # Add copy button on codeblock
   copy_button:
     enable: true
