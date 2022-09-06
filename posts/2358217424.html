@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4b20c21694e940d5acf2b343148bfbbf~tplv-k3u1fbpfcp-zoom-1.image">
 <meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cc8e06075df24102b9989fc1ff0eb797~tplv-k3u1fbpfcp-zoom-1.image">
 <meta property="article:published_time" content="2022-08-26T14:42:26.000Z">
-<meta property="article:modified_time" content="2022-09-06T03:52:13.228Z">
+<meta property="article:modified_time" content="2022-09-06T05:49:06.368Z">
 <meta property="article:author" content="甜点cc">
 <meta property="article:tag" content="HTTP">
 <meta name="twitter:card" content="summary">
@@ -242,7 +242,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-09-06 11:52:13" itemprop="dateModified" datetime="2022-09-06T11:52:13+08:00">2022-09-06</time>
+      <time title="修改时间：2022-09-06 13:49:06" itemprop="dateModified" datetime="2022-09-06T13:49:06+08:00">2022-09-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -317,7 +317,7 @@
 <li><p>no-store 不缓存</p>
 </li>
 <li><p>max-age   表示缓存的过期时长</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x27;cache-control&#x27;: &#x27;max-age=5&#x27; // 滑动时间，单位是秒</span><br></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;cache-control&#x27;</span>: <span class="string">&#x27;max-age=5&#x27;</span> <span class="regexp">//</span> 滑动时间，单位是秒</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>private, public： 用以明确响应资源是否可以被代理服务器缓存。</p>
 </li>
@@ -326,12 +326,12 @@
 <li><p>public  响应资源既可以被浏览器私有缓存，又可以被代理服务器公共缓存</p>
 </li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cache-control: public, max-age=10;</span><br></pre></td></tr></table></figure>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cache</span><span class="params">-control</span>: <span class="keyword">public</span>, <span class="keyword">max</span><span class="params">-age</span>=<span class="number">10</span>;</span><br></pre></td></tr></table></figure>
 
 <p><img data-src="/blog/images/base/gloading.gif" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4e506a323ebc49449aa316ff302b2116~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <p><img data-src="/blog/images/base/gloading.gif" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ab505a1c9bde44c2a1d3d9ae05bc2266~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <p><img data-src="/blog/images/base/gloading.gif" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/483abb75d50347a081dd4cb7562d6817~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">last-modified: &#x27;&#x27;</span><br><span class="line">if-modified-since:</span><br><span class="line">cache-control: no-cache</span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">last-modified:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="attr">if-modified-since:</span></span><br><span class="line"><span class="attr">cache-control:</span> <span class="literal">no</span><span class="string">-cache</span></span><br></pre></td></tr></table></figure>
 <p><strong>原理</strong>:是根据资源最后的<em>修改时间</em>来判断是否需要读取缓存</p>
 <blockquote>
 <p>根据时间判断有局限性，比方说只改变文件命名，也会引起资源修改时间发生变化，但是对资源本身并没有改动</p>
