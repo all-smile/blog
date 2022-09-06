@@ -3043,3 +3043,11 @@ mark.search-keyword {
     padding: 10px 12px;
   }
 }
+.github-corner svg {
+  color: #fff;
+  fill: var(--theme-color);
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 5;
+}
