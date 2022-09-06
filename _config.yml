@@ -157,25 +157,25 @@ symbols_count_time:
   # 站点底端是否显示站点总字数
   total_symbols: true
   # 站点底端是否显示总阅读时间
-  total_time: false
+  total_time: true
   # 是否移除代码块
   exclude_codeblock: false
   # separated_meta: true
   # item_text_post: true
   # item_text_total: false
   # exclude_codeblock: true
-  # awl: 2
-  # wpm: 300
+  awl: 4
+  wpm: 275 # 每分钟平均字数
 
 
 # Lazyload
 ## Depends on hexo-lazyload-image
 lazyload:
   enable: true
-  onlypost: false
+  onlypost: true
   # 图片尚未加载完时，显示指定图片。目录地址为博客根目录下的 source/
   # 变量引用 ${root}
-  loadingImg: /blog/images/base/gloading.gif
+  loadingImg: /blog/images/base/loading8.svg # /blog/images/base/gloading.gif
 
 # 站内搜索 - 同时设置 _config_next.yml local_search
 search:
