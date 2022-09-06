@@ -33,13 +33,11 @@ jobs:
       # - name: Look Path
       #   run: pwd
       # 查看文件
-      - name: Look Dir List
-        run: tree -L 3 -a
+      # - name: Look Dir List
+      #   run: tree -L 3 -a
       # 第一次或者依赖发生变化的时候执行 Install Dependencies，其它构建的时候不需要这一步
       - name: Install Dependencies
         run: npm install
-      - name: Look Dir List
-        run: tree -L 3 -a
       # - name: clean theme cache
       #   run: git rm -f --cached themes/tenacity
         # run: git submodule deinit themes/tenacity && git rm themes/tenacity
