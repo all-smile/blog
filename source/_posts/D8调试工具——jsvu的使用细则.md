@@ -33,11 +33,11 @@ npm install -g jsvu
 >
 >`jsvu --os=win64 --engines=v8,v8-debug`
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ec1bc890f23c4bf0a1e35ad19c19a71a~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/63184e1c16f2c2beb1dfabd6.png)
 
 执行 jsvu安装引擎，可在 *%USERPROFILE%* */.jsvu* 目录下查看安装的引擎
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3c578fcbdc094598aa80fcd39bb99097~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/63184e2b16f2c2beb1dfbc33.png)
 
 安装 v8-debug
 
@@ -45,7 +45,7 @@ npm install -g jsvu
 jsvu --os=win64 --engines=v8-debug
 ```
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4012a84ed1af4d818829669dbf3271a7~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/63184e3d16f2c2beb1dfd36c.png)
 
 ### 操作系统支持的引擎
 
@@ -129,7 +129,7 @@ Using config "C:\Users\xiao.eshost-config.json"
 C:\Users\xiao.jsvu>
 ```
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/23fed6bc37864292bfc7bad09af4374e~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/63184e5d16f2c2beb1dfff6f.png)
 
 有大佬知道上面问题在哪，麻烦您指点一下，感谢😊
 
@@ -141,7 +141,7 @@ C:\Users\xiao.jsvu>
 
     在cmd窗口下输入 set 回车，可以查看系统变量（想要了解更多 set 命令请看👉 [这里](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/set_1)）
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0a47c2e7fd614e39ac078bd9cd0d1dbb~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/63184e7616f2c2beb1e01f77.png)
 
 ## 3、先简单了解一下抽象语法树
 
@@ -161,11 +161,11 @@ C:\Users\xiao.jsvu>
 
 将AST转换成可执行代码的过程被称为代码生成。
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/86f054da794c45cbac28b645ce4eb9ef~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/63184e8216f2c2beb1e02e93.png)
 <p align=center>图片来源网络（侵删）</p>
 
 下面看一下[在线解析AST](https://astexplorer.net/)的示例👇
-![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/301453d0b408409fbfbbb02511725bf9~tplv-k3u1fbpfcp-watermark.image?)
+![image.png](https://pic.imgdb.cn/item/63184e9816f2c2beb1e04929.png)
 
 ## 4、使用V8调试分析代码
 
@@ -274,7 +274,7 @@ FUNC at 0
 C:\Users\xiao>
 ```
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/32a274ef18a6401d8175b4f5e5bc99d3~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/63184eaa16f2c2beb1e05da2.png)
 
 ### 4.2、查看作用域
 
@@ -363,7 +363,7 @@ v8-debug --allow-natives-syntax .\src\libs\demo.js
 
 输出
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b597a8a32caa4daebe19dc86d9e4e880~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/63184eba16f2c2beb1e071cd.png)
 
 ## 相关文章一览
 

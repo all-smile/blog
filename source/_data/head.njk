@@ -1,2 +1,20 @@
 {# 看板娘 waifu2x是使用深度卷积神经网络的图片超解析系统 二次元图片 #}
 <script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
+{# 自定义操作 #}
+<script>
+  const timing = window.performance && window.performance.timing;
+  const { navigationStart } = timing
+  // 白屏时间
+  const whiteScreenTime = new Date().getTime() - navigationStart
+  console.log('%c whiteScreenTime =', "color: #A871FF", whiteScreenTime, 'ms');
+  // 首屏时间
+  window.onload = function () {
+    // 清除 log
+    console.clear();
+    const firstScreenTime = new Date().getTime() - navigationStart
+    console.log('%c firstScreenTime =', "color: #A871FF", firstScreenTime, 'ms');
+
+    console.log("%c 甜点cc：相逢的还会再相逢", "color: #A871FF;font-size: 20px;font-weight: bold")
+    console.log("%c https://home.i-xiao.space/", "color: #A871FF;font-size: 16px;font-weight: bold")
+  }
+</script>

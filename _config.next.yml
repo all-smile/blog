@@ -100,10 +100,13 @@ menu:
   about: /about/ || fa fa-user
   # tags: /tags/ || fa fa-tags
   # categories: /categories/ || fa fa-th
-  archives: /archives/ || fa fa-archive
-  schedule: /schedule/ || fa fa-calendar
-  # sitemap: /sitemap.xml || fa fa-sitemap
-  commonweal: /404/ || fa fa-heartbeat
+  # archives: /archives/ || fa fa-archive
+  # schedule: /schedule/ || fa fa-calendar # 日程表
+  sitemap: /BingSiteAuth.xml/ || fa fa-sitemap
+  # commonweal: /404/ || fa fa-heartbeat # 公益 404
+  留言: /message/ || fa fa-comment
+  # 札记: /notes/ || fa fa-book
+  # 电影: /movie/ || fa fa-video-camera
 
   # 动态子菜单
   # Docs:

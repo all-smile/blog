@@ -175,7 +175,7 @@ lazyload:
   onlypost: true
   # 图片尚未加载完时，显示指定图片。目录地址为博客根目录下的 source/
   # 变量引用 ${root}
-  loadingImg: /blog/images/base/loading8.svg # /blog/images/base/gloading.gif
+  loadingImg: /blog/images/base/loading02.gif # /blog/images/base/gloading.gif
 
 # 站内搜索 - 同时设置 _config_next.yml local_search
 search:
@@ -188,7 +188,7 @@ search:
 # 是一个生成网站 sitemap 工具，你可以主动将生成的 sitemap.xml 提交给搜索引擎，
 # 这样搜索引擎就可以更好的抓取你的博文
 sitemap:
-  path: sitemap.xml
+  path: BingSiteAuth.xml
   rel: false
 
 

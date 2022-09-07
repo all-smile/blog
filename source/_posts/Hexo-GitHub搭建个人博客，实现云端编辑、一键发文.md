@@ -69,7 +69,7 @@ npm install
 hexo s
 ```
 
-![](https://files.mdnice.com/user/34064/5dd21663-e0b3-4304-9bb4-a65dded21137.png)
+![](https://pic.imgdb.cn/item/63184fd416f2c2beb1e20f8a.png)
 
 
 网站基础配置修改参考[这里](https://hexo.io/docs/configuration)
@@ -118,7 +118,7 @@ git push -u origin gh-pages
 
 指定部署分支：gh-pages
 
-![](https://files.mdnice.com/user/34064/a973732c-bccb-4fbd-ba95-8fb1ef2945fa.png)
+![](https://pic.imgdb.cn/item/63184fe116f2c2beb1e221d9.png)
 
 # 4、手动部署
 
@@ -131,7 +131,7 @@ hexo deploy
 
 hexo模板引擎生成静态文件，并推送到`gh-pages`分支下（替换原先分支下的所有文件）
 
-![](https://files.mdnice.com/user/34064/ff1f8baa-c9cb-4570-97a5-bee921649715.png)
+![](https://pic.imgdb.cn/item/63184ff316f2c2beb1e26ab9.png)
 
 到这里就已经完成了博客的搭建
 
@@ -141,7 +141,7 @@ hexo模板引擎生成静态文件，并推送到`gh-pages`分支下（替换原
 
 这里我配置了自定义域名
 
-![](https://files.mdnice.com/user/34064/b9ccbe53-b080-41ba-8b10-fd9810d6b1e3.jpg)
+![](https://pic.imgdb.cn/item/6318500316f2c2beb1e2b0f1.jpg)
 
 # 5、自动部署
 
@@ -162,7 +162,7 @@ hexo模板引擎生成静态文件，并推送到`gh-pages`分支下（替换原
 > 在线编辑:
 `Github`有提供一个在线编辑的页面，在Repo页面按下按键`.`就可以打开编辑页面了
 
-![](https://files.mdnice.com/user/34064/8818f33d-14ce-4d4d-ae58-079f5e90b023.png)
+![](https://pic.imgdb.cn/item/631854c416f2c2beb1e8b091.png)
 
 每个 `action` 就是一个独立脚本，因此可以做成代码仓库，使用`userName/repoName`的语法引用 `action`。比如，`actions/setup-node`就表示[`github.com/actions/setup-node`](https://github.com/actions/setup-node)这个仓库，它代表一个 `action`，作用是安装 Node.js。事实上，GitHub 官方的 actions 都放在 [`github.com/actions`](https://github.com/actions) 里面。
 
@@ -210,13 +210,13 @@ ssh-keygen -t rsa -b 4096 -C "$(git config user.email)" -f gh-pages -N ""
 
 - 转到`Deploy Keys`并使用`Allow write access`添加您的公钥 `gh-pages.pub`，name写为`public key of ACTIONS_DEPLOY_KEY`，指定用途，方便后面维护
 
-![](https://files.mdnice.com/user/34064/16070f38-5c57-482d-a1bc-5d2fa3318221.png)
+![](https://pic.imgdb.cn/item/631853cd16f2c2beb1e79fe6.png)
 
 
 - 转到`Actions secrets`并将您的私钥 `gh-pages` 添加为 `ACTIONS_DEPLOY_KEY`（这个名称在yml文件中需要使用）
 
 
-![](https://files.mdnice.com/user/34064/e2f6afbc-71e8-4fc2-bcdd-181d2dd96a6c.png)
+![](https://pic.imgdb.cn/item/631853ec16f2c2beb1e7c1f2.png)
 
 
 ## 7.2、新建 .github/workflows/pages.yml 文件
@@ -319,11 +319,11 @@ deploy:
 
 本地仓库直接`push`，触发 `GitHub Actions` 自动构建发布
 
-![](https://files.mdnice.com/user/34064/3428f5ca-7730-4128-9c51-1fce5c063e99.png)
+![](https://pic.imgdb.cn/item/6318540a16f2c2beb1e7e06d.png)
 
-![](https://files.mdnice.com/user/34064/13a98b38-a16c-4997-8a33-f825bb86fb07.png)
+![](https://pic.imgdb.cn/item/6318541616f2c2beb1e7ef0c.png)
 
-![](https://files.mdnice.com/user/34064/9952cb44-cc50-467c-a6b4-36cab774f436.png)
+![](https://pic.imgdb.cn/item/6318547016f2c2beb1e849dd.jpg)
 
 ## Hexo主题
 
@@ -337,7 +337,7 @@ deploy:
 
 在 `pages.yml` 文件的 `Deploy` 步骤下，发布的时候需要一些参数配置，这些参数名是指定好的，不可以随便写，比如 `commit_msg`应该使用 `commit_message`
 
-![](https://files.mdnice.com/user/34064/81d50c5b-188b-4925-b1f8-0da53d697b65.jpg)
+![](https://pic.imgdb.cn/item/6318549416f2c2beb1e87597.jpg)
 
 ```yml
 commit_message: ${{ github.event.head_commit.message }}
@@ -351,7 +351,7 @@ commit_message: ${{ github.event.head_commit.message }}
 
 `GITHUB_TOKEN` 是一种 `GitHub` 应用程序安装访问令牌。 可以使用安装访问令牌代表仓库中安装的 `GitHub` 应用程序进行身份验证。令牌的权限仅限于包含您的工作流程的仓库。
 
-![](https://files.mdnice.com/user/34064/909ecbe7-ad36-4d09-a511-6236bdc317c5.png)
+![](https://pic.imgdb.cn/item/6318549f16f2c2beb1e8841e.png)
 
 解决：
 
@@ -363,7 +363,7 @@ github_token: ${{ secrets.GITHUB_TOKEN }}
 
 - 在 仓库 `Settings/Actions/general` 下，修改 `GITHUB_TOKEN` 的权限
 
-![](https://files.mdnice.com/user/34064/99653c2c-38e5-4a03-a190-1dad2586c372.png)
+![](https://pic.imgdb.cn/item/631854b716f2c2beb1e8a12a.png)
 
 ## 8.3、deploy key问题
 

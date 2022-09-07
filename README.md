@@ -58,6 +58,10 @@ hexo deploy
 ```
 .travis.yml
 ```
+
+- `menu_id` 用来高亮页面所属菜单导航
+- `social_icons` 小图标
+- `auto_cover` 自动添加文章封面
  -->
 
 # 4、常用命令

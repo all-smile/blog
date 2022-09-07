@@ -30,26 +30,26 @@ v16.14.1
 
 - [下载地址](https://developer.android.google.cn/studio/)
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/14f24334e0744e9cbb662908447e5921~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/631855c416f2c2beb1e9e38c.png)
 
 # 3、Android SDK 下载安装
 
 - 安装 android sdk
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4d9bc195ebc6458482c4574f0f740128~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/6318562016f2c2beb1ea4698.png)
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ba817702a1684af6a16f86fcb59f2f7d~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/6318567d16f2c2beb1eab904.png)
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6e446d5e4bf74136af62df252fd56eea~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/6318569116f2c2beb1eacfb0.png)
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7d8ad488eaf7457c96b14e64c1e8ac14~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/631856a016f2c2beb1eae08f.png)
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3e4146b0ea4d44a8932051b9dce2d7db~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/631856be16f2c2beb1eb068f.png)
 
 ## 3.1、环境变量配置
 
 - 配置系统变量
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/afa360280fe1419e8e6586443eb6c345~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/631856cf16f2c2beb1eb1c1c.png)
 
 - Path 配置：
 
@@ -65,13 +65,13 @@ v16.14.1
 
 - [下载地址](https://github.com/Genymobile/scrcpy)
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5597618b2c424d92890e8f272395a0bd~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/631856e916f2c2beb1eb3879.png)
 
 下载zip文件，解压，双击运行 `scrcpy.exe` 可执行文件即可在电脑上投影手机屏幕，如下图👇
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e1a38a71aa8b42c5b4b809a8dd2b21e8~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/631856fb16f2c2beb1eb4fb0.png)
 
-![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f4f4f5f4725c42c480e2eed50a1199d6~tplv-k3u1fbpfcp-watermark.image?)
+![image.png](https://pic.imgdb.cn/item/6318571216f2c2beb1eb7443.png)
 
 > 运行可执行文件之前，使用**数据线**连接Android手机，进行开发者选项设置（不同的手机进入开发者模式略有差异，自行搜索，我用的是华为手机）
 
@@ -124,16 +124,16 @@ yarn react-native run-android
 运行的时候会在手机上弹窗 “是否统一安装软件”之类的提示，点击同意即可
 
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b90b3f05d1f84550a4b36daf6c62d2b6~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/6318572616f2c2beb1eb9161.png)
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b79e872b58ad4ab5b7901eab1f34e3d4~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/6318573616f2c2beb1eba516.png)
 
 ## 7.3、adb reverse  命令使用
 
 [adb 文档](https://developer.android.google.cn/studio/command-line/adb?hl=zh-cn)
 
 #### 解决问题
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6e692862aded418cb3f25d4b47bd63b2~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/6318574916f2c2beb1ebbc88.png)
 
 猜测是多设备连接受影响了，可以尝试重启手机解决
 也可以尝试如下步骤： 启停 adb 服务器
@@ -162,7 +162,7 @@ adb reverse tcp:8081 tcp:8081
 
 ## 8.1、vscode 上代码飘红
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c8fd66fbd3154e30863186824b46a2ed~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic.imgdb.cn/item/6318575a16f2c2beb1ebd220.png)
 
 - 问题原因：
 
