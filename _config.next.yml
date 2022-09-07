@@ -191,7 +191,13 @@ links_settings:
   layout: block
 
 links:
-  掘金: https://juejin.cn/user/852876755212814/posts
+  📢我的空间🎯🔥: https://home.i-xiao.space/
+  # 语雀: https://www.yuque.com/allblue-byynd
+  # 掘金: https://juejin.cn/user/852876755212814/posts
+  # 知乎: https://www.zhihu.com/people/xiaojt_95/posts
+  # CSDN: https://blog.csdn.net/heyYouU?type=blog
+  # 博客园: https://www.cnblogs.com/all-smile/
+  # 微信公众号: https://pic.imgdb.cn/item/63118f9f16f2c2beb1da309c.jpg
 
 # Table of Contents in the Sidebar
 # Front-matter variable (nonsupport wrap expand_all).
@@ -351,7 +357,7 @@ calendar:
 
 # Preconnect CDN for fonts and plugins.
 # For more information: https://www.w3.org/TR/resource-hints/#preconnect
-preconnect: false
+preconnect: true
 
 # Set the text alignment in posts / pages.
 text_align:
@@ -877,6 +883,7 @@ motion:
 
 # Progress bar in the top during page loading.
 # For more information: https://github.com/CodeByZach/pace
+# 阅读进度条
 pace:
   enable: true
   # All available colors:
@@ -889,9 +896,10 @@ pace:
 
 # Canvas ribbon
 # For more information: https://github.com/hustcc/ribbon.js
+# 丝带背景
 canvas_ribbon:
   enable: true
-  size: 300 # The width of the ribbon
+  size: 280 # The width of the ribbon
   alpha: 0.6 # The transparency of the ribbon
   zIndex: -1 # The display level of the ribbon
 
