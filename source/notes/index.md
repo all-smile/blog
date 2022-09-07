@@ -1,6 +1,7 @@
 ---
 menu_id: notes
-title: notes
+title: 札记
+date: 2022-09-07 13:29:46
 ---
 
-# notes
+---
