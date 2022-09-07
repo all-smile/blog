@@ -3051,10 +3051,53 @@ mark.search-keyword {
   top: 0;
   z-index: 5;
 }
+.github-corner svg:hover {
+  fill: #4186f5;
+}
 .gitter-open-chat-button {
   padding: 10px;
+  background: #a63271;
 }
 a:hover {
-  color: #0ff;
-  border-bottom-color: #0ff;
+  color: #40a5f5;
+  border-bottom-color: #40a5f5;
+}
+.fa-coffee {
+  color: #54bddd;
+}
+.fa-heart {
+  color: #f00;
+}
+.fa-chart-line {
+  color: #757bf2;
+}
+.fa-home {
+  color: #ed5564;
+}
+.fa-archive {
+  color: #fa4;
+}
+.fa-search {
+  color: #aaaaf8;
+}
+.fa-calendar {
+  color: #ff5f5f;
+}
+.fa-calendar-check {
+  color: #30c694;
+}
+.fa-folder {
+  color: #8c7bfd;
+}
+.fa-file-word {
+  color: #007ee6;
+}
+.fa-clock {
+  color: #f74;
+}
+.fa-user {
+  color: #5f87e3;
+}
+.fa-eye {
+  color: #ffb5ec;
 }
