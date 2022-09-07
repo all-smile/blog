@@ -3051,3 +3051,10 @@ mark.search-keyword {
   top: 0;
   z-index: 5;
 }
+.gitter-open-chat-button {
+  padding: 10px;
+}
+a:hover {
+  color: #0ff;
+  border-bottom-color: #0ff;
+}
