@@ -101,9 +101,9 @@ menu:
   # tags: /tags/ || fa fa-tags
   # categories: /categories/ || fa fa-th
   archives: /archives/ || fa fa-archive
-  # schedule: /schedule/ || fa fa-calendar
+  schedule: /schedule/ || fa fa-calendar
   # sitemap: /sitemap.xml || fa fa-sitemap
-  # commonweal: /404/ || fa fa-heartbeat
+  commonweal: /404/ || fa fa-heartbeat
 
   # 动态子菜单
   # Docs:
@@ -338,16 +338,21 @@ tagcloud:
 
 # Google Calendar
 # Share your recent schedule to others via calendar page.
+# 我的谷歌日历： https://calendar.google.com/calendar/u/0/r
 calendar:
-  calendar_id: <required> # Your Google account E-Mail
-  api_key: <required>
+  enable: true
+  calendar_id: cmm6fl676798lmc5s4vmfaorbo@group.calendar.google.com #<required> # Your Google account E-Mail
+  api_key: AIzaSyDxEa6f-7wHFZNQRtETxEaEY8tj5sjXcTI # <required>
   orderBy: startTime
-  showLocation: false
-  offsetMax: 72 # Time Range
-  offsetMin: 4 # Time Range
-  showDeleted: false
+  offsetMax: 48 # Time Range
+  offsetMin: 12 # Time Range
+  showLocation: false #是否显示地点
+  showCalendar: false #是否显示来源日历
+  # offsetMax: 72 # Time Range
+  # offsetMin: 4 # Time Range
+  showDeleted: false #是否显示已删除事件
   singleEvents: true
-  maxResults: 250
+  maxResults: 50
 
 
 # ---------------------------------------------------------------

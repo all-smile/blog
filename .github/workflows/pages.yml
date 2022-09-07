@@ -41,6 +41,9 @@ jobs:
       # - name: clean theme cache
       #   run: git rm -f --cached themes/tenacity
         # run: git submodule deinit themes/tenacity && git rm themes/tenacity
+      # 安装 书签 插件
+      - name: Install Bookmark
+        run: git clone https://github.com/theme-next/theme-next-bookmark.git source/lib/bookmark
       # 安装主题
       - name: Install Theme
         # run: git submodule add -f https://github.com/all-smile/tenacity.git themes/tenacity

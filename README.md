@@ -127,3 +127,29 @@ git rm themes/tenacity
 git submodule init
 git submodule update
 ```
+
+# 插件
+
+1. bookmark
+
+```bash
+git clone https://github.com/theme-next/theme-next-bookmark.git source/lib/bookmark
+```
+
+修改 `.gitignore`
+```
+source/lib/bookmark
+```
+
+2. 压缩博文
+
+```bash
+npm install hexo-neat --save
+```
+
+
+---
+
+`NexT`主题配置推荐阅读：
+- [官方文档](https://theme-next.js.org/docs/getting-started/)
+- [网友博客](https://siriusq.top/Next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96.html)
