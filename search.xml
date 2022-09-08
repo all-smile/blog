@@ -803,6 +803,181 @@
       </tags>
   </entry>
   <entry>
+    <title>Hybrid app本地开发如何调用JSBridge</title>
+    <url>/blog/posts/3740751445.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>前天同事问我公司内部的小程序怎么对接的，我回忆了一下，简单记录了一下前端同学需要注意的点。</p>
+<p>背后还有小程序架构、网络策略等等。当时恰逢小程序架构调整，（老架构的时候我就发现了有一个问题点可以优化，但是跟那边人反馈之后，人家表示不要我管😂，新架构时发现这个问题还巧妙的遗留下来了😮）我虽然不负责那块，但是本着<strong>这样不优雅</strong>的原则，还是跟新架构的对接人讲了我的优化方案，讲明白了之后，同时上报各自直系领导，并建议我领导牵头开会推动。最后，无奈存量数据太多，老架构那边权衡之后决定不改动。（多说了几句，权当记录一下）</p>
+</blockquote>
+<h1 id="1、背景"><a href="#1、背景" class="headerlink" title="1、背景"></a>1、背景</h1><p>公司研发的一款服务软件App（姑且称为“大地”），提供了包涵消息、待办、工作台、同事圈和通讯录五大功能模块，其中，工作台里集成了包括公司的移动客户端、PC端以及第三方平台的部分功能/服务（统称为“应用”）。</p>
+<p>我今天要讲的是这个集成平台以什么方式展现“应用”，答案是：借鉴了微信的架构，自研了“小程序”接入“应用”。</p>
+<p>我司小程序具有一种相对开放能力（面向全公司），赋能业务快速数字化、场景敏捷迭代，并且可在“大地”上便捷的获取和使用，同时具有完善的使用体验（这就是严格的接入审核标准带来的好处）。</p>
+<p>在“大地”开发者平台，创建小程序会自动创建配套的公众号（公众号是为了推送消息使用，可订阅）。小程序开发不限制技术选型，开发完成之后按照小程序接入规范打包上架小程序，审核发布。</p>
+<blockquote>
+<p>简单来说，可以把“大地”看成是一个“钉钉”，我现在要把我们的业务功能投放到“大地”上，就需要接入“大地”小程序，以小程序的方式在“大地”上为用户提供服务。</p>
+</blockquote>
+<p>小程序架构：<code>Cordova</code>框架做的<code>WebView</code>，运行我开发的前端程序，通过<code>Nginx</code>帮我把请求代理到微服务网关，由网关转发到目的主机处理请求。它虽然看上去是一个<code>Native App</code>，但只有一个<code>UI WebView</code>，里面访问的是一个<code>Web App</code>，对我来说就是开发一个<code>H5</code>应用调用一些所需的<code>JSBridge</code>，也就是所谓的<code>Hybrid App</code>。</p>
+<p>下面看一下本地开发中的一些问题，以及我是怎么处理的</p>
+<h1 id="2、问题"><a href="#2、问题" class="headerlink" title="2、问题"></a>2、问题</h1><p><code>Hybrid App</code>本地开发过程中没有真实的<code>Native</code>环境的，同样也无法使用<code>JSBridge</code>，这就会带来一个问题：跟原生交互的行为只能发布小程序才可以调试，本地玩不了，这…，相当fuck。</p>
+<p>目的是想让本地开发同小程序测试环境具有相同的体验，我的想法是在本地模拟<code>JSBridge</code>的方法，尽管不能带来真实的效果，至少触发了某个行为之后要有个反应，不至于让操作流程看起来像是“脱节”的（实际跟原生的交互行为并不多，比如：拍照、弹窗提示、定位等等）。</p>
+<p>因此，我要做的就是本地模拟<code>JSBridge</code>的一些方法，开发时触发了这些原生交互行为之后提示一些信息，等到上架小程序测试环境时，在手机上会用真实的<code>JSBridge</code>方法自动替换掉我模拟实现的方法。</p>
+<p>于是我就开始了下面的准备工作。</p>
+<ol>
+<li><p>搞清楚<code>JSBridge</code>运行的原理</p>
+</li>
+<li><p>本地模拟<code>JSBridge</code>的方法</p>
+</li>
+<li><p>上架小程序是自动使用真实的<code>JSBridge</code></p>
+</li>
+</ol>
+<h1 id="3、了解JSBridge"><a href="#3、了解JSBridge" class="headerlink" title="3、了解JSBridge"></a>3、了解<code>JSBridge</code></h1><p><strong>JSBridge</strong>：望文生义就是<code>js</code>和<code>Native</code>之前的桥梁，而实际上<code>JSBridge</code>确实是<code>JS</code>和<code>Native</code>之前的<strong>一种通信方式</strong>。</p>
+<p>简单的说，<code>JSBridge</code>就是定义<code>Native</code>和<code>JS</code>的通信，<code>Native</code>只通过一个固定的桥对象调用<code>JS</code>，<code>JS</code>也只通过固定的桥对象调用<code>Native</code>。<code>JSBridge</code>另一个叫法及大家熟知的<code>Hybrid app</code>技术。</p>
+<p><img data-src="/blog/images/base/loading02.gif" data-original="https://files.mdnice.com/user/34064/5abc4a2c-94d3-43c4-94ef-e30e67f0b189.png"></p>
+<!-- ![](https://files.mdnice.com/user/34064/f153f9b5-c445-4251-ba42-192321a0ca89.png) -->
+
+<p>了解即可，更多的请参考</p>
+<ul>
+<li><p><a href="https://www.jianshu.com/p/0bd13e9059fb">Cordova浅析架构原理</a></p>
+</li>
+<li><p><a href="https://toutiao.io/posts/07qll1/preview">JSBridge 深度剖析</a></p>
+</li>
+</ul>
+<p>下图展示了<code>JSBridge</code>的工作流程👇</p>
+<p><img data-src="/blog/images/base/loading02.gif" data-original="https://files.mdnice.com/user/34064/5ba88de0-b711-429d-9af9-1d27ee681e2a.png"></p>
+<p>上图中左侧部分正式我要做的，具体请看下文</p>
+<blockquote>
+<p>看累了，三连一下，回看不迷路哟😉</p>
+</blockquote>
+<h2 id="3-1、我们的JSBridge"><a href="#3-1、我们的JSBridge" class="headerlink" title="3.1、我们的JSBridge"></a>3.1、我们的<code>JSBridge</code></h2><p>推测“大地”那边的<code>JSBridge</code>应该是自己写的，没有初始化<code>JSBridge</code>的操作</p>
+<p>当调用<code>JSBridge</code>时，必须在页面完全加载完成之后才能够拿到全局的<code>JSBridge</code>，<code>Cordova</code>框架提供<code>deviceready</code>事件，该事件触发的时候表示全局的<code>JSBridge</code>挂载成功。（注意：这就是我接下来操作的切入点，嘻嘻）</p>
+<p>简单写下如下：</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'deviceready OK!'</span>);</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">showToast</span>(<span class="number">0</span>, <span class="string">'提示信息'</span>)</span><br><span class="line">}, <span class="literal">false</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>需要注意的是，在开发环境，是没有 <code>deviceready</code> 事件的，所以上面的代码并不会执行，只有在<code>app</code>里面运行的时候才会执行。</p>
+<p><strong>思考：</strong></p>
+<p><code>JSBridge</code>必须是在<code>deviceready</code>事件触发后方能使用的，因此首先要做的就是自定义<code>deviceready</code>事件，本地环境可以在<code>load</code>事件里触发自定义<code>deviceready</code>事件，生产环境下监听<code>deviceready</code>事件即可</p>
+<p><img data-src="/blog/images/base/loading02.gif" data-original="https://files.mdnice.com/user/34064/4d013bc7-f272-43a3-adfc-715534db4467.png"></p>
+<h1 id="4、JS发起自定义事件"><a href="#4、JS发起自定义事件" class="headerlink" title="4、JS发起自定义事件"></a>4、JS发起自定义事件</h1><p>我是用 <code>CustomEvent</code> 构造函数，继承至 <code>Event</code>，文档看<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/CustomEvent">这里</a></p>
+<ol>
+<li>用法</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="title class_">CustomEvent</span>(eventName, params);</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>示例</li>
+</ol>
+<p>创建一个自定义事件</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> event=<span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'mock-event'</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>传递参数</li>
+</ol>
+<p>这里值得注意，需要把想要传递的参数包裹在一个包含<code>detail</code>属性的对象，否则传递的参数不会被挂载</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createEvent</span>(<span class="params">params, eventName = <span class="string">'mock-event'</span></span>) {</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(eventName, { <span class="attr">detail</span>: params });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> event = <span class="title function_">createEvent</span>({ <span class="attr">id</span>: <span class="string">'0010'</span> });</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="4">
+<li>发起事件</li>
+</ol>
+<p>调用<code>dispatchEvent</code>方法发起事件，传入你刚才创建的方法</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">dispatchEvent</span>(event);</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="5">
+<li>监听事件</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'mock-event'</span>, <span class="function">(<span class="params">{ detail: { id } }</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'id'</span>,id) <span class="comment">// 会在控制台打印0010</span></span><br><span class="line">});</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="6">
+<li>示例：</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">addEventListener</span>(<span class="string">'show'</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> { <span class="variable language_">console</span>.<span class="title function_">log</span>(event.<span class="property">detail</span>); });</span><br><span class="line"><span class="comment">// 触发</span></span><br><span class="line"><span class="keyword">let</span> myEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'show'</span>, {</span><br><span class="line">    <span class="attr">detail</span>: {</span><br><span class="line">        <span class="attr">username</span>: <span class="string">'xixi'</span>,</span><br><span class="line">        <span class="attr">userid</span>: <span class="string">'2022'</span></span><br><span class="line">    }</span><br><span class="line">});</span><br><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">dispatchEvent</span>(myEvent);</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>了解了自定义事件之后，通过自定义事件模拟触发<code>deviceready</code>事件，这样上面的 <code>deviceready</code> 事件监听就可以执行了。</p>
+<p><strong>注意</strong>：这里还要确定一个问题，在什么时候触发自定义事件<code>deviceready</code>呢？</p>
+</blockquote>
+<h1 id="5、确定-deviceready-事件执行时机"><a href="#5、确定-deviceready-事件执行时机" class="headerlink" title="5、确定 deviceready 事件执行时机"></a>5、确定 <code>deviceready</code> 事件执行时机</h1><ul>
+<li>只需要编写如下代码，查看输出结果即可</li>
+</ul>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'load'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'load OK!'</span>);</span><br><span class="line">}, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'deviceready OK!'</span>);</span><br><span class="line">}, <span class="literal">false</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>结果输出</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">load OK!</span><br><span class="line">deviceready OK!</span><br></pre></td></tr></tbody></table></figure>
+
+<p>由此可知，执行顺序：<code>load</code> –&gt; <code>deviceready</code></p>
+<h1 id="6、自定义事件模拟Cordova-deviceready事件"><a href="#6、自定义事件模拟Cordova-deviceready事件" class="headerlink" title="6、自定义事件模拟Cordova deviceready事件"></a>6、自定义事件模拟<code>Cordova</code> <code>deviceready</code>事件</h1><ol>
+<li><p>自定义<code>deviceready</code>事件</p>
+</li>
+<li><p>根据上面测试执行顺序得出的结论，我在<code>load</code>事件里触发自定义事件</p>
+</li>
+<li><p>在开发环境下模拟一些用到的<code>JSBridge-API</code>，比如下面写到的 <code>JSAPI.showToast()</code> 方法</p>
+</li>
+</ol>
+<ul>
+<li>mockEvent.js<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (process.<span class="property">env</span>.<span class="property">NODE_ENV</span> === <span class="string">'development'</span>) {</span><br><span class="line">  <span class="comment">//  自定义事件</span></span><br><span class="line">  <span class="keyword">let</span> myEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'deviceready'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 模拟JSAPI事件</span></span><br><span class="line">  <span class="variable language_">window</span>[<span class="string">'JSAPI'</span>] = {</span><br><span class="line">    <span class="title function_">showToast</span>(<span class="params">type, desc</span>) {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(type, desc);</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 开发环境下，在 原生 load 方法之后 触发自定义事件</span></span><br><span class="line">  <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'load'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'load OK!'</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> {</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">dispatchEvent</span>(myEvent);</span><br><span class="line">    }, <span class="number">100</span>)</span><br><span class="line">  }, <span class="literal">false</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h1 id="7、封装deviceReady方法"><a href="#7、封装deviceReady方法" class="headerlink" title="7、封装deviceReady方法"></a>7、封装<code>deviceReady</code>方法</h1><p>实现在<code>Cordova</code>框架触发<code>deviceready</code>事件的时候感知到，以便于在<code>deviceReady</code>事件触发后执行<code>JS-API</code>。</p>
+<p><strong>可用于开发环境和非开发环境</strong></p>
+<h2 id="7-1、方式一"><a href="#7-1、方式一" class="headerlink" title="7.1、方式一"></a>7.1、方式一</h2><p>这里采用<strong>链式调用</strong>的方式，</p>
+<p>以下这种借助 <code>Promise</code> 的实现，在这种场景下其实是不合理的👀<br>只是形式上类似，其实并不是</p>
+<ol>
+<li>定义</li>
+</ol>
+<ul>
+<li>mixin.js</li>
+</ul>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">deviceReady</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">      <span class="title function_">resolve</span>(<span class="string">"ready go!"</span>);</span><br><span class="line">    }, <span class="literal">false</span>);</span><br><span class="line">  })</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>组件内使用<code>JS-API</code></li>
+</ol>
+<p>使用<code>JSAPI</code>可以如下这么写</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">deviceReady</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res); <span class="comment">// ready go!</span></span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">showToast</span>(<span class="number">0</span>, <span class="string">'提示'</span>)</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="variable language_">this</span>.<span class="title function_">deviceReady</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">getUserInfo</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">  }, <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">  });</span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>开发环境执行效果如下</li>
+</ol>
+<p><img data-src="/blog/images/base/loading02.gif" data-original="https://files.mdnice.com/user/34064/0acc6185-f3bb-49ea-8ac8-f55fec5207b2.png"></p>
+<h2 id="7-2、方式二（推荐）"><a href="#7-2、方式二（推荐）" class="headerlink" title="7.2、方式二（推荐）"></a>7.2、方式二（推荐）</h2><p>改写成通用的事件监听函数，支持链式调用</p>
+<blockquote>
+<ul>
+<li><p>开发环境下，由<code>mockEvent.js</code>文件里的<code>dispatchEvent</code>触发自定义的<code>deviceready</code>事件；</p>
+</li>
+<li><p>小程序里运行，则由真实的<code>deviceready</code>事件触发</p>
+</li>
+</ul>
+</blockquote>
+<ol>
+<li>定义</li>
+</ol>
+<ul>
+<li>mixin.js</li>
+</ul>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">receiver</span>(<span class="params">type</span>) {</span><br><span class="line">  <span class="keyword">let</span> callbacks = {</span><br><span class="line">      <span class="attr">fns</span>: [],</span><br><span class="line">      <span class="attr">then</span>: <span class="keyword">function</span>(<span class="params">cb</span>){</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">fns</span>.<span class="title function_">push</span>(cb);</span><br><span class="line">          <span class="keyword">return</span> <span class="variable language_">this</span>;</span><br><span class="line">      }</span><br><span class="line">  };</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(type, <span class="keyword">function</span>(<span class="params">ev</span>) {</span><br><span class="line">    <span class="keyword">let</span> fns = callbacks.<span class="property">fns</span>.<span class="title function_">slice</span>();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>, l = fns.<span class="property">length</span>; i &lt; l; i++){</span><br><span class="line">        fns[i].<span class="title function_">call</span>(<span class="variable language_">this</span>, ev);</span><br><span class="line">    }</span><br><span class="line">  });</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> callbacks;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>使用</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">receiver</span>(<span class="string">'deviceready'</span>).<span class="title function_">then</span>(<span class="function">(<span class="params">ev</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(ev);</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">getUserInfo</span>(</span><br><span class="line">    <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">    },</span><br><span class="line">    <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">    }</span><br><span class="line">  )</span><br><span class="line">})</span><br><span class="line"><span class="variable language_">this</span>.<span class="title function_">receiver</span>(<span class="string">"click"</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"hi"</span>))</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">()=&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">22</span>));</span><br></pre></td></tr></tbody></table></figure>
+
+
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>当应用发布到<code>app</code>上，就是监听的真实的 <code>Cordova</code>框架的 <code>deviceready</code> 事件了，之后也就可以拿到真实的<code>JSAPI</code>了，以上只是为了在开发环境的时候模拟使用<code>JSAPI</code>。防止在开发环境下直接调用<code>JSAPI</code>飘红的情况，当然也是可以加<code>try catch</code>处理的，只不过个人感觉模拟事件使得代码看起来更加优雅别致一点，使用更加丝滑，酌情食用😁。</p>
+<p>软件架构非常有意思，感兴趣的可以交流探索，嘻嘻。</p>
+<hr>
+<p><img data-src="/blog/images/base/loading02.gif" data-original="https://files.mdnice.com/user/34064/27dc0961-1b17-43f4-951a-ff421816df4f.gif"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>Hybrid app</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux操作系统学习（运维必会）</title>
     <url>/blog/posts/1915044345.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
