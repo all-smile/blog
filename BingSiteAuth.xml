@@ -263,15 +263,6 @@
   </url>
   
   <url>
-    <loc>https://all-smile.github.io/blog/404/index.html</loc>
-    
-    <lastmod>2022-09-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://all-smile.github.io/blog/about/index.html</loc>
     
     <lastmod>2022-09-09</lastmod>
@@ -291,6 +282,15 @@
   
   <url>
     <loc>https://all-smile.github.io/blog/friends/index.html</loc>
+    
+    <lastmod>2022-09-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://all-smile.github.io/blog/404/index.html</loc>
     
     <lastmod>2022-09-09</lastmod>
     
