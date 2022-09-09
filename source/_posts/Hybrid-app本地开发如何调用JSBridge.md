@@ -1,11 +1,12 @@
 ---
 title: Hybrid app本地开发如何调用JSBridge
-date: 2022-09-08 19:56:22
 tags:
   - Hybrid app
 categories:
   - 前端
 description: 前天同事问我公司内部的小程序怎么对接的，我回忆了一下，简单记录了一下前端同学需要注意的点。背后还有小程序架构、网络策略等等。
+abbrlink: 3740751445
+date: 2022-09-08 19:56:22
 ---
 
 > 前天同事问我公司内部的小程序怎么对接的，我回忆了一下，简单记录了一下前端同学需要注意的点。
@@ -50,9 +51,8 @@ description: 前天同事问我公司内部的小程序怎么对接的，我回�
 
 简单的说，`JSBridge`就是定义`Native`和`JS`的通信，`Native`只通过一个固定的桥对象调用`JS`，`JS`也只通过固定的桥对象调用`Native`。`JSBridge`另一个叫法及大家熟知的`Hybrid app`技术。
 
-![](https://files.mdnice.com/user/34064/5abc4a2c-94d3-43c4-94ef-e30e67f0b189.png)
+![](https://pic.imgdb.cn/item/631aeacc16f2c2beb1834bb9.png)
 
-<!-- ![](https://files.mdnice.com/user/34064/f153f9b5-c445-4251-ba42-192321a0ca89.png) -->
 
 了解即可，更多的请参考
 
@@ -62,7 +62,7 @@ description: 前天同事问我公司内部的小程序怎么对接的，我回�
 
 下图展示了`JSBridge`的工作流程👇
 
-![](https://files.mdnice.com/user/34064/5ba88de0-b711-429d-9af9-1d27ee681e2a.png)
+![](https://pic.imgdb.cn/item/631aeaee16f2c2beb18371d9.png)
 
 上图中左侧部分正式我要做的，具体请看下文
 
@@ -87,9 +87,9 @@ document.addEventListener('deviceready', function () {
 
 **思考：**
 
-`JSBridge`必须是在`deviceready`事件触发后方能使用的，因此首先要做的就是自定义`deviceready`事件，本地环境可以在`load`事件里触发自定义`deviceready`事件，生产环境下监听`deviceready`事件即可
+`JSBridge`必须是在`deviceready`事件触发后方能使用的，因此首先要做的就是自定义`deviceready`事件，本地环境可以手动触发自定义`deviceready`事件，生产环境下直接监听`deviceready`事件即可
 
-![](https://files.mdnice.com/user/34064/4d013bc7-f272-43a3-adfc-715534db4467.png)
+![](https://pic.imgdb.cn/item/631aeafd16f2c2beb1838190.png)
 
 # 4、JS发起自定义事件
 
@@ -260,7 +260,7 @@ this.deviceReady().then((res) => {
 
 3. 开发环境执行效果如下
 
-![](https://files.mdnice.com/user/34064/0acc6185-f3bb-49ea-8ac8-f55fec5207b2.png)
+![](https://pic.imgdb.cn/item/631aeb0a16f2c2beb183900d.png)
 
 ## 7.2、方式二（推荐）
 
@@ -323,7 +323,7 @@ this.receiver("click")
 
 ---
 
-![](https://files.mdnice.com/user/34064/27dc0961-1b17-43f4-951a-ff421816df4f.gif)
+![](https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp)
 
 
 我是 [**甜点cc**](https://home.i-xiao.space/)

@@ -175,7 +175,7 @@ lazyload:
   onlypost: true
   # 图片尚未加载完时，显示指定图片。目录地址为博客根目录下的 source/
   # 变量引用 ${root}
-  loadingImg: /blog/images/base/loading02.gif # /blog/images/base/gloading.gif
+  loadingImg: /blog/images/base/loading03.svg # loading02.gif /blog/images/base/gloading.gif
 
 # 站内搜索 - 同时设置 _config_next.yml local_search
 search:
