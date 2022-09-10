@@ -12,3 +12,11 @@ hexo.extend.injector.register(
 //   '<meta name="google-site-verification" content="甜点cc,前端,Vue,React,DevOps" /> ',
 //   'home'
 // );
+
+
+// 插入 Youtube 影片。
+hexo.extend.tag.register('youtube', function (args) {
+  console.log('args=', args);
+  var id = args[0];
+  return '<div class="video-container"><iframe width="560" height="315" src="http://www.youtube.com/embed/' + id + '" frameborder="0" allowfullscreen></iframe></div>';
+});
