@@ -1,6 +1,6 @@
-// 注入有问题
+<html><head></head><body>// 注入有问题
 window.onload = function () {
-  const timing = window.performance && window.performance.timing;
+  const timing = window.performance &amp;&amp; window.performance.timing;
   const { navigationStart } = timing;
   // 白屏时间
   const whiteScreenTime = new Date().getTime() - navigationStart;
@@ -28,10 +28,11 @@ window.onload = function () {
     } else {
       $('[rel="icon"]').attr("href", "/blog/images/base/favicon.ico");
       // https://pic.imgdb.cn/item/631869a616f2c2beb101201c.jpg
-      document.title = "(ฅ>ω<*ฅ) 噫又好了~" + OriginTitle;
+      document.title = "(ฅ&gt;ω&lt;*ฅ) 噫又好了~" + OriginTitle;
       titleTime = setTimeout(function () {
         document.title = OriginTitle;
       }, 2000);
     }
   });
 };
+</body></html>
