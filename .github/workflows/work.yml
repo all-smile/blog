@@ -1,0 +1,72 @@
+name: Pages
+
+on:
+  push:
+    branches:
+      - master  # default branch
+jobs:
+  pages:
+    runs-on: ubuntu-latest # 定运行所需要的虚拟机环境
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v2
+        # with:
+        #   submodules: true
+        #   fetch-depth: 0
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.14.1'
+      # - run: node -v # 查看node版本号
+      # 缓存依赖项: https://docs.github.com/cn/actions/using-workflows/caching-dependencies-to-speed-up-workflows
+      - name: Cache NPM dependencies
+        uses: actions/cache@v2
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          # path: node_modules
+          key: ${{ runner.OS }}-npm-cache
+          restore-keys: |
+            ${{ runner.OS }}-npm-cache
+      # 查看路径 : /home/runner/work/blog/blog
+      # - name: Look Path
+      #   run: pwd
+      # 查看文件
+      # - name: Look Dir List
+      #   run: tree -L 3 -a
+      # 第一次或者依赖发生变化的时候执行 Install Dependencies，其它构建的时候不需要这一步
+      - name: Install Dependencies
+        run: npm install
+      # - name: clean theme cache
+      #   run: git rm -f --cached themes/tenacity
+        # run: git submodule deinit themes/tenacity && git rm themes/tenacity
+      # 安装 书签 插件
+      # - name: Install Bookmark
+      #   run: git clone https://github.com/theme-next/theme-next-bookmark.git source/lib/bookmark
+      # 安装主题
+      - name: Install Theme
+        # run: git submodule add -f https://github.com/all-smile/tenacity.git themes/tenacity
+        run: git clone https://github.com/next-theme/hexo-theme-next themes/next
+      - name: Clean
+        run: npm run clean
+      - name: Build
+        run: npm run build
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY  }}
+          # user_name: 'github-actions[bot]'
+          # user_email: 'github-actions[bot]@users.noreply.github.com'
+          user_name: xiao
+          user_email: allblue95@126.com
+          commit_message: ${{ github.event.head_commit.message }}
+          full_commit_message: ${{ github.event.head_commit.message }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # GITHUB_TOKEN不是个人访问令牌，GitHub Actions 运行器会自动创建一个GITHUB_TOKEN密钥以在您的工作流程中进行身份验证。因此，您无需任何配置即可立即开始部​​署
+          publish_dir: ./public
+          allow_empty_commit: true # 允许空提交
+      # Use the output from the `deploy` step(use for test action)
+      - name: Get the output
+        run: |
+          echo "${{ steps.deploy.outputs.notify }}"
