@@ -343,7 +343,7 @@ tagcloud:
 # Share your recent schedule to others via calendar page.
 # 我的谷歌日历： https://calendar.google.com/calendar/u/0/r
 calendar:
-  enable: true
+  enable: false
   calendar_id: cmm6fl676798lmc5s4vmfaorbo@group.calendar.google.com #<required> # Your Google account E-Mail
   api_key: AIzaSyDxEa6f-7wHFZNQRtETxEaEY8tj5sjXcTI # <required>
   orderBy: startTime
@@ -567,6 +567,7 @@ lazyload: true
 # Pangu Support
 # For more information: https://github.com/vinta/pangu.js
 # Server-side plugin: https://github.com/next-theme/hexo-pangu
+# 在汉字和英文数字符号之间插入一个空格
 pangu: true
 
 # Quicklink Support

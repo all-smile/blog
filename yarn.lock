@@ -307,16 +307,6 @@
   "resolved" "https://registry.npmmirror.com/arr-union/-/arr-union-3.1.0.tgz"
   "version" "3.1.0"
 
-"array-parallel@~0.1.3":
-  "integrity" "sha512-TDPTwSWW5E4oiFiKmz6RGJ/a80Y91GuLgUYuLd49+XBS75tYo8PNgaT2K/OxuQYqkoI852MDGBorg9OcUSTQ8w=="
-  "resolved" "https://registry.npmmirror.com/array-parallel/-/array-parallel-0.1.3.tgz"
-  "version" "0.1.3"
-
-"array-series@~0.1.5":
-  "integrity" "sha512-L0XlBwfx9QetHOsbLDrE/vh2t018w9462HM3iaFfxRiK83aJjAt/Ja3NMkOW7FICwWTlQBa3ZbL5FKhuQWkDrg=="
-  "resolved" "https://registry.npmmirror.com/array-series/-/array-series-0.1.5.tgz"
-  "version" "0.1.5"
-
 "array-unique@^0.2.1":
   "integrity" "sha512-G2n5bG5fSUCpnsXz4+8FUkYsGPkNfLn9YvS66U5qbTIXI2Ynnlo4Bi42bWv+omKUCqz+ejzfClwne0alJWJPhg=="
   "resolved" "https://registry.npmmirror.com/array-unique/-/array-unique-0.2.1.tgz"
@@ -860,14 +850,6 @@
   "resolved" "https://registry.npmmirror.com/core-util-is/-/core-util-is-1.0.2.tgz"
   "version" "1.0.2"
 
-"cross-spawn@^4.0.0":
-  "integrity" "sha512-yAXz/pA1tD8Gtg2S98Ekf/sewp3Lcp3YoFKJ4Hkp5h5yLWnKVTDU0kwjKJ8NDCYcfTLfyGkzTikst+jWypT1iA=="
-  "resolved" "https://registry.npmmirror.com/cross-spawn/-/cross-spawn-4.0.2.tgz"
-  "version" "4.0.2"
-  dependencies:
-    "lru-cache" "^4.0.1"
-    "which" "^1.2.9"
-
 "cross-spawn@^6.0.0":
   "integrity" "sha512-eTVLrBSt7fjbDygz805pMnstIs2VTBNkRm0qxZd+M7A5XDdxVRWO5MxGBXZhjY4cqLYLdtrGqRf8mBPmzwSpWQ=="
   "resolved" "https://registry.npmmirror.com/cross-spawn/-/cross-spawn-6.0.5.tgz"
@@ -974,13 +956,6 @@
   "version" "2.6.9"
   dependencies:
     "ms" "2.0.0"
-
-"debug@^3.1.0":
-  "integrity" "sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ=="
-  "resolved" "https://registry.npmmirror.com/debug/-/debug-3.2.7.tgz"
-  "version" "3.2.7"
-  dependencies:
-    "ms" "^2.1.1"
 
 "debug@^4.3.2":
   "integrity" "sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ=="
@@ -1605,16 +1580,6 @@
     "min-document" "^2.19.0"
     "process" "^0.11.10"
 
-"gm@^1.23.1":
-  "integrity" "sha512-wYGVAa8/sh9ggF5qWoOs6eArcAgwEPkDNvf637jHRHkMUznvs7m/Q2vrc0KLN6B8px3nnRJqJcXK4mTK6lLFmg=="
-  "resolved" "https://registry.npmmirror.com/gm/-/gm-1.23.1.tgz"
-  "version" "1.23.1"
-  dependencies:
-    "array-parallel" "~0.1.3"
-    "array-series" "~0.1.5"
-    "cross-spawn" "^4.0.0"
-    "debug" "^3.1.0"
-
 "googleapis@^1.0.21":
   "integrity" "sha512-eoy/QAkhohkjziIpqybTsUtPxMDmtVjK4uJSCerU7RcrVu9qae7tJIvRsyMgHJ7fF90FV/j8Wv2ESsGzZqUwxA=="
   "resolved" "https://registry.npmmirror.com/googleapis/-/googleapis-1.1.5.tgz"
@@ -1860,24 +1825,6 @@
   "version" "1.0.0"
   dependencies:
     "sprintf-js" "^1.0.3"
-
-"hexo-lazyload-image@^1.0.12":
-  "integrity" "sha512-FYtWS3MnEesDqDKwxGIoGG8j5m8jzJAJoDa22rEsztI/fYxtnXZzypinyADRlOczXQLHqKqtjBR+rdpnynJtJQ=="
-  "resolved" "https://registry.npmmirror.com/hexo-lazyload-image/-/hexo-lazyload-image-1.0.12.tgz"
-  "version" "1.0.12"
-  dependencies:
-    "uglify-js" "^3.0.27"
-
-"hexo-lazyload@^1.3.6":
-  "integrity" "sha512-Ms1iwux7hdCYrBzZx2Zmy4IrYcrsL17VG0XNxaHYZA7MI9iv54Ah/XUWSSR9datf1pfJ+EB4UtxhXyudkP3s/g=="
-  "resolved" "https://registry.npmmirror.com/hexo-lazyload/-/hexo-lazyload-1.3.6.tgz"
-  "version" "1.3.6"
-  dependencies:
-    "cheerio" "^1.0.0-rc.2"
-    "gm" "^1.23.1"
-    "mkdirp" "^0.5.1"
-    "queue-maplimit" "^0.0.3"
-    "request" "^2.85.0"
 
 "hexo-log@^2.0.0":
   "integrity" "sha512-U7zdDae74pXcyhQEyNmpJdq3UI6zWKxQ7/zLoMr/d3CBRdIfB5yO8DWqKUnewfibYv0gODyTWUIhxQDWuwloow=="
@@ -2698,14 +2645,6 @@
   dependencies:
     "tslib" "^2.0.3"
 
-"lru-cache@^4.0.1":
-  "integrity" "sha512-sWZlbEP2OsHNkXrMl5GYk/jKk70MBng6UU4YI/qGDYbgf6YbP4EvmqISbXCoJiRKs+1bSpFHVgQxvJ17F2li5g=="
-  "resolved" "https://registry.npmmirror.com/lru-cache/-/lru-cache-4.1.5.tgz"
-  "version" "4.1.5"
-  dependencies:
-    "pseudomap" "^1.0.2"
-    "yallist" "^2.1.2"
-
 "map-age-cleaner@^0.1.1":
   "integrity" "sha512-bJzx6nMoP6PDLPBFmg7+xRKeFZvFboMrGlxmNj9ClvX53KrmvM5bXFXEWjbz4cz1AFn+jWJ9z/DJSz7hrs0w3w=="
   "resolved" "https://registry.npmmirror.com/map-age-cleaner/-/map-age-cleaner-0.1.3.tgz"
@@ -2930,11 +2869,6 @@
     "depd" "~2.0.0"
     "on-finished" "~2.3.0"
     "on-headers" "~1.0.2"
-
-"ms@^2.1.1":
-  "integrity" "sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA=="
-  "resolved" "https://registry.npmmirror.com/ms/-/ms-2.1.3.tgz"
-  "version" "2.1.3"
 
 "ms@2.0.0":
   "integrity" "sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A=="
@@ -3346,11 +3280,6 @@
   "resolved" "https://registry.npmmirror.com/process/-/process-0.11.10.tgz"
   "version" "0.11.10"
 
-"pseudomap@^1.0.2":
-  "integrity" "sha512-b/YwNhb8lk1Zz2+bXXpS/LK9OisiZZ1SNsSLxN1x2OXVEhW2Ckr/7mWE5vrC1ZTiJlD9g19jWszTmJsB+oEpFQ=="
-  "resolved" "https://registry.npmmirror.com/pseudomap/-/pseudomap-1.0.2.tgz"
-  "version" "1.0.2"
-
 "psl@^1.1.28", "psl@^1.1.33":
   "integrity" "sha512-E/ZsdU4HLs/68gYzgGTkMicWTLPdAftJLfJFlLUAAKZGkStNU72sZjT66SnMDVOfOWY/YAoiD7Jxa9iHvngcag=="
   "resolved" "https://registry.npmmirror.com/psl/-/psl-1.9.0.tgz"
@@ -3388,11 +3317,6 @@
   "integrity" "sha512-773xhDQnZBMFobEiztv8LIl70ch5MSF/jUQVlhwFyBILqq96anmoctVIYz+ZRp0qbCKATTn6ev02M3r7Ga5vqA=="
   "resolved" "https://registry.npmmirror.com/querystring-es3/-/querystring-es3-0.2.1.tgz"
   "version" "0.2.1"
-
-"queue-maplimit@^0.0.3":
-  "integrity" "sha512-jn26bECWPDvOu4lnaexFRVL1wJSzDj8BTxTDHfLn2mgGtfW+iXrosLgQ52j6zkByx/MKG0SUDCzZFLyRKn8weQ=="
-  "resolved" "https://registry.npmmirror.com/queue-maplimit/-/queue-maplimit-0.0.3.tgz"
-  "version" "0.0.3"
 
 "randomatic@^3.0.0":
   "integrity" "sha512-TuDE5KxZ0J461RVjrJZCJc+J+zCkTb1MbH9AQUq68sMhOMcy9jLcb3BrZKgp9q9Ncltdg4QVqWrH02W2EFFVYw=="
@@ -3516,32 +3440,6 @@
     "is-finite" "^1.0.0"
 
 "request@^2.54.0":
-  "integrity" "sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw=="
-  "resolved" "https://registry.npmmirror.com/request/-/request-2.88.2.tgz"
-  "version" "2.88.2"
-  dependencies:
-    "aws-sign2" "~0.7.0"
-    "aws4" "^1.8.0"
-    "caseless" "~0.12.0"
-    "combined-stream" "~1.0.6"
-    "extend" "~3.0.2"
-    "forever-agent" "~0.6.1"
-    "form-data" "~2.3.2"
-    "har-validator" "~5.1.3"
-    "http-signature" "~1.2.0"
-    "is-typedarray" "~1.0.0"
-    "isstream" "~0.1.2"
-    "json-stringify-safe" "~5.0.1"
-    "mime-types" "~2.1.19"
-    "oauth-sign" "~0.9.0"
-    "performance-now" "^2.1.0"
-    "qs" "~6.5.2"
-    "safe-buffer" "^5.1.2"
-    "tough-cookie" "~2.5.0"
-    "tunnel-agent" "^0.6.0"
-    "uuid" "^3.3.2"
-
-"request@^2.85.0":
   "integrity" "sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw=="
   "resolved" "https://registry.npmmirror.com/request/-/request-2.88.2.tgz"
   "version" "2.88.2"
@@ -4130,7 +4028,7 @@
   "resolved" "https://registry.npmmirror.com/typedarray/-/typedarray-0.0.6.tgz"
   "version" "0.0.6"
 
-"uglify-js@^3.0.27", "uglify-js@^3.5.1":
+"uglify-js@^3.5.1":
   "integrity" "sha512-aTeNPVmgIMPpm1cxXr2Q/nEbvkmV8yq66F3om7X3P/cvOXQ0TMQ64Wk63iyT1gPlmdmGzjGpyLh1f3y8MZWXGg=="
   "resolved" "https://registry.npmmirror.com/uglify-js/-/uglify-js-3.17.0.tgz"
   "version" "3.17.0"
@@ -4343,11 +4241,6 @@
   "integrity" "sha512-JKhqTOwSrqNA1NY5lSztJ1GrBiUodLMmIZuLiDaMRJ+itFd+ABVE8XBjOvIWL+rSqNDC74LCSFmlb/U4UZ4hJQ=="
   "resolved" "https://registry.npmmirror.com/y18n/-/y18n-4.0.3.tgz"
   "version" "4.0.3"
-
-"yallist@^2.1.2":
-  "integrity" "sha512-ncTzHV7NvsQZkYe1DW7cbDLm0YpzHmZF5r/iyP3ZnQtMiJ+pjzisCiMNI+Sj+xQF5pXhSHxSB3uDbsBTzY/c2A=="
-  "resolved" "https://registry.npmmirror.com/yallist/-/yallist-2.1.2.tgz"
-  "version" "2.1.2"
 
 "yargs-parser@^11.1.1":
   "integrity" "sha512-C6kB/WJDiaxONLJQnF8ccx9SEeoTTLek8RVbaOIsrAUS8VrBEXfmeSnCZxygc+XC2sNMBIwOOnfcxiynjHsVSQ=="

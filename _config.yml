@@ -169,7 +169,8 @@ symbols_count_time:
 
 
 # Lazyload
-## Depends on hexo-lazyload-image
+## Depends on hexo-lazyload
+## npm install hexo-lazyload -S
 lazyload:
   enable: true
   onlypost: true
