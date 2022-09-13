@@ -55,11 +55,11 @@
   var titleTime;
   document.addEventListener('visibilitychange', function () {
     if (document.hidden) {
-      // $('[rel="icon"]').attr('href', "/blog/images/base/crashed.png");
+      $('[rel="icon"]').attr('href', "/blog/images/base/crashed.png");
       document.title = '゜zｚＺ页面崩溃啦 ~';
       clearTimeout(titleTime);
     } else {
-      // $('[rel="icon"]').attr('href', "/blog/images/base/favicon.ico");
+      $('[rel="icon"]').attr('href', "/blog/images/base/favicon.ico");
       // https://pic.imgdb.cn/item/631869a616f2c2beb101201c.jpg
       document.title = '♪(´▽｀)噫又好了~' + OriginTitle;
       titleTime = setTimeout(function () {
