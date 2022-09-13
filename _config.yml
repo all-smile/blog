@@ -21,7 +21,7 @@ timezone: 'Asia/Shanghai'
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
 # url: https://all-smile.github.io/blog
 # root: /blog/
-url: https://blog.i-xiao.space/
+url: https://blog.i-xiao.space
 root: /
 
 permalink: posts/:abbrlink.html # 添加了 .html 的后缀， 利于seo
@@ -171,14 +171,15 @@ symbols_count_time:
 
 
 # Lazyload
-## Depends on hexo-lazyload
+## Depends on hexo-lazyload hexo-lazyload-image
 ## npm install hexo-lazyload -S
+## q: generateThumb fail xxx
 lazyload:
   enable: true
   onlypost: true
   # 图片尚未加载完时，显示指定图片。目录地址为博客根目录下的 source/
   # 变量引用 ${root}
-  loadingImg: /blog/images/base/loading03.svg # loading02.gif /blog/images/base/gloading.gif
+  loadingImg: /images/base/loading03.svg # loading02.gif /blog/images/base/gloading.gif
 
 # 站内搜索 - 同时设置 _config_next.yml local_search
 search:
@@ -187,11 +188,13 @@ search:
   content: true
   format: html
 
-# npm install hexo-generator-sitemap --save
+# chrome: npm install hexo-generator-sitemap --save
+# baidu： npm install hexo-generator-baidu-sitemap --save
+# public文件夹下自动生成sitemap.xml和baidusitemap.xml分别用于Google和百度
 # 是一个生成网站 sitemap 工具，你可以主动将生成的 sitemap.xml 提交给搜索引擎，
 # 这样搜索引擎就可以更好的抓取你的博文
 sitemap:
-  path: BingSiteAuth.xml
+  path: sitemap.xml # bing seo : BingSiteAuth.xml
   rel: false
 
 
