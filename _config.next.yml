@@ -693,7 +693,8 @@ rating:
 
 # AddThis Share. See: https://www.addthis.com
 # Go to https://www.addthis.com/dashboard to customize your tools.
-add_this_id:
+# https://www.addthis.com/dashboard#profile-options/ra-63203cd6b9de3c20/general-settings
+add_this_id: ra-63203cd6b9de3c20
 
 
 # ---------------------------------------------------------------
