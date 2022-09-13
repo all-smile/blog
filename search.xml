@@ -38,85 +38,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>Docker0网络及原理探究</title>
-    <url>/blog/posts/2165908694.html</url>
-    <content><![CDATA[<blockquote>
-<p>个人观点：Docker网络通信在容器编排、集群部署中具有举足轻重的地位，（玩docker不懂docker0那就……玩不透哇👀）本篇分析Docker网络，并通过启动几个容器来探究Docker网络及容器通信，帮助读者理解一下😊。</p>
-</blockquote>
-<h2 id="1、Docker0"><a href="#1、Docker0" class="headerlink" title="1、Docker0"></a>1、Docker0</h2><p>Docker 服务默认会创建一个 docker0 网桥（其上有一个 docker0 内部接口），它在内核层连通了其他的物理或虚拟网卡，这就将所有容器和本地主机都放到同一个物理网络。</p>
-<p>Docker 默认指定了 docker0 接口 的 IP 地址和子网掩码，让主机和容器之间可以通过网桥相互通信，它还给出了 MTU（接口允许接收的最大传输单元），通常是 1500 Bytes，或宿主主机网络路由上支持的默认值。这些值都可以在服务启动的时候进行配置。</p>
-<h2 id="2、清空所有镜像"><a href="#2、清空所有镜像" class="headerlink" title="2、清空所有镜像"></a>2、清空所有镜像</h2><p>如果是初学者，还不是很了解docker0的情况下，建议清空所有镜像，创造一个比较干净的容器网络环境，更加清晰，有助于学习docker0😃</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 查看运行的容器</span></span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 停掉所有正在运行的容器(否则删除不掉)</span></span><br><span class="line">docker stop [containerID]   <span class="comment"># docker stop $(docker container ls -q)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 执行删除</span></span><br><span class="line">docker rmi -f $(docker images -aq)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 查看镜像</span></span><br><span class="line">docker images</span><br></pre></td></tr></table></figure>
-
-<h2 id="3、查看网卡信息"><a href="#3、查看网卡信息" class="headerlink" title="3、查看网卡信息"></a>3、查看网卡信息</h2><ol>
-<li>先了解一下<code>ip addr</code>命令</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ip addr</span><br><span class="line"></span><br><span class="line">lo        <span class="comment"># 本机回环地址 127.0.0.1</span></span><br><span class="line">eth0      <span class="comment"># 阿里云内网地址 172.31.81.32</span></span><br><span class="line">docker0   <span class="comment"># docker生成的网卡 172.17.0.1</span></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>获取当前网卡ip地址和mac地址</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># ip addr</span></span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:16:3e:0a:00:34 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.31.81.32/20 brd 172.31.95.255 scope global dynamic eth0</span><br><span class="line">       valid_lft 291944112sec preferred_lft 291944112sec</span><br><span class="line">3: docker0: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:a4:2f:c5:62 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">[root@--- ~]<span class="comment">#</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>下面通过docker启动几个容器来探究一下Docker网络👇</p>
-</blockquote>
-<h2 id="4、运行容器之后，再次查看网卡信息"><a href="#4、运行容器之后，再次查看网卡信息" class="headerlink" title="4、运行容器之后，再次查看网卡信息"></a>4、运行容器之后，再次查看网卡信息</h2><p>安装Docker时，它会<strong>自动创建</strong>三个网络，默认<code>bridge</code>网桥（创建容器默认连接到此网络）、 <code>none</code> 、<code>host</code></p>
-<h3 id="4-1、运行mysql01-centos01-centos02容器"><a href="#4-1、运行mysql01-centos01-centos02容器" class="headerlink" title="4.1、运行mysql01, centos01, centos02容器"></a>4.1、运行<code>mysql01</code>, <code>centos01</code>, <code>centos02</code>容器</h3><ul>
-<li>启动时，docker默认的bridge网桥，docker0给容器服务自动分配ip</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -it --name mysql01 -e MYSQL_ROOT_PASSWORD=123 mysql:5.7</span><br><span class="line">docker run -it --name centos01  centos /bin/bash</span><br><span class="line">docker run -it --name centos02  centos /bin/bash</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-2、查看ip、mac地址信息"><a href="#4-2、查看ip、mac地址信息" class="headerlink" title="4.2、查看ip、mac地址信息"></a>4.2、查看ip、mac地址信息</h3><ul>
-<li>可以看到上面启动的三个容器服务的<code>mac</code>信息</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ip addr</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:16:3e:0a:00:34 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.31.81.32/20 brd 172.31.95.255 scope global dynamic eth0</span><br><span class="line">       valid_lft 291916543sec preferred_lft 291916543sec</span><br><span class="line">3: docker0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:a4:2f:c5:62 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">140: br-799426d70aa2: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:7f:01:1d:00 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.18.0.1/16 brd 172.18.255.255 scope global br-799426d70aa2</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">154: vethe3da564@if153: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether ea:84:fb:14:47:99 brd ff:ff:ff:ff:ff:ff link-netnsid 0</span><br><span class="line">156: veth6477da5@if155: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether 86:35:30:8d:14:85 brd ff:ff:ff:ff:ff:ff link-netnsid 1</span><br><span class="line">158: veth17b2712@if157: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether 72:76:f0:3c:17:e8 brd ff:ff:ff:ff:ff:ff link-netnsid 2</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-3、查看docker网络"><a href="#4-3、查看docker网络" class="headerlink" title="4.3、查看docker网络"></a>4.3、查看docker网络</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network ls</span></span><br><span class="line">NETWORK ID     NAME      DRIVER    SCOPE</span><br><span class="line">feafa30d4051   bridge    bridge    <span class="built_in">local</span></span><br><span class="line">e8bf4fced9e2   host      host      <span class="built_in">local</span></span><br><span class="line">6263db0933b9   none      null      <span class="built_in">local</span></span><br><span class="line">[root@--- ~]<span class="comment">#</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="4-4、查看默认bridge网桥-docker0"><a href="#4-4、查看默认bridge网桥-docker0" class="headerlink" title="4.4、查看默认bridge网桥(docker0)"></a>4.4、查看默认bridge网桥(docker0)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network inspect feafa30d4051</span></span><br><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;Name&quot;</span>: <span class="string">&quot;bridge&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Id&quot;</span>: <span class="string">&quot;feafa30d4051f24353508959bd420fd163ad0c98d6b30ec8ff13b59a59552bb1&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Created&quot;</span>: <span class="string">&quot;2021-09-26T15:10:27.167774553+08:00&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Scope&quot;</span>: <span class="string">&quot;local&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Driver&quot;</span>: <span class="string">&quot;bridge&quot;</span>,</span><br><span class="line">        <span class="string">&quot;EnableIPv6&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">&quot;IPAM&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;Driver&quot;</span>: <span class="string">&quot;default&quot;</span>,</span><br><span class="line">            <span class="string">&quot;Options&quot;</span>: null,</span><br><span class="line">            <span class="string">&quot;Config&quot;</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="string">&quot;Subnet&quot;</span>: <span class="string">&quot;172.17.0.0/16&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;Gateway&quot;</span>: <span class="string">&quot;172.17.0.1&quot;</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">&quot;Internal&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">&quot;Attachable&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">&quot;Ingress&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">&quot;ConfigFrom&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;Network&quot;</span>: <span class="string">&quot;&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">&quot;ConfigOnly&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">&quot;Containers&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;29298987c51b777b546bf6626560020ce235e390e1d7fcfe188c6db228ca4edf&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;Name&quot;</span>: <span class="string">&quot;mysql01&quot;</span>,</span><br><span class="line">                <span class="string">&quot;EndpointID&quot;</span>: <span class="string">&quot;f6572c49234f74a6c0b652a379bb386f843ebd23b02abd59b1f6a9d1c9534b17&quot;</span>,</span><br><span class="line">                <span class="string">&quot;MacAddress&quot;</span>: <span class="string">&quot;02:42:ac:11:00:02&quot;</span>,</span><br><span class="line">                <span class="string">&quot;IPv4Address&quot;</span>: <span class="string">&quot;172.17.0.2/16&quot;</span>,    <span class="comment"># ✨容器的IP✨</span></span><br><span class="line">                <span class="string">&quot;IPv6Address&quot;</span>: <span class="string">&quot;&quot;</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">&quot;cb1922b95b9316d129b54f3545fad9729092926e10a1d5517f8928db42706151&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;Name&quot;</span>: <span class="string">&quot;centos01&quot;</span>,</span><br><span class="line">                <span class="string">&quot;EndpointID&quot;</span>: <span class="string">&quot;ef6cfa74f56bfa4f49143aa08cf323812002236bc63f75204dee7c3ec1162250&quot;</span>,</span><br><span class="line">                <span class="string">&quot;MacAddress&quot;</span>: <span class="string">&quot;02:42:ac:11:00:03&quot;</span>,</span><br><span class="line">                <span class="string">&quot;IPv4Address&quot;</span>: <span class="string">&quot;172.17.0.3/16&quot;</span>,    <span class="comment"># ✨容器的IP✨</span></span><br><span class="line">                <span class="string">&quot;IPv6Address&quot;</span>: <span class="string">&quot;&quot;</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">&quot;cc6f510b9765ba018dbafd416c9774ddf5fd3ff55fa992827f55516e8dc70b6a&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;Name&quot;</span>: <span class="string">&quot;centos02&quot;</span>,</span><br><span class="line">                <span class="string">&quot;EndpointID&quot;</span>: <span class="string">&quot;2f901aec8f8b455d1fb06112c9035a19f34cc597d8907f26f1b896f12d7eb7ba&quot;</span>,</span><br><span class="line">                <span class="string">&quot;MacAddress&quot;</span>: <span class="string">&quot;02:42:ac:11:00:04&quot;</span>,</span><br><span class="line">                <span class="string">&quot;IPv4Address&quot;</span>: <span class="string">&quot;172.17.0.4/16&quot;</span>,    <span class="comment"># ✨容器的IP✨</span></span><br><span class="line">                <span class="string">&quot;IPv6Address&quot;</span>: <span class="string">&quot;&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">&quot;Options&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;com.docker.network.bridge.default_bridge&quot;</span>: <span class="string">&quot;true&quot;</span>,</span><br><span class="line">            <span class="string">&quot;com.docker.network.bridge.enable_icc&quot;</span>: <span class="string">&quot;true&quot;</span>,</span><br><span class="line">            <span class="string">&quot;com.docker.network.bridge.enable_ip_masquerade&quot;</span>: <span class="string">&quot;true&quot;</span>,</span><br><span class="line">            <span class="string">&quot;com.docker.network.bridge.host_binding_ipv4&quot;</span>: <span class="string">&quot;0.0.0.0&quot;</span>,</span><br><span class="line">            <span class="string">&quot;com.docker.network.bridge.name&quot;</span>: <span class="string">&quot;docker0&quot;</span>,</span><br><span class="line">            <span class="string">&quot;com.docker.network.driver.mtu&quot;</span>: <span class="string">&quot;1500&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">&quot;Labels&quot;</span>: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-5、测试容器通信"><a href="#4-5、测试容器通信" class="headerlink" title="4.5、测试容器通信"></a>4.5、测试容器通信</h3><blockquote>
-<p>此时，进入<code>centos01</code>容器，<code>ping</code> mysql容器的<code>ip</code>可以ping通，但是ping不通容器名 ❗</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it cb1922b95b93 /bin/bash</span><br><span class="line">ping 172.17.0.2</span><br><span class="line"></span><br><span class="line"><span class="comment"># docker0不支持容器名连接访问</span></span><br><span class="line">ping mysql01</span><br><span class="line">ping: mysql01: Name or service not known</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">docker run 启动镜像的时候docker都会分配一个网卡地址</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看运行容器的ip</span></span><br><span class="line">docker inspect 容器ID | grep IPAddress</span><br></pre></td></tr></table></figure>
-
-<p>如下图👇</p>
-<p><img data-src="https://pic.imgdb.cn/item/6311936716f2c2beb1dc0720.png"></p>
-<h2 id="5、容器通信原理"><a href="#5、容器通信原理" class="headerlink" title="5、容器通信原理"></a>5、容器通信原理</h2><ul>
-<li><p>只要我们安装了docker，就会有一个网卡docker0（相当于一个路由器），每启动一个docker容器，docker都会给docker容器分配一个ip（连接路由器的终端，同一网段下终端可以互相通信），</p>
-</li>
-<li><p>通过<code>evth-pair</code>技术实现，<code>evth-pair</code>就是一对<em>虚拟设备接口</em>，他们都是成对出现的，一端连着协议，一端彼此相连，<code>evth-pair</code>充当一个桥梁，连接各种虚拟网络设备。</p>
-</li>
-<li><p>Docker网络使用的是<code>Linux桥接</code>，宿主机是docker容器的网桥，docker0，最多分配65535个</p>
-</li>
-<li><p>删除容器之后，虚拟网卡就自动消失了。（<strong>虚拟网卡传递效率高！</strong>）</p>
-</li>
-</ul>
-<p><img data-src="https://pic.imgdb.cn/item/63184efd16f2c2beb1e0c421.png"></p>
-<p>启动容器不设置网络，容器ip由docker0自动分配情况下，容器间的通信，要经过<code>evth-pair</code>技术实现，<strong>并不是直连的</strong>。(跟计算机网络通信类似，分层模型，TCP&#x2F;IP协议数据报封装解封装)</p>
-<p><img data-src="https://pic.imgdb.cn/item/63184f0f16f2c2beb1e0dbff.png"></p>
-<h3 id="5-1、结论"><a href="#5-1、结论" class="headerlink" title="5.1、结论"></a>5.1、结论</h3><ol>
-<li><p><code>tomcat01</code>,<code>tomcat02</code>是共用的一个路由器，docker0</p>
-</li>
-<li><p>所有的容器启动时，如果不指定网络的情况下，都是docker0路由的。65535</p>
-</li>
-</ol>
-<p><img data-src="https://pic.imgdb.cn/item/63184f2116f2c2beb1e0f432.png"></p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>上面<code>docker0</code>不支持容器名连接访问，容器通信只可以通过容器<code>ip</code>通信，docker也无法保证容器重启后的IP地址不变，所以更好的方式是<strong>通过别名进行互联</strong>，下篇继续讲解怎么通过别名进行容器通信，😊😊。</p>
-<hr>
-<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
-]]></content>
-      <categories>
-        <category>后端运维</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>D8调试工具——jsvu的使用细则</title>
     <url>/blog/posts/1327063303.html</url>
     <content><![CDATA[<blockquote>
@@ -335,87 +256,82 @@
       </tags>
   </entry>
   <entry>
-    <title>GitHub Pages 站点建设</title>
-    <url>/blog/posts/899051033.html</url>
-    <content><![CDATA[<h2 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h2><ul>
-<li><p>GitHub Pages 是通过 GitHub 托管和发布的公共网页，将纯文本转换为静态博客网站。</p>
+    <title>Docker0网络及原理探究</title>
+    <url>/blog/posts/2165908694.html</url>
+    <content><![CDATA[<blockquote>
+<p>个人观点：Docker网络通信在容器编排、集群部署中具有举足轻重的地位，（玩docker不懂docker0那就……玩不透哇👀）本篇分析Docker网络，并通过启动几个容器来探究Docker网络及容器通信，帮助读者理解一下😊。</p>
+</blockquote>
+<h2 id="1、Docker0"><a href="#1、Docker0" class="headerlink" title="1、Docker0"></a>1、Docker0</h2><p>Docker 服务默认会创建一个 docker0 网桥（其上有一个 docker0 内部接口），它在内核层连通了其他的物理或虚拟网卡，这就将所有容器和本地主机都放到同一个物理网络。</p>
+<p>Docker 默认指定了 docker0 接口 的 IP 地址和子网掩码，让主机和容器之间可以通过网桥相互通信，它还给出了 MTU（接口允许接收的最大传输单元），通常是 1500 Bytes，或宿主主机网络路由上支持的默认值。这些值都可以在服务启动的时候进行配置。</p>
+<h2 id="2、清空所有镜像"><a href="#2、清空所有镜像" class="headerlink" title="2、清空所有镜像"></a>2、清空所有镜像</h2><p>如果是初学者，还不是很了解docker0的情况下，建议清空所有镜像，创造一个比较干净的容器网络环境，更加清晰，有助于学习docker0😃</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 查看运行的容器</span></span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 停掉所有正在运行的容器(否则删除不掉)</span></span><br><span class="line">docker stop [containerID]   <span class="comment"># docker stop $(docker container ls -q)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 执行删除</span></span><br><span class="line">docker rmi -f $(docker images -aq)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 查看镜像</span></span><br><span class="line">docker images</span><br></pre></td></tr></table></figure>
+
+<h2 id="3、查看网卡信息"><a href="#3、查看网卡信息" class="headerlink" title="3、查看网卡信息"></a>3、查看网卡信息</h2><ol>
+<li>先了解一下<code>ip addr</code>命令</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ip addr</span><br><span class="line"></span><br><span class="line">lo        <span class="comment"># 本机回环地址 127.0.0.1</span></span><br><span class="line">eth0      <span class="comment"># 阿里云内网地址 172.31.81.32</span></span><br><span class="line">docker0   <span class="comment"># docker生成的网卡 172.17.0.1</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>获取当前网卡ip地址和mac地址</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># ip addr</span></span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:16:3e:0a:00:34 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.31.81.32/20 brd 172.31.95.255 scope global dynamic eth0</span><br><span class="line">       valid_lft 291944112sec preferred_lft 291944112sec</span><br><span class="line">3: docker0: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:a4:2f:c5:62 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">[root@--- ~]<span class="comment">#</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>下面通过docker启动几个容器来探究一下Docker网络👇</p>
+</blockquote>
+<h2 id="4、运行容器之后，再次查看网卡信息"><a href="#4、运行容器之后，再次查看网卡信息" class="headerlink" title="4、运行容器之后，再次查看网卡信息"></a>4、运行容器之后，再次查看网卡信息</h2><p>安装Docker时，它会<strong>自动创建</strong>三个网络，默认<code>bridge</code>网桥（创建容器默认连接到此网络）、 <code>none</code> 、<code>host</code></p>
+<h3 id="4-1、运行mysql01-centos01-centos02容器"><a href="#4-1、运行mysql01-centos01-centos02容器" class="headerlink" title="4.1、运行mysql01, centos01, centos02容器"></a>4.1、运行<code>mysql01</code>, <code>centos01</code>, <code>centos02</code>容器</h3><ul>
+<li>启动时，docker默认的bridge网桥，docker0给容器服务自动分配ip</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -it --name mysql01 -e MYSQL_ROOT_PASSWORD=123 mysql:5.7</span><br><span class="line">docker run -it --name centos01  centos /bin/bash</span><br><span class="line">docker run -it --name centos02  centos /bin/bash</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2、查看ip、mac地址信息"><a href="#4-2、查看ip、mac地址信息" class="headerlink" title="4.2、查看ip、mac地址信息"></a>4.2、查看ip、mac地址信息</h3><ul>
+<li>可以看到上面启动的三个容器服务的<code>mac</code>信息</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ip addr</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:16:3e:0a:00:34 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.31.81.32/20 brd 172.31.95.255 scope global dynamic eth0</span><br><span class="line">       valid_lft 291916543sec preferred_lft 291916543sec</span><br><span class="line">3: docker0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:a4:2f:c5:62 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">140: br-799426d70aa2: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:7f:01:1d:00 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.18.0.1/16 brd 172.18.255.255 scope global br-799426d70aa2</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">154: vethe3da564@if153: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether ea:84:fb:14:47:99 brd ff:ff:ff:ff:ff:ff link-netnsid 0</span><br><span class="line">156: veth6477da5@if155: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether 86:35:30:8d:14:85 brd ff:ff:ff:ff:ff:ff link-netnsid 1</span><br><span class="line">158: veth17b2712@if157: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether 72:76:f0:3c:17:e8 brd ff:ff:ff:ff:ff:ff link-netnsid 2</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3、查看docker网络"><a href="#4-3、查看docker网络" class="headerlink" title="4.3、查看docker网络"></a>4.3、查看docker网络</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network ls</span></span><br><span class="line">NETWORK ID     NAME      DRIVER    SCOPE</span><br><span class="line">feafa30d4051   bridge    bridge    <span class="built_in">local</span></span><br><span class="line">e8bf4fced9e2   host      host      <span class="built_in">local</span></span><br><span class="line">6263db0933b9   none      null      <span class="built_in">local</span></span><br><span class="line">[root@--- ~]<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-4、查看默认bridge网桥-docker0"><a href="#4-4、查看默认bridge网桥-docker0" class="headerlink" title="4.4、查看默认bridge网桥(docker0)"></a>4.4、查看默认bridge网桥(docker0)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network inspect feafa30d4051</span></span><br><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;Name&quot;</span>: <span class="string">&quot;bridge&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Id&quot;</span>: <span class="string">&quot;feafa30d4051f24353508959bd420fd163ad0c98d6b30ec8ff13b59a59552bb1&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Created&quot;</span>: <span class="string">&quot;2021-09-26T15:10:27.167774553+08:00&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Scope&quot;</span>: <span class="string">&quot;local&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Driver&quot;</span>: <span class="string">&quot;bridge&quot;</span>,</span><br><span class="line">        <span class="string">&quot;EnableIPv6&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">&quot;IPAM&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;Driver&quot;</span>: <span class="string">&quot;default&quot;</span>,</span><br><span class="line">            <span class="string">&quot;Options&quot;</span>: null,</span><br><span class="line">            <span class="string">&quot;Config&quot;</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="string">&quot;Subnet&quot;</span>: <span class="string">&quot;172.17.0.0/16&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;Gateway&quot;</span>: <span class="string">&quot;172.17.0.1&quot;</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">&quot;Internal&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">&quot;Attachable&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">&quot;Ingress&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">&quot;ConfigFrom&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;Network&quot;</span>: <span class="string">&quot;&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">&quot;ConfigOnly&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">&quot;Containers&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;29298987c51b777b546bf6626560020ce235e390e1d7fcfe188c6db228ca4edf&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;Name&quot;</span>: <span class="string">&quot;mysql01&quot;</span>,</span><br><span class="line">                <span class="string">&quot;EndpointID&quot;</span>: <span class="string">&quot;f6572c49234f74a6c0b652a379bb386f843ebd23b02abd59b1f6a9d1c9534b17&quot;</span>,</span><br><span class="line">                <span class="string">&quot;MacAddress&quot;</span>: <span class="string">&quot;02:42:ac:11:00:02&quot;</span>,</span><br><span class="line">                <span class="string">&quot;IPv4Address&quot;</span>: <span class="string">&quot;172.17.0.2/16&quot;</span>,    <span class="comment"># ✨容器的IP✨</span></span><br><span class="line">                <span class="string">&quot;IPv6Address&quot;</span>: <span class="string">&quot;&quot;</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">&quot;cb1922b95b9316d129b54f3545fad9729092926e10a1d5517f8928db42706151&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;Name&quot;</span>: <span class="string">&quot;centos01&quot;</span>,</span><br><span class="line">                <span class="string">&quot;EndpointID&quot;</span>: <span class="string">&quot;ef6cfa74f56bfa4f49143aa08cf323812002236bc63f75204dee7c3ec1162250&quot;</span>,</span><br><span class="line">                <span class="string">&quot;MacAddress&quot;</span>: <span class="string">&quot;02:42:ac:11:00:03&quot;</span>,</span><br><span class="line">                <span class="string">&quot;IPv4Address&quot;</span>: <span class="string">&quot;172.17.0.3/16&quot;</span>,    <span class="comment"># ✨容器的IP✨</span></span><br><span class="line">                <span class="string">&quot;IPv6Address&quot;</span>: <span class="string">&quot;&quot;</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">&quot;cc6f510b9765ba018dbafd416c9774ddf5fd3ff55fa992827f55516e8dc70b6a&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;Name&quot;</span>: <span class="string">&quot;centos02&quot;</span>,</span><br><span class="line">                <span class="string">&quot;EndpointID&quot;</span>: <span class="string">&quot;2f901aec8f8b455d1fb06112c9035a19f34cc597d8907f26f1b896f12d7eb7ba&quot;</span>,</span><br><span class="line">                <span class="string">&quot;MacAddress&quot;</span>: <span class="string">&quot;02:42:ac:11:00:04&quot;</span>,</span><br><span class="line">                <span class="string">&quot;IPv4Address&quot;</span>: <span class="string">&quot;172.17.0.4/16&quot;</span>,    <span class="comment"># ✨容器的IP✨</span></span><br><span class="line">                <span class="string">&quot;IPv6Address&quot;</span>: <span class="string">&quot;&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">&quot;Options&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;com.docker.network.bridge.default_bridge&quot;</span>: <span class="string">&quot;true&quot;</span>,</span><br><span class="line">            <span class="string">&quot;com.docker.network.bridge.enable_icc&quot;</span>: <span class="string">&quot;true&quot;</span>,</span><br><span class="line">            <span class="string">&quot;com.docker.network.bridge.enable_ip_masquerade&quot;</span>: <span class="string">&quot;true&quot;</span>,</span><br><span class="line">            <span class="string">&quot;com.docker.network.bridge.host_binding_ipv4&quot;</span>: <span class="string">&quot;0.0.0.0&quot;</span>,</span><br><span class="line">            <span class="string">&quot;com.docker.network.bridge.name&quot;</span>: <span class="string">&quot;docker0&quot;</span>,</span><br><span class="line">            <span class="string">&quot;com.docker.network.driver.mtu&quot;</span>: <span class="string">&quot;1500&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">&quot;Labels&quot;</span>: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-5、测试容器通信"><a href="#4-5、测试容器通信" class="headerlink" title="4.5、测试容器通信"></a>4.5、测试容器通信</h3><blockquote>
+<p>此时，进入<code>centos01</code>容器，<code>ping</code> mysql容器的<code>ip</code>可以ping通，但是ping不通容器名 ❗</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it cb1922b95b93 /bin/bash</span><br><span class="line">ping 172.17.0.2</span><br><span class="line"></span><br><span class="line"><span class="comment"># docker0不支持容器名连接访问</span></span><br><span class="line">ping mysql01</span><br><span class="line">ping: mysql01: Name or service not known</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">docker run 启动镜像的时候docker都会分配一个网卡地址</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看运行容器的ip</span></span><br><span class="line">docker inspect 容器ID | grep IPAddress</span><br></pre></td></tr></table></figure>
+
+<p>如下图👇</p>
+<p><img data-src="https://pic.imgdb.cn/item/6311936716f2c2beb1dc0720.png"></p>
+<h2 id="5、容器通信原理"><a href="#5、容器通信原理" class="headerlink" title="5、容器通信原理"></a>5、容器通信原理</h2><ul>
+<li><p>只要我们安装了docker，就会有一个网卡docker0（相当于一个路由器），每启动一个docker容器，docker都会给docker容器分配一个ip（连接路由器的终端，同一网段下终端可以互相通信），</p>
 </li>
-<li><p>您可以使用 GitHub Pages 来展示一些开源项目、博客甚或分享您的简历，有内存限制，可以绑定个人域名。</p>
+<li><p>通过<code>evth-pair</code>技术实现，<code>evth-pair</code>就是一对<em>虚拟设备接口</em>，他们都是成对出现的，一端连着协议，一端彼此相连，<code>evth-pair</code>充当一个桥梁，连接各种虚拟网络设备。</p>
 </li>
-<li><p>启动和运行的最快方法是使用 <a href="https://jekyllcn.com/">Jekyll</a> 主题选择器加载预置主题。 然后，您可以修改 GitHub Pages 的内容和样式。👉 <a href="https://docs.github.com/cn/pages/getting-started-with-github-pages/about-github-pages">文档</a></p>
+<li><p>Docker网络使用的是<code>Linux桥接</code>，宿主机是docker容器的网桥，docker0，最多分配65535个</p>
+</li>
+<li><p>删除容器之后，虚拟网卡就自动消失了。（<strong>虚拟网卡传递效率高！</strong>）</p>
 </li>
 </ul>
-<h2 id="2、创建仓库"><a href="#2、创建仓库" class="headerlink" title="2、创建仓库"></a>2、创建仓库</h2><p>仓库名： <code>&lt;username&gt;.github.io</code><br><code>username</code> 是GitHub的用户名</p>
-<h2 id="3、创建站点"><a href="#3、创建站点" class="headerlink" title="3、创建站点"></a>3、创建站点</h2><p>在 <code>repo</code> 下创建 <code>index.md</code>文件，随便写点东西保存。然后，点击 <code>settings</code>选项卡，单机左侧 <code>Pages</code>进行设置，如下图：</p>
-<p><img data-src="https://pic.imgdb.cn/item/63184fae16f2c2beb1e1d288.png"></p>
-<p>🔊 此时站点已经建成，可以访问 <code>https://&lt;username&gt;.github.io/</code> 查看，如果已经有个人域名了，也可以绑定个人域名，继续往下看👇</p>
-<h2 id="4、仓库文件目录"><a href="#4、仓库文件目录" class="headerlink" title="4、仓库文件目录"></a>4、仓库文件目录</h2><p><img data-src="https://pic.imgdb.cn/item/63184fbe16f2c2beb1e1e89f.png"></p>
-<h2 id="5、绑定域名"><a href="#5、绑定域名" class="headerlink" title="5、绑定域名"></a>5、绑定域名</h2><p>我个人购买的一级域名是 i-xiao ，域名后缀是 space，专门给GitHub Pages 增加一个CNAME记录（blog），解析二级域名，绑定 <username>github.io 域名。</p>
-<h3 id="5-1、域名相关知识"><a href="#5-1、域名相关知识" class="headerlink" title="5.1、域名相关知识"></a>5.1、域名相关知识</h3><ul>
-<li>www：主机名，i-xiao : 域名主体(一级域名)，.space : 域名后缀<br>注册一级域名的时候是需要付费的</li>
-<li>二级域名，是依附一级域名的存在而存在的，也就是说要是顶级域名消失了，二级域名也也会不复存在。反而来说，二级域名的网站不做了，主域名网站是不受影响的。</li>
-<li>一级域名、二级域名区别：<br>DNS收录一级域名更快；还有就是解析速度，下一跳路由就不说了，找到目的主机之后，二级域名层级更深，需要多一层计算（其实这是我瞎写的🤣，猜测应该跟 nginx location匹配类似）</li>
-</ul>
-<h3 id="5-2、GitHub上配置自定义域名"><a href="#5-2、GitHub上配置自定义域名" class="headerlink" title="5.2、GitHub上配置自定义域名"></a>5.2、GitHub上配置自定义域名</h3><p>进入 <username>github.io 仓库，进入设置页面，点击左边 Pages 选项卡，进行下面的配置。</p>
-<p><img data-src="https://pic.imgdb.cn/item/63184f6116f2c2beb1e1511a.png"></p>
-<h2 id="6、配置域名映射"><a href="#6、配置域名映射" class="headerlink" title="6、配置域名映射"></a>6、配置域名映射</h2><p><strong>各记录类型使用目的</strong></p>
-<table>
-<thead>
-<tr>
-<th>记录类型</th>
-<th>使用目的</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ce5/">A 记录</a></td>
-<td>将域名指向一个 IP 地址（外网地址）。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9cf9/">CNAME 记录</a></td>
-<td>将域名指向另一个域名，再由另一个域名提供 IP 地址（外网地址）。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9cff/">MX 记录</a></td>
-<td>设置邮箱，让邮箱能收到邮件。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d11/">NS 记录</a></td>
-<td>将子域名交给其他 DNS 服务商解析。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d0b/">AAAA 记录</a></td>
-<td>将域名指向一个 IPv6 地址。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d17/">SRV 记录</a></td>
-<td>用来标识某台服务器使用了某个服务，常见于微软系统的目录管理。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d05/">TXT 记录</a></td>
-<td>对域名进行标识和说明，绝大多数的 TXT 记录是用来做 SPF 记录（反垃圾邮件）。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ced/">隐、显性 URL 记录</a></td>
-<td>将一个域名指向另外一个已经存在的站点。</td>
-</tr>
-</tbody></table>
-<p><strong>如下图</strong></p>
-<p><img data-src="https://pic.imgdb.cn/item/63184f6f16f2c2beb1e16954.png"></p>
-<h2 id="7、DNS检测"><a href="#7、DNS检测" class="headerlink" title="7、DNS检测"></a>7、DNS检测</h2><p><img data-src="https://pic.imgdb.cn/item/63184f7816f2c2beb1e1785b.png"></p>
-<h2 id="8、查看Pages"><a href="#8、查看Pages" class="headerlink" title="8、查看Pages"></a>8、查看Pages</h2><p>成功解析之后，还存在DNS缓存，一般还需要再等待一会（一般十分钟，或许更长时间）才能生效，如下图成功显示👇</p>
-<p><img data-src="https://pic.imgdb.cn/item/63184f8c16f2c2beb1e1a34c.png"></p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>站点绑定的域名已经更换，访问请到👉 <a href="https://home.i-xiao.space/">这里</a></p>
+<p><img data-src="https://pic.imgdb.cn/item/63184efd16f2c2beb1e0c421.png"></p>
+<p>启动容器不设置网络，容器ip由docker0自动分配情况下，容器间的通信，要经过<code>evth-pair</code>技术实现，<strong>并不是直连的</strong>。(跟计算机网络通信类似，分层模型，TCP&#x2F;IP协议数据报封装解封装)</p>
+<p><img data-src="https://pic.imgdb.cn/item/63184f0f16f2c2beb1e0dbff.png"></p>
+<h3 id="5-1、结论"><a href="#5-1、结论" class="headerlink" title="5.1、结论"></a>5.1、结论</h3><ol>
+<li><p><code>tomcat01</code>,<code>tomcat02</code>是共用的一个路由器，docker0</p>
+</li>
+<li><p>所有的容器启动时，如果不指定网络的情况下，都是docker0路由的。65535</p>
+</li>
+</ol>
+<p><img data-src="https://pic.imgdb.cn/item/63184f2116f2c2beb1e0f432.png"></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>上面<code>docker0</code>不支持容器名连接访问，容器通信只可以通过容器<code>ip</code>通信，docker也无法保证容器重启后的IP地址不变，所以更好的方式是<strong>通过别名进行互联</strong>，下篇继续讲解怎么通过别名进行容器通信，😊😊。</p>
 <hr>
-<p>🎈🎈🎈</p>
 <p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
 <p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
 <p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
 ]]></content>
       <categories>
-        <category>GitHub</category>
+        <category>后端运维</category>
       </categories>
       <tags>
-        <tag>GitHub</tag>
+        <tag>Docker</tag>
       </tags>
   </entry>
   <entry>
@@ -561,6 +477,90 @@
       </categories>
       <tags>
         <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GitHub Pages 站点建设</title>
+    <url>/blog/posts/899051033.html</url>
+    <content><![CDATA[<h2 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h2><ul>
+<li><p>GitHub Pages 是通过 GitHub 托管和发布的公共网页，将纯文本转换为静态博客网站。</p>
+</li>
+<li><p>您可以使用 GitHub Pages 来展示一些开源项目、博客甚或分享您的简历，有内存限制，可以绑定个人域名。</p>
+</li>
+<li><p>启动和运行的最快方法是使用 <a href="https://jekyllcn.com/">Jekyll</a> 主题选择器加载预置主题。 然后，您可以修改 GitHub Pages 的内容和样式。👉 <a href="https://docs.github.com/cn/pages/getting-started-with-github-pages/about-github-pages">文档</a></p>
+</li>
+</ul>
+<h2 id="2、创建仓库"><a href="#2、创建仓库" class="headerlink" title="2、创建仓库"></a>2、创建仓库</h2><p>仓库名： <code>&lt;username&gt;.github.io</code><br><code>username</code> 是GitHub的用户名</p>
+<h2 id="3、创建站点"><a href="#3、创建站点" class="headerlink" title="3、创建站点"></a>3、创建站点</h2><p>在 <code>repo</code> 下创建 <code>index.md</code>文件，随便写点东西保存。然后，点击 <code>settings</code>选项卡，单机左侧 <code>Pages</code>进行设置，如下图：</p>
+<p><img data-src="https://pic.imgdb.cn/item/63184fae16f2c2beb1e1d288.png"></p>
+<p>🔊 此时站点已经建成，可以访问 <code>https://&lt;username&gt;.github.io/</code> 查看，如果已经有个人域名了，也可以绑定个人域名，继续往下看👇</p>
+<h2 id="4、仓库文件目录"><a href="#4、仓库文件目录" class="headerlink" title="4、仓库文件目录"></a>4、仓库文件目录</h2><p><img data-src="https://pic.imgdb.cn/item/63184fbe16f2c2beb1e1e89f.png"></p>
+<h2 id="5、绑定域名"><a href="#5、绑定域名" class="headerlink" title="5、绑定域名"></a>5、绑定域名</h2><p>我个人购买的一级域名是 i-xiao ，域名后缀是 space，专门给GitHub Pages 增加一个CNAME记录（blog），解析二级域名，绑定 <username>github.io 域名。</p>
+<h3 id="5-1、域名相关知识"><a href="#5-1、域名相关知识" class="headerlink" title="5.1、域名相关知识"></a>5.1、域名相关知识</h3><ul>
+<li>www：主机名，i-xiao : 域名主体(一级域名)，.space : 域名后缀<br>注册一级域名的时候是需要付费的</li>
+<li>二级域名，是依附一级域名的存在而存在的，也就是说要是顶级域名消失了，二级域名也也会不复存在。反而来说，二级域名的网站不做了，主域名网站是不受影响的。</li>
+<li>一级域名、二级域名区别：<br>DNS收录一级域名更快；还有就是解析速度，下一跳路由就不说了，找到目的主机之后，二级域名层级更深，需要多一层计算（其实这是我瞎写的🤣，猜测应该跟 nginx location匹配类似）</li>
+</ul>
+<h3 id="5-2、GitHub上配置自定义域名"><a href="#5-2、GitHub上配置自定义域名" class="headerlink" title="5.2、GitHub上配置自定义域名"></a>5.2、GitHub上配置自定义域名</h3><p>进入 <username>github.io 仓库，进入设置页面，点击左边 Pages 选项卡，进行下面的配置。</p>
+<p><img data-src="https://pic.imgdb.cn/item/63184f6116f2c2beb1e1511a.png"></p>
+<h2 id="6、配置域名映射"><a href="#6、配置域名映射" class="headerlink" title="6、配置域名映射"></a>6、配置域名映射</h2><p><strong>各记录类型使用目的</strong></p>
+<table>
+<thead>
+<tr>
+<th>记录类型</th>
+<th>使用目的</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ce5/">A 记录</a></td>
+<td>将域名指向一个 IP 地址（外网地址）。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9cf9/">CNAME 记录</a></td>
+<td>将域名指向另一个域名，再由另一个域名提供 IP 地址（外网地址）。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9cff/">MX 记录</a></td>
+<td>设置邮箱，让邮箱能收到邮件。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d11/">NS 记录</a></td>
+<td>将子域名交给其他 DNS 服务商解析。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d0b/">AAAA 记录</a></td>
+<td>将域名指向一个 IPv6 地址。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d17/">SRV 记录</a></td>
+<td>用来标识某台服务器使用了某个服务，常见于微软系统的目录管理。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d05/">TXT 记录</a></td>
+<td>对域名进行标识和说明，绝大多数的 TXT 记录是用来做 SPF 记录（反垃圾邮件）。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ced/">隐、显性 URL 记录</a></td>
+<td>将一个域名指向另外一个已经存在的站点。</td>
+</tr>
+</tbody></table>
+<p><strong>如下图</strong></p>
+<p><img data-src="https://pic.imgdb.cn/item/63184f6f16f2c2beb1e16954.png"></p>
+<h2 id="7、DNS检测"><a href="#7、DNS检测" class="headerlink" title="7、DNS检测"></a>7、DNS检测</h2><p><img data-src="https://pic.imgdb.cn/item/63184f7816f2c2beb1e1785b.png"></p>
+<h2 id="8、查看Pages"><a href="#8、查看Pages" class="headerlink" title="8、查看Pages"></a>8、查看Pages</h2><p>成功解析之后，还存在DNS缓存，一般还需要再等待一会（一般十分钟，或许更长时间）才能生效，如下图成功显示👇</p>
+<p><img data-src="https://pic.imgdb.cn/item/63184f8c16f2c2beb1e1a34c.png"></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>站点绑定的域名已经更换，访问请到👉 <a href="https://home.i-xiao.space/">这里</a></p>
+<hr>
+<p>🎈🎈🎈</p>
+<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
+]]></content>
+      <categories>
+        <category>GitHub</category>
+      </categories>
+      <tags>
+        <tag>GitHub</tag>
       </tags>
   </entry>
   <entry>
@@ -1478,6 +1478,70 @@
       </tags>
   </entry>
   <entry>
+    <title>博客园美化</title>
+    <url>/blog/posts/2159164587.html</url>
+    <content><![CDATA[<blockquote>
+<p>博客园允许用户设置多样化的主题。通过选择皮肤，然后开启JS脚本权限，在设置里面植入跟皮肤配套的<code>CSS</code>、<code>JS</code>，并且禁用默认的<code>CSS</code>，即可实现个性化的界面风格和交互行为。</p>
+</blockquote>
+<h2 id="SimpleMemory-皮肤"><a href="#SimpleMemory-皮肤" class="headerlink" title="SimpleMemory 皮肤"></a>SimpleMemory 皮肤</h2><p>文档参考<a href="https://bndong.github.io/Cnblogs-Theme-SimpleMemory/v2/#/">这里</a>，非常详细🌹</p>
+<ul>
+<li>效果预览：</li>
+</ul>
+<p><img data-src="https://pic.imgdb.cn/item/6318481816f2c2beb1d87bad.png"></p>
+<h2 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h2><h3 id="1-选项"><a href="#1-选项" class="headerlink" title="1. 选项"></a>1. 选项</h3><p>勾选 “公告”</p>
+<p><img data-src="https://pic.imgdb.cn/item/6318484616f2c2beb1d8ac38.jpg"></p>
+<h3 id="2-基本设置、代码高亮、开通JS权限"><a href="#2-基本设置、代码高亮、开通JS权限" class="headerlink" title="2. 基本设置、代码高亮、开通JS权限"></a>2. 基本设置、代码高亮、开通JS权限</h3><p>皮肤选择 <code>SimpleMemory</code></p>
+<p><img data-src="https://pic.imgdb.cn/item/6318486316f2c2beb1d8c8b8.jpg"></p>
+<h3 id="3-页面定制CSS代码"><a href="#3-页面定制CSS代码" class="headerlink" title="3. 页面定制CSS代码"></a>3. 页面定制CSS代码</h3><p>这里我选择的是 Cnblogs-Theme-SimpleMemory <code>V2.1.0</code> 版本</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="keyword">@import</span> url(<span class="attribute">https</span>://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@<span class="number">2.1</span>.<span class="number">0</span>/dist/simpleMemory.css);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：</p>
+<ol>
+<li><p>页面定制CSS代码我使用的是外链导入形式（免费jsdelivr cdn加速，也可以自行选择其它方式托管）。</p>
+</li>
+<li><p>勾选“禁用模板默认CSS”。（使得外链css生效）</p>
+</li>
+</ol>
+</blockquote>
+<h3 id="4-博客侧边栏公告设置"><a href="#4-博客侧边栏公告设置" class="headerlink" title="4. 博客侧边栏公告设置"></a>4. 博客侧边栏公告设置</h3><p><img data-src="https://pic.imgdb.cn/item/6318487b16f2c2beb1d8e4d6.png"></p>
+<p>下面是我的配置（仅供参考）</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;script type=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">cnblogsConfig</span> = &#123;</span><br><span class="line">      <span class="comment">// iconfont（我个人的，可以自己建一个iconfont项目维护使用）</span></span><br><span class="line">      <span class="attr">fontIconExtend</span>: <span class="string">&quot;//at.alicdn.com/t/c/font_3603036_keyavmcqbhn.css&quot;</span>,</span><br><span class="line">      <span class="attr">info</span>: &#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;甜点cc&#x27;</span>, <span class="comment">// 用户名</span></span><br><span class="line">        <span class="attr">startDate</span>: <span class="string">&#x27;2016-10-08&#x27;</span>, <span class="comment">// 入园时间，年-月-日。入园时间查看方法：鼠标停留园龄时间上，会显示入园时间</span></span><br><span class="line">        <span class="attr">avatar</span>: <span class="string">&#x27;https://pic.cnblogs.com/avatar/1037867/20220801164532.png&#x27;</span>, <span class="comment">// 用户头像</span></span><br><span class="line">        <span class="attr">blogIcon</span>: <span class="string">&#x27;https://pic.cnblogs.com/avatar/1037867/20220801164532.png&#x27;</span>, <span class="comment">// 网站图标 favicon.ico</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">sidebar</span>: &#123;</span><br><span class="line">        <span class="attr">infoBackground</span>: <span class="string">&#x27;https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/Machine_tool.jpg&#x27;</span>, <span class="comment">// 个人信息背景</span></span><br><span class="line">        <span class="attr">titleMsg</span>: <span class="string">&#x27;宝宝等你很久啦~🌹🌹&#x27;</span>, <span class="comment">// 侧边栏title信息</span></span><br><span class="line">        <span class="attr">navList</span>: [</span><br><span class="line">            [<span class="string">&#x27;友链&#x27;</span>, <span class="string">&#x27;https://www.cnblogs.com/all-smile/p/16612170.html&#x27;</span>, <span class="string">&#x27;icon-pengyoufill&#x27;</span>],</span><br><span class="line">            [<span class="string">&#x27;个人主页&#x27;</span>, <span class="string">&#x27;https://home.i-xiao.space/&#x27;</span>, <span class="string">&#x27;icon-zhuye&#x27;</span>],</span><br><span class="line">        ],</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">banner</span>: &#123;</span><br><span class="line">        <span class="attr">home</span>: &#123;</span><br><span class="line">          <span class="comment">// 主页banner标语, 随机从数组中获取一条文字显示</span></span><br><span class="line">          <span class="attr">title</span>: [<span class="string">&#x27;每一个不曾起舞的日子，都是对生命的辜负。&#x27;</span>, <span class="string">&#x27;为者常成，行者常至。&#x27;</span>, <span class="string">&#x27;逝者如斯夫，不舍昼夜。&#x27;</span>, <span class="string">&quot;相逢的还会再相逢。&quot;</span>],</span><br><span class="line">          <span class="comment">// 主页banner图片</span></span><br><span class="line">          <span class="attr">background</span>: [</span><br><span class="line">              <span class="string">&quot;https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/Machine_tool.jpg&quot;</span>,</span><br><span class="line">              <span class="string">&quot;https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/horse.jpg&quot;</span>,</span><br><span class="line">              <span class="string">&quot;https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/background.jpg&quot;</span>,</span><br><span class="line">              <span class="string">&quot;https://raw.githubusercontent.com/all-smile/nav/master/static/images/sunset.jpg&quot;</span>,</span><br><span class="line">              <span class="string">&quot;https://raw.githubusercontent.com/all-smile/nav/master/static/images/sunset02.jpg&quot;</span></span><br><span class="line">          ],</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// 失去焦点标签文字</span></span><br><span class="line">      <span class="attr">title</span>: &#123;</span><br><span class="line">        <span class="attr">onblur</span>: <span class="string">&#x27;(oﾟvﾟ)ノ Hi&#x27;</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// 页面加载loading。</span></span><br><span class="line">      <span class="attr">loading</span>: &#123;</span><br><span class="line">        <span class="attr">rebound</span>: &#123;</span><br><span class="line">          <span class="attr">tension</span>: <span class="number">16</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">spinner</span>: &#123;</span><br><span class="line">          <span class="attr">id</span>: <span class="string">&#x27;spinner&#x27;</span>,</span><br><span class="line">          <span class="attr">radius</span>: <span class="number">90</span>,</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// 页脚模式</span></span><br><span class="line">      <span class="attr">footer</span>: &#123;</span><br><span class="line">        <span class="attr">style</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="attr">text</span>: &#123;</span><br><span class="line">          <span class="attr">left</span>: <span class="string">&#x27;蓄之既久，其发必速。&#x27;</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// 友情链接</span></span><br><span class="line">      <span class="attr">links</span>: &#123;</span><br><span class="line">        <span class="comment">// 文章底部显示添加友链入口（博客园发送消息）</span></span><br><span class="line">        <span class="attr">footer</span>: [</span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">            格式：</span></span><br><span class="line"><span class="comment">            Key	Description</span></span><br><span class="line"><span class="comment">            name	昵称</span></span><br><span class="line"><span class="comment">            introduction	简介</span></span><br><span class="line"><span class="comment">            avatar	头像</span></span><br><span class="line"><span class="comment">            url	友链地址</span></span><br><span class="line"><span class="comment">            */</span></span><br><span class="line">            [<span class="string">&quot;添加友链&quot;</span>, <span class="string">&#x27;https://msg.cnblogs.com/send/甜点cc&#x27;</span>],</span><br><span class="line">        ],</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// 右下角菜单</span></span><br><span class="line">      <span class="attr">rtMenu</span>: &#123;</span><br><span class="line">        <span class="attr">qrCode</span>: <span class="string">&#x27;https://xxx.jpg&#x27;</span>, <span class="comment">// 自己设置</span></span><br><span class="line">        <span class="attr">reward</span>: &#123;</span><br><span class="line">          <span class="attr">wechatpay</span>: <span class="string">&#x27;https:xxx.jpg&#x27;</span> <span class="comment">// 自己设置</span></span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">animate</span>: &#123;</span><br><span class="line">        <span class="comment">// 主页banner动效配置。</span></span><br><span class="line">        <span class="attr">homeBanner</span>: &#123;</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">true</span>,</span><br><span class="line">          <span class="attr">options</span>: &#123;</span><br><span class="line">            <span class="attr">radius</span>: <span class="number">15</span>,</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">// 文章页标题动效配置。</span></span><br><span class="line">        <span class="attr">articleTitle</span>: &#123;</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">true</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">// 文章页banner动效配置</span></span><br><span class="line">        <span class="attr">articleBanner</span>: &#123;</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">true</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">// 背景动效。</span></span><br><span class="line">        <span class="attr">background</span>: &#123;</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">false</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">// 跟随鼠标动效。</span></span><br><span class="line">        <span class="attr">mouse</span>: &#123;</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">false</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// 友链配置</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">cnblogsConfig</span>.<span class="property">links</span>.<span class="property">page</span> = [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;甜点cc&#x27;</span>, <span class="comment">// 昵称</span></span><br><span class="line">        <span class="attr">introduction</span>: <span class="string">&#x27;博客&#x27;</span>, <span class="comment">// 简介</span></span><br><span class="line">        <span class="attr">avatar</span>: <span class="string">&#x27;https://pic.cnblogs.com/avatar/1037867/20220801164532.png&#x27;</span>, <span class="comment">// 头像</span></span><br><span class="line">        <span class="attr">url</span>: <span class="string">&#x27;https://home.i-xiao.space/blog/&#x27;</span> <span class="comment">// 友链地址</span></span><br><span class="line">      &#125;,</span><br><span class="line">    ]</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@v2.1.0/dist/simpleMemory.js&quot;</span> <span class="attr">defer</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：</p>
+<ul>
+<li>上面配置中 加载的 js 脚本，要和 上一步的CSS外链同一个版本（这里是V2.1.0），否则可能会不生效或者出现别的问题</li>
+</ul>
+</blockquote>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><ol>
+<li><p>主题相关文件（css\js等）可以自己托管维护，可以自行扩展界面交互</p>
+</li>
+<li><p>图片等静态资源可以自行寻找免费图床。当然也可以自己放到<code>GitHub</code>上面托管，采用CDN访问（参考<a href="https://juejin.cn/post/7120973719346151431">这里</a>）</p>
+</li>
+<li><p>托管到博客园上</p>
+</li>
+</ol>
+<p><img data-src="https://pic.imgdb.cn/item/631848cd16f2c2beb1d93e27.png"></p>
+<ol start="4">
+<li>图片等静态资源也可以自行搭建云盘使用😏</li>
+</ol>
+<p>👉 方式很多，顺手就行 👈</p>
+<p>我的博客园主页请看<a href="https://www.cnblogs.com/all-smile">这里</a>😊欢迎来访问呀🌹</p>
+<hr>
+<p>🎈🎈🎈</p>
+<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
+]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>前端</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>博客评论插件Beaudar安装使用</title>
     <url>/blog/posts/34114278.html</url>
     <content><![CDATA[<h2 id="Beaudar"><a href="#Beaudar" class="headerlink" title="Beaudar"></a>Beaudar</h2><p><code>Hexo</code>主题选用的<a href="https://xaoxuu.com/wiki/stellar/"><code>Stellar</code></a></p>
@@ -1569,70 +1633,6 @@
 <p>在上面思路分析中，当进入详情页，刷新页面，可能会存在时序问题，具体就是面包屑组件里标记信息不能及时同步，这里我采用的是在<code>data</code>上面定义属性<code>signTitle</code>承接<code>sessionStorage</code>，然后在 <code>computed</code> 里面以<code>signTitle</code>为源数据得到最新的标记信息</p>
 <p>可以使用全局状态管理方式替代sessionStorage，状态持久化就可以了</p>
 <hr>
-<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
-]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>前端</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>博客园美化</title>
-    <url>/blog/posts/2159164587.html</url>
-    <content><![CDATA[<blockquote>
-<p>博客园允许用户设置多样化的主题。通过选择皮肤，然后开启JS脚本权限，在设置里面植入跟皮肤配套的<code>CSS</code>、<code>JS</code>，并且禁用默认的<code>CSS</code>，即可实现个性化的界面风格和交互行为。</p>
-</blockquote>
-<h2 id="SimpleMemory-皮肤"><a href="#SimpleMemory-皮肤" class="headerlink" title="SimpleMemory 皮肤"></a>SimpleMemory 皮肤</h2><p>文档参考<a href="https://bndong.github.io/Cnblogs-Theme-SimpleMemory/v2/#/">这里</a>，非常详细🌹</p>
-<ul>
-<li>效果预览：</li>
-</ul>
-<p><img data-src="https://pic.imgdb.cn/item/6318481816f2c2beb1d87bad.png"></p>
-<h2 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h2><h3 id="1-选项"><a href="#1-选项" class="headerlink" title="1. 选项"></a>1. 选项</h3><p>勾选 “公告”</p>
-<p><img data-src="https://pic.imgdb.cn/item/6318484616f2c2beb1d8ac38.jpg"></p>
-<h3 id="2-基本设置、代码高亮、开通JS权限"><a href="#2-基本设置、代码高亮、开通JS权限" class="headerlink" title="2. 基本设置、代码高亮、开通JS权限"></a>2. 基本设置、代码高亮、开通JS权限</h3><p>皮肤选择 <code>SimpleMemory</code></p>
-<p><img data-src="https://pic.imgdb.cn/item/6318486316f2c2beb1d8c8b8.jpg"></p>
-<h3 id="3-页面定制CSS代码"><a href="#3-页面定制CSS代码" class="headerlink" title="3. 页面定制CSS代码"></a>3. 页面定制CSS代码</h3><p>这里我选择的是 Cnblogs-Theme-SimpleMemory <code>V2.1.0</code> 版本</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="keyword">@import</span> url(<span class="attribute">https</span>://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@<span class="number">2.1</span>.<span class="number">0</span>/dist/simpleMemory.css);</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>注意：</p>
-<ol>
-<li><p>页面定制CSS代码我使用的是外链导入形式（免费jsdelivr cdn加速，也可以自行选择其它方式托管）。</p>
-</li>
-<li><p>勾选“禁用模板默认CSS”。（使得外链css生效）</p>
-</li>
-</ol>
-</blockquote>
-<h3 id="4-博客侧边栏公告设置"><a href="#4-博客侧边栏公告设置" class="headerlink" title="4. 博客侧边栏公告设置"></a>4. 博客侧边栏公告设置</h3><p><img data-src="https://pic.imgdb.cn/item/6318487b16f2c2beb1d8e4d6.png"></p>
-<p>下面是我的配置（仅供参考）</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;script type=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">cnblogsConfig</span> = &#123;</span><br><span class="line">      <span class="comment">// iconfont（我个人的，可以自己建一个iconfont项目维护使用）</span></span><br><span class="line">      <span class="attr">fontIconExtend</span>: <span class="string">&quot;//at.alicdn.com/t/c/font_3603036_keyavmcqbhn.css&quot;</span>,</span><br><span class="line">      <span class="attr">info</span>: &#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;甜点cc&#x27;</span>, <span class="comment">// 用户名</span></span><br><span class="line">        <span class="attr">startDate</span>: <span class="string">&#x27;2016-10-08&#x27;</span>, <span class="comment">// 入园时间，年-月-日。入园时间查看方法：鼠标停留园龄时间上，会显示入园时间</span></span><br><span class="line">        <span class="attr">avatar</span>: <span class="string">&#x27;https://pic.cnblogs.com/avatar/1037867/20220801164532.png&#x27;</span>, <span class="comment">// 用户头像</span></span><br><span class="line">        <span class="attr">blogIcon</span>: <span class="string">&#x27;https://pic.cnblogs.com/avatar/1037867/20220801164532.png&#x27;</span>, <span class="comment">// 网站图标 favicon.ico</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">sidebar</span>: &#123;</span><br><span class="line">        <span class="attr">infoBackground</span>: <span class="string">&#x27;https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/Machine_tool.jpg&#x27;</span>, <span class="comment">// 个人信息背景</span></span><br><span class="line">        <span class="attr">titleMsg</span>: <span class="string">&#x27;宝宝等你很久啦~🌹🌹&#x27;</span>, <span class="comment">// 侧边栏title信息</span></span><br><span class="line">        <span class="attr">navList</span>: [</span><br><span class="line">            [<span class="string">&#x27;友链&#x27;</span>, <span class="string">&#x27;https://www.cnblogs.com/all-smile/p/16612170.html&#x27;</span>, <span class="string">&#x27;icon-pengyoufill&#x27;</span>],</span><br><span class="line">            [<span class="string">&#x27;个人主页&#x27;</span>, <span class="string">&#x27;https://home.i-xiao.space/&#x27;</span>, <span class="string">&#x27;icon-zhuye&#x27;</span>],</span><br><span class="line">        ],</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">banner</span>: &#123;</span><br><span class="line">        <span class="attr">home</span>: &#123;</span><br><span class="line">          <span class="comment">// 主页banner标语, 随机从数组中获取一条文字显示</span></span><br><span class="line">          <span class="attr">title</span>: [<span class="string">&#x27;每一个不曾起舞的日子，都是对生命的辜负。&#x27;</span>, <span class="string">&#x27;为者常成，行者常至。&#x27;</span>, <span class="string">&#x27;逝者如斯夫，不舍昼夜。&#x27;</span>, <span class="string">&quot;相逢的还会再相逢。&quot;</span>],</span><br><span class="line">          <span class="comment">// 主页banner图片</span></span><br><span class="line">          <span class="attr">background</span>: [</span><br><span class="line">              <span class="string">&quot;https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/Machine_tool.jpg&quot;</span>,</span><br><span class="line">              <span class="string">&quot;https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/horse.jpg&quot;</span>,</span><br><span class="line">              <span class="string">&quot;https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/background.jpg&quot;</span>,</span><br><span class="line">              <span class="string">&quot;https://raw.githubusercontent.com/all-smile/nav/master/static/images/sunset.jpg&quot;</span>,</span><br><span class="line">              <span class="string">&quot;https://raw.githubusercontent.com/all-smile/nav/master/static/images/sunset02.jpg&quot;</span></span><br><span class="line">          ],</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// 失去焦点标签文字</span></span><br><span class="line">      <span class="attr">title</span>: &#123;</span><br><span class="line">        <span class="attr">onblur</span>: <span class="string">&#x27;(oﾟvﾟ)ノ Hi&#x27;</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// 页面加载loading。</span></span><br><span class="line">      <span class="attr">loading</span>: &#123;</span><br><span class="line">        <span class="attr">rebound</span>: &#123;</span><br><span class="line">          <span class="attr">tension</span>: <span class="number">16</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">spinner</span>: &#123;</span><br><span class="line">          <span class="attr">id</span>: <span class="string">&#x27;spinner&#x27;</span>,</span><br><span class="line">          <span class="attr">radius</span>: <span class="number">90</span>,</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// 页脚模式</span></span><br><span class="line">      <span class="attr">footer</span>: &#123;</span><br><span class="line">        <span class="attr">style</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="attr">text</span>: &#123;</span><br><span class="line">          <span class="attr">left</span>: <span class="string">&#x27;蓄之既久，其发必速。&#x27;</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// 友情链接</span></span><br><span class="line">      <span class="attr">links</span>: &#123;</span><br><span class="line">        <span class="comment">// 文章底部显示添加友链入口（博客园发送消息）</span></span><br><span class="line">        <span class="attr">footer</span>: [</span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">            格式：</span></span><br><span class="line"><span class="comment">            Key	Description</span></span><br><span class="line"><span class="comment">            name	昵称</span></span><br><span class="line"><span class="comment">            introduction	简介</span></span><br><span class="line"><span class="comment">            avatar	头像</span></span><br><span class="line"><span class="comment">            url	友链地址</span></span><br><span class="line"><span class="comment">            */</span></span><br><span class="line">            [<span class="string">&quot;添加友链&quot;</span>, <span class="string">&#x27;https://msg.cnblogs.com/send/甜点cc&#x27;</span>],</span><br><span class="line">        ],</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// 右下角菜单</span></span><br><span class="line">      <span class="attr">rtMenu</span>: &#123;</span><br><span class="line">        <span class="attr">qrCode</span>: <span class="string">&#x27;https://xxx.jpg&#x27;</span>, <span class="comment">// 自己设置</span></span><br><span class="line">        <span class="attr">reward</span>: &#123;</span><br><span class="line">          <span class="attr">wechatpay</span>: <span class="string">&#x27;https:xxx.jpg&#x27;</span> <span class="comment">// 自己设置</span></span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">animate</span>: &#123;</span><br><span class="line">        <span class="comment">// 主页banner动效配置。</span></span><br><span class="line">        <span class="attr">homeBanner</span>: &#123;</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">true</span>,</span><br><span class="line">          <span class="attr">options</span>: &#123;</span><br><span class="line">            <span class="attr">radius</span>: <span class="number">15</span>,</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">// 文章页标题动效配置。</span></span><br><span class="line">        <span class="attr">articleTitle</span>: &#123;</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">true</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">// 文章页banner动效配置</span></span><br><span class="line">        <span class="attr">articleBanner</span>: &#123;</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">true</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">// 背景动效。</span></span><br><span class="line">        <span class="attr">background</span>: &#123;</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">false</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">// 跟随鼠标动效。</span></span><br><span class="line">        <span class="attr">mouse</span>: &#123;</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">false</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// 友链配置</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">cnblogsConfig</span>.<span class="property">links</span>.<span class="property">page</span> = [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="string">&#x27;甜点cc&#x27;</span>, <span class="comment">// 昵称</span></span><br><span class="line">        <span class="attr">introduction</span>: <span class="string">&#x27;博客&#x27;</span>, <span class="comment">// 简介</span></span><br><span class="line">        <span class="attr">avatar</span>: <span class="string">&#x27;https://pic.cnblogs.com/avatar/1037867/20220801164532.png&#x27;</span>, <span class="comment">// 头像</span></span><br><span class="line">        <span class="attr">url</span>: <span class="string">&#x27;https://home.i-xiao.space/blog/&#x27;</span> <span class="comment">// 友链地址</span></span><br><span class="line">      &#125;,</span><br><span class="line">    ]</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@v2.1.0/dist/simpleMemory.js&quot;</span> <span class="attr">defer</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>注意：</p>
-<ul>
-<li>上面配置中 加载的 js 脚本，要和 上一步的CSS外链同一个版本（这里是V2.1.0），否则可能会不生效或者出现别的问题</li>
-</ul>
-</blockquote>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><ol>
-<li><p>主题相关文件（css\js等）可以自己托管维护，可以自行扩展界面交互</p>
-</li>
-<li><p>图片等静态资源可以自行寻找免费图床。当然也可以自己放到<code>GitHub</code>上面托管，采用CDN访问（参考<a href="https://juejin.cn/post/7120973719346151431">这里</a>）</p>
-</li>
-<li><p>托管到博客园上</p>
-</li>
-</ol>
-<p><img data-src="https://pic.imgdb.cn/item/631848cd16f2c2beb1d93e27.png"></p>
-<ol start="4">
-<li>图片等静态资源也可以自行搭建云盘使用😏</li>
-</ol>
-<p>👉 方式很多，顺手就行 👈</p>
-<p>我的博客园主页请看<a href="https://www.cnblogs.com/all-smile">这里</a>😊欢迎来访问呀🌹</p>
-<hr>
-<p>🎈🎈🎈</p>
 <p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
 <p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
 <p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
