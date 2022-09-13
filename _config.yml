@@ -19,8 +19,8 @@ timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://all-smile.github.io/blog
-root: /blog/
+url: https://all-smile.github.io
+root: /
 
 permalink: posts/:abbrlink.html # 添加了 .html 的后缀， 利于seo
 
