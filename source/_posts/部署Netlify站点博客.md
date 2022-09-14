@@ -1,10 +1,10 @@
 ---
-title: 更换博客域名
+title: 部署Netlify站点博客
 tags:
   - 站点建设
 categories:
   - 博客
-description: 博客站点域名更换，以及一些遗留问题
+description: 部署Netlify站点，域名更换，网速比对，以及一些问题记录
 abbrlink: 818123119
 date: 2022-09-13 19:27:22
 ---
@@ -50,6 +50,8 @@ Netlify 部署的地址在[这里](https://m.i-xiao.space/)
 - 解决4：
 
 方法一： 本地`master`分支，在`source`目录下新建一个`CNAME`文件，存放要绑定的域名，等到执行`hexo g`的时候，会把`source`目录下的文件“揍”到`public`下，然后推送到`gh-pages`分支上
+
+`xxx.xml` 网站地图也可以用同样的方式放置到`source`目录
 
 方法二： 理论上也可以在`generateAfter`事件中处理
 
