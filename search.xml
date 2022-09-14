@@ -1012,6 +1012,121 @@
       </tags>
   </entry>
   <entry>
+    <title>React Native环境配置、初始化项目、打包安装到手机，以及开发小知识</title>
+    <url>/posts/252268106.html</url>
+    <content><![CDATA[<html><head></head><body><h1 id="1、前言"><a href="#1、前言" class="headerlink" title="1、前言"></a>1、前言</h1><p>环境：Win10 + Android</p>
+<p>已经在Windows电脑上安装好 <a href="https://nodejs.org/en/">Node</a>（v14+）、Git、Yarn、<br><a href="https://www.oracle.com/java/technologies/downloads/#java11">JDK</a>(v11)</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">javac -version</span><br><span class="line">javac 11.0.15.1</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">node -v</span><br><span class="line">v16.14.1</span><br></pre></td></tr></tbody></table></figure>
+<p>👉 <a href="https://www.react-native.cn/docs/next/environment-setup">官方文档</a></p>
+<h1 id="2、Android-Studio下载安装"><a href="#2、Android-Studio下载安装" class="headerlink" title="2、Android Studio下载安装"></a>2、Android Studio下载安装</h1><ul>
+<li><a href="https://developer.android.google.cn/studio/">下载地址</a></li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631855c416f2c2beb1e9e38c.png"></p>
+<h1 id="3、Android-SDK-下载安装"><a href="#3、Android-SDK-下载安装" class="headerlink" title="3、Android SDK 下载安装"></a>3、Android SDK 下载安装</h1><ul>
+<li>安装 android sdk</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318562016f2c2beb1ea4698.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318567d16f2c2beb1eab904.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318569116f2c2beb1eacfb0.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856a016f2c2beb1eae08f.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856be16f2c2beb1eb068f.png"></p>
+<h2 id="3-1、环境变量配置"><a href="#3-1、环境变量配置" class="headerlink" title="3.1、环境变量配置"></a>3.1、环境变量配置</h2><ul>
+<li><p>配置系统变量<br><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856cf16f2c2beb1eb1c1c.png"></p>
+</li>
+<li><p>Path 配置：</p>
+</li>
+</ul>
+<figure class="highlight haml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\platform-tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\emulator</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools\bin</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="4、Scrcpy-手机模拟器下载安装使用"><a href="#4、Scrcpy-手机模拟器下载安装使用" class="headerlink" title="4、Scrcpy 手机模拟器下载安装使用"></a>4、Scrcpy 手机模拟器下载安装使用</h1><ul>
+<li><a href="https://github.com/Genymobile/scrcpy">下载地址</a></li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856e916f2c2beb1eb3879.png"></p>
+<p>下载zip文件，解压，双击运行 <code>scrcpy.exe</code> 可执行文件即可在电脑上投影手机屏幕，如下图👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856fb16f2c2beb1eb4fb0.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318571216f2c2beb1eb7443.png" alt="image.png"></p>
+<blockquote>
+<p>运行可执行文件之前，使用<strong>数据线</strong>连接Android手机，进行开发者选项设置（不同的手机进入开发者模式略有差异，自行搜索，我用的是华为手机）</p>
+</blockquote>
+<ul>
+<li>电脑端查看连接设备<br><code>adb devices</code></li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">adb devices</span><br><span class="line">List of devices attached</span><br><span class="line">8TFDU18719000649        device</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>adb 命令，在下载 <code>scrcpy</code> 的时候已经内置了</p>
+</blockquote>
+<h1 id="5、安装-React-Native"><a href="#5、安装-React-Native" class="headerlink" title="5、安装 React Native"></a>5、安装 React Native</h1><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm i react-native-cli -g</span><br><span class="line"></span><br><span class="line">$ react-native -v</span><br><span class="line">react-native-cli: 2.0.1</span><br><span class="line">react-native: n/a - not inside a React Native project directory</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="6、初始化项目"><a href="#6、初始化项目" class="headerlink" title="6、初始化项目"></a>6、初始化项目</h1><p>进入到自己的工作目录，执行下面的命令创建 react native 项目</p>
+<figure class="highlight actionscript"><table><tbody><tr><td class="code"><pre><span class="line">npx react-<span class="keyword">native</span> init AwesomeProject</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="7、运行项目安装软件到安卓机"><a href="#7、运行项目安装软件到安卓机" class="headerlink" title="7、运行项目安装软件到安卓机"></a>7、运行项目安装软件到安卓机</h1><h2 id="7-1、先用数据线连接手机和电脑，运行scrcpy-软件"><a href="#7-1、先用数据线连接手机和电脑，运行scrcpy-软件" class="headerlink" title="7.1、先用数据线连接手机和电脑，运行scrcpy 软件"></a>7.1、先用数据线连接手机和电脑，运行scrcpy 软件</h2><p>开发者选项配置修改，最终实现在电脑上可以投屏手机，并可以在电脑上操控手机</p>
+<h2 id="7-2、打开-android-studio-编辑器，运行项目"><a href="#7-2、打开-android-studio-编辑器，运行项目" class="headerlink" title="7.2、打开 android studio 编辑器，运行项目"></a>7.2、打开 android studio 编辑器，运行项目</h2><figure class="highlight asciidoc"><table><tbody><tr><td class="code"><pre><span class="line">npm run android</span><br><span class="line"></span><br><span class="line"><span class="section">or</span></span><br><span class="line"><span class="section">-------------------</span></span><br><span class="line">cd AwesomeProject</span><br><span class="line">yarn android</span><br><span class="line"># 或者</span><br><span class="line">yarn react-native run-android</span><br></pre></td></tr></tbody></table></figure>
+
+<p>运行的时候会在手机上弹窗 “是否统一安装软件”之类的提示，点击同意即可</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318572616f2c2beb1eb9161.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318573616f2c2beb1eba516.png"></p>
+<h2 id="7-3、adb-reverse-命令使用"><a href="#7-3、adb-reverse-命令使用" class="headerlink" title="7.3、adb reverse  命令使用"></a>7.3、adb reverse  命令使用</h2><p><a href="https://developer.android.google.cn/studio/command-line/adb?hl=zh-cn">adb 文档</a></p>
+<h4 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h4><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318574916f2c2beb1ebbc88.png"></p>
+<p>猜测是多设备连接受影响了，可以尝试重启手机解决<br>也可以尝试如下步骤： 启停 adb 服务器</p>
+<blockquote>
+<p>在某些情况下，您可能需要终止 adb 服务器进程，然后重启以解决问题（例如，如果 adb 不响应命令）。</p>
+<p>如需停止 adb 服务器，请使用 adb kill-server 命令。然后，您可以通过发出其他任何 adb 命令来重启服务器。</p>
+</blockquote>
+<figure class="highlight pgsql"><table><tbody><tr><td class="code"><pre><span class="line">adb kill-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">start</span>-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">reverse</span> tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><figure class="highlight apache"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attribute">adb</span> reverse tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>这条命令的意思是，Android允许我们通过ADB，把Android上的某个端口映射到电脑（adb forward），或者把电脑的某个端口映射到Android系统（adb reverse），在这里假设电脑上开启的服务，监听的端口为8081。Android手机通过USB连接电脑后，在终端直接执行<code>adb reverse tcp:8081 tcp:8081</code>，然后在手机中访问<code>127.0.0.1:8081</code>，就可以访问到电脑上启动的服务了。</p>
+<p>注意：</p>
+<ol>
+<li>必须是在连接数据线usb的前提下才能使用该方案进行代码调试。</li>
+<li>(Android 5.0 及以上)使用 adb reverse 命令，这个选项只能在 5.0 以上版本(API 21+)的安卓设备上使用。</li>
+</ol>
+<h1 id="8、react-native开发小知识"><a href="#8、react-native开发小知识" class="headerlink" title="8、react-native开发小知识"></a>8、react-native开发小知识</h1><h2 id="8-1、vscode-上代码飘红"><a href="#8-1、vscode-上代码飘红" class="headerlink" title="8.1、vscode 上代码飘红"></a>8.1、vscode 上代码飘红</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318575a16f2c2beb1ebd220.png"></p>
+<ul>
+<li>问题原因：</li>
+</ul>
+<p>VScode是默认解析ts的，但是不会默认识别 <a href="https://flow.org/en/docs/react/"><code>Flow</code></a>(<strong>静态类型检测工具</strong>)的语法，所以这种的代码会被解析成ts语法。</p>
+<ul>
+<li>解决方法：<br>快捷键<code>Ctrl+Shift+P</code>，输入<code>setting.json</code>，选择 首选项:打开设置(json)。</li>
+</ul>
+<p><code>settings.json</code></p>
+<figure class="highlight awk"><table><tbody><tr><td class="code"><pre><span class="line"><span class="regexp">//</span> <span class="string">"import type"</span> 声明只能在 TypeScript 文件中使用。</span><br><span class="line"><span class="string">"javascript.validate.enable"</span>: false,</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="8-2、npm-run-android-每次都需要在手机上重新安装软件包"><a href="#8-2、npm-run-android-每次都需要在手机上重新安装软件包" class="headerlink" title="8.2、npm run android 每次都需要在手机上重新安装软件包"></a>8.2、npm run android 每次都需要在手机上重新安装软件包</h2><p>开发者模式 -&gt; USB调试 -&gt; 监控ADB安装应用 -&gt; 关闭, 即可解决。</p>
+<h2 id="8-3、本地开发启动多个项目"><a href="#8-3、本地开发启动多个项目" class="headerlink" title="8.3、本地开发启动多个项目"></a>8.3、本地开发启动多个项目</h2><p>默认端口号是8081，通过指定不同的端口号来启动。</p>
+<figure class="highlight livecodeserver"><table><tbody><tr><td class="code"><pre><span class="line">react-native <span class="built_in">start</span> <span class="comment">--port=8082</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="8-4、修改软件包名称"><a href="#8-4、修改软件包名称" class="headerlink" title="8.4、修改软件包名称"></a>8.4、修改软件包名称</h2><ol>
+<li>修改配置文件<br>Android<br>修改配置文件里的 <code>app_name</code> 即可，重新 <code>yarn android</code> ，发现手机上软件的名称已修改成功。</li>
+</ol>
+<p>文件： <code>android\app\src\main\res\values\strings.xml</code></p>
+<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">string</span> <span class="attr">name</span>=<span class="string">"app_name"</span>&gt;</span>远点<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>react-native-rename 插件修改</li>
+</ol>
+<p>通过插件修改名字，必须是 使用 <code>react-native init xxx</code> 创建的项目</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 安装</span></span><br><span class="line">npm install react-native-rename -g</span><br><span class="line">or</span><br><span class="line">yarn global add react-native-rename</span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目根目录执行命令</span></span><br><span class="line">npx react-native-rename &lt;newName&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>修改完成。</p>
+<p>本篇完！后面继续分享如何调试react native项目。</p>
+<hr>
+<p>🎈🎈🎈</p>
+<p>🌹 关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>✨ 欢迎大家转发、评论交流</p>
+<p>🎁 蟹蟹😊</p>
+</body></html>]]></content>
+      <categories>
+        <category>React Native</category>
+      </categories>
+      <tags>
+        <tag>React Native</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux操作系统学习（运维必会）</title>
     <url>/posts/1915044345.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1192,121 +1307,6 @@
       </tags>
   </entry>
   <entry>
-    <title>React Native环境配置、初始化项目、打包安装到手机，以及开发小知识</title>
-    <url>/posts/252268106.html</url>
-    <content><![CDATA[<html><head></head><body><h1 id="1、前言"><a href="#1、前言" class="headerlink" title="1、前言"></a>1、前言</h1><p>环境：Win10 + Android</p>
-<p>已经在Windows电脑上安装好 <a href="https://nodejs.org/en/">Node</a>（v14+）、Git、Yarn、<br><a href="https://www.oracle.com/java/technologies/downloads/#java11">JDK</a>(v11)</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">javac -version</span><br><span class="line">javac 11.0.15.1</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">node -v</span><br><span class="line">v16.14.1</span><br></pre></td></tr></tbody></table></figure>
-<p>👉 <a href="https://www.react-native.cn/docs/next/environment-setup">官方文档</a></p>
-<h1 id="2、Android-Studio下载安装"><a href="#2、Android-Studio下载安装" class="headerlink" title="2、Android Studio下载安装"></a>2、Android Studio下载安装</h1><ul>
-<li><a href="https://developer.android.google.cn/studio/">下载地址</a></li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631855c416f2c2beb1e9e38c.png"></p>
-<h1 id="3、Android-SDK-下载安装"><a href="#3、Android-SDK-下载安装" class="headerlink" title="3、Android SDK 下载安装"></a>3、Android SDK 下载安装</h1><ul>
-<li>安装 android sdk</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318562016f2c2beb1ea4698.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318567d16f2c2beb1eab904.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318569116f2c2beb1eacfb0.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856a016f2c2beb1eae08f.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856be16f2c2beb1eb068f.png"></p>
-<h2 id="3-1、环境变量配置"><a href="#3-1、环境变量配置" class="headerlink" title="3.1、环境变量配置"></a>3.1、环境变量配置</h2><ul>
-<li><p>配置系统变量<br><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856cf16f2c2beb1eb1c1c.png"></p>
-</li>
-<li><p>Path 配置：</p>
-</li>
-</ul>
-<figure class="highlight haml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\platform-tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\emulator</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools\bin</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="4、Scrcpy-手机模拟器下载安装使用"><a href="#4、Scrcpy-手机模拟器下载安装使用" class="headerlink" title="4、Scrcpy 手机模拟器下载安装使用"></a>4、Scrcpy 手机模拟器下载安装使用</h1><ul>
-<li><a href="https://github.com/Genymobile/scrcpy">下载地址</a></li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856e916f2c2beb1eb3879.png"></p>
-<p>下载zip文件，解压，双击运行 <code>scrcpy.exe</code> 可执行文件即可在电脑上投影手机屏幕，如下图👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856fb16f2c2beb1eb4fb0.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318571216f2c2beb1eb7443.png" alt="image.png"></p>
-<blockquote>
-<p>运行可执行文件之前，使用<strong>数据线</strong>连接Android手机，进行开发者选项设置（不同的手机进入开发者模式略有差异，自行搜索，我用的是华为手机）</p>
-</blockquote>
-<ul>
-<li>电脑端查看连接设备<br><code>adb devices</code></li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">adb devices</span><br><span class="line">List of devices attached</span><br><span class="line">8TFDU18719000649        device</span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<p>adb 命令，在下载 <code>scrcpy</code> 的时候已经内置了</p>
-</blockquote>
-<h1 id="5、安装-React-Native"><a href="#5、安装-React-Native" class="headerlink" title="5、安装 React Native"></a>5、安装 React Native</h1><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm i react-native-cli -g</span><br><span class="line"></span><br><span class="line">$ react-native -v</span><br><span class="line">react-native-cli: 2.0.1</span><br><span class="line">react-native: n/a - not inside a React Native project directory</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="6、初始化项目"><a href="#6、初始化项目" class="headerlink" title="6、初始化项目"></a>6、初始化项目</h1><p>进入到自己的工作目录，执行下面的命令创建 react native 项目</p>
-<figure class="highlight actionscript"><table><tbody><tr><td class="code"><pre><span class="line">npx react-<span class="keyword">native</span> init AwesomeProject</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="7、运行项目安装软件到安卓机"><a href="#7、运行项目安装软件到安卓机" class="headerlink" title="7、运行项目安装软件到安卓机"></a>7、运行项目安装软件到安卓机</h1><h2 id="7-1、先用数据线连接手机和电脑，运行scrcpy-软件"><a href="#7-1、先用数据线连接手机和电脑，运行scrcpy-软件" class="headerlink" title="7.1、先用数据线连接手机和电脑，运行scrcpy 软件"></a>7.1、先用数据线连接手机和电脑，运行scrcpy 软件</h2><p>开发者选项配置修改，最终实现在电脑上可以投屏手机，并可以在电脑上操控手机</p>
-<h2 id="7-2、打开-android-studio-编辑器，运行项目"><a href="#7-2、打开-android-studio-编辑器，运行项目" class="headerlink" title="7.2、打开 android studio 编辑器，运行项目"></a>7.2、打开 android studio 编辑器，运行项目</h2><figure class="highlight asciidoc"><table><tbody><tr><td class="code"><pre><span class="line">npm run android</span><br><span class="line"></span><br><span class="line"><span class="section">or</span></span><br><span class="line"><span class="section">-------------------</span></span><br><span class="line">cd AwesomeProject</span><br><span class="line">yarn android</span><br><span class="line"># 或者</span><br><span class="line">yarn react-native run-android</span><br></pre></td></tr></tbody></table></figure>
-
-<p>运行的时候会在手机上弹窗 “是否统一安装软件”之类的提示，点击同意即可</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318572616f2c2beb1eb9161.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318573616f2c2beb1eba516.png"></p>
-<h2 id="7-3、adb-reverse-命令使用"><a href="#7-3、adb-reverse-命令使用" class="headerlink" title="7.3、adb reverse  命令使用"></a>7.3、adb reverse  命令使用</h2><p><a href="https://developer.android.google.cn/studio/command-line/adb?hl=zh-cn">adb 文档</a></p>
-<h4 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h4><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318574916f2c2beb1ebbc88.png"></p>
-<p>猜测是多设备连接受影响了，可以尝试重启手机解决<br>也可以尝试如下步骤： 启停 adb 服务器</p>
-<blockquote>
-<p>在某些情况下，您可能需要终止 adb 服务器进程，然后重启以解决问题（例如，如果 adb 不响应命令）。</p>
-<p>如需停止 adb 服务器，请使用 adb kill-server 命令。然后，您可以通过发出其他任何 adb 命令来重启服务器。</p>
-</blockquote>
-<figure class="highlight pgsql"><table><tbody><tr><td class="code"><pre><span class="line">adb kill-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">start</span>-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">reverse</span> tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><figure class="highlight apache"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attribute">adb</span> reverse tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>这条命令的意思是，Android允许我们通过ADB，把Android上的某个端口映射到电脑（adb forward），或者把电脑的某个端口映射到Android系统（adb reverse），在这里假设电脑上开启的服务，监听的端口为8081。Android手机通过USB连接电脑后，在终端直接执行<code>adb reverse tcp:8081 tcp:8081</code>，然后在手机中访问<code>127.0.0.1:8081</code>，就可以访问到电脑上启动的服务了。</p>
-<p>注意：</p>
-<ol>
-<li>必须是在连接数据线usb的前提下才能使用该方案进行代码调试。</li>
-<li>(Android 5.0 及以上)使用 adb reverse 命令，这个选项只能在 5.0 以上版本(API 21+)的安卓设备上使用。</li>
-</ol>
-<h1 id="8、react-native开发小知识"><a href="#8、react-native开发小知识" class="headerlink" title="8、react-native开发小知识"></a>8、react-native开发小知识</h1><h2 id="8-1、vscode-上代码飘红"><a href="#8-1、vscode-上代码飘红" class="headerlink" title="8.1、vscode 上代码飘红"></a>8.1、vscode 上代码飘红</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318575a16f2c2beb1ebd220.png"></p>
-<ul>
-<li>问题原因：</li>
-</ul>
-<p>VScode是默认解析ts的，但是不会默认识别 <a href="https://flow.org/en/docs/react/"><code>Flow</code></a>(<strong>静态类型检测工具</strong>)的语法，所以这种的代码会被解析成ts语法。</p>
-<ul>
-<li>解决方法：<br>快捷键<code>Ctrl+Shift+P</code>，输入<code>setting.json</code>，选择 首选项:打开设置(json)。</li>
-</ul>
-<p><code>settings.json</code></p>
-<figure class="highlight awk"><table><tbody><tr><td class="code"><pre><span class="line"><span class="regexp">//</span> <span class="string">"import type"</span> 声明只能在 TypeScript 文件中使用。</span><br><span class="line"><span class="string">"javascript.validate.enable"</span>: false,</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="8-2、npm-run-android-每次都需要在手机上重新安装软件包"><a href="#8-2、npm-run-android-每次都需要在手机上重新安装软件包" class="headerlink" title="8.2、npm run android 每次都需要在手机上重新安装软件包"></a>8.2、npm run android 每次都需要在手机上重新安装软件包</h2><p>开发者模式 -&gt; USB调试 -&gt; 监控ADB安装应用 -&gt; 关闭, 即可解决。</p>
-<h2 id="8-3、本地开发启动多个项目"><a href="#8-3、本地开发启动多个项目" class="headerlink" title="8.3、本地开发启动多个项目"></a>8.3、本地开发启动多个项目</h2><p>默认端口号是8081，通过指定不同的端口号来启动。</p>
-<figure class="highlight livecodeserver"><table><tbody><tr><td class="code"><pre><span class="line">react-native <span class="built_in">start</span> <span class="comment">--port=8082</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="8-4、修改软件包名称"><a href="#8-4、修改软件包名称" class="headerlink" title="8.4、修改软件包名称"></a>8.4、修改软件包名称</h2><ol>
-<li>修改配置文件<br>Android<br>修改配置文件里的 <code>app_name</code> 即可，重新 <code>yarn android</code> ，发现手机上软件的名称已修改成功。</li>
-</ol>
-<p>文件： <code>android\app\src\main\res\values\strings.xml</code></p>
-<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">string</span> <span class="attr">name</span>=<span class="string">"app_name"</span>&gt;</span>远点<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>react-native-rename 插件修改</li>
-</ol>
-<p>通过插件修改名字，必须是 使用 <code>react-native init xxx</code> 创建的项目</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 安装</span></span><br><span class="line">npm install react-native-rename -g</span><br><span class="line">or</span><br><span class="line">yarn global add react-native-rename</span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目根目录执行命令</span></span><br><span class="line">npx react-native-rename &lt;newName&gt;</span><br></pre></td></tr></tbody></table></figure>
-
-<p>修改完成。</p>
-<p>本篇完！后面继续分享如何调试react native项目。</p>
-<hr>
-<p>🎈🎈🎈</p>
-<p>🌹 关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>✨ 欢迎大家转发、评论交流</p>
-<p>🎁 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>React Native</category>
-      </categories>
-      <tags>
-        <tag>React Native</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>关于Web和App的一点点思考</title>
     <url>/posts/4136692609.html</url>
     <content><![CDATA[<html><head></head><body><h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>朋友在微信上分享给我一个“PDD”砍一刀的链接，让我帮忙砍一刀助力，我点开链接之后，让我去下载App，然后去应用商店下载一个App，注册登录完成之后，回到微信里面点击链接，就会唤醒App，接着就是在App里面一顿操作，还不能退出到首页，我呆了😮</p>
@@ -1483,54 +1483,6 @@
       </tags>
   </entry>
   <entry>
-    <title>博客评论插件Beaudar安装使用</title>
-    <url>/posts/34114278.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="Beaudar"><a href="#Beaudar" class="headerlink" title="Beaudar"></a>Beaudar</h2><p><code>Hexo</code>主题选用的<a href="https://xaoxuu.com/wiki/stellar/"><code>Stellar</code></a></p>
-<p>基于 GitHub issue 的轻量评论插件，Utterances 的中文版本，官网在<a href="https://beaudar.lipk.org/">这里</a></p>
-<h2 id="Beaudar-是如何工作的？"><a href="#Beaudar-是如何工作的？" class="headerlink" title="Beaudar 是如何工作的？"></a>Beaudar 是如何工作的？</h2><p>Beaudar 加载时，将使用 GitHub issue 搜索 API 根据 url，“路径名”或“标题”查找与页面相关的 issue。如果找不到与页面匹配的 issue，即没有评论，当有人首次发表评论时，Beaudar-bot 会自动创建一个 issue。</p>
-<h2 id="配置使用"><a href="#配置使用" class="headerlink" title="配置使用"></a>配置使用</h2><ol>
-<li>准备</li>
-</ol>
-<p>Beaudar 的配置方法很简单，创建一个仓库<a href="https://github.com/all-smile/blog-comments"><code>blog-comments</code></a>，在仓库中创建一个域名白名单文件<code>beaudar.json</code>，然后在<a href="https://github.com/apps/beaudar">此处</a>授权安装即可。</p>
-<p><code>beaudar.json</code>文件</p>
-<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li><code>Hexo</code>配置</li>
-</ol>
-<p>在主题配置文件里<code>_config_[theme].yml</code>里面增加如下配置</p>
-<figure class="highlight yml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 评论 [beaudar](https://beaudar.lipk.org/) 插件</span></span><br><span class="line"><span class="attr">comments:</span></span><br><span class="line">  <span class="attr">service:</span> <span class="string">beaudar</span></span><br><span class="line">  <span class="attr">beaudar:</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">all-smile/blog-comments</span> <span class="comment"># 指向你自己的repo</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p>使用<code>GitHub</code>登录后评论</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b40c16f2c2beb16136d9.jpg"></p>
-<h2 id="问题处理"><a href="#问题处理" class="headerlink" title="问题处理"></a>问题处理</h2><ol>
-<li><code>blog-comments</code> 仓库默认分支为<code>main</code></li>
-</ol>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b22716f2c2beb15ee173.jpg"></p>
-<p><strong>解决：</strong></p>
-<p>进入<code>blog-comments</code> 仓库，在 settings -&gt; branches 里面，修改 <code>Default branch</code> 为 <code>main</code></p>
-<ol start="2">
-<li><code>Hexo</code> 本地服务测试<code>Beaudar</code>，添加白名单配置</li>
-</ol>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b2a816f2c2beb15f64b2.jpg"></p>
-<p><strong>解决：</strong></p>
-<p>修改<code>beaudar.json</code>文件</p>
-<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>博客园美化</title>
     <url>/posts/2159164587.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1583,6 +1535,109 @@
 <p>我的博客园主页请看<a href="https://www.cnblogs.com/all-smile">这里</a>😊欢迎来访问呀🌹</p>
 <hr>
 <p>🎈🎈🎈</p>
+<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>前端</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客评论插件Beaudar安装使用</title>
+    <url>/posts/34114278.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="Beaudar"><a href="#Beaudar" class="headerlink" title="Beaudar"></a>Beaudar</h2><p><code>Hexo</code>主题选用的<a href="https://xaoxuu.com/wiki/stellar/"><code>Stellar</code></a></p>
+<p>基于 GitHub issue 的轻量评论插件，Utterances 的中文版本，官网在<a href="https://beaudar.lipk.org/">这里</a></p>
+<h2 id="Beaudar-是如何工作的？"><a href="#Beaudar-是如何工作的？" class="headerlink" title="Beaudar 是如何工作的？"></a>Beaudar 是如何工作的？</h2><p>Beaudar 加载时，将使用 GitHub issue 搜索 API 根据 url，“路径名”或“标题”查找与页面相关的 issue。如果找不到与页面匹配的 issue，即没有评论，当有人首次发表评论时，Beaudar-bot 会自动创建一个 issue。</p>
+<h2 id="配置使用"><a href="#配置使用" class="headerlink" title="配置使用"></a>配置使用</h2><ol>
+<li>准备</li>
+</ol>
+<p>Beaudar 的配置方法很简单，创建一个仓库<a href="https://github.com/all-smile/blog-comments"><code>blog-comments</code></a>，在仓库中创建一个域名白名单文件<code>beaudar.json</code>，然后在<a href="https://github.com/apps/beaudar">此处</a>授权安装即可。</p>
+<p><code>beaudar.json</code>文件</p>
+<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li><code>Hexo</code>配置</li>
+</ol>
+<p>在主题配置文件里<code>_config_[theme].yml</code>里面增加如下配置</p>
+<figure class="highlight yml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 评论 [beaudar](https://beaudar.lipk.org/) 插件</span></span><br><span class="line"><span class="attr">comments:</span></span><br><span class="line">  <span class="attr">service:</span> <span class="string">beaudar</span></span><br><span class="line">  <span class="attr">beaudar:</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">all-smile/blog-comments</span> <span class="comment"># 指向你自己的repo</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p>使用<code>GitHub</code>登录后评论</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b40c16f2c2beb16136d9.jpg"></p>
+<h2 id="问题处理"><a href="#问题处理" class="headerlink" title="问题处理"></a>问题处理</h2><ol>
+<li><code>blog-comments</code> 仓库默认分支为<code>main</code></li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b22716f2c2beb15ee173.jpg"></p>
+<p><strong>解决：</strong></p>
+<p>进入<code>blog-comments</code> 仓库，在 settings -&gt; branches 里面，修改 <code>Default branch</code> 为 <code>main</code></p>
+<ol start="2">
+<li><code>Hexo</code> 本地服务测试<code>Beaudar</code>，添加白名单配置</li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b2a816f2c2beb15f64b2.jpg"></p>
+<p><strong>解决：</strong></p>
+<p>修改<code>beaudar.json</code>文件</p>
+<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>多路径来源页面导航高亮以及面包屑导航修改</title>
+    <url>/posts/2025032412.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="问题缘由"><a href="#问题缘由" class="headerlink" title="问题缘由"></a>问题缘由</h2><p>这个问题比较普遍，原因是业务方面对产品进行多维度的划分（或者对产品进行归档、打标签、收藏等等），反应在前端方面就是同一个页面可以有不同的入口（产品目录结构划分）</p>
+<p>干说不如举个例子：</p>
+<ol>
+<li><p>“活期储蓄”产品属于负债类理财产品（导航菜单）</p>
+</li>
+<li><p>关注“活期储蓄”产品</p>
+</li>
+<li><p>在“我的关注”菜单里也存在“活期储蓄”产品</p>
+</li>
+</ol>
+<p>从上面的描述中不难发现，“活期储蓄”产品既可以从“负债类理财产品”菜单进入，也可以从“我的关注”菜单进入。</p>
+<p>这就带来了两个问题：</p>
+<ol>
+<li><p>当进入“活期储蓄”产品详情页面的时候，高亮哪个导航菜单</p>
+</li>
+<li><p>当进入“活期储蓄”产品详情页面的时候，面包屑导航怎么显示</p>
+</li>
+</ol>
+<p>从用户角度来说自然是我从哪里点进去的就高亮哪个菜单，面包屑也真实的反应“来源路径”</p>
+<h2 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h2><p>项目采用的技术： Vue，Element UI，vue-router</p>
+<p>采用的 element ui 的 导航组件和面包屑组件。</p>
+<p>面包屑是借助 vue-router 的 matched 方法 匹配到的路由对象数据注入ui组件实现的</p>
+<h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><ul>
+<li><p>如果可以从后端数据上进行处理当然更好，现实是没有如果。</p>
+</li>
+<li><p>前端处理，分别针对导高亮和面包屑处理</p>
+</li>
+</ul>
+<h3 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h3><ol>
+<li><p>在进入详情页面的行为中增加标记（我使用 sessionStorage 标记，标记信息包括路径path、title，path用于高亮导航，title用于面包屑展示）</p>
+</li>
+<li><p>在离开详情页的时候移除标记（通过路由守卫实现，目的是标记不会带来别的副作用）</p>
+</li>
+<li><p>根据标记修正菜单高亮、面包屑展示</p>
+</li>
+</ol>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>分析完之后发现写代码就跟玩一样，没有什么技术含量，就不贴代码了</p>
+<p>有一点需要注意：</p>
+<p>在上面思路分析中，当进入详情页，刷新页面，可能会存在时序问题，具体就是面包屑组件里标记信息不能及时同步，这里我采用的是在<code>data</code>上面定义属性<code>signTitle</code>承接<code>sessionStorage</code>，然后在 <code>computed</code> 里面以<code>signTitle</code>为源数据得到最新的标记信息</p>
+<p>可以使用全局状态管理方式替代sessionStorage，状态持久化就可以了</p>
+<hr>
 <p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
 <p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
 <p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
@@ -1669,48 +1724,137 @@
       </tags>
   </entry>
   <entry>
-    <title>多路径来源页面导航高亮以及面包屑导航修改</title>
-    <url>/posts/2025032412.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="问题缘由"><a href="#问题缘由" class="headerlink" title="问题缘由"></a>问题缘由</h2><p>这个问题比较普遍，原因是业务方面对产品进行多维度的划分（或者对产品进行归档、打标签、收藏等等），反应在前端方面就是同一个页面可以有不同的入口（产品目录结构划分）</p>
-<p>干说不如举个例子：</p>
-<ol>
-<li><p>“活期储蓄”产品属于负债类理财产品（导航菜单）</p>
+    <title>认识Chrome扩展插件</title>
+    <url>/posts/9575625.html</url>
+    <content><![CDATA[<html><head></head><body><hr>
+<h2 id="1、前言"><a href="#1、前言" class="headerlink" title="1、前言"></a>1、前言</h2><p>现如今的时代，绝大多数人都要跟浏览器打交道的，说到浏览器那肯定是<code>Chrome</code>浏览器一家独大，具体数据请看👇</p>
+<p>知名流量监测机构 <a href="https://statcounter.com/">Statcounter</a> 公布了 7 月份全球桌面浏览器市场份额，主要数据如下：</p>
+<table>
+<thead>
+<tr>
+<th>浏览器</th>
+<th>市场份额</th>
+<th>月涨跌份额</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Chrome</td>
+<td>66.19%</td>
+<td>-0.74%</td>
+</tr>
+<tr>
+<td>Edge</td>
+<td>10.84%</td>
+<td>+0.2%</td>
+</tr>
+<tr>
+<td>Safari</td>
+<td>8.94%</td>
+<td>+0.01%</td>
+</tr>
+<tr>
+<td>Firefox</td>
+<td>8.08%</td>
+<td>+0.28%</td>
+</tr>
+<tr>
+<td>Opera</td>
+<td>3.06%</td>
+<td>+0.08%</td>
+</tr>
+<tr>
+<td>IE</td>
+<td>0.75%</td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>浏览器扩展插件的用途</strong></p>
+<ul>
+<li><p>生产力工具（和浏览器进行交互：标签、书签、下载、代理、cookie等）</p>
 </li>
-<li><p>关注“活期储蓄”产品</p>
+<li><p>网页内容丰富（改变浏览器外观、桌面通知、右键菜单、定制新标签页）</p>
 </li>
-<li><p>在“我的关注”菜单里也存在“活期储蓄”产品</p>
+<li><p>信息聚合（更像是一个<em>快应用</em>，类似小程序）</p>
 </li>
-</ol>
-<p>从上面的描述中不难发现，“活期储蓄”产品既可以从“负债类理财产品”菜单进入，也可以从“我的关注”菜单进入。</p>
-<p>这就带来了两个问题：</p>
-<ol>
-<li><p>当进入“活期储蓄”产品详情页面的时候，高亮哪个导航菜单</p>
-</li>
-<li><p>当进入“活期储蓄”产品详情页面的时候，面包屑导航怎么显示</p>
-</li>
-</ol>
-<p>从用户角度来说自然是我从哪里点进去的就高亮哪个菜单，面包屑也真实的反应“来源路径”</p>
-<h2 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h2><p>项目采用的技术： Vue，Element UI，vue-router</p>
-<p>采用的 element ui 的 导航组件和面包屑组件。</p>
-<p>面包屑是借助 vue-router 的 matched 方法 匹配到的路由对象数据注入ui组件实现的</p>
-<h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><ul>
-<li><p>如果可以从后端数据上进行处理当然更好，现实是没有如果。</p>
-</li>
-<li><p>前端处理，分别针对导高亮和面包屑处理</p>
+<li><p>乐趣和游戏（小恐龙（<code>chrome://dino/</code>）游戏，想必都玩过）</p>
 </li>
 </ul>
-<h3 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h3><ol>
-<li><p>在进入详情页面的行为中增加标记（我使用 sessionStorage 标记，标记信息包括路径path、title，path用于高亮导航，title用于面包屑展示）</p>
+<p>总之扩展程序让浏览器的功能更加强大，更加贴合用户使用。不管是不是软件开发人员，或多或少都会使用到浏览器扩展插件，常见的比如：书签、网页翻译、广告屏蔽……</p>
+<p>学习Chrome扩展插件势在必行🏃‍♂️🐱‍🏍</p>
+<ul>
+<li><p>Chrome extensions <a href="https://developer.chrome.com/docs/extensions/">文档</a></p>
 </li>
-<li><p>在离开详情页的时候移除标记（通过路由守卫实现，目的是标记不会带来别的副作用）</p>
+<li><p>插件的架构可以参考<a href="https://developer.chrome.com/docs/extensions/mv3/architecture-overview/">这里</a></p>
 </li>
-<li><p>根据标记修正菜单高亮、面包屑展示</p>
+<li><p>Chrome扩展程序应用商店<a href="https://chrome.google.com/webstore/category/extensions">入口</a></p>
+</li>
+<li><p>管理使用chrome扩展。访问 url: <code>chrome://extensions</code>，打开开发者模式</p>
+</li>
+</ul>
+<p>扩展程序是基于 Web 技术（如 HTML、CSS 和 JavaScript）构建的软件程序，使用户能够自定义 Chrome 浏览体验。（前端开发人员技能范围之内😁😁）</p>
+<p>本文从应用着手，通过讲解扩展插件的特性来启发读者对其进一步探索。</p>
+<h2 id="2、Chrome-extensions-和-Chrome-Plugin的区别"><a href="#2、Chrome-extensions-和-Chrome-Plugin的区别" class="headerlink" title="2、Chrome extensions 和 Chrome Plugin的区别"></a>2、Chrome extensions 和 Chrome Plugin的区别</h2><ul>
+<li><p>Chrome Extension（Chrome扩展插件）仅仅是用来增强浏览器网页的功能，它是利用浏览器提供的已有功能和和各种API，进行功能组合，从而改善浏览器体验，停留在<strong>浏览器层面</strong>；</p>
+</li>
+<li><p>Chrome Plugin（Chrome插件）不仅能增强网页的功能，同时能够扩展浏览器本身的功能；当浏览器提供的功能已经无法满足你的需求，就需要你通过C/C++这样的编译语言来扩展浏览器的功能，例如我们常用的Flash 插件，Chrome Plugin工作在<strong>内核层面</strong>。</p>
+</li>
+</ul>
+<h2 id="3、扩展如何工作"><a href="#3、扩展如何工作" class="headerlink" title="3、扩展如何工作"></a>3、扩展如何工作</h2><ul>
+<li><p>扩展是基于 HTML、JavaScript 和 CSS 等 Web 技术构建的。它们在单独的沙盒执行环境中运行，并与 Chrome 浏览器交互。</p>
+</li>
+<li><p>扩展允许您通过使用 API 修改浏览器行为和访问 Web 内容来“扩展”浏览器。扩展通过最终用户 UI 和开发人员 API 进行操作：</p>
+</li>
+<li><p>扩展用户界面 这为用户提供了一种一致的方式来管理他们的扩展。</p>
+</li>
+<li><p><a href="https://developer.chrome.com/docs/extensions/reference/">扩展 API</a>允许扩展代码访问浏览器本身的功能：激活选项卡、修改网络请求等。</p>
+</li>
+</ul>
+<p>要创建扩展，您需要组合一些资源清单: <code>manifest.json</code>、 <code>JavaScript</code>、 <code>HTML</code> 和 <code>CSS</code> 文件、图片等。</p>
+<h2 id="4、Chrome扩展文件"><a href="#4、Chrome扩展文件" class="headerlink" title="4、Chrome扩展文件"></a>4、Chrome扩展文件</h2><p>Chrome扩展文件以.crx为后缀名，.crx实际上是一个压缩文件，使用解压文件打开这个文件就可以看到其中的文件目录</p>
+<p>下图是 <code>Axure</code> 扩展插件原文件：</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184de816f2c2beb1df6802.png"></p>
+<p>因此可以认为，我们实际上就是写一个Web应用，然后将按照Chrome的规定将一个<strong>快捷方式</strong>放在Chrome工具栏上。如下图：</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184d8716f2c2beb1ded274.png"></p>
+<p>上图中左边地址栏内部的按钮是page action（Chrome插件，直接内置在Chrome里的），右边地址栏外部的是 browser action（Chrome 扩展插件）</p>
+<h2 id="5、扩展插件使用"><a href="#5、扩展插件使用" class="headerlink" title="5、扩展插件使用"></a>5、扩展插件使用</h2><p>对于开发和测试，您可以使用扩展开发者模式将这些“解压”加载到 Chrome 中，或者直接拖动<code>crx</code>文件到管理扩展插件页面。如果扩展感到满意，也可以打包并分享给小伙伴使用。</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184d9f16f2c2beb1deffad.png"></p>
+<h2 id="6、popup弹出窗口"><a href="#6、popup弹出窗口" class="headerlink" title="6、popup弹出窗口"></a>6、popup弹出窗口</h2><ul>
+<li><p><code>popup.html</code>可以在里面放置任何<code>html</code>元素，它的宽度是自适应的。当然，这个弹出窗口不会被Chrome拦截</p>
+</li>
+<li><p>popup 无法通过程序打开，只能由用户点击打开。点击 popup 之外的区域会导致 popup 收起。</p>
+</li>
+</ul>
+<p>下图是 <code>FeHelper</code> 扩展插件的弹出窗👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184db116f2c2beb1df1b24.png"></p>
+<h2 id="7、Background-Pages后台页面"><a href="#7、Background-Pages后台页面" class="headerlink" title="7、Background Pages后台页面"></a>7、Background Pages后台页面</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184dc016f2c2beb1df2eec.png"></p>
+<h2 id="8、Chrome扩展插件运行的核心机制"><a href="#8、Chrome扩展插件运行的核心机制" class="headerlink" title="8、Chrome扩展插件运行的核心机制"></a>8、Chrome扩展插件运行的核心机制</h2><p>Chrome扩展插件中比较核心的几个概念：<code>Extension Page</code>、<code>background.js</code>、<code>content_script.js</code></p>
+<p>下图展示他们之间的关系，以及如何通信</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184dd516f2c2beb1df4d37.png"><br>（图片来源网络，侵删）</p>
+<p>运行时的三个进程：</p>
+<ul>
+<li><p>扩展进程（Extension Process）</p>
+</li>
+<li><p>页面渲染进程（Page Render Process）</p>
+</li>
+<li><p>浏览器进程（Browser Process）</p>
+</li>
+</ul>
+<ol>
+<li><strong>扩展进程</strong>中运行<code>Extension Page</code>，主要包括<code>backgrount.html</code>和<code>popup.html</code>,</li>
+</ol>
+<ul>
+<li><p><code> backgrount.html</code>中没有任何内容，是通过<code>background.js</code>创建生成，当浏览器打开时，会自动加载插件的background.js文件，它独立于网页并且一直运行在后台，它主要通过调用浏览器提供的API和浏览器进行交互</p>
+</li>
+<li><p><code>popup.html</code>有内容的，跟我们普通的web页面一样，由<code>html</code>、<code>css</code>、<code>Javascript</code>组成，它是按需加载的，需要用户去点击地址栏的按钮去触发，才能弹出页面。</p>
+</li>
+</ul>
+<ol start="2">
+<li><p><strong>渲染进程</strong>主要运行<code>Web Page</code>,当打开页面时，会将<code>content_script.js</code>加载并注入到该网页的环境中，它和网页中引入的<code>Javascript</code>一样，可以操作该网页的<code>DOM Tree</code>，<em>改变页面的展示效果</em></p>
+</li>
+<li><p><strong>浏览器进程</strong>在这里更多起到桥梁作用，作为中转可以实现<code>Extension Page</code>和<code>content_script.js</code>之间的消息通信。</p>
 </li>
 </ol>
-<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>分析完之后发现写代码就跟玩一样，没有什么技术含量，就不贴代码了</p>
-<p>有一点需要注意：</p>
-<p>在上面思路分析中，当进入详情页，刷新页面，可能会存在时序问题，具体就是面包屑组件里标记信息不能及时同步，这里我采用的是在<code>data</code>上面定义属性<code>signTitle</code>承接<code>sessionStorage</code>，然后在 <code>computed</code> 里面以<code>signTitle</code>为源数据得到最新的标记信息</p>
-<p>可以使用全局状态管理方式替代sessionStorage，状态持久化就可以了</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>本文介绍的是 chrome 扩展基础知识，相信看完以上之后，你会对 Chrome 扩展插件有了一个比较清晰的认识。相信chrome扩展会大有作为，会不会迫不急待的要体验一下呢🤔，我根据Chrome插件开发官网示例写的一个小扩展插件，点击<a href="https://github.com/all-smile/myFirstExtension">这里</a>查看项目。</p>
 <hr>
 <p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
 <p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
@@ -1721,6 +1865,7 @@
       </categories>
       <tags>
         <tag>前端</tag>
+        <tag>Chrome插件</tag>
       </tags>
   </entry>
   <entry>
@@ -1873,196 +2018,6 @@
       </tags>
   </entry>
   <entry>
-    <title>更换博客域名</title>
-    <url>/posts/818123119.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="Netlify站点部署静态博客"><a href="#Netlify站点部署静态博客" class="headerlink" title="Netlify站点部署静态博客"></a>Netlify站点部署静态博客</h2><p>今天尝试把站点部署在<a href="https://app.netlify.com/">Netlify</a>上，因为部署在GitHub Pages上，国内访问速度太慢了，所以就尝试一下别的站点，部署成功之后发现速度还是不太行，后边继续找找原因</p>
-<p>Netlify 部署的地址在<a href="https://m.i-xiao.space/">这里</a></p>
-<p>下图展示<code>GitHub Pages</code>站点和<code>Netlify</code>站点的全国网速对比（数据来源<a href="https://tool.chinaz.com/">站长工具</a>）</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63218cd316f2c2beb1b2619a.jpg"></p>
-<p>总的来说，效果比<code>GitHub Pages</code>站点速度要快</p>
-<h2 id="问题记录"><a href="#问题记录" class="headerlink" title="问题记录"></a>问题记录</h2><p>部署的时候，有几个问题，记录一下：</p>
-<ol>
-<li>部署时告警信息直接就阻塞了部署进程，导致部署失败，猜测是一些类似代码扫描工具使然，然后我只得先把造成告警的 <code>hexo-lazyload</code> 插件给剔除掉，然后就可以了（还不了解<code>Netlify</code>的工作原理，只是临时处理方案）</li>
-</ol>
-<p>一下是<code>Netlify</code>部署的部分日志信息</p>
-<figure class="highlight apache"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">23</span> PM: $ hexo generate</span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">23</span> PM: INFO  Validating config</span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">24</span> PM: INFO  Start processing</span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">24</span> PM: INFO  neat the css: /opt/build/repo/source/_data/styles.styl<span class="meta"> [ 19.27% saved]</span></span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">24</span> PM: INFO  neat the css: /opt/build/repo/source/_data/variables.styl<span class="meta"> [ NaN% saved]</span></span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">34</span> PM: WARN  request remote img fail https://pic.imgdb.cn/item/<span class="number">63184</span>ff316f2c2beb1e26ab9.png</span><br><span class="line"><span class="attribute">2</span>:<span class="number">48</span>:<span class="number">42</span> PM: Build exceeded maximum allowed runtime</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li><p><code>Netlify</code>部署成功之后，由于资源路径不正确，导致<code>NexT</code>主题不生效。我原先设置了路径 <code>root: /blog/</code> ，然后就重新添加了一条记录，解析了一个新的二级域名用来访问博客，同时，这也给我带来了另外两个问题，如下：</p>
-</li>
-<li><p>原先站点 <code>https://home.i-xiao.space/blog/</code> 上的不蒜子数据丢失了，重新初始化数据了。</p>
-</li>
-</ol>
-<blockquote>
-<p><a href="http://ibruce.info/2015/04/04/busuanzi/">“不蒜子”</a>允许初始化首次数据，但是需要注册登录，目前“不蒜子”暂停了<a href="http://busuanzi.ibruce.info/">注册</a>功能，那就先这样吧</p>
-</blockquote>
-<ol start="4">
-<li>原<code>GitHub Pages</code>站点不能正常访问。 给<code>blog</code>仓库设置 <code>GitHub Pages</code>，绑定心得个人二级域名，在发布分支<code>gh-pages</code>下面生成一个CNAME文件，用来存放个人二级域名。存在的问题是：<code>hexo deploy</code> 是把<code>master</code>分支下生成的<code>public</code>目录下的静态文件推送并覆盖<code>gh-pages</code>分支下的文件，因为每次生成的<code>public</code>目录下没有<code>CNAME</code>文件，所以<code>CNAME</code>文件就被冲掉了，造成的结果就是，每次自动部署都会把之前绑定的个人域名“解绑”，导致网站不能正常访问</li>
-</ol>
-<ul>
-<li>解决4：</li>
-</ul>
-<p>方法一： 本地<code>master</code>分支，在<code>source</code>目录下新建一个<code>CNAME</code>文件，存放要绑定的域名，等到执行<code>hexo g</code>的时候，会把<code>source</code>目录下的文件“揍”到<code>public</code>下，然后推送到<code>gh-pages</code>分支上</p>
-<p>方法二： 理论上也可以在<code>generateAfter</code>事件中处理</p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>博客</category>
-      </categories>
-      <tags>
-        <tag>站点建设</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>认识Chrome扩展插件</title>
-    <url>/posts/9575625.html</url>
-    <content><![CDATA[<html><head></head><body><hr>
-<h2 id="1、前言"><a href="#1、前言" class="headerlink" title="1、前言"></a>1、前言</h2><p>现如今的时代，绝大多数人都要跟浏览器打交道的，说到浏览器那肯定是<code>Chrome</code>浏览器一家独大，具体数据请看👇</p>
-<p>知名流量监测机构 <a href="https://statcounter.com/">Statcounter</a> 公布了 7 月份全球桌面浏览器市场份额，主要数据如下：</p>
-<table>
-<thead>
-<tr>
-<th>浏览器</th>
-<th>市场份额</th>
-<th>月涨跌份额</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Chrome</td>
-<td>66.19%</td>
-<td>-0.74%</td>
-</tr>
-<tr>
-<td>Edge</td>
-<td>10.84%</td>
-<td>+0.2%</td>
-</tr>
-<tr>
-<td>Safari</td>
-<td>8.94%</td>
-<td>+0.01%</td>
-</tr>
-<tr>
-<td>Firefox</td>
-<td>8.08%</td>
-<td>+0.28%</td>
-</tr>
-<tr>
-<td>Opera</td>
-<td>3.06%</td>
-<td>+0.08%</td>
-</tr>
-<tr>
-<td>IE</td>
-<td>0.75%</td>
-<td></td>
-</tr>
-</tbody></table>
-<p><strong>浏览器扩展插件的用途</strong></p>
-<ul>
-<li><p>生产力工具（和浏览器进行交互：标签、书签、下载、代理、cookie等）</p>
-</li>
-<li><p>网页内容丰富（改变浏览器外观、桌面通知、右键菜单、定制新标签页）</p>
-</li>
-<li><p>信息聚合（更像是一个<em>快应用</em>，类似小程序）</p>
-</li>
-<li><p>乐趣和游戏（小恐龙（<code>chrome://dino/</code>）游戏，想必都玩过）</p>
-</li>
-</ul>
-<p>总之扩展程序让浏览器的功能更加强大，更加贴合用户使用。不管是不是软件开发人员，或多或少都会使用到浏览器扩展插件，常见的比如：书签、网页翻译、广告屏蔽……</p>
-<p>学习Chrome扩展插件势在必行🏃‍♂️🐱‍🏍</p>
-<ul>
-<li><p>Chrome extensions <a href="https://developer.chrome.com/docs/extensions/">文档</a></p>
-</li>
-<li><p>插件的架构可以参考<a href="https://developer.chrome.com/docs/extensions/mv3/architecture-overview/">这里</a></p>
-</li>
-<li><p>Chrome扩展程序应用商店<a href="https://chrome.google.com/webstore/category/extensions">入口</a></p>
-</li>
-<li><p>管理使用chrome扩展。访问 url: <code>chrome://extensions</code>，打开开发者模式</p>
-</li>
-</ul>
-<p>扩展程序是基于 Web 技术（如 HTML、CSS 和 JavaScript）构建的软件程序，使用户能够自定义 Chrome 浏览体验。（前端开发人员技能范围之内😁😁）</p>
-<p>本文从应用着手，通过讲解扩展插件的特性来启发读者对其进一步探索。</p>
-<h2 id="2、Chrome-extensions-和-Chrome-Plugin的区别"><a href="#2、Chrome-extensions-和-Chrome-Plugin的区别" class="headerlink" title="2、Chrome extensions 和 Chrome Plugin的区别"></a>2、Chrome extensions 和 Chrome Plugin的区别</h2><ul>
-<li><p>Chrome Extension（Chrome扩展插件）仅仅是用来增强浏览器网页的功能，它是利用浏览器提供的已有功能和和各种API，进行功能组合，从而改善浏览器体验，停留在<strong>浏览器层面</strong>；</p>
-</li>
-<li><p>Chrome Plugin（Chrome插件）不仅能增强网页的功能，同时能够扩展浏览器本身的功能；当浏览器提供的功能已经无法满足你的需求，就需要你通过C/C++这样的编译语言来扩展浏览器的功能，例如我们常用的Flash 插件，Chrome Plugin工作在<strong>内核层面</strong>。</p>
-</li>
-</ul>
-<h2 id="3、扩展如何工作"><a href="#3、扩展如何工作" class="headerlink" title="3、扩展如何工作"></a>3、扩展如何工作</h2><ul>
-<li><p>扩展是基于 HTML、JavaScript 和 CSS 等 Web 技术构建的。它们在单独的沙盒执行环境中运行，并与 Chrome 浏览器交互。</p>
-</li>
-<li><p>扩展允许您通过使用 API 修改浏览器行为和访问 Web 内容来“扩展”浏览器。扩展通过最终用户 UI 和开发人员 API 进行操作：</p>
-</li>
-<li><p>扩展用户界面 这为用户提供了一种一致的方式来管理他们的扩展。</p>
-</li>
-<li><p><a href="https://developer.chrome.com/docs/extensions/reference/">扩展 API</a>允许扩展代码访问浏览器本身的功能：激活选项卡、修改网络请求等。</p>
-</li>
-</ul>
-<p>要创建扩展，您需要组合一些资源清单: <code>manifest.json</code>、 <code>JavaScript</code>、 <code>HTML</code> 和 <code>CSS</code> 文件、图片等。</p>
-<h2 id="4、Chrome扩展文件"><a href="#4、Chrome扩展文件" class="headerlink" title="4、Chrome扩展文件"></a>4、Chrome扩展文件</h2><p>Chrome扩展文件以.crx为后缀名，.crx实际上是一个压缩文件，使用解压文件打开这个文件就可以看到其中的文件目录</p>
-<p>下图是 <code>Axure</code> 扩展插件原文件：</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184de816f2c2beb1df6802.png"></p>
-<p>因此可以认为，我们实际上就是写一个Web应用，然后将按照Chrome的规定将一个<strong>快捷方式</strong>放在Chrome工具栏上。如下图：</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184d8716f2c2beb1ded274.png"></p>
-<p>上图中左边地址栏内部的按钮是page action（Chrome插件，直接内置在Chrome里的），右边地址栏外部的是 browser action（Chrome 扩展插件）</p>
-<h2 id="5、扩展插件使用"><a href="#5、扩展插件使用" class="headerlink" title="5、扩展插件使用"></a>5、扩展插件使用</h2><p>对于开发和测试，您可以使用扩展开发者模式将这些“解压”加载到 Chrome 中，或者直接拖动<code>crx</code>文件到管理扩展插件页面。如果扩展感到满意，也可以打包并分享给小伙伴使用。</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184d9f16f2c2beb1deffad.png"></p>
-<h2 id="6、popup弹出窗口"><a href="#6、popup弹出窗口" class="headerlink" title="6、popup弹出窗口"></a>6、popup弹出窗口</h2><ul>
-<li><p><code>popup.html</code>可以在里面放置任何<code>html</code>元素，它的宽度是自适应的。当然，这个弹出窗口不会被Chrome拦截</p>
-</li>
-<li><p>popup 无法通过程序打开，只能由用户点击打开。点击 popup 之外的区域会导致 popup 收起。</p>
-</li>
-</ul>
-<p>下图是 <code>FeHelper</code> 扩展插件的弹出窗👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184db116f2c2beb1df1b24.png"></p>
-<h2 id="7、Background-Pages后台页面"><a href="#7、Background-Pages后台页面" class="headerlink" title="7、Background Pages后台页面"></a>7、Background Pages后台页面</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184dc016f2c2beb1df2eec.png"></p>
-<h2 id="8、Chrome扩展插件运行的核心机制"><a href="#8、Chrome扩展插件运行的核心机制" class="headerlink" title="8、Chrome扩展插件运行的核心机制"></a>8、Chrome扩展插件运行的核心机制</h2><p>Chrome扩展插件中比较核心的几个概念：<code>Extension Page</code>、<code>background.js</code>、<code>content_script.js</code></p>
-<p>下图展示他们之间的关系，以及如何通信</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184dd516f2c2beb1df4d37.png"><br>（图片来源网络，侵删）</p>
-<p>运行时的三个进程：</p>
-<ul>
-<li><p>扩展进程（Extension Process）</p>
-</li>
-<li><p>页面渲染进程（Page Render Process）</p>
-</li>
-<li><p>浏览器进程（Browser Process）</p>
-</li>
-</ul>
-<ol>
-<li><strong>扩展进程</strong>中运行<code>Extension Page</code>，主要包括<code>backgrount.html</code>和<code>popup.html</code>,</li>
-</ol>
-<ul>
-<li><p><code> backgrount.html</code>中没有任何内容，是通过<code>background.js</code>创建生成，当浏览器打开时，会自动加载插件的background.js文件，它独立于网页并且一直运行在后台，它主要通过调用浏览器提供的API和浏览器进行交互</p>
-</li>
-<li><p><code>popup.html</code>有内容的，跟我们普通的web页面一样，由<code>html</code>、<code>css</code>、<code>Javascript</code>组成，它是按需加载的，需要用户去点击地址栏的按钮去触发，才能弹出页面。</p>
-</li>
-</ul>
-<ol start="2">
-<li><p><strong>渲染进程</strong>主要运行<code>Web Page</code>,当打开页面时，会将<code>content_script.js</code>加载并注入到该网页的环境中，它和网页中引入的<code>Javascript</code>一样，可以操作该网页的<code>DOM Tree</code>，<em>改变页面的展示效果</em></p>
-</li>
-<li><p><strong>浏览器进程</strong>在这里更多起到桥梁作用，作为中转可以实现<code>Extension Page</code>和<code>content_script.js</code>之间的消息通信。</p>
-</li>
-</ol>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>本文介绍的是 chrome 扩展基础知识，相信看完以上之后，你会对 Chrome 扩展插件有了一个比较清晰的认识。相信chrome扩展会大有作为，会不会迫不急待的要体验一下呢🤔，我根据Chrome插件开发官网示例写的一个小扩展插件，点击<a href="https://github.com/all-smile/myFirstExtension">这里</a>查看项目。</p>
-<hr>
-<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>前端</tag>
-        <tag>Chrome插件</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>认识HTTP缓存</title>
     <url>/posts/2358217424.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -2170,6 +2125,123 @@
       </tags>
   </entry>
   <entry>
+    <title>记一个 &#39;奇葩&#39; 需求的实现</title>
+    <url>/posts/2156089668.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们这边没有专门的产品经理，<code>UI</code>对产品的设计基本具有决定权，说实话，是有那么一点可怖的（前后改了很多次，差一点就改回原版了，我自己都觉得不好意思了🤣）。个人感觉我们<code>UI</code>还是体验的少，缺乏对产品以及用户行为的认识。设计出来的东西看似很华丽，其实缺失很多场景下的分析，不切合实际，大多数人说的“用户体验”或许只是主观的、想当然的（我也一样😮）。</p>
+<p>自从接触互联网开始我就在有意的学习怎么做产品，期间还考虑过转产品，永远不要拿业余的跟专业的比，没什么可比性，不成熟。继续保持思考、学习。</p>
+<blockquote>
+<p>所用技术：<code>vue</code>、<code>vue-router</code>、<code>element-ui</code></p>
+</blockquote>
+<h2 id="需求："><a href="#需求：" class="headerlink" title="需求："></a>需求：</h2><blockquote>
+<p>导航菜单（<code>el-menu</code>组件）竖向展示的</p>
+</blockquote>
+<ol>
+<li><p>鼠标移入一级菜单展示下面的子菜单，移出则收起来（手风琴模式，正常状态下只保持一个菜单处于展开状态，手动鼠标悬浮展开的不算）</p>
+</li>
+<li><p>选中某个子菜单时高亮对应的一级菜单，并且当鼠标移出高亮的这个菜单模块时不折叠，但是可以点击一级菜单进行折叠（注意：跟第一条有区别）</p>
+</li>
+</ol>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
+<li><p><code>element-ui</code>的导航组件子菜单打开的触发方式可以通过 <code>menu-trigger</code> 参数控制，但是，只在菜单是水平展示（<code>horizontal</code>）的情况下生效。嘶~！我不禁暗想：垂直模式滑动展开真的会有系统这么做吗？（只能自己修改了）</p>
+</li>
+<li><p><code>unique-opened</code> 参数可以控制是否只保持一个子菜单展开，但是在没有子菜单的情况下失效（需要手动修改）</p>
+</li>
+</ol>
+<h2 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h2><p>导航菜单使用递归<code>el-submenu</code>组件实现</p>
+<ol>
+<li>鼠标滑动展开关闭需求：</li>
+</ol>
+<ul>
+<li><code>el-submenu</code> 组件编写鼠标移入移出事件（<code>mouseenter</code>、<code>mouseleave</code>），拿到<code>indexPath</code>，调用<code>open</code>和<code>close</code>方法打开或者折叠菜单（注意：没有子菜单的一级菜单鼠标移入移出不做处理）</li>
+</ul>
+<ol start="2">
+<li>只保持一个菜单出于展开状态</li>
+</ol>
+<ul>
+<li>先配置 <code>unique-opened</code> 参数为 <code>false</code> ，以保证 <code>openedMenus</code> 只有一个（ <code>openedMenus</code> 是<code>el-menu</code>内部维护的属性, 可以自行打印看一下）</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ebfb16f2c2beb1163942.jpg"></p>
+<blockquote>
+<p>一开始我想在子菜单展开折叠的回调事件（<code>open</code>、<code>close</code>）里写逻辑判断，但是不知道什么原因回调事件不触发（注意：<code>open方法</code>和<code>open事件</code>不一样，组件三大要素：<strong>属性、事件、方法</strong>），所以我就考虑在<code>select</code>回调事件里写逻辑了</p>
+</blockquote>
+<ul>
+<li>在菜单激活的<code>select</code>回调事件中，让上一个打开的菜单调用<code>close</code>方法关闭。（这里需要记录上次打开菜单的<code>index</code>，这里我使用<code>sessionStorage</code>记录）</li>
+</ul>
+<h2 id="代码展示"><a href="#代码展示" class="headerlink" title="代码展示"></a>代码展示</h2><p>只展示代码片段，仅供参考</p>
+<p><code>sessionStorage</code>使用自己封装的，之前文章有写过，感兴趣的可以看一下</p>
+<ul>
+<li><code>el-submenu</code> 组件</li>
+</ul>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">menuEnter</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// isNest 是否还有子菜单 true:没有子菜单 false:有子菜单</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; <span class="variable language_">this</span>.<span class="property">item</span>.<span class="property">alwaysShow</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleOpen'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="title function_">menuLeave</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 存在子菜单，并且不是打开状态的菜单，鼠标离开的时候需要合起来</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; !<span class="variable language_">this</span>.<span class="property">curMenuIsOpened</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleClose'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><code>el-menu</code> 组件</li>
+</ul>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 登录系统的时候，记录展开的菜单信息，</span></span><br><span class="line"><span class="comment">// 在 mounted 里面获取 openedMenus ，并记录信息</span></span><br><span class="line"><span class="title function_">mounted</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 获取当前展开的菜单 - array</span></span><br><span class="line">  <span class="comment">// 手风琴模式，只有一个展开菜单</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// openedMenus 是内部属性</span></span><br><span class="line">  <span class="keyword">const</span> {openedMenus = []} = <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (openedMenus &amp;&amp; openedMenus.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">    <span class="comment">// 获取展开菜单的 index</span></span><br><span class="line">    <span class="keyword">const</span> index = openedMenus[<span class="number">0</span>];</span><br><span class="line">    sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, index)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="attr">methods</span>: {</span><br><span class="line">  <span class="title function_">handleOpen</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 open 方法, 打开close,</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">open</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handleClose</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 close 方法, 关闭close</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handlerSelect</span>(<span class="params">index, indexPath</span>) {</span><br><span class="line">    <span class="comment">// 1. 获取上次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">const</span> _preActiveMenu = sessionStorage.<span class="title function_">get</span>(<span class="string">'preActiveMenu'</span>) || <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">if</span> (_preActiveMenu) {</span><br><span class="line">      <span class="comment">// 如果存在，则关闭该菜单，再打开新的</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(_preActiveMenu);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 记录这次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">if</span> (indexPath.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">      sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, indexPath[<span class="number">0</span>])</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="最终效果展示"><a href="#最终效果展示" class="headerlink" title="最终效果展示"></a>最终效果展示</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ec1816f2c2beb1164933.jpg"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>用了<code>UI</code>框架之后就不可避免的会跟产品设计风格向左，这就需要在框架基础之上进行修改。框架也是一个个组件组成的，抓住组件设计的三要素：属性、事件、方法，了解框架组件的工作原理，就可以轻松的进行修改啦🎉🎉</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+        <tag>element-ui</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>部署Netlify站点博客</title>
+    <url>/posts/818123119.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="Netlify站点部署静态博客"><a href="#Netlify站点部署静态博客" class="headerlink" title="Netlify站点部署静态博客"></a>Netlify站点部署静态博客</h2><p>今天尝试把站点部署在<a href="https://app.netlify.com/">Netlify</a>上，因为部署在GitHub Pages上，国内访问速度太慢了，所以就尝试一下别的站点，部署成功之后发现速度还是不太行，后边继续找找原因</p>
+<p>Netlify 部署的地址在<a href="https://m.i-xiao.space/">这里</a></p>
+<p>下图展示<code>GitHub Pages</code>站点和<code>Netlify</code>站点的全国网速对比（数据来源<a href="https://tool.chinaz.com/">站长工具</a>）</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63218cd316f2c2beb1b2619a.jpg"></p>
+<p>总的来说，效果比<code>GitHub Pages</code>站点速度要快</p>
+<h2 id="问题记录"><a href="#问题记录" class="headerlink" title="问题记录"></a>问题记录</h2><p>部署的时候，有几个问题，记录一下：</p>
+<ol>
+<li>部署时告警信息直接就阻塞了部署进程，导致部署失败，猜测是一些类似代码扫描工具使然，然后我只得先把造成告警的 <code>hexo-lazyload</code> 插件给剔除掉，然后就可以了（还不了解<code>Netlify</code>的工作原理，只是临时处理方案）</li>
+</ol>
+<p>一下是<code>Netlify</code>部署的部分日志信息</p>
+<figure class="highlight apache"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">23</span> PM: $ hexo generate</span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">23</span> PM: INFO  Validating config</span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">24</span> PM: INFO  Start processing</span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">24</span> PM: INFO  neat the css: /opt/build/repo/source/_data/styles.styl<span class="meta"> [ 19.27% saved]</span></span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">24</span> PM: INFO  neat the css: /opt/build/repo/source/_data/variables.styl<span class="meta"> [ NaN% saved]</span></span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">34</span> PM: WARN  request remote img fail https://pic.imgdb.cn/item/<span class="number">63184</span>ff316f2c2beb1e26ab9.png</span><br><span class="line"><span class="attribute">2</span>:<span class="number">48</span>:<span class="number">42</span> PM: Build exceeded maximum allowed runtime</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li><p><code>Netlify</code>部署成功之后，由于资源路径不正确，导致<code>NexT</code>主题不生效。我原先设置了路径 <code>root: /blog/</code> ，然后就重新添加了一条记录，解析了一个新的二级域名用来访问博客，同时，这也给我带来了另外两个问题，如下：</p>
+</li>
+<li><p>原先站点 <code>https://home.i-xiao.space/blog/</code> 上的不蒜子数据丢失了，重新初始化数据了。</p>
+</li>
+</ol>
+<blockquote>
+<p><a href="http://ibruce.info/2015/04/04/busuanzi/">“不蒜子”</a>允许初始化首次数据，但是需要注册登录，目前“不蒜子”暂停了<a href="http://busuanzi.ibruce.info/">注册</a>功能，那就先这样吧</p>
+</blockquote>
+<ol start="4">
+<li>原<code>GitHub Pages</code>站点不能正常访问。 给<code>blog</code>仓库设置 <code>GitHub Pages</code>，绑定心得个人二级域名，在发布分支<code>gh-pages</code>下面生成一个CNAME文件，用来存放个人二级域名。存在的问题是：<code>hexo deploy</code> 是把<code>master</code>分支下生成的<code>public</code>目录下的静态文件推送并覆盖<code>gh-pages</code>分支下的文件，因为每次生成的<code>public</code>目录下没有<code>CNAME</code>文件，所以<code>CNAME</code>文件就被冲掉了，造成的结果就是，每次自动部署都会把之前绑定的个人域名“解绑”，导致网站不能正常访问</li>
+</ol>
+<ul>
+<li>解决4：</li>
+</ul>
+<p>方法一： 本地<code>master</code>分支，在<code>source</code>目录下新建一个<code>CNAME</code>文件，存放要绑定的域名，等到执行<code>hexo g</code>的时候，会把<code>source</code>目录下的文件“揍”到<code>public</code>下，然后推送到<code>gh-pages</code>分支上</p>
+<p><code>xxx.xml</code> 网站地图也可以用同样的方式放置到<code>source</code>目录</p>
+<p>方法二： 理论上也可以在<code>generateAfter</code>事件中处理</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>博客</category>
+      </categories>
+      <tags>
+        <tag>站点建设</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>设计模式浅析</title>
     <url>/posts/3163405351.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -2239,77 +2311,6 @@
       </categories>
       <tags>
         <tag>设计模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>记一个 &#39;奇葩&#39; 需求的实现</title>
-    <url>/posts/2156089668.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们这边没有专门的产品经理，<code>UI</code>对产品的设计基本具有决定权，说实话，是有那么一点可怖的（前后改了很多次，差一点就改回原版了，我自己都觉得不好意思了🤣）。个人感觉我们<code>UI</code>还是体验的少，缺乏对产品以及用户行为的认识。设计出来的东西看似很华丽，其实缺失很多场景下的分析，不切合实际，大多数人说的“用户体验”或许只是主观的、想当然的（我也一样😮）。</p>
-<p>自从接触互联网开始我就在有意的学习怎么做产品，期间还考虑过转产品，永远不要拿业余的跟专业的比，没什么可比性，不成熟。继续保持思考、学习。</p>
-<blockquote>
-<p>所用技术：<code>vue</code>、<code>vue-router</code>、<code>element-ui</code></p>
-</blockquote>
-<h2 id="需求："><a href="#需求：" class="headerlink" title="需求："></a>需求：</h2><blockquote>
-<p>导航菜单（<code>el-menu</code>组件）竖向展示的</p>
-</blockquote>
-<ol>
-<li><p>鼠标移入一级菜单展示下面的子菜单，移出则收起来（手风琴模式，正常状态下只保持一个菜单处于展开状态，手动鼠标悬浮展开的不算）</p>
-</li>
-<li><p>选中某个子菜单时高亮对应的一级菜单，并且当鼠标移出高亮的这个菜单模块时不折叠，但是可以点击一级菜单进行折叠（注意：跟第一条有区别）</p>
-</li>
-</ol>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
-<li><p><code>element-ui</code>的导航组件子菜单打开的触发方式可以通过 <code>menu-trigger</code> 参数控制，但是，只在菜单是水平展示（<code>horizontal</code>）的情况下生效。嘶~！我不禁暗想：垂直模式滑动展开真的会有系统这么做吗？（只能自己修改了）</p>
-</li>
-<li><p><code>unique-opened</code> 参数可以控制是否只保持一个子菜单展开，但是在没有子菜单的情况下失效（需要手动修改）</p>
-</li>
-</ol>
-<h2 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h2><p>导航菜单使用递归<code>el-submenu</code>组件实现</p>
-<ol>
-<li>鼠标滑动展开关闭需求：</li>
-</ol>
-<ul>
-<li><code>el-submenu</code> 组件编写鼠标移入移出事件（<code>mouseenter</code>、<code>mouseleave</code>），拿到<code>indexPath</code>，调用<code>open</code>和<code>close</code>方法打开或者折叠菜单（注意：没有子菜单的一级菜单鼠标移入移出不做处理）</li>
-</ul>
-<ol start="2">
-<li>只保持一个菜单出于展开状态</li>
-</ol>
-<ul>
-<li>先配置 <code>unique-opened</code> 参数为 <code>false</code> ，以保证 <code>openedMenus</code> 只有一个（ <code>openedMenus</code> 是<code>el-menu</code>内部维护的属性, 可以自行打印看一下）</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ebfb16f2c2beb1163942.jpg"></p>
-<blockquote>
-<p>一开始我想在子菜单展开折叠的回调事件（<code>open</code>、<code>close</code>）里写逻辑判断，但是不知道什么原因回调事件不触发（注意：<code>open方法</code>和<code>open事件</code>不一样，组件三大要素：<strong>属性、事件、方法</strong>），所以我就考虑在<code>select</code>回调事件里写逻辑了</p>
-</blockquote>
-<ul>
-<li>在菜单激活的<code>select</code>回调事件中，让上一个打开的菜单调用<code>close</code>方法关闭。（这里需要记录上次打开菜单的<code>index</code>，这里我使用<code>sessionStorage</code>记录）</li>
-</ul>
-<h2 id="代码展示"><a href="#代码展示" class="headerlink" title="代码展示"></a>代码展示</h2><p>只展示代码片段，仅供参考</p>
-<p><code>sessionStorage</code>使用自己封装的，之前文章有写过，感兴趣的可以看一下</p>
-<ul>
-<li><code>el-submenu</code> 组件</li>
-</ul>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">menuEnter</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// isNest 是否还有子菜单 true:没有子菜单 false:有子菜单</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; <span class="variable language_">this</span>.<span class="property">item</span>.<span class="property">alwaysShow</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleOpen'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="title function_">menuLeave</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 存在子菜单，并且不是打开状态的菜单，鼠标离开的时候需要合起来</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; !<span class="variable language_">this</span>.<span class="property">curMenuIsOpened</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleClose'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li><code>el-menu</code> 组件</li>
-</ul>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 登录系统的时候，记录展开的菜单信息，</span></span><br><span class="line"><span class="comment">// 在 mounted 里面获取 openedMenus ，并记录信息</span></span><br><span class="line"><span class="title function_">mounted</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 获取当前展开的菜单 - array</span></span><br><span class="line">  <span class="comment">// 手风琴模式，只有一个展开菜单</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// openedMenus 是内部属性</span></span><br><span class="line">  <span class="keyword">const</span> {openedMenus = []} = <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (openedMenus &amp;&amp; openedMenus.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">    <span class="comment">// 获取展开菜单的 index</span></span><br><span class="line">    <span class="keyword">const</span> index = openedMenus[<span class="number">0</span>];</span><br><span class="line">    sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, index)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="attr">methods</span>: {</span><br><span class="line">  <span class="title function_">handleOpen</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 open 方法, 打开close,</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">open</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handleClose</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 close 方法, 关闭close</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handlerSelect</span>(<span class="params">index, indexPath</span>) {</span><br><span class="line">    <span class="comment">// 1. 获取上次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">const</span> _preActiveMenu = sessionStorage.<span class="title function_">get</span>(<span class="string">'preActiveMenu'</span>) || <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">if</span> (_preActiveMenu) {</span><br><span class="line">      <span class="comment">// 如果存在，则关闭该菜单，再打开新的</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(_preActiveMenu);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 记录这次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">if</span> (indexPath.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">      sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, indexPath[<span class="number">0</span>])</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="最终效果展示"><a href="#最终效果展示" class="headerlink" title="最终效果展示"></a>最终效果展示</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ec1816f2c2beb1164933.jpg"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>用了<code>UI</code>框架之后就不可避免的会跟产品设计风格向左，这就需要在框架基础之上进行修改。框架也是一个个组件组成的，抓住组件设计的三要素：属性、事件、方法，了解框架组件的工作原理，就可以轻松的进行修改啦🎉🎉</p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>vue</tag>
-        <tag>element-ui</tag>
       </tags>
   </entry>
 </search>
