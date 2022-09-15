@@ -3,6 +3,10 @@ title: 静态博客SEO优化
 abbrlink: 2912186581
 date: 2022-09-15 13:26:00
 tags:
+  - SEO
+categories:
+  - Hexo
+description: 本文记录为Hexo静态站点博客进行百度、必应SEO的简单尝试
 ---
 
 ## Baidu Webmaster Tools
@@ -17,6 +21,8 @@ tags:
    - `CNAME`验证 （增加域名解析记录）
 
 我使用的是`HTML`标签验证，`Hexo` 提供的有`API`， 可以往页面里注入 `HTML`
+
+> 百度移动统计: https://mtj.baidu.com/web/dashboard
 
 ```js
 // baidu seo
