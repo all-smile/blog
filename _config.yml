@@ -192,10 +192,17 @@ search:
 # baidu： npm install hexo-generator-baidu-sitemap --save
 # public文件夹下自动生成sitemap.xml和baidusitemap.xml分别用于Google和百度
 # 是一个生成网站 sitemap 工具，你可以主动将生成的 sitemap.xml 提交给搜索引擎，
+# bing seo : BingSiteAuth.xml
 # 这样搜索引擎就可以更好的抓取你的博文
 sitemap:
-  path: sitemap.xml # bing seo : BingSiteAuth.xml
+  path: sitemap.xml
   rel: false
+  tags: false # 不需要生成分类和标签的地图,反而降低权重
+  categories: false
+baidusitemap:
+  path: baidusitemap.xml
+  tags: false
+  categories: false
 
 
 # `Follow me on GitHub` banner in the top-right corner.
