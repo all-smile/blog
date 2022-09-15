@@ -1,7 +1,7 @@
 {# 看板娘 waifu2x是使用深度卷积神经网络的图片超解析系统 二次元图片 #}
 {# <script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script> #}
 {# 自定义操作 #}
-  <script>
+<script>
 ;
 (function () {
   handleAddListener('load', getTiming)
@@ -42,15 +42,13 @@
       // for (item in timingObj) { console.log(item + ":" + timingObj[item] + '秒(s)'); }
       console.log(timingObj)
     } catch (err) {
-      console
-        .log(err)
-        console
-        .log(timingObj)
-        console
-        .log(performance.timing);
+      console.log(err)
+      console.log(timingObj)
+      console.log(performance.timing);
     }
   }
 })();
+
 // 崩溃欺骗
 const OriginTitle = document.title;
 let titleTime;
@@ -65,9 +63,9 @@ document.addEventListener('visibilitychange', function () {
     }, 2000);
   }
 });
+
 // 修改复制文字
 document.addEventListener("copy", function (evt) {
-  console.log('evt', evt)
   const clipboard_data = evt.clipboardData || window.clipboardData;
   if (! clipboard_data) {
     return;
@@ -83,4 +81,5 @@ document.addEventListener("copy", function (evt) {
     clipboard_data.setData(
     "text/plain", text + "\n\n转载请注明出处\n本文作者： 甜点cc（https://blog.i-xiao.space）\n本文链接： " + baseURI + "\n");
   }
-})</script>
+})
+</script>
