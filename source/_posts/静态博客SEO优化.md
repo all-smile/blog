@@ -6,8 +6,10 @@ tags:
   - SEO
 categories:
   - Hexo
-description: 本文记录为Hexo静态站点博客进行百度、必应SEO的简单尝试
+description: 本文记录为Hexo静态站点博客进行百度、必应、搜狗等SEO的简单尝试
 ---
+
+> [屈站长](https://www.sousuoyinqingtijiao.com/)汇总了各大搜索引擎网站提交入口，非常方便，可以前去提交验证。
 
 ## Baidu Webmaster Tools
 

@@ -13,6 +13,13 @@ hexo.extend.injector.register(
   'default'
 );
 
+// sogou seo
+hexo.extend.injector.register(
+  'head_begin',
+  '<meta name="sogou_site_verification" content="eJcmtFUSuq" />',
+  'default'
+);
+
 // google-site-verification
 // hexo.extend.injector.register(
 //   'head_begin',
