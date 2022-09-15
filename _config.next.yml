@@ -618,6 +618,9 @@ comments:
     gitalk:
       text: gitalk # 描述
       order: -2
+    valine:
+      text: valine # 描述
+      order: -3
 
 # Disqus
 # For more information: https://disqus.com
@@ -680,6 +683,17 @@ utterances:
 # For more information: https://posativ.org/isso/
 isso: # <data_isso>
 
+valine:
+  enable: true # 设置为true，默认为false
+  appid: 6o213f6ejhGlUWPb9i4CSz0E-MdYXbMMI # 将应用key的App ID设置在这里
+  appkey: oO7PKRrUJLDX0g8FQ5aSLUJR # 将应用key的App Key设置在这里
+  notify: false # 邮箱通知 , https://github.com/xCss/Valine/wiki，默认为false
+  verify: false # 验证码 默认为false
+  placeholder: Just go go ^_^ # 初始化评论显示，根据自己修改，这里默认，
+  avatar: monsterid # 头像风格，默认为mm，可进入网址：https://valine.js.org/visitor.html查看头像设置，这里有许多头像风格，进行设置
+  guest_info: nick,mail,link # 自定义评论标题
+  pageSize: 10 # 分页大小，10页就自动分页
+  visitor: true # 是否允许游客评论 ，进入官网查看设置：https://valine.js.org/visitor.html
 
 # ---------------------------------------------------------------
 # Post Widgets & Content Sharing Services
@@ -688,6 +702,7 @@ isso: # <data_isso>
 
 # Star rating support to each article.
 # To get your ID visit https://widgetpack.com
+# 星标 投票挂件
 rating:
   enable: false
   id:     # <app_id>
@@ -737,10 +752,11 @@ matomo:
 
 # Show number of visitors of each article.
 # You can visit https://www.leancloud.cn to get AppID and AppKey.
+# npm install hexo-leancloud-counter-security
 leancloud_visitors:
-  enable: false
-  app_id: # <your app id>
-  app_key: # <your app key>
+  enable: true
+  app_id: 6o213f6ejhGlUWPb9i4CSz0E-MdYXbMMI # <your app id>
+  app_key: oO7PKRrUJLDX0g8FQ5aSLUJR # <your app key>
   # Required for apps from CN region
   server_url: # <your server url>
   # Dependencies: https://github.com/theme-next/hexo-leancloud-counter-security

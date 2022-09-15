@@ -83,31 +83,4 @@ document.addEventListener("copy", function (evt) {
   }
 })
 
-// 捕获404页面，并重定向到公益404页面
-var isRunUrl=function(url){
-    return new Promise(function (resolve, reject) {
-        // 测试链接连通性, 主要检测404错误
-        // 由于AJAX通常无法区分404和跨域问题
-        // 所以只能用script 或者 link标签
-        // link比script更容易捕获错误
-        var dom= document.createElement('link');
-        dom.href = url;
-        dom.rel = 'stylesheet';
-        document.head.appendChild(dom);
-        dom.onload = function () {
-            document.head.removeChild(dom);
-            resolve();
-        }
-        dom.onerror = reject;
-    });
-}
-
-
-isRunUrl("测试地址").then(function(data){
-    //处理resolve的代码
-    console.log("Promise被置为resolve", data);;
-},function(data){
-    //处理reject的代码
-    console .log("程序被置为了reject",data);
-})
 </script>

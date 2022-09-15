@@ -235,3 +235,10 @@ neat_js:
     - '**/index.js'
     - '**/clicklove.js'
     - '**/firework.js'
+# npm install hexo-leancloud-counter-security
+leancloud_counter_security:
+  enable_sync: true
+  app_id: 6o213f6ejhGlUWPb9i4CSz0E-MdYXbMMI
+  app_key: oO7PKRrUJLDX0g8FQ5aSLUJR
+  username: # <your username> # Will be asked while deploying if is left blank
+  password: # <your password> # Recommmended to be left blank. Will be asked while deploying if is left blank
