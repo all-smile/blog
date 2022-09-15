@@ -43,85 +43,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker0网络及原理探究</title>
-    <url>/posts/2165908694.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>个人观点：Docker网络通信在容器编排、集群部署中具有举足轻重的地位，（玩docker不懂docker0那就……玩不透哇👀）本篇分析Docker网络，并通过启动几个容器来探究Docker网络及容器通信，帮助读者理解一下😊。</p>
-</blockquote>
-<h2 id="1、Docker0"><a href="#1、Docker0" class="headerlink" title="1、Docker0"></a>1、Docker0</h2><p>Docker 服务默认会创建一个 docker0 网桥（其上有一个 docker0 内部接口），它在内核层连通了其他的物理或虚拟网卡，这就将所有容器和本地主机都放到同一个物理网络。</p>
-<p>Docker 默认指定了 docker0 接口 的 IP 地址和子网掩码，让主机和容器之间可以通过网桥相互通信，它还给出了 MTU（接口允许接收的最大传输单元），通常是 1500 Bytes，或宿主主机网络路由上支持的默认值。这些值都可以在服务启动的时候进行配置。</p>
-<h2 id="2、清空所有镜像"><a href="#2、清空所有镜像" class="headerlink" title="2、清空所有镜像"></a>2、清空所有镜像</h2><p>如果是初学者，还不是很了解docker0的情况下，建议清空所有镜像，创造一个比较干净的容器网络环境，更加清晰，有助于学习docker0😃</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 查看运行的容器</span></span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 停掉所有正在运行的容器(否则删除不掉)</span></span><br><span class="line">docker stop [containerID]   <span class="comment"># docker stop $(docker container ls -q)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 执行删除</span></span><br><span class="line">docker rmi -f $(docker images -aq)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 查看镜像</span></span><br><span class="line">docker images</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="3、查看网卡信息"><a href="#3、查看网卡信息" class="headerlink" title="3、查看网卡信息"></a>3、查看网卡信息</h2><ol>
-<li>先了解一下<code>ip addr</code>命令</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">ip addr</span><br><span class="line"></span><br><span class="line">lo        <span class="comment"># 本机回环地址 127.0.0.1</span></span><br><span class="line">eth0      <span class="comment"># 阿里云内网地址 172.31.81.32</span></span><br><span class="line">docker0   <span class="comment"># docker生成的网卡 172.17.0.1</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>获取当前网卡ip地址和mac地址</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># ip addr</span></span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:16:3e:0a:00:34 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.31.81.32/20 brd 172.31.95.255 scope global dynamic eth0</span><br><span class="line">       valid_lft 291944112sec preferred_lft 291944112sec</span><br><span class="line">3: docker0: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:a4:2f:c5:62 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">[root@--- ~]<span class="comment">#</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p>下面通过docker启动几个容器来探究一下Docker网络👇</p>
-</blockquote>
-<h2 id="4、运行容器之后，再次查看网卡信息"><a href="#4、运行容器之后，再次查看网卡信息" class="headerlink" title="4、运行容器之后，再次查看网卡信息"></a>4、运行容器之后，再次查看网卡信息</h2><p>安装Docker时，它会<strong>自动创建</strong>三个网络，默认<code>bridge</code>网桥（创建容器默认连接到此网络）、 <code>none</code> 、<code>host</code></p>
-<h3 id="4-1、运行mysql01-centos01-centos02容器"><a href="#4-1、运行mysql01-centos01-centos02容器" class="headerlink" title="4.1、运行mysql01, centos01, centos02容器"></a>4.1、运行<code>mysql01</code>, <code>centos01</code>, <code>centos02</code>容器</h3><ul>
-<li>启动时，docker默认的bridge网桥，docker0给容器服务自动分配ip</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it --name mysql01 -e MYSQL_ROOT_PASSWORD=123 mysql:5.7</span><br><span class="line">docker run -it --name centos01  centos /bin/bash</span><br><span class="line">docker run -it --name centos02  centos /bin/bash</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="4-2、查看ip、mac地址信息"><a href="#4-2、查看ip、mac地址信息" class="headerlink" title="4.2、查看ip、mac地址信息"></a>4.2、查看ip、mac地址信息</h3><ul>
-<li>可以看到上面启动的三个容器服务的<code>mac</code>信息</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ ip addr</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:16:3e:0a:00:34 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.31.81.32/20 brd 172.31.95.255 scope global dynamic eth0</span><br><span class="line">       valid_lft 291916543sec preferred_lft 291916543sec</span><br><span class="line">3: docker0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:a4:2f:c5:62 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">140: br-799426d70aa2: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:7f:01:1d:00 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.18.0.1/16 brd 172.18.255.255 scope global br-799426d70aa2</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">154: vethe3da564@if153: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether ea:84:fb:14:47:99 brd ff:ff:ff:ff:ff:ff link-netnsid 0</span><br><span class="line">156: veth6477da5@if155: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether 86:35:30:8d:14:85 brd ff:ff:ff:ff:ff:ff link-netnsid 1</span><br><span class="line">158: veth17b2712@if157: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether 72:76:f0:3c:17:e8 brd ff:ff:ff:ff:ff:ff link-netnsid 2</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="4-3、查看docker网络"><a href="#4-3、查看docker网络" class="headerlink" title="4.3、查看docker网络"></a>4.3、查看docker网络</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network ls</span></span><br><span class="line">NETWORK ID     NAME      DRIVER    SCOPE</span><br><span class="line">feafa30d4051   bridge    bridge    <span class="built_in">local</span></span><br><span class="line">e8bf4fced9e2   host      host      <span class="built_in">local</span></span><br><span class="line">6263db0933b9   none      null      <span class="built_in">local</span></span><br><span class="line">[root@--- ~]<span class="comment">#</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="4-4、查看默认bridge网桥-docker0"><a href="#4-4、查看默认bridge网桥-docker0" class="headerlink" title="4.4、查看默认bridge网桥(docker0)"></a>4.4、查看默认bridge网桥(docker0)</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network inspect feafa30d4051</span></span><br><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        <span class="string">"Name"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"feafa30d4051f24353508959bd420fd163ad0c98d6b30ec8ff13b59a59552bb1"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2021-09-26T15:10:27.167774553+08:00"</span>,</span><br><span class="line">        <span class="string">"Scope"</span>: <span class="string">"local"</span>,</span><br><span class="line">        <span class="string">"Driver"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"EnableIPv6"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"IPAM"</span>: {</span><br><span class="line">            <span class="string">"Driver"</span>: <span class="string">"default"</span>,</span><br><span class="line">            <span class="string">"Options"</span>: null,</span><br><span class="line">            <span class="string">"Config"</span>: [</span><br><span class="line">                {</span><br><span class="line">                    <span class="string">"Subnet"</span>: <span class="string">"172.17.0.0/16"</span>,</span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"172.17.0.1"</span></span><br><span class="line">                }</span><br><span class="line">            ]</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Internal"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Attachable"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Ingress"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"ConfigFrom"</span>: {</span><br><span class="line">            <span class="string">"Network"</span>: <span class="string">""</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"ConfigOnly"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Containers"</span>: {</span><br><span class="line">            <span class="string">"29298987c51b777b546bf6626560020ce235e390e1d7fcfe188c6db228ca4edf"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"mysql01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"f6572c49234f74a6c0b652a379bb386f843ebd23b02abd59b1f6a9d1c9534b17"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:11:00:02"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.17.0.2/16"</span>,    <span class="comment"># ✨容器的IP✨</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">"cb1922b95b9316d129b54f3545fad9729092926e10a1d5517f8928db42706151"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"centos01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"ef6cfa74f56bfa4f49143aa08cf323812002236bc63f75204dee7c3ec1162250"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:11:00:03"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.17.0.3/16"</span>,    <span class="comment"># ✨容器的IP✨</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">"cc6f510b9765ba018dbafd416c9774ddf5fd3ff55fa992827f55516e8dc70b6a"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"centos02"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"2f901aec8f8b455d1fb06112c9035a19f34cc597d8907f26f1b896f12d7eb7ba"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:11:00:04"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.17.0.4/16"</span>,    <span class="comment"># ✨容器的IP✨</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            }</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Options"</span>: {</span><br><span class="line">            <span class="string">"com.docker.network.bridge.default_bridge"</span>: <span class="string">"true"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.enable_icc"</span>: <span class="string">"true"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.enable_ip_masquerade"</span>: <span class="string">"true"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.host_binding_ipv4"</span>: <span class="string">"0.0.0.0"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.name"</span>: <span class="string">"docker0"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.driver.mtu"</span>: <span class="string">"1500"</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Labels"</span>: {}</span><br><span class="line">    }</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="4-5、测试容器通信"><a href="#4-5、测试容器通信" class="headerlink" title="4.5、测试容器通信"></a>4.5、测试容器通信</h3><blockquote>
-<p>此时，进入<code>centos01</code>容器，<code>ping</code> mysql容器的<code>ip</code>可以ping通，但是ping不通容器名 ❗</p>
-</blockquote>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it cb1922b95b93 /bin/bash</span><br><span class="line">ping 172.17.0.2</span><br><span class="line"></span><br><span class="line"><span class="comment"># docker0不支持容器名连接访问</span></span><br><span class="line">ping mysql01</span><br><span class="line">ping: mysql01: Name or service not known</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">docker run 启动镜像的时候docker都会分配一个网卡地址</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看运行容器的ip</span></span><br><span class="line">docker inspect 容器ID | grep IPAddress</span><br></pre></td></tr></tbody></table></figure>
-
-<p>如下图👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311936716f2c2beb1dc0720.png"></p>
-<h2 id="5、容器通信原理"><a href="#5、容器通信原理" class="headerlink" title="5、容器通信原理"></a>5、容器通信原理</h2><ul>
-<li><p>只要我们安装了docker，就会有一个网卡docker0（相当于一个路由器），每启动一个docker容器，docker都会给docker容器分配一个ip（连接路由器的终端，同一网段下终端可以互相通信），</p>
-</li>
-<li><p>通过<code>evth-pair</code>技术实现，<code>evth-pair</code>就是一对<em>虚拟设备接口</em>，他们都是成对出现的，一端连着协议，一端彼此相连，<code>evth-pair</code>充当一个桥梁，连接各种虚拟网络设备。</p>
-</li>
-<li><p>Docker网络使用的是<code>Linux桥接</code>，宿主机是docker容器的网桥，docker0，最多分配65535个</p>
-</li>
-<li><p>删除容器之后，虚拟网卡就自动消失了。（<strong>虚拟网卡传递效率高！</strong>）</p>
-</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184efd16f2c2beb1e0c421.png"></p>
-<p>启动容器不设置网络，容器ip由docker0自动分配情况下，容器间的通信，要经过<code>evth-pair</code>技术实现，<strong>并不是直连的</strong>。(跟计算机网络通信类似，分层模型，TCP/IP协议数据报封装解封装)</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f0f16f2c2beb1e0dbff.png"></p>
-<h3 id="5-1、结论"><a href="#5-1、结论" class="headerlink" title="5.1、结论"></a>5.1、结论</h3><ol>
-<li><p><code>tomcat01</code>,<code>tomcat02</code>是共用的一个路由器，docker0</p>
-</li>
-<li><p>所有的容器启动时，如果不指定网络的情况下，都是docker0路由的。65535</p>
-</li>
-</ol>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f2116f2c2beb1e0f432.png"></p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>上面<code>docker0</code>不支持容器名连接访问，容器通信只可以通过容器<code>ip</code>通信，docker也无法保证容器重启后的IP地址不变，所以更好的方式是<strong>通过别名进行互联</strong>，下篇继续讲解怎么通过别名进行容器通信，😊😊。</p>
-<hr>
-<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>后端运维</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>D8调试工具——jsvu的使用细则</title>
     <url>/posts/1327063303.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -337,6 +258,85 @@
       </categories>
       <tags>
         <tag>V8</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker0网络及原理探究</title>
+    <url>/posts/2165908694.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>个人观点：Docker网络通信在容器编排、集群部署中具有举足轻重的地位，（玩docker不懂docker0那就……玩不透哇👀）本篇分析Docker网络，并通过启动几个容器来探究Docker网络及容器通信，帮助读者理解一下😊。</p>
+</blockquote>
+<h2 id="1、Docker0"><a href="#1、Docker0" class="headerlink" title="1、Docker0"></a>1、Docker0</h2><p>Docker 服务默认会创建一个 docker0 网桥（其上有一个 docker0 内部接口），它在内核层连通了其他的物理或虚拟网卡，这就将所有容器和本地主机都放到同一个物理网络。</p>
+<p>Docker 默认指定了 docker0 接口 的 IP 地址和子网掩码，让主机和容器之间可以通过网桥相互通信，它还给出了 MTU（接口允许接收的最大传输单元），通常是 1500 Bytes，或宿主主机网络路由上支持的默认值。这些值都可以在服务启动的时候进行配置。</p>
+<h2 id="2、清空所有镜像"><a href="#2、清空所有镜像" class="headerlink" title="2、清空所有镜像"></a>2、清空所有镜像</h2><p>如果是初学者，还不是很了解docker0的情况下，建议清空所有镜像，创造一个比较干净的容器网络环境，更加清晰，有助于学习docker0😃</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 查看运行的容器</span></span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 停掉所有正在运行的容器(否则删除不掉)</span></span><br><span class="line">docker stop [containerID]   <span class="comment"># docker stop $(docker container ls -q)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 执行删除</span></span><br><span class="line">docker rmi -f $(docker images -aq)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 查看镜像</span></span><br><span class="line">docker images</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="3、查看网卡信息"><a href="#3、查看网卡信息" class="headerlink" title="3、查看网卡信息"></a>3、查看网卡信息</h2><ol>
+<li>先了解一下<code>ip addr</code>命令</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">ip addr</span><br><span class="line"></span><br><span class="line">lo        <span class="comment"># 本机回环地址 127.0.0.1</span></span><br><span class="line">eth0      <span class="comment"># 阿里云内网地址 172.31.81.32</span></span><br><span class="line">docker0   <span class="comment"># docker生成的网卡 172.17.0.1</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>获取当前网卡ip地址和mac地址</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># ip addr</span></span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:16:3e:0a:00:34 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.31.81.32/20 brd 172.31.95.255 scope global dynamic eth0</span><br><span class="line">       valid_lft 291944112sec preferred_lft 291944112sec</span><br><span class="line">3: docker0: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:a4:2f:c5:62 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">[root@--- ~]<span class="comment">#</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>下面通过docker启动几个容器来探究一下Docker网络👇</p>
+</blockquote>
+<h2 id="4、运行容器之后，再次查看网卡信息"><a href="#4、运行容器之后，再次查看网卡信息" class="headerlink" title="4、运行容器之后，再次查看网卡信息"></a>4、运行容器之后，再次查看网卡信息</h2><p>安装Docker时，它会<strong>自动创建</strong>三个网络，默认<code>bridge</code>网桥（创建容器默认连接到此网络）、 <code>none</code> 、<code>host</code></p>
+<h3 id="4-1、运行mysql01-centos01-centos02容器"><a href="#4-1、运行mysql01-centos01-centos02容器" class="headerlink" title="4.1、运行mysql01, centos01, centos02容器"></a>4.1、运行<code>mysql01</code>, <code>centos01</code>, <code>centos02</code>容器</h3><ul>
+<li>启动时，docker默认的bridge网桥，docker0给容器服务自动分配ip</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it --name mysql01 -e MYSQL_ROOT_PASSWORD=123 mysql:5.7</span><br><span class="line">docker run -it --name centos01  centos /bin/bash</span><br><span class="line">docker run -it --name centos02  centos /bin/bash</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="4-2、查看ip、mac地址信息"><a href="#4-2、查看ip、mac地址信息" class="headerlink" title="4.2、查看ip、mac地址信息"></a>4.2、查看ip、mac地址信息</h3><ul>
+<li>可以看到上面启动的三个容器服务的<code>mac</code>信息</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ ip addr</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:16:3e:0a:00:34 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.31.81.32/20 brd 172.31.95.255 scope global dynamic eth0</span><br><span class="line">       valid_lft 291916543sec preferred_lft 291916543sec</span><br><span class="line">3: docker0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:a4:2f:c5:62 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">140: br-799426d70aa2: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:7f:01:1d:00 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.18.0.1/16 brd 172.18.255.255 scope global br-799426d70aa2</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">154: vethe3da564@if153: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether ea:84:fb:14:47:99 brd ff:ff:ff:ff:ff:ff link-netnsid 0</span><br><span class="line">156: veth6477da5@if155: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether 86:35:30:8d:14:85 brd ff:ff:ff:ff:ff:ff link-netnsid 1</span><br><span class="line">158: veth17b2712@if157: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether 72:76:f0:3c:17:e8 brd ff:ff:ff:ff:ff:ff link-netnsid 2</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="4-3、查看docker网络"><a href="#4-3、查看docker网络" class="headerlink" title="4.3、查看docker网络"></a>4.3、查看docker网络</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network ls</span></span><br><span class="line">NETWORK ID     NAME      DRIVER    SCOPE</span><br><span class="line">feafa30d4051   bridge    bridge    <span class="built_in">local</span></span><br><span class="line">e8bf4fced9e2   host      host      <span class="built_in">local</span></span><br><span class="line">6263db0933b9   none      null      <span class="built_in">local</span></span><br><span class="line">[root@--- ~]<span class="comment">#</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="4-4、查看默认bridge网桥-docker0"><a href="#4-4、查看默认bridge网桥-docker0" class="headerlink" title="4.4、查看默认bridge网桥(docker0)"></a>4.4、查看默认bridge网桥(docker0)</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network inspect feafa30d4051</span></span><br><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        <span class="string">"Name"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"feafa30d4051f24353508959bd420fd163ad0c98d6b30ec8ff13b59a59552bb1"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2021-09-26T15:10:27.167774553+08:00"</span>,</span><br><span class="line">        <span class="string">"Scope"</span>: <span class="string">"local"</span>,</span><br><span class="line">        <span class="string">"Driver"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"EnableIPv6"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"IPAM"</span>: {</span><br><span class="line">            <span class="string">"Driver"</span>: <span class="string">"default"</span>,</span><br><span class="line">            <span class="string">"Options"</span>: null,</span><br><span class="line">            <span class="string">"Config"</span>: [</span><br><span class="line">                {</span><br><span class="line">                    <span class="string">"Subnet"</span>: <span class="string">"172.17.0.0/16"</span>,</span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"172.17.0.1"</span></span><br><span class="line">                }</span><br><span class="line">            ]</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Internal"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Attachable"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Ingress"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"ConfigFrom"</span>: {</span><br><span class="line">            <span class="string">"Network"</span>: <span class="string">""</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"ConfigOnly"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Containers"</span>: {</span><br><span class="line">            <span class="string">"29298987c51b777b546bf6626560020ce235e390e1d7fcfe188c6db228ca4edf"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"mysql01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"f6572c49234f74a6c0b652a379bb386f843ebd23b02abd59b1f6a9d1c9534b17"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:11:00:02"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.17.0.2/16"</span>,    <span class="comment"># ✨容器的IP✨</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">"cb1922b95b9316d129b54f3545fad9729092926e10a1d5517f8928db42706151"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"centos01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"ef6cfa74f56bfa4f49143aa08cf323812002236bc63f75204dee7c3ec1162250"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:11:00:03"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.17.0.3/16"</span>,    <span class="comment"># ✨容器的IP✨</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">"cc6f510b9765ba018dbafd416c9774ddf5fd3ff55fa992827f55516e8dc70b6a"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"centos02"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"2f901aec8f8b455d1fb06112c9035a19f34cc597d8907f26f1b896f12d7eb7ba"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:11:00:04"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.17.0.4/16"</span>,    <span class="comment"># ✨容器的IP✨</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            }</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Options"</span>: {</span><br><span class="line">            <span class="string">"com.docker.network.bridge.default_bridge"</span>: <span class="string">"true"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.enable_icc"</span>: <span class="string">"true"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.enable_ip_masquerade"</span>: <span class="string">"true"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.host_binding_ipv4"</span>: <span class="string">"0.0.0.0"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.name"</span>: <span class="string">"docker0"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.driver.mtu"</span>: <span class="string">"1500"</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Labels"</span>: {}</span><br><span class="line">    }</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="4-5、测试容器通信"><a href="#4-5、测试容器通信" class="headerlink" title="4.5、测试容器通信"></a>4.5、测试容器通信</h3><blockquote>
+<p>此时，进入<code>centos01</code>容器，<code>ping</code> mysql容器的<code>ip</code>可以ping通，但是ping不通容器名 ❗</p>
+</blockquote>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it cb1922b95b93 /bin/bash</span><br><span class="line">ping 172.17.0.2</span><br><span class="line"></span><br><span class="line"><span class="comment"># docker0不支持容器名连接访问</span></span><br><span class="line">ping mysql01</span><br><span class="line">ping: mysql01: Name or service not known</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">docker run 启动镜像的时候docker都会分配一个网卡地址</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看运行容器的ip</span></span><br><span class="line">docker inspect 容器ID | grep IPAddress</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如下图👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311936716f2c2beb1dc0720.png"></p>
+<h2 id="5、容器通信原理"><a href="#5、容器通信原理" class="headerlink" title="5、容器通信原理"></a>5、容器通信原理</h2><ul>
+<li><p>只要我们安装了docker，就会有一个网卡docker0（相当于一个路由器），每启动一个docker容器，docker都会给docker容器分配一个ip（连接路由器的终端，同一网段下终端可以互相通信），</p>
+</li>
+<li><p>通过<code>evth-pair</code>技术实现，<code>evth-pair</code>就是一对<em>虚拟设备接口</em>，他们都是成对出现的，一端连着协议，一端彼此相连，<code>evth-pair</code>充当一个桥梁，连接各种虚拟网络设备。</p>
+</li>
+<li><p>Docker网络使用的是<code>Linux桥接</code>，宿主机是docker容器的网桥，docker0，最多分配65535个</p>
+</li>
+<li><p>删除容器之后，虚拟网卡就自动消失了。（<strong>虚拟网卡传递效率高！</strong>）</p>
+</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184efd16f2c2beb1e0c421.png"></p>
+<p>启动容器不设置网络，容器ip由docker0自动分配情况下，容器间的通信，要经过<code>evth-pair</code>技术实现，<strong>并不是直连的</strong>。(跟计算机网络通信类似，分层模型，TCP/IP协议数据报封装解封装)</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f0f16f2c2beb1e0dbff.png"></p>
+<h3 id="5-1、结论"><a href="#5-1、结论" class="headerlink" title="5.1、结论"></a>5.1、结论</h3><ol>
+<li><p><code>tomcat01</code>,<code>tomcat02</code>是共用的一个路由器，docker0</p>
+</li>
+<li><p>所有的容器启动时，如果不指定网络的情况下，都是docker0路由的。65535</p>
+</li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f2116f2c2beb1e0f432.png"></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>上面<code>docker0</code>不支持容器名连接访问，容器通信只可以通过容器<code>ip</code>通信，docker也无法保证容器重启后的IP地址不变，所以更好的方式是<strong>通过别名进行互联</strong>，下篇继续讲解怎么通过别名进行容器通信，😊😊。</p>
+<hr>
+<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
+</body></html>]]></content>
+      <categories>
+        <category>后端运维</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
       </tags>
   </entry>
   <entry>
@@ -2018,6 +2018,77 @@
       </tags>
   </entry>
   <entry>
+    <title>记一个 &#39;奇葩&#39; 需求的实现</title>
+    <url>/posts/2156089668.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们这边没有专门的产品经理，<code>UI</code>对产品的设计基本具有决定权，说实话，是有那么一点可怖的（前后改了很多次，差一点就改回原版了，我自己都觉得不好意思了🤣）。个人感觉我们<code>UI</code>还是体验的少，缺乏对产品以及用户行为的认识。设计出来的东西看似很华丽，其实缺失很多场景下的分析，不切合实际，大多数人说的“用户体验”或许只是主观的、想当然的（我也一样😮）。</p>
+<p>自从接触互联网开始我就在有意的学习怎么做产品，期间还考虑过转产品，永远不要拿业余的跟专业的比，没什么可比性，不成熟。继续保持思考、学习。</p>
+<blockquote>
+<p>所用技术：<code>vue</code>、<code>vue-router</code>、<code>element-ui</code></p>
+</blockquote>
+<h2 id="需求："><a href="#需求：" class="headerlink" title="需求："></a>需求：</h2><blockquote>
+<p>导航菜单（<code>el-menu</code>组件）竖向展示的</p>
+</blockquote>
+<ol>
+<li><p>鼠标移入一级菜单展示下面的子菜单，移出则收起来（手风琴模式，正常状态下只保持一个菜单处于展开状态，手动鼠标悬浮展开的不算）</p>
+</li>
+<li><p>选中某个子菜单时高亮对应的一级菜单，并且当鼠标移出高亮的这个菜单模块时不折叠，但是可以点击一级菜单进行折叠（注意：跟第一条有区别）</p>
+</li>
+</ol>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
+<li><p><code>element-ui</code>的导航组件子菜单打开的触发方式可以通过 <code>menu-trigger</code> 参数控制，但是，只在菜单是水平展示（<code>horizontal</code>）的情况下生效。嘶~！我不禁暗想：垂直模式滑动展开真的会有系统这么做吗？（只能自己修改了）</p>
+</li>
+<li><p><code>unique-opened</code> 参数可以控制是否只保持一个子菜单展开，但是在没有子菜单的情况下失效（需要手动修改）</p>
+</li>
+</ol>
+<h2 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h2><p>导航菜单使用递归<code>el-submenu</code>组件实现</p>
+<ol>
+<li>鼠标滑动展开关闭需求：</li>
+</ol>
+<ul>
+<li><code>el-submenu</code> 组件编写鼠标移入移出事件（<code>mouseenter</code>、<code>mouseleave</code>），拿到<code>indexPath</code>，调用<code>open</code>和<code>close</code>方法打开或者折叠菜单（注意：没有子菜单的一级菜单鼠标移入移出不做处理）</li>
+</ul>
+<ol start="2">
+<li>只保持一个菜单出于展开状态</li>
+</ol>
+<ul>
+<li>先配置 <code>unique-opened</code> 参数为 <code>false</code> ，以保证 <code>openedMenus</code> 只有一个（ <code>openedMenus</code> 是<code>el-menu</code>内部维护的属性, 可以自行打印看一下）</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ebfb16f2c2beb1163942.jpg"></p>
+<blockquote>
+<p>一开始我想在子菜单展开折叠的回调事件（<code>open</code>、<code>close</code>）里写逻辑判断，但是不知道什么原因回调事件不触发（注意：<code>open方法</code>和<code>open事件</code>不一样，组件三大要素：<strong>属性、事件、方法</strong>），所以我就考虑在<code>select</code>回调事件里写逻辑了</p>
+</blockquote>
+<ul>
+<li>在菜单激活的<code>select</code>回调事件中，让上一个打开的菜单调用<code>close</code>方法关闭。（这里需要记录上次打开菜单的<code>index</code>，这里我使用<code>sessionStorage</code>记录）</li>
+</ul>
+<h2 id="代码展示"><a href="#代码展示" class="headerlink" title="代码展示"></a>代码展示</h2><p>只展示代码片段，仅供参考</p>
+<p><code>sessionStorage</code>使用自己封装的，之前文章有写过，感兴趣的可以看一下</p>
+<ul>
+<li><code>el-submenu</code> 组件</li>
+</ul>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">menuEnter</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// isNest 是否还有子菜单 true:没有子菜单 false:有子菜单</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; <span class="variable language_">this</span>.<span class="property">item</span>.<span class="property">alwaysShow</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleOpen'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="title function_">menuLeave</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 存在子菜单，并且不是打开状态的菜单，鼠标离开的时候需要合起来</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; !<span class="variable language_">this</span>.<span class="property">curMenuIsOpened</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleClose'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><code>el-menu</code> 组件</li>
+</ul>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 登录系统的时候，记录展开的菜单信息，</span></span><br><span class="line"><span class="comment">// 在 mounted 里面获取 openedMenus ，并记录信息</span></span><br><span class="line"><span class="title function_">mounted</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 获取当前展开的菜单 - array</span></span><br><span class="line">  <span class="comment">// 手风琴模式，只有一个展开菜单</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// openedMenus 是内部属性</span></span><br><span class="line">  <span class="keyword">const</span> {openedMenus = []} = <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (openedMenus &amp;&amp; openedMenus.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">    <span class="comment">// 获取展开菜单的 index</span></span><br><span class="line">    <span class="keyword">const</span> index = openedMenus[<span class="number">0</span>];</span><br><span class="line">    sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, index)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="attr">methods</span>: {</span><br><span class="line">  <span class="title function_">handleOpen</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 open 方法, 打开close,</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">open</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handleClose</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 close 方法, 关闭close</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handlerSelect</span>(<span class="params">index, indexPath</span>) {</span><br><span class="line">    <span class="comment">// 1. 获取上次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">const</span> _preActiveMenu = sessionStorage.<span class="title function_">get</span>(<span class="string">'preActiveMenu'</span>) || <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">if</span> (_preActiveMenu) {</span><br><span class="line">      <span class="comment">// 如果存在，则关闭该菜单，再打开新的</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(_preActiveMenu);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 记录这次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">if</span> (indexPath.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">      sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, indexPath[<span class="number">0</span>])</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="最终效果展示"><a href="#最终效果展示" class="headerlink" title="最终效果展示"></a>最终效果展示</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ec1816f2c2beb1164933.jpg"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>用了<code>UI</code>框架之后就不可避免的会跟产品设计风格向左，这就需要在框架基础之上进行修改。框架也是一个个组件组成的，抓住组件设计的三要素：属性、事件、方法，了解框架组件的工作原理，就可以轻松的进行修改啦🎉🎉</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+        <tag>element-ui</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>认识HTTP缓存</title>
     <url>/posts/2358217424.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -2122,77 +2193,6 @@
       </categories>
       <tags>
         <tag>HTTP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>记一个 &#39;奇葩&#39; 需求的实现</title>
-    <url>/posts/2156089668.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们这边没有专门的产品经理，<code>UI</code>对产品的设计基本具有决定权，说实话，是有那么一点可怖的（前后改了很多次，差一点就改回原版了，我自己都觉得不好意思了🤣）。个人感觉我们<code>UI</code>还是体验的少，缺乏对产品以及用户行为的认识。设计出来的东西看似很华丽，其实缺失很多场景下的分析，不切合实际，大多数人说的“用户体验”或许只是主观的、想当然的（我也一样😮）。</p>
-<p>自从接触互联网开始我就在有意的学习怎么做产品，期间还考虑过转产品，永远不要拿业余的跟专业的比，没什么可比性，不成熟。继续保持思考、学习。</p>
-<blockquote>
-<p>所用技术：<code>vue</code>、<code>vue-router</code>、<code>element-ui</code></p>
-</blockquote>
-<h2 id="需求："><a href="#需求：" class="headerlink" title="需求："></a>需求：</h2><blockquote>
-<p>导航菜单（<code>el-menu</code>组件）竖向展示的</p>
-</blockquote>
-<ol>
-<li><p>鼠标移入一级菜单展示下面的子菜单，移出则收起来（手风琴模式，正常状态下只保持一个菜单处于展开状态，手动鼠标悬浮展开的不算）</p>
-</li>
-<li><p>选中某个子菜单时高亮对应的一级菜单，并且当鼠标移出高亮的这个菜单模块时不折叠，但是可以点击一级菜单进行折叠（注意：跟第一条有区别）</p>
-</li>
-</ol>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
-<li><p><code>element-ui</code>的导航组件子菜单打开的触发方式可以通过 <code>menu-trigger</code> 参数控制，但是，只在菜单是水平展示（<code>horizontal</code>）的情况下生效。嘶~！我不禁暗想：垂直模式滑动展开真的会有系统这么做吗？（只能自己修改了）</p>
-</li>
-<li><p><code>unique-opened</code> 参数可以控制是否只保持一个子菜单展开，但是在没有子菜单的情况下失效（需要手动修改）</p>
-</li>
-</ol>
-<h2 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h2><p>导航菜单使用递归<code>el-submenu</code>组件实现</p>
-<ol>
-<li>鼠标滑动展开关闭需求：</li>
-</ol>
-<ul>
-<li><code>el-submenu</code> 组件编写鼠标移入移出事件（<code>mouseenter</code>、<code>mouseleave</code>），拿到<code>indexPath</code>，调用<code>open</code>和<code>close</code>方法打开或者折叠菜单（注意：没有子菜单的一级菜单鼠标移入移出不做处理）</li>
-</ul>
-<ol start="2">
-<li>只保持一个菜单出于展开状态</li>
-</ol>
-<ul>
-<li>先配置 <code>unique-opened</code> 参数为 <code>false</code> ，以保证 <code>openedMenus</code> 只有一个（ <code>openedMenus</code> 是<code>el-menu</code>内部维护的属性, 可以自行打印看一下）</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ebfb16f2c2beb1163942.jpg"></p>
-<blockquote>
-<p>一开始我想在子菜单展开折叠的回调事件（<code>open</code>、<code>close</code>）里写逻辑判断，但是不知道什么原因回调事件不触发（注意：<code>open方法</code>和<code>open事件</code>不一样，组件三大要素：<strong>属性、事件、方法</strong>），所以我就考虑在<code>select</code>回调事件里写逻辑了</p>
-</blockquote>
-<ul>
-<li>在菜单激活的<code>select</code>回调事件中，让上一个打开的菜单调用<code>close</code>方法关闭。（这里需要记录上次打开菜单的<code>index</code>，这里我使用<code>sessionStorage</code>记录）</li>
-</ul>
-<h2 id="代码展示"><a href="#代码展示" class="headerlink" title="代码展示"></a>代码展示</h2><p>只展示代码片段，仅供参考</p>
-<p><code>sessionStorage</code>使用自己封装的，之前文章有写过，感兴趣的可以看一下</p>
-<ul>
-<li><code>el-submenu</code> 组件</li>
-</ul>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">menuEnter</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// isNest 是否还有子菜单 true:没有子菜单 false:有子菜单</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; <span class="variable language_">this</span>.<span class="property">item</span>.<span class="property">alwaysShow</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleOpen'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="title function_">menuLeave</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 存在子菜单，并且不是打开状态的菜单，鼠标离开的时候需要合起来</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; !<span class="variable language_">this</span>.<span class="property">curMenuIsOpened</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleClose'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li><code>el-menu</code> 组件</li>
-</ul>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 登录系统的时候，记录展开的菜单信息，</span></span><br><span class="line"><span class="comment">// 在 mounted 里面获取 openedMenus ，并记录信息</span></span><br><span class="line"><span class="title function_">mounted</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 获取当前展开的菜单 - array</span></span><br><span class="line">  <span class="comment">// 手风琴模式，只有一个展开菜单</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// openedMenus 是内部属性</span></span><br><span class="line">  <span class="keyword">const</span> {openedMenus = []} = <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (openedMenus &amp;&amp; openedMenus.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">    <span class="comment">// 获取展开菜单的 index</span></span><br><span class="line">    <span class="keyword">const</span> index = openedMenus[<span class="number">0</span>];</span><br><span class="line">    sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, index)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="attr">methods</span>: {</span><br><span class="line">  <span class="title function_">handleOpen</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 open 方法, 打开close,</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">open</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handleClose</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 close 方法, 关闭close</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handlerSelect</span>(<span class="params">index, indexPath</span>) {</span><br><span class="line">    <span class="comment">// 1. 获取上次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">const</span> _preActiveMenu = sessionStorage.<span class="title function_">get</span>(<span class="string">'preActiveMenu'</span>) || <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">if</span> (_preActiveMenu) {</span><br><span class="line">      <span class="comment">// 如果存在，则关闭该菜单，再打开新的</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(_preActiveMenu);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 记录这次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">if</span> (indexPath.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">      sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, indexPath[<span class="number">0</span>])</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="最终效果展示"><a href="#最终效果展示" class="headerlink" title="最终效果展示"></a>最终效果展示</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ec1816f2c2beb1164933.jpg"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>用了<code>UI</code>框架之后就不可避免的会跟产品设计风格向左，这就需要在框架基础之上进行修改。框架也是一个个组件组成的，抓住组件设计的三要素：属性、事件、方法，了解框架组件的工作原理，就可以轻松的进行修改啦🎉🎉</p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>vue</tag>
-        <tag>element-ui</tag>
       </tags>
   </entry>
   <entry>
