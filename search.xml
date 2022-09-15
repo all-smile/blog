@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Actions</title>
+    <url>/posts/3405105267.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>持续集成、持续部署</p>
+</body></html>]]></content>
+  </entry>
+  <entry>
     <title>2022年中秋佳节，于梦开始的地方</title>
     <url>/posts/4798453.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -35,12 +41,6 @@
       <tags>
         <tag>梦开始的地方</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Actions</title>
-    <url>/posts/3405105267.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>持续集成、持续部署</p>
-</body></html>]]></content>
   </entry>
   <entry>
     <title>D8调试工具——jsvu的使用细则</title>
@@ -329,151 +329,6 @@
 <h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>上面<code>docker0</code>不支持容器名连接访问，容器通信只可以通过容器<code>ip</code>通信，docker也无法保证容器重启后的IP地址不变，所以更好的方式是<strong>通过别名进行互联</strong>，下篇继续讲解怎么通过别名进行容器通信，😊😊。</p>
 <hr>
 <p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>后端运维</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Docker网络模型以及容器通信</title>
-    <url>/posts/1604561083.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>本篇接着上篇：【Docker0网络及原理探究】，继续深入探究容器网络通信原理，通过学习Docker网路驱动模型，更好地解决容器间的通信问题🎉🎉</p>
-</blockquote>
-<h2 id="1、Docker的网络驱动模型"><a href="#1、Docker的网络驱动模型" class="headerlink" title="1、Docker的网络驱动模型"></a>1、Docker的网络驱动模型</h2><h3 id="1-1、Docker的网络驱动模型分类："><a href="#1-1、Docker的网络驱动模型分类：" class="headerlink" title="1.1、Docker的网络驱动模型分类："></a>1.1、Docker的网络驱动模型分类：</h3><ol>
-<li><p><code>bridge</code>：Docker中默认的网络驱动模型，在启动容器时如果不指定则默认为此驱动类型；</p>
-</li>
-<li><p><code>host</code>：打破Docker容器与宿主机之间的网络隔离，直接使用宿主机的网络环境，该模型仅适用于Docker17.6及以上版本；</p>
-</li>
-<li><p><code>overlay</code>：可以连接多个docker守护进程或者满足集群服务之间的通信；适用于不同宿主机上的docker容器之间的通信；</p>
-</li>
-<li><p><code>macvlan</code>：可以为docker容器分配<code>MAC</code>地址，使其像真实的物理机一样运行；</p>
-</li>
-<li><p><code>none</code>：即禁用了网络驱动，需要自己手动自定义网络驱动配置；</p>
-</li>
-<li><p><code>plugins</code>：使用第三方网络驱动插件；</p>
-</li>
-</ol>
-<h3 id="1-2、Docker网络模式"><a href="#1-2、Docker网络模式" class="headerlink" title="1.2、Docker网络模式"></a>1.2、Docker网络模式</h3><ul>
-<li><strong>查看docker网络</strong> <code>docker network ls</code></li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network ls</span></span><br><span class="line">NETWORK ID     NAME      DRIVER    SCOPE</span><br><span class="line">feafa30d4051   bridge    bridge    <span class="built_in">local</span></span><br><span class="line">e8bf4fced9e2   host      host      <span class="built_in">local</span></span><br><span class="line">6263db0933b9   none      null      <span class="built_in">local</span></span><br><span class="line">[root@--- ~]<span class="comment"># </span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>Docker内置这三个网络，运行容器时，你可以使用该<code>--network</code>标志来指定容器应连接到哪些网络。</p>
-<p>该<code>bridge</code>网络代表<code>docker0</code>所有Docker安装中存在的网络。除非你使用<code>docker run --network=&lt;NETWORK&gt;</code>选项指定，否则Docker守护程序默认将容器连接到此网络。</p>
-<p>我们在使用<code>docker run</code>创建Docker容器时，可以用 <code>--net</code> 选项指定容器的网络模式，<strong>Docker可以有以下4种网络模式</strong>：</p>
-<ol>
-<li><p><code>host模式</code>：使用 <code>--net=host</code> 指定。</p>
-</li>
-<li><p><code>none模式</code>：使用 <code>--net=none</code> 指定。</p>
-</li>
-<li><p><code>bridge模式</code>：使用 <code>--net=bridge</code> 指定，默认设置。</p>
-</li>
-<li><p><code>container模式</code>：使用 <code>--net=container:NAME_or_ID</code> 指定。</p>
-</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it -P --name tomcat01 --net=bridge tomcat  <span class="comment"># 默认设置</span></span><br><span class="line">docker run -it -P --name tomcat02 --net=none tomcat</span><br><span class="line"><span class="comment"># ...</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="2、容器通信问题"><a href="#2、容器通信问题" class="headerlink" title="2、容器通信问题"></a>2、容器通信问题</h2><ol>
-<li><p>由于不同容器通过<code>veth pair</code>连接在虚拟网桥<code>docker0</code>上，所以容器之间可以通过<code>IP</code>互相通信，<strong>但是无法通过容器名进行通信</strong>。docker0不支持容器名连接访问</p>
-</li>
-<li><p>默认网桥<code>bridge</code>上的容器只能通过IP互连，无法通过<code>DNS</code>解析名称或别名。假如我们在container1中部署了Web服务，在container2中部署了mysql，container1中的Web服务往往需要连接container2的mysql，这是只能靠IP进行连接，但是docker也无法保证容器重启后的IP地址不变，所以更好的方式是通过别名进行互联，在网络中加入DNS服务器，将容器名与IP地址进行匹配，省去了手动修改Web服务中连接mysql的IP的过程。</p>
-</li>
-</ol>
-<p>为了实现不同容器<strong>通过容器名或别名的互连</strong>，docker提供了以下几种：👇</p>
-<ol>
-<li><p>在启动docker容器时加入<code>--link</code>参数，但是目前已经被废弃，废弃的主要原因是需要在连接的两个容器上都创建–link选项，当互连的容器数量较多时，操作的复杂度会显著增加；</p>
-</li>
-<li><p>启动docker容器后进入容器并修改 <code>/etc/hosts</code> 配置文件（本地DNS解析），缺点是手动配置较为繁杂；</p>
-</li>
-<li><p>用户<strong>自定义bridge网桥</strong>，这是目前解决此类问题的主要方法，提供更好的隔离效果和更好的互通性（更好的隔离效果是针对外界网络，而更好的互通性则是指同一<code>bridge</code>下的不同容器之间），用户自定义bridge在容器之间提供了自动DNS解析。</p>
-</li>
-</ol>
-<blockquote>
-<p>容器在默认情况下以隔离方式运行，它们完全不知道同一计算机上有其他进程或容器。 那么，如何使容器能够彼此通信？ 答案就是网络连接。 如果两个容器在同一网络上，那么它们可彼此通信。 如果没在同一网络上，则没法通信。</p>
-</blockquote>
-<h2 id="3、容器之间通信的主要方式总结"><a href="#3、容器之间通信的主要方式总结" class="headerlink" title="3、容器之间通信的主要方式总结"></a>3、容器之间通信的主要方式总结</h2><h3 id="3-1、通过容器ip访问"><a href="#3-1、通过容器ip访问" class="headerlink" title="3.1、通过容器ip访问"></a>3.1、通过容器ip访问</h3><p>容器重启后，ip会发生变化。通过容器ip访问不是一个好的方案。</p>
-<h3 id="3-2、通过宿主机的ip-port访问"><a href="#3-2、通过宿主机的ip-port访问" class="headerlink" title="3.2、通过宿主机的ip:port访问"></a>3.2、通过宿主机的ip:port访问</h3><p>通过宿主机的<code>ip:port</code>访问，只能依靠监听在暴露出的端口的进程来进行有限的通信。</p>
-<h3 id="3-3、通过-link建立连接（官方不推荐使用）"><a href="#3-3、通过-link建立连接（官方不推荐使用）" class="headerlink" title="3.3、通过--link建立连接（官方不推荐使用）"></a>3.3、通过<code>--link</code>建立连接（官方不推荐使用）</h3><p><strong>原理分析：</strong></p>
-<ul>
-<li><p>运行容器时，指定参数link，使得源容器与被链接的容器可以进行相互通信，并且接受的容器可以获得源容器的一些数据，比如：环境变量。</p>
-</li>
-<li><p>与<code>/etc/hosts</code>中的主机条目不同，如果重新启动源容器，则不会自动更新存储在环境变量中的IP地址。我们建议使用主机条目 <code>/etc/hosts</code>来解析链接容器的IP地址。</p>
-</li>
-<li><p>除了环境变量之外，Docker还将源容器的主机条目添加到<code>/etc/hosts</code>文件中。(本质上就是通过 <code>--link</code> 参数，自动的给容器添加 <code>hosts</code> 配置)</p>
-</li>
-</ul>
-<p><strong><code>--link</code>建立连接步骤：✨</strong></p>
-<ol>
-<li>启动tomcat01,tomcat02</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it -P --name tomcat01 tomcat</span><br><span class="line">docker run -it -P --name tomcat02 tomcat</span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<ul>
-<li><p><code>--link</code> 通过配置 <code>/etc/hosts</code> 实现连接</p>
-</li>
-<li><p>通过<code>link</code>建立连接的容器，被链接的容器能 ping 通源容器，反过来不行。</p>
-</li>
-<li><p>被链接容器会继承源容器的环境变量信息</p>
-</li>
-</ul>
-</blockquote>
-<ol start="2">
-<li>建立<code>link</code>连接</li>
-</ol>
-<p><code>tomcat02</code> 容器 link 到 <code>tomcat03</code> 上</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it -P --name tomcat03 --<span class="built_in">link</span> tomcat02 tomcat</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="3">
-<li>查看tomcat03 hosts配置</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker exec -it tomcat03 cat /etc/hosts</span></span><br><span class="line">127.0.0.1	localhost</span><br><span class="line">::1	localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0	ip6-localnet</span><br><span class="line">ff00::0	ip6-mcastprefix</span><br><span class="line">ff02::1	ip6-allnodes</span><br><span class="line">ff02::2	ip6-allrouters</span><br><span class="line">172.17.0.3	tomcat02 099602f3ff7f <span class="comment">#✨--link命令配置生成的条目✨</span></span><br><span class="line">172.17.0.4	a20a10b7e728</span><br><span class="line">[root@--- ~]<span class="comment"># </span></span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="3-4、🧨通过-User-defined-networks（推荐）"><a href="#3-4、🧨通过-User-defined-networks（推荐）" class="headerlink" title="3.4、🧨通过 User-defined networks（推荐）"></a>3.4、🧨通过 User-defined networks（推荐）</h3><p><strong>用户自定义网桥步骤：✨</strong></p>
-<ol>
-<li>创建用户自定义bridge网桥</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network create test-network</span></span><br><span class="line">799426d70aa28b73b4a777c85b338186eafadd1558b13c43e07a9fd9a8b545e7</span><br><span class="line">[root@iZm5e23n3ueobwkjtfartxZ ~]<span class="comment"># docker network ls</span></span><br><span class="line">NETWORK ID     NAME           DRIVER    SCOPE</span><br><span class="line">feafa30d4051   bridge         bridge    <span class="built_in">local</span></span><br><span class="line">e8bf4fced9e2   host           host      <span class="built_in">local</span></span><br><span class="line">6263db0933b9   none           null      <span class="built_in">local</span></span><br><span class="line">799426d70aa2   test-network   bridge    <span class="built_in">local</span>   <span class="comment">#✨创建的桥接网络✨</span></span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p>删除网桥:  <code>docker network rm test-network</code></p>
-</blockquote>
-<ol start="2">
-<li><p>把之前启动的 mysql01,centos01,centos02 容器加入到自定义bridge网桥中: <code>connect</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker network connect test-network mysql01</span><br><span class="line">docker network connect test-network centos01</span><br><span class="line">docker network connect test-network centos02</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>查看自定义bridge网桥信息</p>
-</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker network inspect 799426d70aa2</span><br><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        <span class="string">"Name"</span>: <span class="string">"test-network"</span>,</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"799426d70aa28b73b4a777c85b338186eafadd1558b13c43e07a9fd9a8b545e7"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2021-10-03T20:30:03.325679562+08:00"</span>,</span><br><span class="line">        <span class="string">"Scope"</span>: <span class="string">"local"</span>,</span><br><span class="line">        <span class="string">"Driver"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"EnableIPv6"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"IPAM"</span>: {</span><br><span class="line">            <span class="string">"Driver"</span>: <span class="string">"default"</span>,</span><br><span class="line">            <span class="string">"Options"</span>: {},</span><br><span class="line">            <span class="string">"Config"</span>: [</span><br><span class="line">                {</span><br><span class="line">                    <span class="string">"Subnet"</span>: <span class="string">"172.18.0.0/16"</span>,  <span class="comment">#✨test-network的子网✨</span></span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"172.18.0.1"</span>     <span class="comment">#✨test-network的网关✨</span></span><br><span class="line">                }</span><br><span class="line">            ]</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Internal"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Attachable"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Ingress"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"ConfigFrom"</span>: {</span><br><span class="line">            <span class="string">"Network"</span>: <span class="string">""</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"ConfigOnly"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Containers"</span>: {</span><br><span class="line">            <span class="string">"29298987c51b777b546bf6626560020ce235e390e1d7fcfe188c6db228ca4edf"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"mysql01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"a69560a1872a25af042c74132df5dcade6e0e93faf9102185c1de19f6c8b3b36"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:12:00:02"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.18.0.2/16"</span>,    <span class="comment">#✨mysql01 容器的IP，与之前不同✨</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">"cb1922b95b9316d129b54f3545fad9729092926e10a1d5517f8928db42706151"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"centos01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"f0cf5feb77ec23526fe5cee217dba9271125b9b4106c81bc7d58253ac48a4caf"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:12:00:03"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.18.0.3/16"</span>,    <span class="comment">#✨centos01 容器的IP，与之前不同✨</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">"cc6f510b9765ba018dbafd416c9774ddf5fd3ff55fa992827f55516e8dc70b6a"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"centos02"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"6c88540d719014e441d3119c4388e62d311b07acf009106e16aa66d7ebaf5763"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:12:00:04"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.18.0.4/16"</span>,    <span class="comment">#✨centos02 容器的IP，与之前不同✨</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            }</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Options"</span>: {},</span><br><span class="line">        <span class="string">"Labels"</span>: {}</span><br><span class="line">    }</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="4">
-<li>通过容器名或别名互连通信</li>
-</ol>
-<p>进入centos01容器，<code>ping centos02</code>, <code>ping mysql01</code></p>
-<p>可以发现centos01可以和centos02、mysql01容器之间可以通信</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it cb1922b95b93 /bin/bash👈</span><br><span class="line">[root@cb1922b95b93 /]<span class="comment"># ping centos02👈</span></span><br><span class="line">PING centos02 (172.18.0.4) 56(84) bytes of data.</span><br><span class="line">64 bytes from centos02.test-network (172.18.0.4): icmp_seq=1 ttl=64 time=0.118 ms</span><br><span class="line">64 bytes from centos02.test-network (172.18.0.4): icmp_seq=2 ttl=64 time=0.113 ms</span><br><span class="line">...</span><br><span class="line">ping mysql01👈</span><br><span class="line">PING mysql01 (172.18.0.2) 56(84) bytes of data.</span><br><span class="line">64 bytes from mysql01.test-network (172.18.0.2): icmp_seq=1 ttl=64 time=0.107 ms</span><br><span class="line">64 bytes from mysql01.test-network (172.18.0.2): icmp_seq=2 ttl=64 time=0.103 ms</span><br><span class="line">...</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="5">
-<li>断开网络</li>
-</ol>
-<p>由于我们的容器仍然连接着默认bridge网桥docker0，而现在我们已经不需要它，所以应该将容器与docker0的连接断开，执行以下操作<code>disconnect</code>:</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker network disconnect bridge mysql01</span><br><span class="line">docker network disconnect bridge centos01</span><br><span class="line">docker network disconnect bridge centos02</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="6">
-<li>查看默认bridge网桥docker0的容器网络配置</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker network inspect feafa30d4051👈</span><br><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        <span class="string">"Name"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"feafa30d4051f24353508959bd420fd163ad0c98d6b30ec8ff13b59a59552bb1"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2021-09-26T15:10:27.167774553+08:00"</span>,</span><br><span class="line">        <span class="string">"Scope"</span>: <span class="string">"local"</span>,</span><br><span class="line">        <span class="string">"Driver"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"EnableIPv6"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"IPAM"</span>: {</span><br><span class="line">            <span class="string">"Driver"</span>: <span class="string">"default"</span>,</span><br><span class="line">            <span class="string">"Options"</span>: null,</span><br><span class="line">            <span class="string">"Config"</span>: [</span><br><span class="line">                {</span><br><span class="line">                    <span class="string">"Subnet"</span>: <span class="string">"172.17.0.0/16"</span>,</span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"172.17.0.1"</span></span><br><span class="line">                }</span><br><span class="line">            ]</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Internal"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Attachable"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Ingress"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"ConfigFrom"</span>: {</span><br><span class="line">            <span class="string">"Network"</span>: <span class="string">""</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"ConfigOnly"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Containers"</span>: {},    <span class="comment">#✨之前的容器服务，已经从默认网桥中移除✨</span></span><br><span class="line">        <span class="string">"Options"</span>: {</span><br><span class="line">            <span class="string">"com.docker.network.bridge.default_bridge"</span>: <span class="string">"true"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.enable_icc"</span>: <span class="string">"true"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.enable_ip_masquerade"</span>: <span class="string">"true"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.host_binding_ipv4"</span>: <span class="string">"0.0.0.0"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.name"</span>: <span class="string">"docker0"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.driver.mtu"</span>: <span class="string">"1500"</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Labels"</span>: {}</span><br><span class="line">    }</span><br><span class="line">]</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>了解了Docker网络、容器通信之后，对继续学习服务网格（<code>Service Mesh</code>）与<code>Kubernetes</code>的服务发现有很大帮助。很多的项目架构也都是从网络通信角度进行的层级、模块划分（比如：网路拓扑图、终极系统架构异地多活）。关于网络，学完之后你会发现很多东西都串一块了，超级有意思😊 </p>
-<p>微信公众号：【看见另一种可能】</p>
-<hr>
-<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏程序员😊，让我们一起学习，共同成长吧。</p>
 <p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
 <p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
 </body></html>]]></content>
@@ -839,6 +694,151 @@
       </tags>
   </entry>
   <entry>
+    <title>Docker网络模型以及容器通信</title>
+    <url>/posts/1604561083.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇接着上篇：【Docker0网络及原理探究】，继续深入探究容器网络通信原理，通过学习Docker网路驱动模型，更好地解决容器间的通信问题🎉🎉</p>
+</blockquote>
+<h2 id="1、Docker的网络驱动模型"><a href="#1、Docker的网络驱动模型" class="headerlink" title="1、Docker的网络驱动模型"></a>1、Docker的网络驱动模型</h2><h3 id="1-1、Docker的网络驱动模型分类："><a href="#1-1、Docker的网络驱动模型分类：" class="headerlink" title="1.1、Docker的网络驱动模型分类："></a>1.1、Docker的网络驱动模型分类：</h3><ol>
+<li><p><code>bridge</code>：Docker中默认的网络驱动模型，在启动容器时如果不指定则默认为此驱动类型；</p>
+</li>
+<li><p><code>host</code>：打破Docker容器与宿主机之间的网络隔离，直接使用宿主机的网络环境，该模型仅适用于Docker17.6及以上版本；</p>
+</li>
+<li><p><code>overlay</code>：可以连接多个docker守护进程或者满足集群服务之间的通信；适用于不同宿主机上的docker容器之间的通信；</p>
+</li>
+<li><p><code>macvlan</code>：可以为docker容器分配<code>MAC</code>地址，使其像真实的物理机一样运行；</p>
+</li>
+<li><p><code>none</code>：即禁用了网络驱动，需要自己手动自定义网络驱动配置；</p>
+</li>
+<li><p><code>plugins</code>：使用第三方网络驱动插件；</p>
+</li>
+</ol>
+<h3 id="1-2、Docker网络模式"><a href="#1-2、Docker网络模式" class="headerlink" title="1.2、Docker网络模式"></a>1.2、Docker网络模式</h3><ul>
+<li><strong>查看docker网络</strong> <code>docker network ls</code></li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network ls</span></span><br><span class="line">NETWORK ID     NAME      DRIVER    SCOPE</span><br><span class="line">feafa30d4051   bridge    bridge    <span class="built_in">local</span></span><br><span class="line">e8bf4fced9e2   host      host      <span class="built_in">local</span></span><br><span class="line">6263db0933b9   none      null      <span class="built_in">local</span></span><br><span class="line">[root@--- ~]<span class="comment"># </span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>Docker内置这三个网络，运行容器时，你可以使用该<code>--network</code>标志来指定容器应连接到哪些网络。</p>
+<p>该<code>bridge</code>网络代表<code>docker0</code>所有Docker安装中存在的网络。除非你使用<code>docker run --network=&lt;NETWORK&gt;</code>选项指定，否则Docker守护程序默认将容器连接到此网络。</p>
+<p>我们在使用<code>docker run</code>创建Docker容器时，可以用 <code>--net</code> 选项指定容器的网络模式，<strong>Docker可以有以下4种网络模式</strong>：</p>
+<ol>
+<li><p><code>host模式</code>：使用 <code>--net=host</code> 指定。</p>
+</li>
+<li><p><code>none模式</code>：使用 <code>--net=none</code> 指定。</p>
+</li>
+<li><p><code>bridge模式</code>：使用 <code>--net=bridge</code> 指定，默认设置。</p>
+</li>
+<li><p><code>container模式</code>：使用 <code>--net=container:NAME_or_ID</code> 指定。</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it -P --name tomcat01 --net=bridge tomcat  <span class="comment"># 默认设置</span></span><br><span class="line">docker run -it -P --name tomcat02 --net=none tomcat</span><br><span class="line"><span class="comment"># ...</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="2、容器通信问题"><a href="#2、容器通信问题" class="headerlink" title="2、容器通信问题"></a>2、容器通信问题</h2><ol>
+<li><p>由于不同容器通过<code>veth pair</code>连接在虚拟网桥<code>docker0</code>上，所以容器之间可以通过<code>IP</code>互相通信，<strong>但是无法通过容器名进行通信</strong>。docker0不支持容器名连接访问</p>
+</li>
+<li><p>默认网桥<code>bridge</code>上的容器只能通过IP互连，无法通过<code>DNS</code>解析名称或别名。假如我们在container1中部署了Web服务，在container2中部署了mysql，container1中的Web服务往往需要连接container2的mysql，这是只能靠IP进行连接，但是docker也无法保证容器重启后的IP地址不变，所以更好的方式是通过别名进行互联，在网络中加入DNS服务器，将容器名与IP地址进行匹配，省去了手动修改Web服务中连接mysql的IP的过程。</p>
+</li>
+</ol>
+<p>为了实现不同容器<strong>通过容器名或别名的互连</strong>，docker提供了以下几种：👇</p>
+<ol>
+<li><p>在启动docker容器时加入<code>--link</code>参数，但是目前已经被废弃，废弃的主要原因是需要在连接的两个容器上都创建–link选项，当互连的容器数量较多时，操作的复杂度会显著增加；</p>
+</li>
+<li><p>启动docker容器后进入容器并修改 <code>/etc/hosts</code> 配置文件（本地DNS解析），缺点是手动配置较为繁杂；</p>
+</li>
+<li><p>用户<strong>自定义bridge网桥</strong>，这是目前解决此类问题的主要方法，提供更好的隔离效果和更好的互通性（更好的隔离效果是针对外界网络，而更好的互通性则是指同一<code>bridge</code>下的不同容器之间），用户自定义bridge在容器之间提供了自动DNS解析。</p>
+</li>
+</ol>
+<blockquote>
+<p>容器在默认情况下以隔离方式运行，它们完全不知道同一计算机上有其他进程或容器。 那么，如何使容器能够彼此通信？ 答案就是网络连接。 如果两个容器在同一网络上，那么它们可彼此通信。 如果没在同一网络上，则没法通信。</p>
+</blockquote>
+<h2 id="3、容器之间通信的主要方式总结"><a href="#3、容器之间通信的主要方式总结" class="headerlink" title="3、容器之间通信的主要方式总结"></a>3、容器之间通信的主要方式总结</h2><h3 id="3-1、通过容器ip访问"><a href="#3-1、通过容器ip访问" class="headerlink" title="3.1、通过容器ip访问"></a>3.1、通过容器ip访问</h3><p>容器重启后，ip会发生变化。通过容器ip访问不是一个好的方案。</p>
+<h3 id="3-2、通过宿主机的ip-port访问"><a href="#3-2、通过宿主机的ip-port访问" class="headerlink" title="3.2、通过宿主机的ip:port访问"></a>3.2、通过宿主机的ip:port访问</h3><p>通过宿主机的<code>ip:port</code>访问，只能依靠监听在暴露出的端口的进程来进行有限的通信。</p>
+<h3 id="3-3、通过-link建立连接（官方不推荐使用）"><a href="#3-3、通过-link建立连接（官方不推荐使用）" class="headerlink" title="3.3、通过--link建立连接（官方不推荐使用）"></a>3.3、通过<code>--link</code>建立连接（官方不推荐使用）</h3><p><strong>原理分析：</strong></p>
+<ul>
+<li><p>运行容器时，指定参数link，使得源容器与被链接的容器可以进行相互通信，并且接受的容器可以获得源容器的一些数据，比如：环境变量。</p>
+</li>
+<li><p>与<code>/etc/hosts</code>中的主机条目不同，如果重新启动源容器，则不会自动更新存储在环境变量中的IP地址。我们建议使用主机条目 <code>/etc/hosts</code>来解析链接容器的IP地址。</p>
+</li>
+<li><p>除了环境变量之外，Docker还将源容器的主机条目添加到<code>/etc/hosts</code>文件中。(本质上就是通过 <code>--link</code> 参数，自动的给容器添加 <code>hosts</code> 配置)</p>
+</li>
+</ul>
+<p><strong><code>--link</code>建立连接步骤：✨</strong></p>
+<ol>
+<li>启动tomcat01,tomcat02</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it -P --name tomcat01 tomcat</span><br><span class="line">docker run -it -P --name tomcat02 tomcat</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<ul>
+<li><p><code>--link</code> 通过配置 <code>/etc/hosts</code> 实现连接</p>
+</li>
+<li><p>通过<code>link</code>建立连接的容器，被链接的容器能 ping 通源容器，反过来不行。</p>
+</li>
+<li><p>被链接容器会继承源容器的环境变量信息</p>
+</li>
+</ul>
+</blockquote>
+<ol start="2">
+<li>建立<code>link</code>连接</li>
+</ol>
+<p><code>tomcat02</code> 容器 link 到 <code>tomcat03</code> 上</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it -P --name tomcat03 --<span class="built_in">link</span> tomcat02 tomcat</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>查看tomcat03 hosts配置</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker exec -it tomcat03 cat /etc/hosts</span></span><br><span class="line">127.0.0.1	localhost</span><br><span class="line">::1	localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0	ip6-localnet</span><br><span class="line">ff00::0	ip6-mcastprefix</span><br><span class="line">ff02::1	ip6-allnodes</span><br><span class="line">ff02::2	ip6-allrouters</span><br><span class="line">172.17.0.3	tomcat02 099602f3ff7f <span class="comment">#✨--link命令配置生成的条目✨</span></span><br><span class="line">172.17.0.4	a20a10b7e728</span><br><span class="line">[root@--- ~]<span class="comment"># </span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="3-4、🧨通过-User-defined-networks（推荐）"><a href="#3-4、🧨通过-User-defined-networks（推荐）" class="headerlink" title="3.4、🧨通过 User-defined networks（推荐）"></a>3.4、🧨通过 User-defined networks（推荐）</h3><p><strong>用户自定义网桥步骤：✨</strong></p>
+<ol>
+<li>创建用户自定义bridge网桥</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network create test-network</span></span><br><span class="line">799426d70aa28b73b4a777c85b338186eafadd1558b13c43e07a9fd9a8b545e7</span><br><span class="line">[root@iZm5e23n3ueobwkjtfartxZ ~]<span class="comment"># docker network ls</span></span><br><span class="line">NETWORK ID     NAME           DRIVER    SCOPE</span><br><span class="line">feafa30d4051   bridge         bridge    <span class="built_in">local</span></span><br><span class="line">e8bf4fced9e2   host           host      <span class="built_in">local</span></span><br><span class="line">6263db0933b9   none           null      <span class="built_in">local</span></span><br><span class="line">799426d70aa2   test-network   bridge    <span class="built_in">local</span>   <span class="comment">#✨创建的桥接网络✨</span></span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>删除网桥:  <code>docker network rm test-network</code></p>
+</blockquote>
+<ol start="2">
+<li><p>把之前启动的 mysql01,centos01,centos02 容器加入到自定义bridge网桥中: <code>connect</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker network connect test-network mysql01</span><br><span class="line">docker network connect test-network centos01</span><br><span class="line">docker network connect test-network centos02</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>查看自定义bridge网桥信息</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker network inspect 799426d70aa2</span><br><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        <span class="string">"Name"</span>: <span class="string">"test-network"</span>,</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"799426d70aa28b73b4a777c85b338186eafadd1558b13c43e07a9fd9a8b545e7"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2021-10-03T20:30:03.325679562+08:00"</span>,</span><br><span class="line">        <span class="string">"Scope"</span>: <span class="string">"local"</span>,</span><br><span class="line">        <span class="string">"Driver"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"EnableIPv6"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"IPAM"</span>: {</span><br><span class="line">            <span class="string">"Driver"</span>: <span class="string">"default"</span>,</span><br><span class="line">            <span class="string">"Options"</span>: {},</span><br><span class="line">            <span class="string">"Config"</span>: [</span><br><span class="line">                {</span><br><span class="line">                    <span class="string">"Subnet"</span>: <span class="string">"172.18.0.0/16"</span>,  <span class="comment">#✨test-network的子网✨</span></span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"172.18.0.1"</span>     <span class="comment">#✨test-network的网关✨</span></span><br><span class="line">                }</span><br><span class="line">            ]</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Internal"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Attachable"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Ingress"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"ConfigFrom"</span>: {</span><br><span class="line">            <span class="string">"Network"</span>: <span class="string">""</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"ConfigOnly"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Containers"</span>: {</span><br><span class="line">            <span class="string">"29298987c51b777b546bf6626560020ce235e390e1d7fcfe188c6db228ca4edf"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"mysql01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"a69560a1872a25af042c74132df5dcade6e0e93faf9102185c1de19f6c8b3b36"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:12:00:02"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.18.0.2/16"</span>,    <span class="comment">#✨mysql01 容器的IP，与之前不同✨</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">"cb1922b95b9316d129b54f3545fad9729092926e10a1d5517f8928db42706151"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"centos01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"f0cf5feb77ec23526fe5cee217dba9271125b9b4106c81bc7d58253ac48a4caf"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:12:00:03"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.18.0.3/16"</span>,    <span class="comment">#✨centos01 容器的IP，与之前不同✨</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">"cc6f510b9765ba018dbafd416c9774ddf5fd3ff55fa992827f55516e8dc70b6a"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"centos02"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"6c88540d719014e441d3119c4388e62d311b07acf009106e16aa66d7ebaf5763"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:12:00:04"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.18.0.4/16"</span>,    <span class="comment">#✨centos02 容器的IP，与之前不同✨</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            }</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Options"</span>: {},</span><br><span class="line">        <span class="string">"Labels"</span>: {}</span><br><span class="line">    }</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="4">
+<li>通过容器名或别名互连通信</li>
+</ol>
+<p>进入centos01容器，<code>ping centos02</code>, <code>ping mysql01</code></p>
+<p>可以发现centos01可以和centos02、mysql01容器之间可以通信</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it cb1922b95b93 /bin/bash👈</span><br><span class="line">[root@cb1922b95b93 /]<span class="comment"># ping centos02👈</span></span><br><span class="line">PING centos02 (172.18.0.4) 56(84) bytes of data.</span><br><span class="line">64 bytes from centos02.test-network (172.18.0.4): icmp_seq=1 ttl=64 time=0.118 ms</span><br><span class="line">64 bytes from centos02.test-network (172.18.0.4): icmp_seq=2 ttl=64 time=0.113 ms</span><br><span class="line">...</span><br><span class="line">ping mysql01👈</span><br><span class="line">PING mysql01 (172.18.0.2) 56(84) bytes of data.</span><br><span class="line">64 bytes from mysql01.test-network (172.18.0.2): icmp_seq=1 ttl=64 time=0.107 ms</span><br><span class="line">64 bytes from mysql01.test-network (172.18.0.2): icmp_seq=2 ttl=64 time=0.103 ms</span><br><span class="line">...</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="5">
+<li>断开网络</li>
+</ol>
+<p>由于我们的容器仍然连接着默认bridge网桥docker0，而现在我们已经不需要它，所以应该将容器与docker0的连接断开，执行以下操作<code>disconnect</code>:</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker network disconnect bridge mysql01</span><br><span class="line">docker network disconnect bridge centos01</span><br><span class="line">docker network disconnect bridge centos02</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="6">
+<li>查看默认bridge网桥docker0的容器网络配置</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker network inspect feafa30d4051👈</span><br><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        <span class="string">"Name"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"feafa30d4051f24353508959bd420fd163ad0c98d6b30ec8ff13b59a59552bb1"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2021-09-26T15:10:27.167774553+08:00"</span>,</span><br><span class="line">        <span class="string">"Scope"</span>: <span class="string">"local"</span>,</span><br><span class="line">        <span class="string">"Driver"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"EnableIPv6"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"IPAM"</span>: {</span><br><span class="line">            <span class="string">"Driver"</span>: <span class="string">"default"</span>,</span><br><span class="line">            <span class="string">"Options"</span>: null,</span><br><span class="line">            <span class="string">"Config"</span>: [</span><br><span class="line">                {</span><br><span class="line">                    <span class="string">"Subnet"</span>: <span class="string">"172.17.0.0/16"</span>,</span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"172.17.0.1"</span></span><br><span class="line">                }</span><br><span class="line">            ]</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Internal"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Attachable"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Ingress"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"ConfigFrom"</span>: {</span><br><span class="line">            <span class="string">"Network"</span>: <span class="string">""</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"ConfigOnly"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Containers"</span>: {},    <span class="comment">#✨之前的容器服务，已经从默认网桥中移除✨</span></span><br><span class="line">        <span class="string">"Options"</span>: {</span><br><span class="line">            <span class="string">"com.docker.network.bridge.default_bridge"</span>: <span class="string">"true"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.enable_icc"</span>: <span class="string">"true"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.enable_ip_masquerade"</span>: <span class="string">"true"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.host_binding_ipv4"</span>: <span class="string">"0.0.0.0"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.name"</span>: <span class="string">"docker0"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.driver.mtu"</span>: <span class="string">"1500"</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Labels"</span>: {}</span><br><span class="line">    }</span><br><span class="line">]</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>了解了Docker网络、容器通信之后，对继续学习服务网格（<code>Service Mesh</code>）与<code>Kubernetes</code>的服务发现有很大帮助。很多的项目架构也都是从网络通信角度进行的层级、模块划分（比如：网路拓扑图、终极系统架构异地多活）。关于网络，学完之后你会发现很多东西都串一块了，超级有意思😊 </p>
+<p>微信公众号：【看见另一种可能】</p>
+<hr>
+<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏程序员😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
+</body></html>]]></content>
+      <categories>
+        <category>后端运维</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hybrid app本地开发如何调用JSBridge</title>
     <url>/posts/3740751445.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1009,409 +1009,6 @@
       </categories>
       <tags>
         <tag>Hybrid app</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>React Native环境配置、初始化项目、打包安装到手机，以及开发小知识</title>
-    <url>/posts/252268106.html</url>
-    <content><![CDATA[<html><head></head><body><h1 id="1、前言"><a href="#1、前言" class="headerlink" title="1、前言"></a>1、前言</h1><p>环境：Win10 + Android</p>
-<p>已经在Windows电脑上安装好 <a href="https://nodejs.org/en/">Node</a>（v14+）、Git、Yarn、<br><a href="https://www.oracle.com/java/technologies/downloads/#java11">JDK</a>(v11)</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">javac -version</span><br><span class="line">javac 11.0.15.1</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">node -v</span><br><span class="line">v16.14.1</span><br></pre></td></tr></tbody></table></figure>
-<p>👉 <a href="https://www.react-native.cn/docs/next/environment-setup">官方文档</a></p>
-<h1 id="2、Android-Studio下载安装"><a href="#2、Android-Studio下载安装" class="headerlink" title="2、Android Studio下载安装"></a>2、Android Studio下载安装</h1><ul>
-<li><a href="https://developer.android.google.cn/studio/">下载地址</a></li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631855c416f2c2beb1e9e38c.png"></p>
-<h1 id="3、Android-SDK-下载安装"><a href="#3、Android-SDK-下载安装" class="headerlink" title="3、Android SDK 下载安装"></a>3、Android SDK 下载安装</h1><ul>
-<li>安装 android sdk</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318562016f2c2beb1ea4698.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318567d16f2c2beb1eab904.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318569116f2c2beb1eacfb0.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856a016f2c2beb1eae08f.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856be16f2c2beb1eb068f.png"></p>
-<h2 id="3-1、环境变量配置"><a href="#3-1、环境变量配置" class="headerlink" title="3.1、环境变量配置"></a>3.1、环境变量配置</h2><ul>
-<li><p>配置系统变量<br><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856cf16f2c2beb1eb1c1c.png"></p>
-</li>
-<li><p>Path 配置：</p>
-</li>
-</ul>
-<figure class="highlight haml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\platform-tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\emulator</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools\bin</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="4、Scrcpy-手机模拟器下载安装使用"><a href="#4、Scrcpy-手机模拟器下载安装使用" class="headerlink" title="4、Scrcpy 手机模拟器下载安装使用"></a>4、Scrcpy 手机模拟器下载安装使用</h1><ul>
-<li><a href="https://github.com/Genymobile/scrcpy">下载地址</a></li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856e916f2c2beb1eb3879.png"></p>
-<p>下载zip文件，解压，双击运行 <code>scrcpy.exe</code> 可执行文件即可在电脑上投影手机屏幕，如下图👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856fb16f2c2beb1eb4fb0.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318571216f2c2beb1eb7443.png" alt="image.png"></p>
-<blockquote>
-<p>运行可执行文件之前，使用<strong>数据线</strong>连接Android手机，进行开发者选项设置（不同的手机进入开发者模式略有差异，自行搜索，我用的是华为手机）</p>
-</blockquote>
-<ul>
-<li>电脑端查看连接设备<br><code>adb devices</code></li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">adb devices</span><br><span class="line">List of devices attached</span><br><span class="line">8TFDU18719000649        device</span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<p>adb 命令，在下载 <code>scrcpy</code> 的时候已经内置了</p>
-</blockquote>
-<h1 id="5、安装-React-Native"><a href="#5、安装-React-Native" class="headerlink" title="5、安装 React Native"></a>5、安装 React Native</h1><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm i react-native-cli -g</span><br><span class="line"></span><br><span class="line">$ react-native -v</span><br><span class="line">react-native-cli: 2.0.1</span><br><span class="line">react-native: n/a - not inside a React Native project directory</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="6、初始化项目"><a href="#6、初始化项目" class="headerlink" title="6、初始化项目"></a>6、初始化项目</h1><p>进入到自己的工作目录，执行下面的命令创建 react native 项目</p>
-<figure class="highlight actionscript"><table><tbody><tr><td class="code"><pre><span class="line">npx react-<span class="keyword">native</span> init AwesomeProject</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="7、运行项目安装软件到安卓机"><a href="#7、运行项目安装软件到安卓机" class="headerlink" title="7、运行项目安装软件到安卓机"></a>7、运行项目安装软件到安卓机</h1><h2 id="7-1、先用数据线连接手机和电脑，运行scrcpy-软件"><a href="#7-1、先用数据线连接手机和电脑，运行scrcpy-软件" class="headerlink" title="7.1、先用数据线连接手机和电脑，运行scrcpy 软件"></a>7.1、先用数据线连接手机和电脑，运行scrcpy 软件</h2><p>开发者选项配置修改，最终实现在电脑上可以投屏手机，并可以在电脑上操控手机</p>
-<h2 id="7-2、打开-android-studio-编辑器，运行项目"><a href="#7-2、打开-android-studio-编辑器，运行项目" class="headerlink" title="7.2、打开 android studio 编辑器，运行项目"></a>7.2、打开 android studio 编辑器，运行项目</h2><figure class="highlight asciidoc"><table><tbody><tr><td class="code"><pre><span class="line">npm run android</span><br><span class="line"></span><br><span class="line"><span class="section">or</span></span><br><span class="line"><span class="section">-------------------</span></span><br><span class="line">cd AwesomeProject</span><br><span class="line">yarn android</span><br><span class="line"># 或者</span><br><span class="line">yarn react-native run-android</span><br></pre></td></tr></tbody></table></figure>
-
-<p>运行的时候会在手机上弹窗 “是否统一安装软件”之类的提示，点击同意即可</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318572616f2c2beb1eb9161.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318573616f2c2beb1eba516.png"></p>
-<h2 id="7-3、adb-reverse-命令使用"><a href="#7-3、adb-reverse-命令使用" class="headerlink" title="7.3、adb reverse  命令使用"></a>7.3、adb reverse  命令使用</h2><p><a href="https://developer.android.google.cn/studio/command-line/adb?hl=zh-cn">adb 文档</a></p>
-<h4 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h4><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318574916f2c2beb1ebbc88.png"></p>
-<p>猜测是多设备连接受影响了，可以尝试重启手机解决<br>也可以尝试如下步骤： 启停 adb 服务器</p>
-<blockquote>
-<p>在某些情况下，您可能需要终止 adb 服务器进程，然后重启以解决问题（例如，如果 adb 不响应命令）。</p>
-<p>如需停止 adb 服务器，请使用 adb kill-server 命令。然后，您可以通过发出其他任何 adb 命令来重启服务器。</p>
-</blockquote>
-<figure class="highlight pgsql"><table><tbody><tr><td class="code"><pre><span class="line">adb kill-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">start</span>-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">reverse</span> tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><figure class="highlight apache"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attribute">adb</span> reverse tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>这条命令的意思是，Android允许我们通过ADB，把Android上的某个端口映射到电脑（adb forward），或者把电脑的某个端口映射到Android系统（adb reverse），在这里假设电脑上开启的服务，监听的端口为8081。Android手机通过USB连接电脑后，在终端直接执行<code>adb reverse tcp:8081 tcp:8081</code>，然后在手机中访问<code>127.0.0.1:8081</code>，就可以访问到电脑上启动的服务了。</p>
-<p>注意：</p>
-<ol>
-<li>必须是在连接数据线usb的前提下才能使用该方案进行代码调试。</li>
-<li>(Android 5.0 及以上)使用 adb reverse 命令，这个选项只能在 5.0 以上版本(API 21+)的安卓设备上使用。</li>
-</ol>
-<h1 id="8、react-native开发小知识"><a href="#8、react-native开发小知识" class="headerlink" title="8、react-native开发小知识"></a>8、react-native开发小知识</h1><h2 id="8-1、vscode-上代码飘红"><a href="#8-1、vscode-上代码飘红" class="headerlink" title="8.1、vscode 上代码飘红"></a>8.1、vscode 上代码飘红</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318575a16f2c2beb1ebd220.png"></p>
-<ul>
-<li>问题原因：</li>
-</ul>
-<p>VScode是默认解析ts的，但是不会默认识别 <a href="https://flow.org/en/docs/react/"><code>Flow</code></a>(<strong>静态类型检测工具</strong>)的语法，所以这种的代码会被解析成ts语法。</p>
-<ul>
-<li>解决方法：<br>快捷键<code>Ctrl+Shift+P</code>，输入<code>setting.json</code>，选择 首选项:打开设置(json)。</li>
-</ul>
-<p><code>settings.json</code></p>
-<figure class="highlight awk"><table><tbody><tr><td class="code"><pre><span class="line"><span class="regexp">//</span> <span class="string">"import type"</span> 声明只能在 TypeScript 文件中使用。</span><br><span class="line"><span class="string">"javascript.validate.enable"</span>: false,</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="8-2、npm-run-android-每次都需要在手机上重新安装软件包"><a href="#8-2、npm-run-android-每次都需要在手机上重新安装软件包" class="headerlink" title="8.2、npm run android 每次都需要在手机上重新安装软件包"></a>8.2、npm run android 每次都需要在手机上重新安装软件包</h2><p>开发者模式 -&gt; USB调试 -&gt; 监控ADB安装应用 -&gt; 关闭, 即可解决。</p>
-<h2 id="8-3、本地开发启动多个项目"><a href="#8-3、本地开发启动多个项目" class="headerlink" title="8.3、本地开发启动多个项目"></a>8.3、本地开发启动多个项目</h2><p>默认端口号是8081，通过指定不同的端口号来启动。</p>
-<figure class="highlight livecodeserver"><table><tbody><tr><td class="code"><pre><span class="line">react-native <span class="built_in">start</span> <span class="comment">--port=8082</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="8-4、修改软件包名称"><a href="#8-4、修改软件包名称" class="headerlink" title="8.4、修改软件包名称"></a>8.4、修改软件包名称</h2><ol>
-<li>修改配置文件<br>Android<br>修改配置文件里的 <code>app_name</code> 即可，重新 <code>yarn android</code> ，发现手机上软件的名称已修改成功。</li>
-</ol>
-<p>文件： <code>android\app\src\main\res\values\strings.xml</code></p>
-<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">string</span> <span class="attr">name</span>=<span class="string">"app_name"</span>&gt;</span>远点<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>react-native-rename 插件修改</li>
-</ol>
-<p>通过插件修改名字，必须是 使用 <code>react-native init xxx</code> 创建的项目</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 安装</span></span><br><span class="line">npm install react-native-rename -g</span><br><span class="line">or</span><br><span class="line">yarn global add react-native-rename</span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目根目录执行命令</span></span><br><span class="line">npx react-native-rename &lt;newName&gt;</span><br></pre></td></tr></tbody></table></figure>
-
-<p>修改完成。</p>
-<p>本篇完！后面继续分享如何调试react native项目。</p>
-<hr>
-<p>🎈🎈🎈</p>
-<p>🌹 关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>✨ 欢迎大家转发、评论交流</p>
-<p>🎁 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>React Native</category>
-      </categories>
-      <tags>
-        <tag>React Native</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>V8中的快慢数组（附源码分析、图文更易理解😃）</title>
-    <url>/posts/1787681656.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>接上一篇 <a href="https://juejin.cn/post/7125763016582234142">V8 中的快慢属性</a>，本篇分析V8 中的快慢数组，了解数组全填充还是带孔、快慢数组、快慢转化、动态扩缩容等等。其实很多语言底层都采用类似的处理方式，比如：Golang中切片的append操作就涉及扩容处理。</p>
-</blockquote>
-<p>🎁 D8调试工具使用请来<a href="https://juejin.cn/post/7126505899337711647">这里</a></p>
-<h1 id="1、全填充-or-带孔"><a href="#1、全填充-or-带孔" class="headerlink" title="1、全填充 or 带孔"></a>1、全填充 or 带孔</h1><p>通过一个小李子，看一下什么是全填充数组(<code>Paked-Array</code>)，什么是带孔数组(<code>Holey-Array</code>)</p>
-<p>前面还写了<strong>稀疏数组</strong>，稀疏数组更加具有业务应用性，清洗的是无意义的数据，可以对比带孔数组来分析一下，有兴趣请看👉 <a href="https://juejin.cn/post/7124557913921847327">稀疏数组——实现五子棋存盘和续上盘功能</a></p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> o = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o[<span class="number">1</span>])          <span class="comment">// 'b'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> o[<span class="number">1</span>]</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o[<span class="number">1</span>])          <span class="comment">// undefined</span></span><br><span class="line">o.<span class="property">__proto__</span> = { <span class="number">1</span>: <span class="string">'B'</span> }</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o[<span class="number">0</span>])          <span class="comment">// 'a'</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o[<span class="number">1</span>])          <span class="comment">// 'B'   但如何确定要访问原型链？？🤔</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o[<span class="number">2</span>])          <span class="comment">// 'c'</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o[<span class="number">3</span>])          <span class="comment">// undefined</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>如果一个数组中所有位置均有值，我们称之为<code>全填充</code>（<strong>Packed</strong>）数组；</p>
-<p>若某些位置在初始化时未定义（如&nbsp;<code>const arr = [1, , 3]</code>&nbsp;中的 arr[1]），或定义后被删除（delete，如上述例子），称之为<code>带孔</code>（<strong>Holey</strong>）数组。</p>
-<p>该例子在 V8 的访问可以通过下图解释：</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318579016f2c2beb1ec1125.png" alt="image.png"></p>
-<p>一开始数组 o 是 packed 的，所以访问 o[1] 时可以直接获取值，而不需要访问原型。</p>
-<p>而行 4：<code>delete o[1]</code>&nbsp;为数组引入了一个孔洞（<code>the_hole</code>），用于标记不存在的属性，同时又行 6 为 o 定义了原型上的 1 属性，当再次获取 o[1] 时会<strong>穿孔</strong>进而继续往原型链上查询。原型链上的查询是昂贵的，<em>可以根据是否有 the_hole 来降低这部分查询开销</em>。</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631857f616f2c2beb1ec80c6.png" alt="image.png"></p>
-<h1 id="2、快慢数组"><a href="#2、快慢数组" class="headerlink" title="2、快慢数组"></a>2、快慢数组</h1><figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">arr[<span class="number">1999</span>] = <span class="number">1999</span></span><br><span class="line"><span class="comment">// arr 会如何存储？</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>这个例子中，在行 1 声明完毕后 arr 是一个全填充的数组，但在行 2 马上又定义索引 1999 处值为 1999，此时如果为 arr 创建一个长度为 2000 的完整数组来存储这样的稀疏数据将会非常占用内存，为了应对这种情况，V8 会将数组降级为<code>慢数组</code>，创建一个字典来存储<code>「键、值、描述符」</code>（<strong>key、value、descriptor</strong>） 三元组。这就是&nbsp;<code>Object.defineProperty(object, key, descriptor)</code>&nbsp;API 同样会做的事情。</p>
-<blockquote>
-<ol>
-<li><p>鉴于我们没有办法在 JavaScript 的 API 层面让 V8 找到 HiddenClass 并存储对应的 descriptor 信息，所以当使用&nbsp;<code>Object.defineProperty</code>&nbsp;自定义 key、value、descriptor 时，V8 都会使用慢属性，对应到数组中就是慢数组。</p>
-</li>
-<li><p><code>Object.defineProperty</code>&nbsp;是 Vue 2 的核心 API，当对象或数组很庞大时，不可避免地导致访问速度下降，这是底层原理决定的。</p>
-</li>
-</ol>
-</blockquote>
-<p>那究竟什么是快数组和慢数组呢？我们看下V8底层对于数组的定义：👉 <a href="https://source.chromium.org/chromium/chromium/src/+/master:v8/src/objects/js-array.h">源代码：v8/src/objects/js-array.h</a></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318581016f2c2beb1ec9d8a.png" alt="image.png"></p>
-<ul>
-<li><p>快模式：数组实现的是 V8 里一个叫&nbsp;<code>FixedArray</code>&nbsp;的类，它在内存中是<strong>连续的空间</strong>，直接通过索引读写值，非常快。如果有 push 或 pop 操作，它会动态地扩容或收缩。</p>
-</li>
-<li><p>慢模式：如前文所介绍，V8 创建了一个字典（<code>HashTable</code>）来记录映射关系，其中索引的整数值即是字典的键。</p>
-</li>
-</ul>
-<h2 id="为什么数组也是对象类型的？"><a href="#为什么数组也是对象类型的？" class="headerlink" title="为什么数组也是对象类型的？"></a>为什么数组也是对象类型的？</h2><p>在 V8 源码中清晰地表明，JSArray 继承自 JSObject，即数组是一个特殊的对象，而 JS 中所有非原始类型都是对象的实例，所以 JS 中数组可以存储多种类型的值。</p>
-<p>数组内部也是用key-value的存储形式</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> testArr = [<span class="number">1</span>, <span class="string">"hello"</span>, <span class="literal">true</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">}];</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318583516f2c2beb1ecca7c.png" alt="image.png"></p>
-<h2 id="2-1、快数组何时转换为慢数组"><a href="#2-1、快数组何时转换为慢数组" class="headerlink" title="2.1、快数组何时转换为慢数组"></a>2.1、快数组何时转换为慢数组</h2><h3 id="1-、看一下源码先👇"><a href="#1-、看一下源码先👇" class="headerlink" title="(1)、看一下源码先👇"></a>(1)、看一下源码先👇</h3><ol>
-<li><p>path:v8/src/objects/js-objects-inl.h</p>
-<p> 快慢模式转化： <code>ShouldConvertToSlowElements</code></p>
-</li>
-</ol>
-<figure class="highlight haxe"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// path:v8/src/objects/js-objects-inl.h</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// If the fast-case backing storage takes up much more memory than a dictionary</span></span><br><span class="line"><span class="comment">// backing storage would, the object should have slow elements.</span></span><br><span class="line"><span class="comment">// static</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">inline</span> bool ShouldConvertToSlowElements(uint32_t used_elements,</span><br><span class="line">                                               uint32_t <span class="keyword">new</span><span class="type">_capacity</span>) {</span><br><span class="line">  uint32_t size_threshold = NumberDictionary:<span class="type"></span>:kPreferFastElementsSizeFactor *</span><br><span class="line">                            NumberDictionary:<span class="type"></span>:ComputeCapacity(used_elements) *</span><br><span class="line">                            NumberDictionary:<span class="type"></span>:kEntrySize;</span><br><span class="line">  <span class="keyword">return</span> size_threshold &lt;= <span class="keyword">new</span><span class="type">_capacity</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">inline</span> bool ShouldConvertToSlowElements(JSObject object,</span><br><span class="line">                                               uint32_t capacity,</span><br><span class="line">                                               uint32_t index,</span><br><span class="line">                                               uint32_t* <span class="keyword">new</span><span class="type">_capacity</span>) {</span><br><span class="line">  STATIC_ASSERT(JSObject:<span class="type"></span>:kMaxUncheckedOldFastElementsLength &lt;=</span><br><span class="line">                JSObject:<span class="type"></span>:kMaxUncheckedFastElementsLength);</span><br><span class="line">  <span class="keyword">if</span> (index &lt; capacity) {</span><br><span class="line">    *<span class="keyword">new</span><span class="type">_capacity</span> = capacity;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">if</span> (index - capacity &gt;= JSObject:<span class="type"></span>:kMaxGap) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  *<span class="keyword">new</span><span class="type">_capacity</span> = JSObject:<span class="type"></span>:NewElementsCapacity(index + <span class="number">1</span>);</span><br><span class="line">  DCHECK_LT(index, *<span class="keyword">new</span><span class="type">_capacity</span>);</span><br><span class="line">  <span class="keyword">if</span> (*<span class="keyword">new</span><span class="type">_capacity</span> &lt;= JSObject:<span class="type"></span>:kMaxUncheckedOldFastElementsLength ||</span><br><span class="line">      (*<span class="keyword">new</span><span class="type">_capacity</span> &lt;= JSObject:<span class="type"></span>:kMaxUncheckedFastElementsLength &amp;&amp;</span><br><span class="line">       ObjectInYoungGeneration(object))) {</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> ShouldConvertToSlowElements(object.GetFastElementsUsage(),</span><br><span class="line">                                     *<span class="keyword">new</span><span class="type">_capacity</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="2-、分析"><a href="#2-、分析" class="headerlink" title="(2)、分析"></a>(2)、分析</h3><ul>
-<li><p>如果快数组扩容后的容量是原来的&nbsp;<strong>3 倍以上</strong>，意味着它比&nbsp;<code>HashTable</code>&nbsp;形式存储占用更大的内存，快数组会转换为慢数组</p>
-</li>
-<li><p>如果快数组新增的索引与原来最大索引的差值大于 1024，快数组会被转换会慢数组</p>
-</li>
-</ul>
-<p>所以，前面的例子：</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">arr[<span class="number">1999</span>] = <span class="number">1999</span>;</span><br><span class="line">%<span class="title class_">DebugPrint</span>(arr);</span><br></pre></td></tr></tbody></table></figure>
-
-<p><code>1999 - 2 &gt; 1024</code>，arr 从快数组转换为哈希形式存储的慢数组。</p>
-<p>下面看一下详细运行信息👇</p>
-<ul>
-<li>修改arr之前:</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318584c16f2c2beb1ece5b1.png" alt="image.png"></p>
-<ul>
-<li>修改arr之后：<br><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318586416f2c2beb1ed0169.png" alt="9c1a1af43947b4da39b9c554d56c312.png"></li>
-</ul>
-<h2 id="2-2、慢数组何时转换为快数组"><a href="#2-2、慢数组何时转换为快数组" class="headerlink" title="2.2、慢数组何时转换为快数组"></a>2.2、慢数组何时转换为快数组</h2><h3 id="1-、看一下源码先👇-1"><a href="#1-、看一下源码先👇-1" class="headerlink" title="(1)、看一下源码先👇"></a>(1)、看一下源码先👇</h3><ol>
-<li>path:v8/src/objects/js-objects.cc</li>
-</ol>
-<figure class="highlight angelscript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// path:v8/src/objects/js-objects.cc</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// line:4932</span></span><br><span class="line">static <span class="built_in">bool</span> ShouldConvertToFastElements(JSObject object,</span><br><span class="line">                                        NumberDictionary <span class="built_in">dictionary</span>,</span><br><span class="line">                                        <span class="built_in">uint32</span>_t index,</span><br><span class="line">                                        <span class="built_in">uint32</span>_t* new_capacity) {</span><br><span class="line">  <span class="comment">// If properties with non-standard attributes or accessors were added, we</span></span><br><span class="line">  <span class="comment">// cannot go back to fast elements.</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">dictionary</span>.requires_slow_elements()) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Adding a property with this index will require slow elements.</span></span><br><span class="line">  <span class="keyword">if</span> (index &gt;= static_cast&lt;<span class="built_in">uint32</span>_t&gt;(Smi::kMaxValue)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (object.IsJSArray()) {</span><br><span class="line">    Object length = JSArray::<span class="keyword">cast</span>(object).length();</span><br><span class="line">    <span class="keyword">if</span> (!length.IsSmi()) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    *new_capacity = static_cast&lt;<span class="built_in">uint32</span>_t&gt;(Smi::ToInt(length));</span><br><span class="line">  } <span class="keyword">else</span> <span class="keyword">if</span> (object.IsJSArgumentsObject()) {</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  } <span class="keyword">else</span> {</span><br><span class="line">    *new_capacity = <span class="built_in">dictionary</span>.max_number_key() + <span class="number">1</span>;</span><br><span class="line">  }</span><br><span class="line">  *new_capacity = std::max(index + <span class="number">1</span>, *new_capacity);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">uint32</span>_t <span class="built_in">dictionary</span>_size = static_cast&lt;<span class="built_in">uint32</span>_t&gt;(<span class="built_in">dictionary</span>.Capacity()) *</span><br><span class="line">                             NumberDictionary::kEntrySize;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 看这里👇， 当慢数组转换成快数组能节省 不少于 50%&nbsp;的空间时，才会将其转换</span></span><br><span class="line">  <span class="comment">// Turn fast if the dictionary only saves 50% space.</span></span><br><span class="line">  <span class="keyword">return</span> <span class="number">2</span> * <span class="built_in">dictionary</span>_size &gt;= *new_capacity;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="2-、分析-1"><a href="#2-、分析-1" class="headerlink" title="(2)、分析"></a>(2)、分析</h3><p>元素能存放在快数组中并且长度不在smi之间（64位-2^31到2^32-1），并且当前慢数组空间相比快数组节省值小于等于50%，则转变成为快数组。</p>
-<h2 id="快慢转换总结"><a href="#快慢转换总结" class="headerlink" title="快慢转换总结"></a>快慢转换总结</h2><ul>
-<li><p>快数组就是以空间换时间的方式，申请了大块连续内存，提高了执行效率。</p>
-</li>
-<li><p>慢数组以时间换空间，不必申请连续的空间，节省了内存，但需要付出效率变差的代价。</p>
-</li>
-</ul>
-<h1 id="3、动态扩容与收缩"><a href="#3、动态扩容与收缩" class="headerlink" title="3、动态扩容与收缩"></a>3、动态扩容与收缩</h1><h2 id="3-1、扩容"><a href="#3-1、扩容" class="headerlink" title="3.1、扩容"></a>3.1、扩容</h2><p>看下源码👇</p>
-<ol>
-<li><p>path:v8/src/objects/js-array.h</p>
-<p> 空数组预分配的大小: 4</p>
-</li>
-</ol>
-<figure class="highlight arduino"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// path:v8/src/objects/js-array.h</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Dispatched behavior.</span></span><br><span class="line"><span class="built_in">DECL_PRINTER</span>(JSArray)</span><br><span class="line"><span class="built_in">DECL_VERIFIER</span>(JSArray)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Number of element slots to pre-allocate for an empty array.</span></span><br><span class="line"><span class="comment">// 空数组预分配的大小为4</span></span><br><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="type">int</span> kPreallocatedArrayElements = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="type">int</span> kLengthDescriptorIndex = <span class="number">0</span>;</span><br></pre></td></tr></tbody></table></figure>
-
-<p>上面代码表明，当声明一个空数组时，已预分配好 4 个字节的存储空间。</p>
-<p>所以 [] 与 [1, 2, 3, 4] 占用一样多的内存。 前面说过，JSArray 继承自 JSObject，我们可以在 js-objects.h 中找到如下代码：</p>
-<ol start="2">
-<li><p>path:v8/src/objects/js-objects.h</p>
-<p> 扩容公式</p>
-</li>
-</ol>
-<figure class="highlight cpp"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// path:v8/src/objects/js-objects.h</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// line:551👇</span></span><br><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="type">uint32_t</span> kMinAddedElementsCapacity = <span class="number">16</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Computes the new capacity when expanding the elements of a JSObject.</span></span><br><span class="line"><span class="function"><span class="type">static</span> <span class="type">uint32_t</span> <span class="title">NewElementsCapacity</span><span class="params">(<span class="type">uint32_t</span> old_capacity)</span> </span>{</span><br><span class="line">  <span class="comment">// (old_capacity + 50%) + kMinAddedElementsCapacity</span></span><br><span class="line">  <span class="comment">// 扩容公式:原有内存容量（1.5倍）+ 16</span></span><br><span class="line">  <span class="keyword">return</span> old_capacity + (old_capacity &gt;&gt; <span class="number">1</span>) + kMinAddedElementsCapacity;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<p>这是对 JSObject elements 扩容和对 JSArray 扩容的通用方法。扩容后容量的计算逻辑是：<strong>在原占用空间 old_capacity 的基础上增加一半（old_capacity &gt;&gt; 1 右移 1 位表示除 2，再相加得原空间 1.5 倍），再加上 16</strong>。</p>
-<p><strong>举例：</strong></p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</span><br><span class="line">arr.<span class="title function_">push</span>(<span class="number">5</span>);</span><br><span class="line">%<span class="title class_">DebugPrint</span>(arr);</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li><p>arr.push 之前：<br><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318587716f2c2beb1ed15cf.png" alt="image.png"></p>
-</li>
-<li><p>arr.push 后：</p>
-</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318588716f2c2beb1ed28c0.png" alt="image.png"></p>
-<p><strong>具体分析如下：</strong><br>👇</p>
-<ol>
-<li><p>向数组 [1, 2, 3, 4] push 5 时，首先判断到当前容量已满，需要计算新容量。</p>
-</li>
-<li><p>old_capacity = 4，new_capacity = 4 + 4 &gt;&gt; 1 + 16 = 22，得出 [1, 2, 3, 4, 5] 的容量为 22 个字节，</p>
-</li>
-<li><p>V8 向操作系统申请一块连续大小为 22 字节的内存空间，随后将老数据一一 copy，再新将新增元素写入。</p>
-</li>
-</ol>
-<h2 id="3-2-缩容"><a href="#3-2-缩容" class="headerlink" title="3.2 缩容"></a>3.2 缩容</h2><p>紧接着，我们在&nbsp;<code>src/objects/elements.cc</code>&nbsp;中找到&nbsp;<code>SetLengthImpl</code>&nbsp;方法中的如下代码：</p>
-<figure class="highlight arcade"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// path:src/objects/elements.cc</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// line:750</span></span><br><span class="line"><span class="keyword">if</span> (<span class="number">2</span> * <span class="built_in">length</span> + JSObject::kMinAddedElementsCapacity &lt;= capacity) {</span><br><span class="line">  <span class="comment">// If more than half the elements won't be used, trim the array.</span></span><br><span class="line">  <span class="comment">// Do not trim from short arrays to prevent frequent trimming on</span></span><br><span class="line">  <span class="comment">// repeated pop operations.</span></span><br><span class="line">  <span class="comment">// Leave some space to allow for subsequent push operations.</span></span><br><span class="line">  int elements_to_trim = <span class="built_in">length</span> + <span class="number">1</span> == old_length</span><br><span class="line">                             ? (capacity - <span class="built_in">length</span>) / <span class="number">2</span></span><br><span class="line">                             : capacity - <span class="built_in">length</span>;</span><br><span class="line">  isolate-&gt;heap()-&gt;RightTrimFixedArray(*backing_store, elements_to_trim);</span><br><span class="line">  <span class="comment">// Fill the non-trimmed elements with holes.</span></span><br><span class="line">  BackingStore::cast(*backing_store)</span><br><span class="line">      .FillWithHoles(<span class="built_in">length</span>,</span><br><span class="line">                     <span class="attr">std</span>::<span class="built_in">min</span>(old_length, capacity - elements_to_trim));</span><br><span class="line">} <span class="keyword">else</span> {</span><br><span class="line">  <span class="comment">// Otherwise, fill the unused tail with holes.</span></span><br><span class="line">  BackingStore::cast(*backing_store).FillWithHoles(<span class="built_in">length</span>, old_length);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<p>当数组元素减少（如 pop）后，如果数组容量大于等于 length 的 2 倍，则进行容量调整，使用&nbsp;<code>RightTrimFixedArray</code>&nbsp;函数，计算出需要释放的空间大小，做好标记，等待 GC 回收；如果数组容量小于 length 的 2 倍，则用 holes 对象填充。</p>
-<h1 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h1><ol>
-<li><p>数组元素少的时候是线性结构存储（FixedArray）的，内存地址连续，查找速度快，可以动态扩缩容；</p>
-</li>
-<li><p>数组元素多的时候转化为慢数组，通过创建了一个字典来记录映射关系，内存不连续，通过大名鼎鼎的Object.defineProperty(object, key, descriptor)创建</p>
-</li>
-</ol>
-<p>js的数组看似不同，其实只是V8 在底层实现上做了一层封装，使用两种数据结构实现数组，并且通过时间和空间2个纬度的取舍，优化了数组的性能。</p>
-<p><a href="https://z3rog.tech/blog/2020/fast-properties.html">参考学习博客</a></p>
-<hr>
-<p>🎈🎈🎈</p>
-<p>🌹 关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得<strong>点赞关注收藏</strong>哟，回看不迷路 😉</p>
-<p>✨ 欢迎大家转发、评论交流</p>
-<p>🎁 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>V8</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>关于Web和App的一点点思考</title>
-    <url>/posts/4136692609.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>朋友在微信上分享给我一个“PDD”砍一刀的链接，让我帮忙砍一刀助力，我点开链接之后，让我去下载App，然后去应用商店下载一个App，注册登录完成之后，回到微信里面点击链接，就会唤醒App，接着就是在App里面一顿操作，还不能退出到首页，我呆了😮</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>从我的角度看，有两个点不是很明白：</p>
-<ol>
-<li>不可以在浏览器里面以Web的方式直接打开助力吗，显然是可以的，事实是非得让下载App才可以</li>
-<li>助力的流程怎么回事，为什么不可以退出这个流程呢，一直在里面来回转啊转啊，清除后台运行程序才可以退出？还是我没有发现别的退出路径呢？</li>
-</ol>
-<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><ul>
-<li><p>Web发展方向，在进入移动互联网时代后，国内外出现了不同的发展路线：国外依然致力于精致Web的研发，国内则是随着微信小程序的推出，让一个App里面可以运行其它的“App”，出现了几大平台自研小程序的现象，而且不同的小程序之间还设有壁垒，不通用，接着又出现了一些搞兼容多方小程序的技术，其实就是做了一些“框架”级别的适配器，封装向下转型、向上转型。</p>
-</li>
-<li><p>那到底有没有一种技术可以让很多不用的程序都在上面跑呢，答案是确定的，不但有，而且已经发展了很多年了，那就是Web，让所有的应用程序都运行在浏览器里面。</p>
-</li>
-</ul>
-<p>这些家伙们在做什么？自己给自己出题玩？到底有没有推动技术的发展，“我不考虑这个，我要赚钱！”</p>
-<blockquote>
-<p>类小程序技术也不是微信的第一个尝试的，还有几大手机厂商的“快应用”等。<br>从中你会发现小公司只要有创新，没有展露头角发展不下去是死路一条，展露头角被大公司抄袭又是一死，<strong>这就是申请软件著作权，申请专利的重要性。</strong></p>
-</blockquote>
-<h2 id="期待"><a href="#期待" class="headerlink" title="期待"></a>期待</h2><p>前端的细分领域真的是太多太多了，期待Web技术会有更好的发展，不要往那些不能长久的、可持续发展的事物上投入太多精力，让那些细枝末节快点走进历史吧。</p>
-<hr>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>博客园美化</title>
-    <url>/posts/2159164587.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>博客园允许用户设置多样化的主题。通过选择皮肤，然后开启JS脚本权限，在设置里面植入跟皮肤配套的<code>CSS</code>、<code>JS</code>，并且禁用默认的<code>CSS</code>，即可实现个性化的界面风格和交互行为。</p>
-</blockquote>
-<h2 id="SimpleMemory-皮肤"><a href="#SimpleMemory-皮肤" class="headerlink" title="SimpleMemory 皮肤"></a>SimpleMemory 皮肤</h2><p>文档参考<a href="https://bndong.github.io/Cnblogs-Theme-SimpleMemory/v2/#/">这里</a>，非常详细🌹</p>
-<ul>
-<li>效果预览：</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318481816f2c2beb1d87bad.png"></p>
-<h2 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h2><h3 id="1-选项"><a href="#1-选项" class="headerlink" title="1. 选项"></a>1. 选项</h3><p>勾选 “公告”</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318484616f2c2beb1d8ac38.jpg"></p>
-<h3 id="2-基本设置、代码高亮、开通JS权限"><a href="#2-基本设置、代码高亮、开通JS权限" class="headerlink" title="2. 基本设置、代码高亮、开通JS权限"></a>2. 基本设置、代码高亮、开通JS权限</h3><p>皮肤选择 <code>SimpleMemory</code></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318486316f2c2beb1d8c8b8.jpg"></p>
-<h3 id="3-页面定制CSS代码"><a href="#3-页面定制CSS代码" class="headerlink" title="3. 页面定制CSS代码"></a>3. 页面定制CSS代码</h3><p>这里我选择的是 Cnblogs-Theme-SimpleMemory <code>V2.1.0</code> 版本</p>
-<figure class="highlight css"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">@import</span> url(<span class="attribute">https</span>://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@<span class="number">2.1</span>.<span class="number">0</span>/dist/simpleMemory.css);</span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p>注意：</p>
-<ol>
-<li><p>页面定制CSS代码我使用的是外链导入形式（免费jsdelivr cdn加速，也可以自行选择其它方式托管）。</p>
-</li>
-<li><p>勾选“禁用模板默认CSS”。（使得外链css生效）</p>
-</li>
-</ol>
-</blockquote>
-<h3 id="4-博客侧边栏公告设置"><a href="#4-博客侧边栏公告设置" class="headerlink" title="4. 博客侧边栏公告设置"></a>4. 博客侧边栏公告设置</h3><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318487b16f2c2beb1d8e4d6.png"></p>
-<p>下面是我的配置（仅供参考）</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">cnblogsConfig</span> = {</span><br><span class="line">      <span class="comment">// iconfont（我个人的，可以自己建一个iconfont项目维护使用）</span></span><br><span class="line">      <span class="attr">fontIconExtend</span>: <span class="string">"//at.alicdn.com/t/c/font_3603036_keyavmcqbhn.css"</span>,</span><br><span class="line">      <span class="attr">info</span>: {</span><br><span class="line">        <span class="attr">name</span>: <span class="string">'甜点cc'</span>, <span class="comment">// 用户名</span></span><br><span class="line">        <span class="attr">startDate</span>: <span class="string">'2016-10-08'</span>, <span class="comment">// 入园时间，年-月-日。入园时间查看方法：鼠标停留园龄时间上，会显示入园时间</span></span><br><span class="line">        <span class="attr">avatar</span>: <span class="string">'https://pic.cnblogs.com/avatar/1037867/20220801164532.png'</span>, <span class="comment">// 用户头像</span></span><br><span class="line">        <span class="attr">blogIcon</span>: <span class="string">'https://pic.cnblogs.com/avatar/1037867/20220801164532.png'</span>, <span class="comment">// 网站图标 favicon.ico</span></span><br><span class="line">      },</span><br><span class="line">      <span class="attr">sidebar</span>: {</span><br><span class="line">        <span class="attr">infoBackground</span>: <span class="string">'https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/Machine_tool.jpg'</span>, <span class="comment">// 个人信息背景</span></span><br><span class="line">        <span class="attr">titleMsg</span>: <span class="string">'宝宝等你很久啦~🌹🌹'</span>, <span class="comment">// 侧边栏title信息</span></span><br><span class="line">        <span class="attr">navList</span>: [</span><br><span class="line">            [<span class="string">'友链'</span>, <span class="string">'https://www.cnblogs.com/all-smile/p/16612170.html'</span>, <span class="string">'icon-pengyoufill'</span>],</span><br><span class="line">            [<span class="string">'个人主页'</span>, <span class="string">'https://home.i-xiao.space/'</span>, <span class="string">'icon-zhuye'</span>],</span><br><span class="line">        ],</span><br><span class="line">      },</span><br><span class="line">      <span class="attr">banner</span>: {</span><br><span class="line">        <span class="attr">home</span>: {</span><br><span class="line">          <span class="comment">// 主页banner标语, 随机从数组中获取一条文字显示</span></span><br><span class="line">          <span class="attr">title</span>: [<span class="string">'每一个不曾起舞的日子，都是对生命的辜负。'</span>, <span class="string">'为者常成，行者常至。'</span>, <span class="string">'逝者如斯夫，不舍昼夜。'</span>, <span class="string">"相逢的还会再相逢。"</span>],</span><br><span class="line">          <span class="comment">// 主页banner图片</span></span><br><span class="line">          <span class="attr">background</span>: [</span><br><span class="line">              <span class="string">"https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/Machine_tool.jpg"</span>,</span><br><span class="line">              <span class="string">"https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/horse.jpg"</span>,</span><br><span class="line">              <span class="string">"https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/background.jpg"</span>,</span><br><span class="line">              <span class="string">"https://raw.githubusercontent.com/all-smile/nav/master/static/images/sunset.jpg"</span>,</span><br><span class="line">              <span class="string">"https://raw.githubusercontent.com/all-smile/nav/master/static/images/sunset02.jpg"</span></span><br><span class="line">          ],</span><br><span class="line">        },</span><br><span class="line">      },</span><br><span class="line">      <span class="comment">// 失去焦点标签文字</span></span><br><span class="line">      <span class="attr">title</span>: {</span><br><span class="line">        <span class="attr">onblur</span>: <span class="string">'(oﾟvﾟ)ノ Hi'</span>,</span><br><span class="line">      },</span><br><span class="line">      <span class="comment">// 页面加载loading。</span></span><br><span class="line">      <span class="attr">loading</span>: {</span><br><span class="line">        <span class="attr">rebound</span>: {</span><br><span class="line">          <span class="attr">tension</span>: <span class="number">16</span>,</span><br><span class="line">        },</span><br><span class="line">        <span class="attr">spinner</span>: {</span><br><span class="line">          <span class="attr">id</span>: <span class="string">'spinner'</span>,</span><br><span class="line">          <span class="attr">radius</span>: <span class="number">90</span>,</span><br><span class="line">        }</span><br><span class="line">      },</span><br><span class="line">      <span class="comment">// 页脚模式</span></span><br><span class="line">      <span class="attr">footer</span>: {</span><br><span class="line">        <span class="attr">style</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="attr">text</span>: {</span><br><span class="line">          <span class="attr">left</span>: <span class="string">'蓄之既久，其发必速。'</span>,</span><br><span class="line">        },</span><br><span class="line">      },</span><br><span class="line">      <span class="comment">// 友情链接</span></span><br><span class="line">      <span class="attr">links</span>: {</span><br><span class="line">        <span class="comment">// 文章底部显示添加友链入口（博客园发送消息）</span></span><br><span class="line">        <span class="attr">footer</span>: [</span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">            格式：</span></span><br><span class="line"><span class="comment">            Key	Description</span></span><br><span class="line"><span class="comment">            name	昵称</span></span><br><span class="line"><span class="comment">            introduction	简介</span></span><br><span class="line"><span class="comment">            avatar	头像</span></span><br><span class="line"><span class="comment">            url	友链地址</span></span><br><span class="line"><span class="comment">            */</span></span><br><span class="line">            [<span class="string">"添加友链"</span>, <span class="string">'https://msg.cnblogs.com/send/甜点cc'</span>],</span><br><span class="line">        ],</span><br><span class="line">      },</span><br><span class="line">      <span class="comment">// 右下角菜单</span></span><br><span class="line">      <span class="attr">rtMenu</span>: {</span><br><span class="line">        <span class="attr">qrCode</span>: <span class="string">'https://xxx.jpg'</span>, <span class="comment">// 自己设置</span></span><br><span class="line">        <span class="attr">reward</span>: {</span><br><span class="line">          <span class="attr">wechatpay</span>: <span class="string">'https:xxx.jpg'</span> <span class="comment">// 自己设置</span></span><br><span class="line">        },</span><br><span class="line">      },</span><br><span class="line">      <span class="attr">animate</span>: {</span><br><span class="line">        <span class="comment">// 主页banner动效配置。</span></span><br><span class="line">        <span class="attr">homeBanner</span>: {</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">true</span>,</span><br><span class="line">          <span class="attr">options</span>: {</span><br><span class="line">            <span class="attr">radius</span>: <span class="number">15</span>,</span><br><span class="line">          }</span><br><span class="line">        },</span><br><span class="line">        <span class="comment">// 文章页标题动效配置。</span></span><br><span class="line">        <span class="attr">articleTitle</span>: {</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">true</span>,</span><br><span class="line">        },</span><br><span class="line">        <span class="comment">// 文章页banner动效配置</span></span><br><span class="line">        <span class="attr">articleBanner</span>: {</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">true</span>,</span><br><span class="line">        },</span><br><span class="line">        <span class="comment">// 背景动效。</span></span><br><span class="line">        <span class="attr">background</span>: {</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">false</span>,</span><br><span class="line">        },</span><br><span class="line">        <span class="comment">// 跟随鼠标动效。</span></span><br><span class="line">        <span class="attr">mouse</span>: {</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">false</span>,</span><br><span class="line">        },</span><br><span class="line">      },</span><br><span class="line">    };</span><br><span class="line">    <span class="comment">// 友链配置</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">cnblogsConfig</span>.<span class="property">links</span>.<span class="property">page</span> = [</span><br><span class="line">      {</span><br><span class="line">        <span class="attr">name</span>: <span class="string">'甜点cc'</span>, <span class="comment">// 昵称</span></span><br><span class="line">        <span class="attr">introduction</span>: <span class="string">'博客'</span>, <span class="comment">// 简介</span></span><br><span class="line">        <span class="attr">avatar</span>: <span class="string">'https://pic.cnblogs.com/avatar/1037867/20220801164532.png'</span>, <span class="comment">// 头像</span></span><br><span class="line">        <span class="attr">url</span>: <span class="string">'https://home.i-xiao.space/blog/'</span> <span class="comment">// 友链地址</span></span><br><span class="line">      },</span><br><span class="line">    ]</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@v2.1.0/dist/simpleMemory.js"</span> <span class="attr">defer</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p>注意：</p>
-<ul>
-<li>上面配置中 加载的 js 脚本，要和 上一步的CSS外链同一个版本（这里是V2.1.0），否则可能会不生效或者出现别的问题</li>
-</ul>
-</blockquote>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><ol>
-<li><p>主题相关文件（css\js等）可以自己托管维护，可以自行扩展界面交互</p>
-</li>
-<li><p>图片等静态资源可以自行寻找免费图床。当然也可以自己放到<code>GitHub</code>上面托管，采用CDN访问（参考<a href="https://juejin.cn/post/7120973719346151431">这里</a>）</p>
-</li>
-<li><p>托管到博客园上</p>
-</li>
-</ol>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631848cd16f2c2beb1d93e27.png"></p>
-<ol start="4">
-<li>图片等静态资源也可以自行搭建云盘使用😏</li>
-</ol>
-<p>👉 方式很多，顺手就行 👈</p>
-<p>我的博客园主页请看<a href="https://www.cnblogs.com/all-smile">这里</a>😊欢迎来访问呀🌹</p>
-<hr>
-<p>🎈🎈🎈</p>
-<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>前端</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>博客评论插件Beaudar安装使用</title>
-    <url>/posts/34114278.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="Beaudar"><a href="#Beaudar" class="headerlink" title="Beaudar"></a>Beaudar</h2><p><code>Hexo</code>主题选用的<a href="https://xaoxuu.com/wiki/stellar/"><code>Stellar</code></a></p>
-<p>基于 GitHub issue 的轻量评论插件，Utterances 的中文版本，官网在<a href="https://beaudar.lipk.org/">这里</a></p>
-<h2 id="Beaudar-是如何工作的？"><a href="#Beaudar-是如何工作的？" class="headerlink" title="Beaudar 是如何工作的？"></a>Beaudar 是如何工作的？</h2><p>Beaudar 加载时，将使用 GitHub issue 搜索 API 根据 url，“路径名”或“标题”查找与页面相关的 issue。如果找不到与页面匹配的 issue，即没有评论，当有人首次发表评论时，Beaudar-bot 会自动创建一个 issue。</p>
-<h2 id="配置使用"><a href="#配置使用" class="headerlink" title="配置使用"></a>配置使用</h2><ol>
-<li>准备</li>
-</ol>
-<p>Beaudar 的配置方法很简单，创建一个仓库<a href="https://github.com/all-smile/blog-comments"><code>blog-comments</code></a>，在仓库中创建一个域名白名单文件<code>beaudar.json</code>，然后在<a href="https://github.com/apps/beaudar">此处</a>授权安装即可。</p>
-<p><code>beaudar.json</code>文件</p>
-<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li><code>Hexo</code>配置</li>
-</ol>
-<p>在主题配置文件里<code>_config_[theme].yml</code>里面增加如下配置</p>
-<figure class="highlight yml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 评论 [beaudar](https://beaudar.lipk.org/) 插件</span></span><br><span class="line"><span class="attr">comments:</span></span><br><span class="line">  <span class="attr">service:</span> <span class="string">beaudar</span></span><br><span class="line">  <span class="attr">beaudar:</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">all-smile/blog-comments</span> <span class="comment"># 指向你自己的repo</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p>使用<code>GitHub</code>登录后评论</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b40c16f2c2beb16136d9.jpg"></p>
-<h2 id="问题处理"><a href="#问题处理" class="headerlink" title="问题处理"></a>问题处理</h2><ol>
-<li><code>blog-comments</code> 仓库默认分支为<code>main</code></li>
-</ol>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b22716f2c2beb15ee173.jpg"></p>
-<p><strong>解决：</strong></p>
-<p>进入<code>blog-comments</code> 仓库，在 settings -&gt; branches 里面，修改 <code>Default branch</code> 为 <code>main</code></p>
-<ol start="2">
-<li><code>Hexo</code> 本地服务测试<code>Beaudar</code>，添加白名单配置</li>
-</ol>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b2a816f2c2beb15f64b2.jpg"></p>
-<p><strong>解决：</strong></p>
-<p>修改<code>beaudar.json</code>文件</p>
-<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -1592,6 +1189,409 @@
       </categories>
       <tags>
         <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>React Native环境配置、初始化项目、打包安装到手机，以及开发小知识</title>
+    <url>/posts/252268106.html</url>
+    <content><![CDATA[<html><head></head><body><h1 id="1、前言"><a href="#1、前言" class="headerlink" title="1、前言"></a>1、前言</h1><p>环境：Win10 + Android</p>
+<p>已经在Windows电脑上安装好 <a href="https://nodejs.org/en/">Node</a>（v14+）、Git、Yarn、<br><a href="https://www.oracle.com/java/technologies/downloads/#java11">JDK</a>(v11)</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">javac -version</span><br><span class="line">javac 11.0.15.1</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">node -v</span><br><span class="line">v16.14.1</span><br></pre></td></tr></tbody></table></figure>
+<p>👉 <a href="https://www.react-native.cn/docs/next/environment-setup">官方文档</a></p>
+<h1 id="2、Android-Studio下载安装"><a href="#2、Android-Studio下载安装" class="headerlink" title="2、Android Studio下载安装"></a>2、Android Studio下载安装</h1><ul>
+<li><a href="https://developer.android.google.cn/studio/">下载地址</a></li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631855c416f2c2beb1e9e38c.png"></p>
+<h1 id="3、Android-SDK-下载安装"><a href="#3、Android-SDK-下载安装" class="headerlink" title="3、Android SDK 下载安装"></a>3、Android SDK 下载安装</h1><ul>
+<li>安装 android sdk</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318562016f2c2beb1ea4698.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318567d16f2c2beb1eab904.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318569116f2c2beb1eacfb0.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856a016f2c2beb1eae08f.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856be16f2c2beb1eb068f.png"></p>
+<h2 id="3-1、环境变量配置"><a href="#3-1、环境变量配置" class="headerlink" title="3.1、环境变量配置"></a>3.1、环境变量配置</h2><ul>
+<li><p>配置系统变量<br><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856cf16f2c2beb1eb1c1c.png"></p>
+</li>
+<li><p>Path 配置：</p>
+</li>
+</ul>
+<figure class="highlight haml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\platform-tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\emulator</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools\bin</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="4、Scrcpy-手机模拟器下载安装使用"><a href="#4、Scrcpy-手机模拟器下载安装使用" class="headerlink" title="4、Scrcpy 手机模拟器下载安装使用"></a>4、Scrcpy 手机模拟器下载安装使用</h1><ul>
+<li><a href="https://github.com/Genymobile/scrcpy">下载地址</a></li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856e916f2c2beb1eb3879.png"></p>
+<p>下载zip文件，解压，双击运行 <code>scrcpy.exe</code> 可执行文件即可在电脑上投影手机屏幕，如下图👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856fb16f2c2beb1eb4fb0.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318571216f2c2beb1eb7443.png" alt="image.png"></p>
+<blockquote>
+<p>运行可执行文件之前，使用<strong>数据线</strong>连接Android手机，进行开发者选项设置（不同的手机进入开发者模式略有差异，自行搜索，我用的是华为手机）</p>
+</blockquote>
+<ul>
+<li>电脑端查看连接设备<br><code>adb devices</code></li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">adb devices</span><br><span class="line">List of devices attached</span><br><span class="line">8TFDU18719000649        device</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>adb 命令，在下载 <code>scrcpy</code> 的时候已经内置了</p>
+</blockquote>
+<h1 id="5、安装-React-Native"><a href="#5、安装-React-Native" class="headerlink" title="5、安装 React Native"></a>5、安装 React Native</h1><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm i react-native-cli -g</span><br><span class="line"></span><br><span class="line">$ react-native -v</span><br><span class="line">react-native-cli: 2.0.1</span><br><span class="line">react-native: n/a - not inside a React Native project directory</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="6、初始化项目"><a href="#6、初始化项目" class="headerlink" title="6、初始化项目"></a>6、初始化项目</h1><p>进入到自己的工作目录，执行下面的命令创建 react native 项目</p>
+<figure class="highlight actionscript"><table><tbody><tr><td class="code"><pre><span class="line">npx react-<span class="keyword">native</span> init AwesomeProject</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="7、运行项目安装软件到安卓机"><a href="#7、运行项目安装软件到安卓机" class="headerlink" title="7、运行项目安装软件到安卓机"></a>7、运行项目安装软件到安卓机</h1><h2 id="7-1、先用数据线连接手机和电脑，运行scrcpy-软件"><a href="#7-1、先用数据线连接手机和电脑，运行scrcpy-软件" class="headerlink" title="7.1、先用数据线连接手机和电脑，运行scrcpy 软件"></a>7.1、先用数据线连接手机和电脑，运行scrcpy 软件</h2><p>开发者选项配置修改，最终实现在电脑上可以投屏手机，并可以在电脑上操控手机</p>
+<h2 id="7-2、打开-android-studio-编辑器，运行项目"><a href="#7-2、打开-android-studio-编辑器，运行项目" class="headerlink" title="7.2、打开 android studio 编辑器，运行项目"></a>7.2、打开 android studio 编辑器，运行项目</h2><figure class="highlight asciidoc"><table><tbody><tr><td class="code"><pre><span class="line">npm run android</span><br><span class="line"></span><br><span class="line"><span class="section">or</span></span><br><span class="line"><span class="section">-------------------</span></span><br><span class="line">cd AwesomeProject</span><br><span class="line">yarn android</span><br><span class="line"># 或者</span><br><span class="line">yarn react-native run-android</span><br></pre></td></tr></tbody></table></figure>
+
+<p>运行的时候会在手机上弹窗 “是否统一安装软件”之类的提示，点击同意即可</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318572616f2c2beb1eb9161.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318573616f2c2beb1eba516.png"></p>
+<h2 id="7-3、adb-reverse-命令使用"><a href="#7-3、adb-reverse-命令使用" class="headerlink" title="7.3、adb reverse  命令使用"></a>7.3、adb reverse  命令使用</h2><p><a href="https://developer.android.google.cn/studio/command-line/adb?hl=zh-cn">adb 文档</a></p>
+<h4 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h4><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318574916f2c2beb1ebbc88.png"></p>
+<p>猜测是多设备连接受影响了，可以尝试重启手机解决<br>也可以尝试如下步骤： 启停 adb 服务器</p>
+<blockquote>
+<p>在某些情况下，您可能需要终止 adb 服务器进程，然后重启以解决问题（例如，如果 adb 不响应命令）。</p>
+<p>如需停止 adb 服务器，请使用 adb kill-server 命令。然后，您可以通过发出其他任何 adb 命令来重启服务器。</p>
+</blockquote>
+<figure class="highlight pgsql"><table><tbody><tr><td class="code"><pre><span class="line">adb kill-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">start</span>-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">reverse</span> tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><figure class="highlight apache"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attribute">adb</span> reverse tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>这条命令的意思是，Android允许我们通过ADB，把Android上的某个端口映射到电脑（adb forward），或者把电脑的某个端口映射到Android系统（adb reverse），在这里假设电脑上开启的服务，监听的端口为8081。Android手机通过USB连接电脑后，在终端直接执行<code>adb reverse tcp:8081 tcp:8081</code>，然后在手机中访问<code>127.0.0.1:8081</code>，就可以访问到电脑上启动的服务了。</p>
+<p>注意：</p>
+<ol>
+<li>必须是在连接数据线usb的前提下才能使用该方案进行代码调试。</li>
+<li>(Android 5.0 及以上)使用 adb reverse 命令，这个选项只能在 5.0 以上版本(API 21+)的安卓设备上使用。</li>
+</ol>
+<h1 id="8、react-native开发小知识"><a href="#8、react-native开发小知识" class="headerlink" title="8、react-native开发小知识"></a>8、react-native开发小知识</h1><h2 id="8-1、vscode-上代码飘红"><a href="#8-1、vscode-上代码飘红" class="headerlink" title="8.1、vscode 上代码飘红"></a>8.1、vscode 上代码飘红</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318575a16f2c2beb1ebd220.png"></p>
+<ul>
+<li>问题原因：</li>
+</ul>
+<p>VScode是默认解析ts的，但是不会默认识别 <a href="https://flow.org/en/docs/react/"><code>Flow</code></a>(<strong>静态类型检测工具</strong>)的语法，所以这种的代码会被解析成ts语法。</p>
+<ul>
+<li>解决方法：<br>快捷键<code>Ctrl+Shift+P</code>，输入<code>setting.json</code>，选择 首选项:打开设置(json)。</li>
+</ul>
+<p><code>settings.json</code></p>
+<figure class="highlight awk"><table><tbody><tr><td class="code"><pre><span class="line"><span class="regexp">//</span> <span class="string">"import type"</span> 声明只能在 TypeScript 文件中使用。</span><br><span class="line"><span class="string">"javascript.validate.enable"</span>: false,</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="8-2、npm-run-android-每次都需要在手机上重新安装软件包"><a href="#8-2、npm-run-android-每次都需要在手机上重新安装软件包" class="headerlink" title="8.2、npm run android 每次都需要在手机上重新安装软件包"></a>8.2、npm run android 每次都需要在手机上重新安装软件包</h2><p>开发者模式 -&gt; USB调试 -&gt; 监控ADB安装应用 -&gt; 关闭, 即可解决。</p>
+<h2 id="8-3、本地开发启动多个项目"><a href="#8-3、本地开发启动多个项目" class="headerlink" title="8.3、本地开发启动多个项目"></a>8.3、本地开发启动多个项目</h2><p>默认端口号是8081，通过指定不同的端口号来启动。</p>
+<figure class="highlight livecodeserver"><table><tbody><tr><td class="code"><pre><span class="line">react-native <span class="built_in">start</span> <span class="comment">--port=8082</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="8-4、修改软件包名称"><a href="#8-4、修改软件包名称" class="headerlink" title="8.4、修改软件包名称"></a>8.4、修改软件包名称</h2><ol>
+<li>修改配置文件<br>Android<br>修改配置文件里的 <code>app_name</code> 即可，重新 <code>yarn android</code> ，发现手机上软件的名称已修改成功。</li>
+</ol>
+<p>文件： <code>android\app\src\main\res\values\strings.xml</code></p>
+<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">string</span> <span class="attr">name</span>=<span class="string">"app_name"</span>&gt;</span>远点<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>react-native-rename 插件修改</li>
+</ol>
+<p>通过插件修改名字，必须是 使用 <code>react-native init xxx</code> 创建的项目</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 安装</span></span><br><span class="line">npm install react-native-rename -g</span><br><span class="line">or</span><br><span class="line">yarn global add react-native-rename</span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目根目录执行命令</span></span><br><span class="line">npx react-native-rename &lt;newName&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>修改完成。</p>
+<p>本篇完！后面继续分享如何调试react native项目。</p>
+<hr>
+<p>🎈🎈🎈</p>
+<p>🌹 关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>✨ 欢迎大家转发、评论交流</p>
+<p>🎁 蟹蟹😊</p>
+</body></html>]]></content>
+      <categories>
+        <category>React Native</category>
+      </categories>
+      <tags>
+        <tag>React Native</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>关于Web和App的一点点思考</title>
+    <url>/posts/4136692609.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>朋友在微信上分享给我一个“PDD”砍一刀的链接，让我帮忙砍一刀助力，我点开链接之后，让我去下载App，然后去应用商店下载一个App，注册登录完成之后，回到微信里面点击链接，就会唤醒App，接着就是在App里面一顿操作，还不能退出到首页，我呆了😮</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>从我的角度看，有两个点不是很明白：</p>
+<ol>
+<li>不可以在浏览器里面以Web的方式直接打开助力吗，显然是可以的，事实是非得让下载App才可以</li>
+<li>助力的流程怎么回事，为什么不可以退出这个流程呢，一直在里面来回转啊转啊，清除后台运行程序才可以退出？还是我没有发现别的退出路径呢？</li>
+</ol>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><ul>
+<li><p>Web发展方向，在进入移动互联网时代后，国内外出现了不同的发展路线：国外依然致力于精致Web的研发，国内则是随着微信小程序的推出，让一个App里面可以运行其它的“App”，出现了几大平台自研小程序的现象，而且不同的小程序之间还设有壁垒，不通用，接着又出现了一些搞兼容多方小程序的技术，其实就是做了一些“框架”级别的适配器，封装向下转型、向上转型。</p>
+</li>
+<li><p>那到底有没有一种技术可以让很多不用的程序都在上面跑呢，答案是确定的，不但有，而且已经发展了很多年了，那就是Web，让所有的应用程序都运行在浏览器里面。</p>
+</li>
+</ul>
+<p>这些家伙们在做什么？自己给自己出题玩？到底有没有推动技术的发展，“我不考虑这个，我要赚钱！”</p>
+<blockquote>
+<p>类小程序技术也不是微信的第一个尝试的，还有几大手机厂商的“快应用”等。<br>从中你会发现小公司只要有创新，没有展露头角发展不下去是死路一条，展露头角被大公司抄袭又是一死，<strong>这就是申请软件著作权，申请专利的重要性。</strong></p>
+</blockquote>
+<h2 id="期待"><a href="#期待" class="headerlink" title="期待"></a>期待</h2><p>前端的细分领域真的是太多太多了，期待Web技术会有更好的发展，不要往那些不能长久的、可持续发展的事物上投入太多精力，让那些细枝末节快点走进历史吧。</p>
+<hr>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>V8中的快慢数组（附源码分析、图文更易理解😃）</title>
+    <url>/posts/1787681656.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>接上一篇 <a href="https://juejin.cn/post/7125763016582234142">V8 中的快慢属性</a>，本篇分析V8 中的快慢数组，了解数组全填充还是带孔、快慢数组、快慢转化、动态扩缩容等等。其实很多语言底层都采用类似的处理方式，比如：Golang中切片的append操作就涉及扩容处理。</p>
+</blockquote>
+<p>🎁 D8调试工具使用请来<a href="https://juejin.cn/post/7126505899337711647">这里</a></p>
+<h1 id="1、全填充-or-带孔"><a href="#1、全填充-or-带孔" class="headerlink" title="1、全填充 or 带孔"></a>1、全填充 or 带孔</h1><p>通过一个小李子，看一下什么是全填充数组(<code>Paked-Array</code>)，什么是带孔数组(<code>Holey-Array</code>)</p>
+<p>前面还写了<strong>稀疏数组</strong>，稀疏数组更加具有业务应用性，清洗的是无意义的数据，可以对比带孔数组来分析一下，有兴趣请看👉 <a href="https://juejin.cn/post/7124557913921847327">稀疏数组——实现五子棋存盘和续上盘功能</a></p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> o = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o[<span class="number">1</span>])          <span class="comment">// 'b'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> o[<span class="number">1</span>]</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o[<span class="number">1</span>])          <span class="comment">// undefined</span></span><br><span class="line">o.<span class="property">__proto__</span> = { <span class="number">1</span>: <span class="string">'B'</span> }</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o[<span class="number">0</span>])          <span class="comment">// 'a'</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o[<span class="number">1</span>])          <span class="comment">// 'B'   但如何确定要访问原型链？？🤔</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o[<span class="number">2</span>])          <span class="comment">// 'c'</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o[<span class="number">3</span>])          <span class="comment">// undefined</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果一个数组中所有位置均有值，我们称之为<code>全填充</code>（<strong>Packed</strong>）数组；</p>
+<p>若某些位置在初始化时未定义（如&nbsp;<code>const arr = [1, , 3]</code>&nbsp;中的 arr[1]），或定义后被删除（delete，如上述例子），称之为<code>带孔</code>（<strong>Holey</strong>）数组。</p>
+<p>该例子在 V8 的访问可以通过下图解释：</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318579016f2c2beb1ec1125.png" alt="image.png"></p>
+<p>一开始数组 o 是 packed 的，所以访问 o[1] 时可以直接获取值，而不需要访问原型。</p>
+<p>而行 4：<code>delete o[1]</code>&nbsp;为数组引入了一个孔洞（<code>the_hole</code>），用于标记不存在的属性，同时又行 6 为 o 定义了原型上的 1 属性，当再次获取 o[1] 时会<strong>穿孔</strong>进而继续往原型链上查询。原型链上的查询是昂贵的，<em>可以根据是否有 the_hole 来降低这部分查询开销</em>。</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631857f616f2c2beb1ec80c6.png" alt="image.png"></p>
+<h1 id="2、快慢数组"><a href="#2、快慢数组" class="headerlink" title="2、快慢数组"></a>2、快慢数组</h1><figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">arr[<span class="number">1999</span>] = <span class="number">1999</span></span><br><span class="line"><span class="comment">// arr 会如何存储？</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>这个例子中，在行 1 声明完毕后 arr 是一个全填充的数组，但在行 2 马上又定义索引 1999 处值为 1999，此时如果为 arr 创建一个长度为 2000 的完整数组来存储这样的稀疏数据将会非常占用内存，为了应对这种情况，V8 会将数组降级为<code>慢数组</code>，创建一个字典来存储<code>「键、值、描述符」</code>（<strong>key、value、descriptor</strong>） 三元组。这就是&nbsp;<code>Object.defineProperty(object, key, descriptor)</code>&nbsp;API 同样会做的事情。</p>
+<blockquote>
+<ol>
+<li><p>鉴于我们没有办法在 JavaScript 的 API 层面让 V8 找到 HiddenClass 并存储对应的 descriptor 信息，所以当使用&nbsp;<code>Object.defineProperty</code>&nbsp;自定义 key、value、descriptor 时，V8 都会使用慢属性，对应到数组中就是慢数组。</p>
+</li>
+<li><p><code>Object.defineProperty</code>&nbsp;是 Vue 2 的核心 API，当对象或数组很庞大时，不可避免地导致访问速度下降，这是底层原理决定的。</p>
+</li>
+</ol>
+</blockquote>
+<p>那究竟什么是快数组和慢数组呢？我们看下V8底层对于数组的定义：👉 <a href="https://source.chromium.org/chromium/chromium/src/+/master:v8/src/objects/js-array.h">源代码：v8/src/objects/js-array.h</a></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318581016f2c2beb1ec9d8a.png" alt="image.png"></p>
+<ul>
+<li><p>快模式：数组实现的是 V8 里一个叫&nbsp;<code>FixedArray</code>&nbsp;的类，它在内存中是<strong>连续的空间</strong>，直接通过索引读写值，非常快。如果有 push 或 pop 操作，它会动态地扩容或收缩。</p>
+</li>
+<li><p>慢模式：如前文所介绍，V8 创建了一个字典（<code>HashTable</code>）来记录映射关系，其中索引的整数值即是字典的键。</p>
+</li>
+</ul>
+<h2 id="为什么数组也是对象类型的？"><a href="#为什么数组也是对象类型的？" class="headerlink" title="为什么数组也是对象类型的？"></a>为什么数组也是对象类型的？</h2><p>在 V8 源码中清晰地表明，JSArray 继承自 JSObject，即数组是一个特殊的对象，而 JS 中所有非原始类型都是对象的实例，所以 JS 中数组可以存储多种类型的值。</p>
+<p>数组内部也是用key-value的存储形式</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> testArr = [<span class="number">1</span>, <span class="string">"hello"</span>, <span class="literal">true</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">}];</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318583516f2c2beb1ecca7c.png" alt="image.png"></p>
+<h2 id="2-1、快数组何时转换为慢数组"><a href="#2-1、快数组何时转换为慢数组" class="headerlink" title="2.1、快数组何时转换为慢数组"></a>2.1、快数组何时转换为慢数组</h2><h3 id="1-、看一下源码先👇"><a href="#1-、看一下源码先👇" class="headerlink" title="(1)、看一下源码先👇"></a>(1)、看一下源码先👇</h3><ol>
+<li><p>path:v8/src/objects/js-objects-inl.h</p>
+<p> 快慢模式转化： <code>ShouldConvertToSlowElements</code></p>
+</li>
+</ol>
+<figure class="highlight haxe"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// path:v8/src/objects/js-objects-inl.h</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// If the fast-case backing storage takes up much more memory than a dictionary</span></span><br><span class="line"><span class="comment">// backing storage would, the object should have slow elements.</span></span><br><span class="line"><span class="comment">// static</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">inline</span> bool ShouldConvertToSlowElements(uint32_t used_elements,</span><br><span class="line">                                               uint32_t <span class="keyword">new</span><span class="type">_capacity</span>) {</span><br><span class="line">  uint32_t size_threshold = NumberDictionary:<span class="type"></span>:kPreferFastElementsSizeFactor *</span><br><span class="line">                            NumberDictionary:<span class="type"></span>:ComputeCapacity(used_elements) *</span><br><span class="line">                            NumberDictionary:<span class="type"></span>:kEntrySize;</span><br><span class="line">  <span class="keyword">return</span> size_threshold &lt;= <span class="keyword">new</span><span class="type">_capacity</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">inline</span> bool ShouldConvertToSlowElements(JSObject object,</span><br><span class="line">                                               uint32_t capacity,</span><br><span class="line">                                               uint32_t index,</span><br><span class="line">                                               uint32_t* <span class="keyword">new</span><span class="type">_capacity</span>) {</span><br><span class="line">  STATIC_ASSERT(JSObject:<span class="type"></span>:kMaxUncheckedOldFastElementsLength &lt;=</span><br><span class="line">                JSObject:<span class="type"></span>:kMaxUncheckedFastElementsLength);</span><br><span class="line">  <span class="keyword">if</span> (index &lt; capacity) {</span><br><span class="line">    *<span class="keyword">new</span><span class="type">_capacity</span> = capacity;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">if</span> (index - capacity &gt;= JSObject:<span class="type"></span>:kMaxGap) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  *<span class="keyword">new</span><span class="type">_capacity</span> = JSObject:<span class="type"></span>:NewElementsCapacity(index + <span class="number">1</span>);</span><br><span class="line">  DCHECK_LT(index, *<span class="keyword">new</span><span class="type">_capacity</span>);</span><br><span class="line">  <span class="keyword">if</span> (*<span class="keyword">new</span><span class="type">_capacity</span> &lt;= JSObject:<span class="type"></span>:kMaxUncheckedOldFastElementsLength ||</span><br><span class="line">      (*<span class="keyword">new</span><span class="type">_capacity</span> &lt;= JSObject:<span class="type"></span>:kMaxUncheckedFastElementsLength &amp;&amp;</span><br><span class="line">       ObjectInYoungGeneration(object))) {</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> ShouldConvertToSlowElements(object.GetFastElementsUsage(),</span><br><span class="line">                                     *<span class="keyword">new</span><span class="type">_capacity</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="2-、分析"><a href="#2-、分析" class="headerlink" title="(2)、分析"></a>(2)、分析</h3><ul>
+<li><p>如果快数组扩容后的容量是原来的&nbsp;<strong>3 倍以上</strong>，意味着它比&nbsp;<code>HashTable</code>&nbsp;形式存储占用更大的内存，快数组会转换为慢数组</p>
+</li>
+<li><p>如果快数组新增的索引与原来最大索引的差值大于 1024，快数组会被转换会慢数组</p>
+</li>
+</ul>
+<p>所以，前面的例子：</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">arr[<span class="number">1999</span>] = <span class="number">1999</span>;</span><br><span class="line">%<span class="title class_">DebugPrint</span>(arr);</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>1999 - 2 &gt; 1024</code>，arr 从快数组转换为哈希形式存储的慢数组。</p>
+<p>下面看一下详细运行信息👇</p>
+<ul>
+<li>修改arr之前:</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318584c16f2c2beb1ece5b1.png" alt="image.png"></p>
+<ul>
+<li>修改arr之后：<br><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318586416f2c2beb1ed0169.png" alt="9c1a1af43947b4da39b9c554d56c312.png"></li>
+</ul>
+<h2 id="2-2、慢数组何时转换为快数组"><a href="#2-2、慢数组何时转换为快数组" class="headerlink" title="2.2、慢数组何时转换为快数组"></a>2.2、慢数组何时转换为快数组</h2><h3 id="1-、看一下源码先👇-1"><a href="#1-、看一下源码先👇-1" class="headerlink" title="(1)、看一下源码先👇"></a>(1)、看一下源码先👇</h3><ol>
+<li>path:v8/src/objects/js-objects.cc</li>
+</ol>
+<figure class="highlight angelscript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// path:v8/src/objects/js-objects.cc</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// line:4932</span></span><br><span class="line">static <span class="built_in">bool</span> ShouldConvertToFastElements(JSObject object,</span><br><span class="line">                                        NumberDictionary <span class="built_in">dictionary</span>,</span><br><span class="line">                                        <span class="built_in">uint32</span>_t index,</span><br><span class="line">                                        <span class="built_in">uint32</span>_t* new_capacity) {</span><br><span class="line">  <span class="comment">// If properties with non-standard attributes or accessors were added, we</span></span><br><span class="line">  <span class="comment">// cannot go back to fast elements.</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">dictionary</span>.requires_slow_elements()) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Adding a property with this index will require slow elements.</span></span><br><span class="line">  <span class="keyword">if</span> (index &gt;= static_cast&lt;<span class="built_in">uint32</span>_t&gt;(Smi::kMaxValue)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (object.IsJSArray()) {</span><br><span class="line">    Object length = JSArray::<span class="keyword">cast</span>(object).length();</span><br><span class="line">    <span class="keyword">if</span> (!length.IsSmi()) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    *new_capacity = static_cast&lt;<span class="built_in">uint32</span>_t&gt;(Smi::ToInt(length));</span><br><span class="line">  } <span class="keyword">else</span> <span class="keyword">if</span> (object.IsJSArgumentsObject()) {</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  } <span class="keyword">else</span> {</span><br><span class="line">    *new_capacity = <span class="built_in">dictionary</span>.max_number_key() + <span class="number">1</span>;</span><br><span class="line">  }</span><br><span class="line">  *new_capacity = std::max(index + <span class="number">1</span>, *new_capacity);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">uint32</span>_t <span class="built_in">dictionary</span>_size = static_cast&lt;<span class="built_in">uint32</span>_t&gt;(<span class="built_in">dictionary</span>.Capacity()) *</span><br><span class="line">                             NumberDictionary::kEntrySize;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 看这里👇， 当慢数组转换成快数组能节省 不少于 50%&nbsp;的空间时，才会将其转换</span></span><br><span class="line">  <span class="comment">// Turn fast if the dictionary only saves 50% space.</span></span><br><span class="line">  <span class="keyword">return</span> <span class="number">2</span> * <span class="built_in">dictionary</span>_size &gt;= *new_capacity;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="2-、分析-1"><a href="#2-、分析-1" class="headerlink" title="(2)、分析"></a>(2)、分析</h3><p>元素能存放在快数组中并且长度不在smi之间（64位-2^31到2^32-1），并且当前慢数组空间相比快数组节省值小于等于50%，则转变成为快数组。</p>
+<h2 id="快慢转换总结"><a href="#快慢转换总结" class="headerlink" title="快慢转换总结"></a>快慢转换总结</h2><ul>
+<li><p>快数组就是以空间换时间的方式，申请了大块连续内存，提高了执行效率。</p>
+</li>
+<li><p>慢数组以时间换空间，不必申请连续的空间，节省了内存，但需要付出效率变差的代价。</p>
+</li>
+</ul>
+<h1 id="3、动态扩容与收缩"><a href="#3、动态扩容与收缩" class="headerlink" title="3、动态扩容与收缩"></a>3、动态扩容与收缩</h1><h2 id="3-1、扩容"><a href="#3-1、扩容" class="headerlink" title="3.1、扩容"></a>3.1、扩容</h2><p>看下源码👇</p>
+<ol>
+<li><p>path:v8/src/objects/js-array.h</p>
+<p> 空数组预分配的大小: 4</p>
+</li>
+</ol>
+<figure class="highlight arduino"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// path:v8/src/objects/js-array.h</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Dispatched behavior.</span></span><br><span class="line"><span class="built_in">DECL_PRINTER</span>(JSArray)</span><br><span class="line"><span class="built_in">DECL_VERIFIER</span>(JSArray)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Number of element slots to pre-allocate for an empty array.</span></span><br><span class="line"><span class="comment">// 空数组预分配的大小为4</span></span><br><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="type">int</span> kPreallocatedArrayElements = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="type">int</span> kLengthDescriptorIndex = <span class="number">0</span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>上面代码表明，当声明一个空数组时，已预分配好 4 个字节的存储空间。</p>
+<p>所以 [] 与 [1, 2, 3, 4] 占用一样多的内存。 前面说过，JSArray 继承自 JSObject，我们可以在 js-objects.h 中找到如下代码：</p>
+<ol start="2">
+<li><p>path:v8/src/objects/js-objects.h</p>
+<p> 扩容公式</p>
+</li>
+</ol>
+<figure class="highlight cpp"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// path:v8/src/objects/js-objects.h</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// line:551👇</span></span><br><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="type">uint32_t</span> kMinAddedElementsCapacity = <span class="number">16</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Computes the new capacity when expanding the elements of a JSObject.</span></span><br><span class="line"><span class="function"><span class="type">static</span> <span class="type">uint32_t</span> <span class="title">NewElementsCapacity</span><span class="params">(<span class="type">uint32_t</span> old_capacity)</span> </span>{</span><br><span class="line">  <span class="comment">// (old_capacity + 50%) + kMinAddedElementsCapacity</span></span><br><span class="line">  <span class="comment">// 扩容公式:原有内存容量（1.5倍）+ 16</span></span><br><span class="line">  <span class="keyword">return</span> old_capacity + (old_capacity &gt;&gt; <span class="number">1</span>) + kMinAddedElementsCapacity;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这是对 JSObject elements 扩容和对 JSArray 扩容的通用方法。扩容后容量的计算逻辑是：<strong>在原占用空间 old_capacity 的基础上增加一半（old_capacity &gt;&gt; 1 右移 1 位表示除 2，再相加得原空间 1.5 倍），再加上 16</strong>。</p>
+<p><strong>举例：</strong></p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</span><br><span class="line">arr.<span class="title function_">push</span>(<span class="number">5</span>);</span><br><span class="line">%<span class="title class_">DebugPrint</span>(arr);</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><p>arr.push 之前：<br><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318587716f2c2beb1ed15cf.png" alt="image.png"></p>
+</li>
+<li><p>arr.push 后：</p>
+</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318588716f2c2beb1ed28c0.png" alt="image.png"></p>
+<p><strong>具体分析如下：</strong><br>👇</p>
+<ol>
+<li><p>向数组 [1, 2, 3, 4] push 5 时，首先判断到当前容量已满，需要计算新容量。</p>
+</li>
+<li><p>old_capacity = 4，new_capacity = 4 + 4 &gt;&gt; 1 + 16 = 22，得出 [1, 2, 3, 4, 5] 的容量为 22 个字节，</p>
+</li>
+<li><p>V8 向操作系统申请一块连续大小为 22 字节的内存空间，随后将老数据一一 copy，再新将新增元素写入。</p>
+</li>
+</ol>
+<h2 id="3-2-缩容"><a href="#3-2-缩容" class="headerlink" title="3.2 缩容"></a>3.2 缩容</h2><p>紧接着，我们在&nbsp;<code>src/objects/elements.cc</code>&nbsp;中找到&nbsp;<code>SetLengthImpl</code>&nbsp;方法中的如下代码：</p>
+<figure class="highlight arcade"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// path:src/objects/elements.cc</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// line:750</span></span><br><span class="line"><span class="keyword">if</span> (<span class="number">2</span> * <span class="built_in">length</span> + JSObject::kMinAddedElementsCapacity &lt;= capacity) {</span><br><span class="line">  <span class="comment">// If more than half the elements won't be used, trim the array.</span></span><br><span class="line">  <span class="comment">// Do not trim from short arrays to prevent frequent trimming on</span></span><br><span class="line">  <span class="comment">// repeated pop operations.</span></span><br><span class="line">  <span class="comment">// Leave some space to allow for subsequent push operations.</span></span><br><span class="line">  int elements_to_trim = <span class="built_in">length</span> + <span class="number">1</span> == old_length</span><br><span class="line">                             ? (capacity - <span class="built_in">length</span>) / <span class="number">2</span></span><br><span class="line">                             : capacity - <span class="built_in">length</span>;</span><br><span class="line">  isolate-&gt;heap()-&gt;RightTrimFixedArray(*backing_store, elements_to_trim);</span><br><span class="line">  <span class="comment">// Fill the non-trimmed elements with holes.</span></span><br><span class="line">  BackingStore::cast(*backing_store)</span><br><span class="line">      .FillWithHoles(<span class="built_in">length</span>,</span><br><span class="line">                     <span class="attr">std</span>::<span class="built_in">min</span>(old_length, capacity - elements_to_trim));</span><br><span class="line">} <span class="keyword">else</span> {</span><br><span class="line">  <span class="comment">// Otherwise, fill the unused tail with holes.</span></span><br><span class="line">  BackingStore::cast(*backing_store).FillWithHoles(<span class="built_in">length</span>, old_length);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>当数组元素减少（如 pop）后，如果数组容量大于等于 length 的 2 倍，则进行容量调整，使用&nbsp;<code>RightTrimFixedArray</code>&nbsp;函数，计算出需要释放的空间大小，做好标记，等待 GC 回收；如果数组容量小于 length 的 2 倍，则用 holes 对象填充。</p>
+<h1 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h1><ol>
+<li><p>数组元素少的时候是线性结构存储（FixedArray）的，内存地址连续，查找速度快，可以动态扩缩容；</p>
+</li>
+<li><p>数组元素多的时候转化为慢数组，通过创建了一个字典来记录映射关系，内存不连续，通过大名鼎鼎的Object.defineProperty(object, key, descriptor)创建</p>
+</li>
+</ol>
+<p>js的数组看似不同，其实只是V8 在底层实现上做了一层封装，使用两种数据结构实现数组，并且通过时间和空间2个纬度的取舍，优化了数组的性能。</p>
+<p><a href="https://z3rog.tech/blog/2020/fast-properties.html">参考学习博客</a></p>
+<hr>
+<p>🎈🎈🎈</p>
+<p>🌹 关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得<strong>点赞关注收藏</strong>哟，回看不迷路 😉</p>
+<p>✨ 欢迎大家转发、评论交流</p>
+<p>🎁 蟹蟹😊</p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>V8</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客评论插件Beaudar安装使用</title>
+    <url>/posts/34114278.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="Beaudar"><a href="#Beaudar" class="headerlink" title="Beaudar"></a>Beaudar</h2><p><code>Hexo</code>主题选用的<a href="https://xaoxuu.com/wiki/stellar/"><code>Stellar</code></a></p>
+<p>基于 GitHub issue 的轻量评论插件，Utterances 的中文版本，官网在<a href="https://beaudar.lipk.org/">这里</a></p>
+<h2 id="Beaudar-是如何工作的？"><a href="#Beaudar-是如何工作的？" class="headerlink" title="Beaudar 是如何工作的？"></a>Beaudar 是如何工作的？</h2><p>Beaudar 加载时，将使用 GitHub issue 搜索 API 根据 url，“路径名”或“标题”查找与页面相关的 issue。如果找不到与页面匹配的 issue，即没有评论，当有人首次发表评论时，Beaudar-bot 会自动创建一个 issue。</p>
+<h2 id="配置使用"><a href="#配置使用" class="headerlink" title="配置使用"></a>配置使用</h2><ol>
+<li>准备</li>
+</ol>
+<p>Beaudar 的配置方法很简单，创建一个仓库<a href="https://github.com/all-smile/blog-comments"><code>blog-comments</code></a>，在仓库中创建一个域名白名单文件<code>beaudar.json</code>，然后在<a href="https://github.com/apps/beaudar">此处</a>授权安装即可。</p>
+<p><code>beaudar.json</code>文件</p>
+<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li><code>Hexo</code>配置</li>
+</ol>
+<p>在主题配置文件里<code>_config_[theme].yml</code>里面增加如下配置</p>
+<figure class="highlight yml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 评论 [beaudar](https://beaudar.lipk.org/) 插件</span></span><br><span class="line"><span class="attr">comments:</span></span><br><span class="line">  <span class="attr">service:</span> <span class="string">beaudar</span></span><br><span class="line">  <span class="attr">beaudar:</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">all-smile/blog-comments</span> <span class="comment"># 指向你自己的repo</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p>使用<code>GitHub</code>登录后评论</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b40c16f2c2beb16136d9.jpg"></p>
+<h2 id="问题处理"><a href="#问题处理" class="headerlink" title="问题处理"></a>问题处理</h2><ol>
+<li><code>blog-comments</code> 仓库默认分支为<code>main</code></li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b22716f2c2beb15ee173.jpg"></p>
+<p><strong>解决：</strong></p>
+<p>进入<code>blog-comments</code> 仓库，在 settings -&gt; branches 里面，修改 <code>Default branch</code> 为 <code>main</code></p>
+<ol start="2">
+<li><code>Hexo</code> 本地服务测试<code>Beaudar</code>，添加白名单配置</li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b2a816f2c2beb15f64b2.jpg"></p>
+<p><strong>解决：</strong></p>
+<p>修改<code>beaudar.json</code>文件</p>
+<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客园美化</title>
+    <url>/posts/2159164587.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>博客园允许用户设置多样化的主题。通过选择皮肤，然后开启JS脚本权限，在设置里面植入跟皮肤配套的<code>CSS</code>、<code>JS</code>，并且禁用默认的<code>CSS</code>，即可实现个性化的界面风格和交互行为。</p>
+</blockquote>
+<h2 id="SimpleMemory-皮肤"><a href="#SimpleMemory-皮肤" class="headerlink" title="SimpleMemory 皮肤"></a>SimpleMemory 皮肤</h2><p>文档参考<a href="https://bndong.github.io/Cnblogs-Theme-SimpleMemory/v2/#/">这里</a>，非常详细🌹</p>
+<ul>
+<li>效果预览：</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318481816f2c2beb1d87bad.png"></p>
+<h2 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h2><h3 id="1-选项"><a href="#1-选项" class="headerlink" title="1. 选项"></a>1. 选项</h3><p>勾选 “公告”</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318484616f2c2beb1d8ac38.jpg"></p>
+<h3 id="2-基本设置、代码高亮、开通JS权限"><a href="#2-基本设置、代码高亮、开通JS权限" class="headerlink" title="2. 基本设置、代码高亮、开通JS权限"></a>2. 基本设置、代码高亮、开通JS权限</h3><p>皮肤选择 <code>SimpleMemory</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318486316f2c2beb1d8c8b8.jpg"></p>
+<h3 id="3-页面定制CSS代码"><a href="#3-页面定制CSS代码" class="headerlink" title="3. 页面定制CSS代码"></a>3. 页面定制CSS代码</h3><p>这里我选择的是 Cnblogs-Theme-SimpleMemory <code>V2.1.0</code> 版本</p>
+<figure class="highlight css"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">@import</span> url(<span class="attribute">https</span>://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@<span class="number">2.1</span>.<span class="number">0</span>/dist/simpleMemory.css);</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>注意：</p>
+<ol>
+<li><p>页面定制CSS代码我使用的是外链导入形式（免费jsdelivr cdn加速，也可以自行选择其它方式托管）。</p>
+</li>
+<li><p>勾选“禁用模板默认CSS”。（使得外链css生效）</p>
+</li>
+</ol>
+</blockquote>
+<h3 id="4-博客侧边栏公告设置"><a href="#4-博客侧边栏公告设置" class="headerlink" title="4. 博客侧边栏公告设置"></a>4. 博客侧边栏公告设置</h3><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318487b16f2c2beb1d8e4d6.png"></p>
+<p>下面是我的配置（仅供参考）</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">cnblogsConfig</span> = {</span><br><span class="line">      <span class="comment">// iconfont（我个人的，可以自己建一个iconfont项目维护使用）</span></span><br><span class="line">      <span class="attr">fontIconExtend</span>: <span class="string">"//at.alicdn.com/t/c/font_3603036_keyavmcqbhn.css"</span>,</span><br><span class="line">      <span class="attr">info</span>: {</span><br><span class="line">        <span class="attr">name</span>: <span class="string">'甜点cc'</span>, <span class="comment">// 用户名</span></span><br><span class="line">        <span class="attr">startDate</span>: <span class="string">'2016-10-08'</span>, <span class="comment">// 入园时间，年-月-日。入园时间查看方法：鼠标停留园龄时间上，会显示入园时间</span></span><br><span class="line">        <span class="attr">avatar</span>: <span class="string">'https://pic.cnblogs.com/avatar/1037867/20220801164532.png'</span>, <span class="comment">// 用户头像</span></span><br><span class="line">        <span class="attr">blogIcon</span>: <span class="string">'https://pic.cnblogs.com/avatar/1037867/20220801164532.png'</span>, <span class="comment">// 网站图标 favicon.ico</span></span><br><span class="line">      },</span><br><span class="line">      <span class="attr">sidebar</span>: {</span><br><span class="line">        <span class="attr">infoBackground</span>: <span class="string">'https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/Machine_tool.jpg'</span>, <span class="comment">// 个人信息背景</span></span><br><span class="line">        <span class="attr">titleMsg</span>: <span class="string">'宝宝等你很久啦~🌹🌹'</span>, <span class="comment">// 侧边栏title信息</span></span><br><span class="line">        <span class="attr">navList</span>: [</span><br><span class="line">            [<span class="string">'友链'</span>, <span class="string">'https://www.cnblogs.com/all-smile/p/16612170.html'</span>, <span class="string">'icon-pengyoufill'</span>],</span><br><span class="line">            [<span class="string">'个人主页'</span>, <span class="string">'https://home.i-xiao.space/'</span>, <span class="string">'icon-zhuye'</span>],</span><br><span class="line">        ],</span><br><span class="line">      },</span><br><span class="line">      <span class="attr">banner</span>: {</span><br><span class="line">        <span class="attr">home</span>: {</span><br><span class="line">          <span class="comment">// 主页banner标语, 随机从数组中获取一条文字显示</span></span><br><span class="line">          <span class="attr">title</span>: [<span class="string">'每一个不曾起舞的日子，都是对生命的辜负。'</span>, <span class="string">'为者常成，行者常至。'</span>, <span class="string">'逝者如斯夫，不舍昼夜。'</span>, <span class="string">"相逢的还会再相逢。"</span>],</span><br><span class="line">          <span class="comment">// 主页banner图片</span></span><br><span class="line">          <span class="attr">background</span>: [</span><br><span class="line">              <span class="string">"https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/Machine_tool.jpg"</span>,</span><br><span class="line">              <span class="string">"https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/horse.jpg"</span>,</span><br><span class="line">              <span class="string">"https://cdn.jsdelivr.net/gh/all-smile/nav@master/static/images/background.jpg"</span>,</span><br><span class="line">              <span class="string">"https://raw.githubusercontent.com/all-smile/nav/master/static/images/sunset.jpg"</span>,</span><br><span class="line">              <span class="string">"https://raw.githubusercontent.com/all-smile/nav/master/static/images/sunset02.jpg"</span></span><br><span class="line">          ],</span><br><span class="line">        },</span><br><span class="line">      },</span><br><span class="line">      <span class="comment">// 失去焦点标签文字</span></span><br><span class="line">      <span class="attr">title</span>: {</span><br><span class="line">        <span class="attr">onblur</span>: <span class="string">'(oﾟvﾟ)ノ Hi'</span>,</span><br><span class="line">      },</span><br><span class="line">      <span class="comment">// 页面加载loading。</span></span><br><span class="line">      <span class="attr">loading</span>: {</span><br><span class="line">        <span class="attr">rebound</span>: {</span><br><span class="line">          <span class="attr">tension</span>: <span class="number">16</span>,</span><br><span class="line">        },</span><br><span class="line">        <span class="attr">spinner</span>: {</span><br><span class="line">          <span class="attr">id</span>: <span class="string">'spinner'</span>,</span><br><span class="line">          <span class="attr">radius</span>: <span class="number">90</span>,</span><br><span class="line">        }</span><br><span class="line">      },</span><br><span class="line">      <span class="comment">// 页脚模式</span></span><br><span class="line">      <span class="attr">footer</span>: {</span><br><span class="line">        <span class="attr">style</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="attr">text</span>: {</span><br><span class="line">          <span class="attr">left</span>: <span class="string">'蓄之既久，其发必速。'</span>,</span><br><span class="line">        },</span><br><span class="line">      },</span><br><span class="line">      <span class="comment">// 友情链接</span></span><br><span class="line">      <span class="attr">links</span>: {</span><br><span class="line">        <span class="comment">// 文章底部显示添加友链入口（博客园发送消息）</span></span><br><span class="line">        <span class="attr">footer</span>: [</span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">            格式：</span></span><br><span class="line"><span class="comment">            Key	Description</span></span><br><span class="line"><span class="comment">            name	昵称</span></span><br><span class="line"><span class="comment">            introduction	简介</span></span><br><span class="line"><span class="comment">            avatar	头像</span></span><br><span class="line"><span class="comment">            url	友链地址</span></span><br><span class="line"><span class="comment">            */</span></span><br><span class="line">            [<span class="string">"添加友链"</span>, <span class="string">'https://msg.cnblogs.com/send/甜点cc'</span>],</span><br><span class="line">        ],</span><br><span class="line">      },</span><br><span class="line">      <span class="comment">// 右下角菜单</span></span><br><span class="line">      <span class="attr">rtMenu</span>: {</span><br><span class="line">        <span class="attr">qrCode</span>: <span class="string">'https://xxx.jpg'</span>, <span class="comment">// 自己设置</span></span><br><span class="line">        <span class="attr">reward</span>: {</span><br><span class="line">          <span class="attr">wechatpay</span>: <span class="string">'https:xxx.jpg'</span> <span class="comment">// 自己设置</span></span><br><span class="line">        },</span><br><span class="line">      },</span><br><span class="line">      <span class="attr">animate</span>: {</span><br><span class="line">        <span class="comment">// 主页banner动效配置。</span></span><br><span class="line">        <span class="attr">homeBanner</span>: {</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">true</span>,</span><br><span class="line">          <span class="attr">options</span>: {</span><br><span class="line">            <span class="attr">radius</span>: <span class="number">15</span>,</span><br><span class="line">          }</span><br><span class="line">        },</span><br><span class="line">        <span class="comment">// 文章页标题动效配置。</span></span><br><span class="line">        <span class="attr">articleTitle</span>: {</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">true</span>,</span><br><span class="line">        },</span><br><span class="line">        <span class="comment">// 文章页banner动效配置</span></span><br><span class="line">        <span class="attr">articleBanner</span>: {</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">true</span>,</span><br><span class="line">        },</span><br><span class="line">        <span class="comment">// 背景动效。</span></span><br><span class="line">        <span class="attr">background</span>: {</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">false</span>,</span><br><span class="line">        },</span><br><span class="line">        <span class="comment">// 跟随鼠标动效。</span></span><br><span class="line">        <span class="attr">mouse</span>: {</span><br><span class="line">          <span class="attr">enable</span>: <span class="literal">false</span>,</span><br><span class="line">        },</span><br><span class="line">      },</span><br><span class="line">    };</span><br><span class="line">    <span class="comment">// 友链配置</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="property">cnblogsConfig</span>.<span class="property">links</span>.<span class="property">page</span> = [</span><br><span class="line">      {</span><br><span class="line">        <span class="attr">name</span>: <span class="string">'甜点cc'</span>, <span class="comment">// 昵称</span></span><br><span class="line">        <span class="attr">introduction</span>: <span class="string">'博客'</span>, <span class="comment">// 简介</span></span><br><span class="line">        <span class="attr">avatar</span>: <span class="string">'https://pic.cnblogs.com/avatar/1037867/20220801164532.png'</span>, <span class="comment">// 头像</span></span><br><span class="line">        <span class="attr">url</span>: <span class="string">'https://home.i-xiao.space/blog/'</span> <span class="comment">// 友链地址</span></span><br><span class="line">      },</span><br><span class="line">    ]</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@v2.1.0/dist/simpleMemory.js"</span> <span class="attr">defer</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>注意：</p>
+<ul>
+<li>上面配置中 加载的 js 脚本，要和 上一步的CSS外链同一个版本（这里是V2.1.0），否则可能会不生效或者出现别的问题</li>
+</ul>
+</blockquote>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><ol>
+<li><p>主题相关文件（css\js等）可以自己托管维护，可以自行扩展界面交互</p>
+</li>
+<li><p>图片等静态资源可以自行寻找免费图床。当然也可以自己放到<code>GitHub</code>上面托管，采用CDN访问（参考<a href="https://juejin.cn/post/7120973719346151431">这里</a>）</p>
+</li>
+<li><p>托管到博客园上</p>
+</li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631848cd16f2c2beb1d93e27.png"></p>
+<ol start="4">
+<li>图片等静态资源也可以自行搭建云盘使用😏</li>
+</ol>
+<p>👉 方式很多，顺手就行 👈</p>
+<p>我的博客园主页请看<a href="https://www.cnblogs.com/all-smile">这里</a>😊欢迎来访问呀🌹</p>
+<hr>
+<p>🎈🎈🎈</p>
+<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>前端</tag>
       </tags>
   </entry>
   <entry>
@@ -2018,6 +2018,77 @@
       </tags>
   </entry>
   <entry>
+    <title>记一个 &#39;奇葩&#39; 需求的实现</title>
+    <url>/posts/2156089668.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们这边没有专门的产品经理，<code>UI</code>对产品的设计基本具有决定权，说实话，是有那么一点可怖的（前后改了很多次，差一点就改回原版了，我自己都觉得不好意思了🤣）。个人感觉我们<code>UI</code>还是体验的少，缺乏对产品以及用户行为的认识。设计出来的东西看似很华丽，其实缺失很多场景下的分析，不切合实际，大多数人说的“用户体验”或许只是主观的、想当然的（我也一样😮）。</p>
+<p>自从接触互联网开始我就在有意的学习怎么做产品，期间还考虑过转产品，永远不要拿业余的跟专业的比，没什么可比性，不成熟。继续保持思考、学习。</p>
+<blockquote>
+<p>所用技术：<code>vue</code>、<code>vue-router</code>、<code>element-ui</code></p>
+</blockquote>
+<h2 id="需求："><a href="#需求：" class="headerlink" title="需求："></a>需求：</h2><blockquote>
+<p>导航菜单（<code>el-menu</code>组件）竖向展示的</p>
+</blockquote>
+<ol>
+<li><p>鼠标移入一级菜单展示下面的子菜单，移出则收起来（手风琴模式，正常状态下只保持一个菜单处于展开状态，手动鼠标悬浮展开的不算）</p>
+</li>
+<li><p>选中某个子菜单时高亮对应的一级菜单，并且当鼠标移出高亮的这个菜单模块时不折叠，但是可以点击一级菜单进行折叠（注意：跟第一条有区别）</p>
+</li>
+</ol>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
+<li><p><code>element-ui</code>的导航组件子菜单打开的触发方式可以通过 <code>menu-trigger</code> 参数控制，但是，只在菜单是水平展示（<code>horizontal</code>）的情况下生效。嘶~！我不禁暗想：垂直模式滑动展开真的会有系统这么做吗？（只能自己修改了）</p>
+</li>
+<li><p><code>unique-opened</code> 参数可以控制是否只保持一个子菜单展开，但是在没有子菜单的情况下失效（需要手动修改）</p>
+</li>
+</ol>
+<h2 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h2><p>导航菜单使用递归<code>el-submenu</code>组件实现</p>
+<ol>
+<li>鼠标滑动展开关闭需求：</li>
+</ol>
+<ul>
+<li><code>el-submenu</code> 组件编写鼠标移入移出事件（<code>mouseenter</code>、<code>mouseleave</code>），拿到<code>indexPath</code>，调用<code>open</code>和<code>close</code>方法打开或者折叠菜单（注意：没有子菜单的一级菜单鼠标移入移出不做处理）</li>
+</ul>
+<ol start="2">
+<li>只保持一个菜单出于展开状态</li>
+</ol>
+<ul>
+<li>先配置 <code>unique-opened</code> 参数为 <code>false</code> ，以保证 <code>openedMenus</code> 只有一个（ <code>openedMenus</code> 是<code>el-menu</code>内部维护的属性, 可以自行打印看一下）</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ebfb16f2c2beb1163942.jpg"></p>
+<blockquote>
+<p>一开始我想在子菜单展开折叠的回调事件（<code>open</code>、<code>close</code>）里写逻辑判断，但是不知道什么原因回调事件不触发（注意：<code>open方法</code>和<code>open事件</code>不一样，组件三大要素：<strong>属性、事件、方法</strong>），所以我就考虑在<code>select</code>回调事件里写逻辑了</p>
+</blockquote>
+<ul>
+<li>在菜单激活的<code>select</code>回调事件中，让上一个打开的菜单调用<code>close</code>方法关闭。（这里需要记录上次打开菜单的<code>index</code>，这里我使用<code>sessionStorage</code>记录）</li>
+</ul>
+<h2 id="代码展示"><a href="#代码展示" class="headerlink" title="代码展示"></a>代码展示</h2><p>只展示代码片段，仅供参考</p>
+<p><code>sessionStorage</code>使用自己封装的，之前文章有写过，感兴趣的可以看一下</p>
+<ul>
+<li><code>el-submenu</code> 组件</li>
+</ul>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">menuEnter</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// isNest 是否还有子菜单 true:没有子菜单 false:有子菜单</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; <span class="variable language_">this</span>.<span class="property">item</span>.<span class="property">alwaysShow</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleOpen'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="title function_">menuLeave</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 存在子菜单，并且不是打开状态的菜单，鼠标离开的时候需要合起来</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; !<span class="variable language_">this</span>.<span class="property">curMenuIsOpened</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleClose'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><code>el-menu</code> 组件</li>
+</ul>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 登录系统的时候，记录展开的菜单信息，</span></span><br><span class="line"><span class="comment">// 在 mounted 里面获取 openedMenus ，并记录信息</span></span><br><span class="line"><span class="title function_">mounted</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 获取当前展开的菜单 - array</span></span><br><span class="line">  <span class="comment">// 手风琴模式，只有一个展开菜单</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// openedMenus 是内部属性</span></span><br><span class="line">  <span class="keyword">const</span> {openedMenus = []} = <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (openedMenus &amp;&amp; openedMenus.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">    <span class="comment">// 获取展开菜单的 index</span></span><br><span class="line">    <span class="keyword">const</span> index = openedMenus[<span class="number">0</span>];</span><br><span class="line">    sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, index)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="attr">methods</span>: {</span><br><span class="line">  <span class="title function_">handleOpen</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 open 方法, 打开close,</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">open</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handleClose</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 close 方法, 关闭close</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handlerSelect</span>(<span class="params">index, indexPath</span>) {</span><br><span class="line">    <span class="comment">// 1. 获取上次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">const</span> _preActiveMenu = sessionStorage.<span class="title function_">get</span>(<span class="string">'preActiveMenu'</span>) || <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">if</span> (_preActiveMenu) {</span><br><span class="line">      <span class="comment">// 如果存在，则关闭该菜单，再打开新的</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(_preActiveMenu);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 记录这次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">if</span> (indexPath.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">      sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, indexPath[<span class="number">0</span>])</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="最终效果展示"><a href="#最终效果展示" class="headerlink" title="最终效果展示"></a>最终效果展示</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ec1816f2c2beb1164933.jpg"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>用了<code>UI</code>框架之后就不可避免的会跟产品设计风格向左，这就需要在框架基础之上进行修改。框架也是一个个组件组成的，抓住组件设计的三要素：属性、事件、方法，了解框架组件的工作原理，就可以轻松的进行修改啦🎉🎉</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+        <tag>element-ui</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>认识HTTP缓存</title>
     <url>/posts/2358217424.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -2125,133 +2196,6 @@
       </tags>
   </entry>
   <entry>
-    <title>记一个 &#39;奇葩&#39; 需求的实现</title>
-    <url>/posts/2156089668.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们这边没有专门的产品经理，<code>UI</code>对产品的设计基本具有决定权，说实话，是有那么一点可怖的（前后改了很多次，差一点就改回原版了，我自己都觉得不好意思了🤣）。个人感觉我们<code>UI</code>还是体验的少，缺乏对产品以及用户行为的认识。设计出来的东西看似很华丽，其实缺失很多场景下的分析，不切合实际，大多数人说的“用户体验”或许只是主观的、想当然的（我也一样😮）。</p>
-<p>自从接触互联网开始我就在有意的学习怎么做产品，期间还考虑过转产品，永远不要拿业余的跟专业的比，没什么可比性，不成熟。继续保持思考、学习。</p>
-<blockquote>
-<p>所用技术：<code>vue</code>、<code>vue-router</code>、<code>element-ui</code></p>
-</blockquote>
-<h2 id="需求："><a href="#需求：" class="headerlink" title="需求："></a>需求：</h2><blockquote>
-<p>导航菜单（<code>el-menu</code>组件）竖向展示的</p>
-</blockquote>
-<ol>
-<li><p>鼠标移入一级菜单展示下面的子菜单，移出则收起来（手风琴模式，正常状态下只保持一个菜单处于展开状态，手动鼠标悬浮展开的不算）</p>
-</li>
-<li><p>选中某个子菜单时高亮对应的一级菜单，并且当鼠标移出高亮的这个菜单模块时不折叠，但是可以点击一级菜单进行折叠（注意：跟第一条有区别）</p>
-</li>
-</ol>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
-<li><p><code>element-ui</code>的导航组件子菜单打开的触发方式可以通过 <code>menu-trigger</code> 参数控制，但是，只在菜单是水平展示（<code>horizontal</code>）的情况下生效。嘶~！我不禁暗想：垂直模式滑动展开真的会有系统这么做吗？（只能自己修改了）</p>
-</li>
-<li><p><code>unique-opened</code> 参数可以控制是否只保持一个子菜单展开，但是在没有子菜单的情况下失效（需要手动修改）</p>
-</li>
-</ol>
-<h2 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h2><p>导航菜单使用递归<code>el-submenu</code>组件实现</p>
-<ol>
-<li>鼠标滑动展开关闭需求：</li>
-</ol>
-<ul>
-<li><code>el-submenu</code> 组件编写鼠标移入移出事件（<code>mouseenter</code>、<code>mouseleave</code>），拿到<code>indexPath</code>，调用<code>open</code>和<code>close</code>方法打开或者折叠菜单（注意：没有子菜单的一级菜单鼠标移入移出不做处理）</li>
-</ul>
-<ol start="2">
-<li>只保持一个菜单出于展开状态</li>
-</ol>
-<ul>
-<li>先配置 <code>unique-opened</code> 参数为 <code>false</code> ，以保证 <code>openedMenus</code> 只有一个（ <code>openedMenus</code> 是<code>el-menu</code>内部维护的属性, 可以自行打印看一下）</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ebfb16f2c2beb1163942.jpg"></p>
-<blockquote>
-<p>一开始我想在子菜单展开折叠的回调事件（<code>open</code>、<code>close</code>）里写逻辑判断，但是不知道什么原因回调事件不触发（注意：<code>open方法</code>和<code>open事件</code>不一样，组件三大要素：<strong>属性、事件、方法</strong>），所以我就考虑在<code>select</code>回调事件里写逻辑了</p>
-</blockquote>
-<ul>
-<li>在菜单激活的<code>select</code>回调事件中，让上一个打开的菜单调用<code>close</code>方法关闭。（这里需要记录上次打开菜单的<code>index</code>，这里我使用<code>sessionStorage</code>记录）</li>
-</ul>
-<h2 id="代码展示"><a href="#代码展示" class="headerlink" title="代码展示"></a>代码展示</h2><p>只展示代码片段，仅供参考</p>
-<p><code>sessionStorage</code>使用自己封装的，之前文章有写过，感兴趣的可以看一下</p>
-<ul>
-<li><code>el-submenu</code> 组件</li>
-</ul>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">menuEnter</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// isNest 是否还有子菜单 true:没有子菜单 false:有子菜单</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; <span class="variable language_">this</span>.<span class="property">item</span>.<span class="property">alwaysShow</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleOpen'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="title function_">menuLeave</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 存在子菜单，并且不是打开状态的菜单，鼠标离开的时候需要合起来</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; !<span class="variable language_">this</span>.<span class="property">curMenuIsOpened</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleClose'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li><code>el-menu</code> 组件</li>
-</ul>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 登录系统的时候，记录展开的菜单信息，</span></span><br><span class="line"><span class="comment">// 在 mounted 里面获取 openedMenus ，并记录信息</span></span><br><span class="line"><span class="title function_">mounted</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 获取当前展开的菜单 - array</span></span><br><span class="line">  <span class="comment">// 手风琴模式，只有一个展开菜单</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// openedMenus 是内部属性</span></span><br><span class="line">  <span class="keyword">const</span> {openedMenus = []} = <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (openedMenus &amp;&amp; openedMenus.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">    <span class="comment">// 获取展开菜单的 index</span></span><br><span class="line">    <span class="keyword">const</span> index = openedMenus[<span class="number">0</span>];</span><br><span class="line">    sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, index)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="attr">methods</span>: {</span><br><span class="line">  <span class="title function_">handleOpen</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 open 方法, 打开close,</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">open</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handleClose</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 close 方法, 关闭close</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handlerSelect</span>(<span class="params">index, indexPath</span>) {</span><br><span class="line">    <span class="comment">// 1. 获取上次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">const</span> _preActiveMenu = sessionStorage.<span class="title function_">get</span>(<span class="string">'preActiveMenu'</span>) || <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">if</span> (_preActiveMenu) {</span><br><span class="line">      <span class="comment">// 如果存在，则关闭该菜单，再打开新的</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(_preActiveMenu);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 记录这次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">if</span> (indexPath.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">      sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, indexPath[<span class="number">0</span>])</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="最终效果展示"><a href="#最终效果展示" class="headerlink" title="最终效果展示"></a>最终效果展示</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ec1816f2c2beb1164933.jpg"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>用了<code>UI</code>框架之后就不可避免的会跟产品设计风格向左，这就需要在框架基础之上进行修改。框架也是一个个组件组成的，抓住组件设计的三要素：属性、事件、方法，了解框架组件的工作原理，就可以轻松的进行修改啦🎉🎉</p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>vue</tag>
-        <tag>element-ui</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>部署Netlify站点博客</title>
-    <url>/posts/818123119.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="Netlify站点部署静态博客"><a href="#Netlify站点部署静态博客" class="headerlink" title="Netlify站点部署静态博客"></a>Netlify站点部署静态博客</h2><p>今天尝试把站点部署在<a href="https://app.netlify.com/">Netlify</a>上，因为部署在GitHub Pages上，国内访问速度太慢了，所以就尝试一下别的站点，部署成功之后发现速度还是不太行，后边继续找找原因</p>
-<p>Netlify 部署的地址在<a href="https://m.i-xiao.space/">这里</a></p>
-<p>下图展示<code>GitHub Pages</code>站点和<code>Netlify</code>站点的全国网速对比（数据来源<a href="https://tool.chinaz.com/">站长工具</a>）</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63218cd316f2c2beb1b2619a.jpg"></p>
-<p>总的来说，效果比<code>GitHub Pages</code>站点速度要快</p>
-<h2 id="问题记录"><a href="#问题记录" class="headerlink" title="问题记录"></a>问题记录</h2><p>部署的时候，有几个问题，记录一下：</p>
-<ol>
-<li>部署时告警信息直接就阻塞了部署进程，导致部署失败，猜测是一些类似代码扫描工具使然，然后我只得先把造成告警的 <code>hexo-lazyload</code> 插件给剔除掉，然后就可以了（还不了解<code>Netlify</code>的工作原理，只是临时处理方案）</li>
-</ol>
-<p>以下是<code>Netlify</code>部署的部分日志信息</p>
-<figure class="highlight apache"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">23</span> PM: $ hexo generate</span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">23</span> PM: INFO  Validating config</span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">24</span> PM: INFO  Start processing</span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">24</span> PM: INFO  neat the css: /opt/build/repo/source/_data/styles.styl<span class="meta"> [ 19.27% saved]</span></span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">24</span> PM: INFO  neat the css: /opt/build/repo/source/_data/variables.styl<span class="meta"> [ NaN% saved]</span></span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">34</span> PM: WARN  request remote img fail https://pic.imgdb.cn/item/<span class="number">63184</span>ff316f2c2beb1e26ab9.png</span><br><span class="line"><span class="attribute">2</span>:<span class="number">48</span>:<span class="number">42</span> PM: Build exceeded maximum allowed runtime</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li><p><code>Netlify</code>部署成功之后，由于资源路径不正确，导致<code>NexT</code>主题不生效。我原先设置了路径 <code>root: /blog/</code> ，然后就重新添加了一条记录，解析了一个新的二级域名用来访问博客，同时，这也给我带来了另外两个问题，如下：</p>
-</li>
-<li><p>原先站点 <code>https://home.i-xiao.space/blog/</code> 上的不蒜子数据丢失了，重新初始化数据了。</p>
-</li>
-</ol>
-<blockquote>
-<p><a href="http://ibruce.info/2015/04/04/busuanzi/">“不蒜子”</a>允许初始化首次数据，但是需要注册登录，目前“不蒜子”暂停了<a href="http://busuanzi.ibruce.info/">注册</a>功能，那就先这样吧</p>
-</blockquote>
-<ol start="4">
-<li>原<code>GitHub Pages</code>站点不能正常访问。 给<code>blog</code>仓库设置 <code>GitHub Pages</code>，绑定心得个人二级域名，在发布分支<code>gh-pages</code>下面生成一个CNAME文件，用来存放个人二级域名。存在的问题是：<code>hexo deploy</code> 是把<code>master</code>分支下生成的<code>public</code>目录下的静态文件推送并覆盖<code>gh-pages</code>分支下的文件，因为每次生成的<code>public</code>目录下没有<code>CNAME</code>文件，所以<code>CNAME</code>文件就被冲掉了，造成的结果就是，每次自动部署都会把之前绑定的个人域名“解绑”，导致网站不能正常访问</li>
-</ol>
-<ul>
-<li>解决4：</li>
-</ul>
-<p>方法一： 本地<code>master</code>分支，在<code>source</code>目录下新建一个<code>CNAME</code>文件，存放要绑定的域名，等到执行<code>hexo g</code>的时候，会把<code>source</code>目录下的文件“揍”到<code>public</code>下，然后推送到<code>gh-pages</code>分支上</p>
-<p><code>xxx.xml</code> 网站地图也可以用同样的方式放置到<code>source</code>目录</p>
-<p>方法二： 理论上也可以在<code>generateAfter</code>事件中使用<code>node</code>处理</p>
-<h2 id="CNAME配置及工作原理探究"><a href="#CNAME配置及工作原理探究" class="headerlink" title="CNAME配置及工作原理探究"></a><code>CNAME</code>配置及工作原理探究</h2><p>配置主要有两步：</p>
-<ol>
-<li><p>个人域名增加 CNAME（<code>可以理解为IP昵称(域名的)的昵称(CNAME)</code>） 记录，<strong>记录值</strong>指向托管网站分配的域名（不带 http(s)://），添加完成之后，记得<strong>开启解析</strong>（需要等待一会，可以通过 ping 二级域名的方式检查是否解析成功）</p>
-</li>
-<li><p>托管网站上配置第一步添加的二级域名，起到<strong>桥接</strong>的作用</p>
-</li>
-</ol>
-<p>整体实现的效果就是“互联互通”。类似与路由器转发的工作，每个路由器上只存储相邻相近的路由器的ip，整合起来就是一张大网，任何已知网路请求都会经由路由器转发到达目的主机</p>
-<p>当访问配置的二级域名时，由于我在域名管理平台上配置的 <code>DNS</code>解析到 托管网站的 域名，由该域名指向<code>IP</code></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63227f8a16f2c2beb180ae64.jpg"></p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>博客</category>
-      </categories>
-      <tags>
-        <tag>站点建设</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>设计模式浅析</title>
     <url>/posts/3163405351.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -2321,6 +2265,62 @@
       </categories>
       <tags>
         <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>部署Netlify站点博客</title>
+    <url>/posts/818123119.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="Netlify站点部署静态博客"><a href="#Netlify站点部署静态博客" class="headerlink" title="Netlify站点部署静态博客"></a>Netlify站点部署静态博客</h2><p>今天尝试把站点部署在<a href="https://app.netlify.com/">Netlify</a>上，因为部署在GitHub Pages上，国内访问速度太慢了，所以就尝试一下别的站点，部署成功之后发现速度还是不太行，后边继续找找原因</p>
+<p>Netlify 部署的地址在<a href="https://m.i-xiao.space/">这里</a></p>
+<p>下图展示<code>GitHub Pages</code>站点和<code>Netlify</code>站点的全国网速对比（数据来源<a href="https://tool.chinaz.com/">站长工具</a>）</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63218cd316f2c2beb1b2619a.jpg"></p>
+<p>总的来说，效果比<code>GitHub Pages</code>站点速度要快</p>
+<h2 id="问题记录"><a href="#问题记录" class="headerlink" title="问题记录"></a>问题记录</h2><p>部署的时候，有几个问题，记录一下：</p>
+<ol>
+<li>部署时告警信息直接就阻塞了部署进程，导致部署失败，猜测是一些类似代码扫描工具使然，然后我只得先把造成告警的 <code>hexo-lazyload</code> 插件给剔除掉，然后就可以了（还不了解<code>Netlify</code>的工作原理，只是临时处理方案）</li>
+</ol>
+<p>以下是<code>Netlify</code>部署的部分日志信息</p>
+<figure class="highlight apache"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">23</span> PM: $ hexo generate</span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">23</span> PM: INFO  Validating config</span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">24</span> PM: INFO  Start processing</span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">24</span> PM: INFO  neat the css: /opt/build/repo/source/_data/styles.styl<span class="meta"> [ 19.27% saved]</span></span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">24</span> PM: INFO  neat the css: /opt/build/repo/source/_data/variables.styl<span class="meta"> [ NaN% saved]</span></span><br><span class="line"><span class="attribute">2</span>:<span class="number">13</span>:<span class="number">34</span> PM: WARN  request remote img fail https://pic.imgdb.cn/item/<span class="number">63184</span>ff316f2c2beb1e26ab9.png</span><br><span class="line"><span class="attribute">2</span>:<span class="number">48</span>:<span class="number">42</span> PM: Build exceeded maximum allowed runtime</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li><p><code>Netlify</code>部署成功之后，由于资源路径不正确，导致<code>NexT</code>主题不生效。我原先设置了路径 <code>root: /blog/</code> ，然后就重新添加了一条记录，解析了一个新的二级域名用来访问博客，同时，这也给我带来了另外两个问题，如下：</p>
+</li>
+<li><p>原先站点 <code>https://home.i-xiao.space/blog/</code> 上的不蒜子数据丢失了，重新初始化数据了。</p>
+</li>
+</ol>
+<blockquote>
+<p><a href="http://ibruce.info/2015/04/04/busuanzi/">“不蒜子”</a>允许初始化首次数据，但是需要注册登录，目前“不蒜子”暂停了<a href="http://busuanzi.ibruce.info/">注册</a>功能，那就先这样吧</p>
+</blockquote>
+<ol start="4">
+<li>原<code>GitHub Pages</code>站点不能正常访问。 给<code>blog</code>仓库设置 <code>GitHub Pages</code>，绑定心得个人二级域名，在发布分支<code>gh-pages</code>下面生成一个CNAME文件，用来存放个人二级域名。存在的问题是：<code>hexo deploy</code> 是把<code>master</code>分支下生成的<code>public</code>目录下的静态文件推送并覆盖<code>gh-pages</code>分支下的文件，因为每次生成的<code>public</code>目录下没有<code>CNAME</code>文件，所以<code>CNAME</code>文件就被冲掉了，造成的结果就是，每次自动部署都会把之前绑定的个人域名“解绑”，导致网站不能正常访问</li>
+</ol>
+<ul>
+<li>解决4：</li>
+</ul>
+<p>方法一： 本地<code>master</code>分支，在<code>source</code>目录下新建一个<code>CNAME</code>文件，存放要绑定的域名，等到执行<code>hexo g</code>的时候，会把<code>source</code>目录下的文件“揍”到<code>public</code>下，然后推送到<code>gh-pages</code>分支上</p>
+<p><code>xxx.xml</code> 网站地图也可以用同样的方式放置到<code>source</code>目录</p>
+<p>方法二： 理论上也可以在<code>generateAfter</code>事件中使用<code>node</code>处理</p>
+<h2 id="CNAME配置及工作原理探究"><a href="#CNAME配置及工作原理探究" class="headerlink" title="CNAME配置及工作原理探究"></a><code>CNAME</code>配置及工作原理探究</h2><p>配置主要有两步：</p>
+<ol>
+<li><p>个人域名增加 CNAME（<code>可以理解为IP昵称(域名的)的昵称(CNAME)</code>） 记录，<strong>记录值</strong>指向托管网站分配的域名（不带 http(s)://），添加完成之后，记得<strong>开启解析</strong>（需要等待一会，可以通过 ping 二级域名的方式检查是否解析成功）</p>
+</li>
+<li><p>托管网站上配置第一步添加的二级域名，起到<strong>桥接</strong>的作用</p>
+</li>
+</ol>
+<p>整体实现的效果就是“互联互通”。类似与路由器转发的工作，每个路由器上只存储相邻相近的路由器的ip，整合起来就是一张大网，任何已知网路请求都会经由路由器转发到达目的主机</p>
+<p>当访问配置的二级域名时，由于我在域名管理平台上配置的 <code>DNS</code>解析到 托管网站的 域名，由该域名指向<code>IP</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63227f8a16f2c2beb180ae64.jpg"></p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>博客</category>
+      </categories>
+      <tags>
+        <tag>站点建设</tag>
       </tags>
   </entry>
 </search>
