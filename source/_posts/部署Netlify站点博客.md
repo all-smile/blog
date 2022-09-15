@@ -28,7 +28,7 @@ Netlify 部署的地址在[这里](https://m.i-xiao.space/)
 
 1. 部署时告警信息直接就阻塞了部署进程，导致部署失败，猜测是一些类似代码扫描工具使然，然后我只得先把造成告警的 `hexo-lazyload` 插件给剔除掉，然后就可以了（还不了解`Netlify`的工作原理，只是临时处理方案）
 
-一下是`Netlify`部署的部分日志信息
+以下是`Netlify`部署的部分日志信息
 ```
 2:13:23 PM: $ hexo generate
 2:13:23 PM: INFO  Validating config
@@ -53,7 +53,7 @@ Netlify 部署的地址在[这里](https://m.i-xiao.space/)
 
 `xxx.xml` 网站地图也可以用同样的方式放置到`source`目录
 
-方法二： 理论上也可以在`generateAfter`事件中处理
+方法二： 理论上也可以在`generateAfter`事件中使用`node`处理
 
 
 ---
