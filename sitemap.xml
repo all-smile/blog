@@ -20,7 +20,7 @@
   </url>
   
   <url>
-    <loc>https://blog.i-xiao.space/notes/index.html</loc>
+    <loc>https://blog.i-xiao.space/schedule/index.html</loc>
     
     <lastmod>2022-09-15</lastmod>
     
@@ -29,7 +29,7 @@
   </url>
   
   <url>
-    <loc>https://blog.i-xiao.space/schedule/index.html</loc>
+    <loc>https://blog.i-xiao.space/notes/index.html</loc>
     
     <lastmod>2022-09-15</lastmod>
     
@@ -92,7 +92,7 @@
   </url>
   
   <url>
-    <loc>https://blog.i-xiao.space/posts/1604561083.html</loc>
+    <loc>https://blog.i-xiao.space/posts/899051033.html</loc>
     
     <lastmod>2022-09-15</lastmod>
     
@@ -101,7 +101,7 @@
   </url>
   
   <url>
-    <loc>https://blog.i-xiao.space/posts/899051033.html</loc>
+    <loc>https://blog.i-xiao.space/posts/1604561083.html</loc>
     
     <lastmod>2022-09-15</lastmod>
     
@@ -200,7 +200,7 @@
   </url>
   
   <url>
-    <loc>https://blog.i-xiao.space/posts/184663689.html</loc>
+    <loc>https://blog.i-xiao.space/posts/9575625.html</loc>
     
     <lastmod>2022-09-15</lastmod>
     
@@ -209,7 +209,7 @@
   </url>
   
   <url>
-    <loc>https://blog.i-xiao.space/posts/9575625.html</loc>
+    <loc>https://blog.i-xiao.space/posts/184663689.html</loc>
     
     <lastmod>2022-09-15</lastmod>
     
@@ -263,6 +263,15 @@
   </url>
   
   <url>
+    <loc>https://blog.i-xiao.space/404/index.html</loc>
+    
+    <lastmod>2022-09-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.i-xiao.space/about/index.html</loc>
     
     <lastmod>2022-09-15</lastmod>
@@ -282,15 +291,6 @@
   
   <url>
     <loc>https://blog.i-xiao.space/friends/index.html</loc>
-    
-    <lastmod>2022-09-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.i-xiao.space/404/index.html</loc>
     
     <lastmod>2022-09-15</lastmod>
     
@@ -385,14 +385,14 @@
   </url>
   
   <url>
-    <loc>https://blog.i-xiao.space/tags/SSH/</loc>
+    <loc>https://blog.i-xiao.space/tags/Chrome%E6%8F%92%E4%BB%B6/</loc>
     <lastmod>2022-09-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.i-xiao.space/tags/Chrome%E6%8F%92%E4%BB%B6/</loc>
+    <loc>https://blog.i-xiao.space/tags/SSH/</loc>
     <lastmod>2022-09-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -428,6 +428,13 @@
   
   <url>
     <loc>https://blog.i-xiao.space/tags/%E7%AB%99%E7%82%B9%E5%BB%BA%E8%AE%BE/</loc>
+    <lastmod>2022-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.i-xiao.space/tags/SEO/</loc>
     <lastmod>2022-09-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
