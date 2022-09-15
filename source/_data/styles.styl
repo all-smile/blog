@@ -1,3 +1,19 @@
+// 禁止选中文本
+body {
+  // -moz-user-select: none; /* Firefox私有属性 */
+  // -webkit-user-select: none; /* WebKit内核私有属性 */
+  // -ms-user-select: none; /* IE私有属性(IE10及以后) */
+  // -khtml-user-select: none; /* KHTML内核私有属性 */
+  // -o-user-select: none; /* Opera私有属性 */
+  // user-select: none; /* CSS3属性 */
+}
+
+// 选中文本样式
+::selection {
+  color: #fff !important;
+  background: #318EFD !important;
+}
+
 // github banner
 .github-corner svg {
   color: #fff;
@@ -135,7 +151,7 @@ a:hover {
   box-shadow: inset 0 0 6px rgba(180, 180, 180, 0.3);
   background-color: #ddd;
 }
-
+// ------------ 修改浏览器默认滚动条样式 end ------------
 // 分页样式
 .pagination .page-number.current {
   background: #fff;
