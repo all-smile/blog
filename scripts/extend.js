@@ -6,6 +6,13 @@ hexo.extend.injector.register(
   'default'
 );
 
+// baidu seo
+hexo.extend.injector.register(
+  'head_begin',
+  '<meta name="baidu-site-verification" content="code-xyJs6My2et" />',
+  'default'
+);
+
 // google-site-verification
 // hexo.extend.injector.register(
 //   'head_begin',
