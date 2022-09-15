@@ -103,7 +103,7 @@ menu:
   # archives: /archives/ || fa fa-archive
   # schedule: /schedule/ || fa fa-calendar # 日程表
   # sitemap: /BingSiteAuth.xml/ || fa fa-sitemap
-  公益: /404/ || fa fa-heartbeat # 公益 commonweal 404
+  # 公益: /404/ || fa fa-heartbeat # 公益 commonweal 404
   留言: /message/ || fa fa-comment
   札记: /notes/ || fa fa-book
   # 电影: /movie/ || fa fa-video-camera
