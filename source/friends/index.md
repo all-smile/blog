@@ -30,7 +30,7 @@ comments: true
 }
 
 .card {
-    flex: 0 0 33.33%;
+    flex: 0 0 50%;
     overflow: hidden;
     padding: 1em;
     box-sizing: border-box;
@@ -39,7 +39,35 @@ comments: true
     transition-duration: 0.15s;
     margin-bottom: 1rem;
     display: flex;
+    position: relative;
 }
+
+.card::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 4px;
+  opacity: 0.8;
+}
+.card:nth-child(1n)::after {
+  background: linear-gradient(136.4deg, #ff7a6d, #ff4d3e);
+}
+.card:nth-child(2n)::after {
+  background: linear-gradient(136.4deg, #5ddbe0, #00bcda);
+}
+.card:nth-child(3n)::after {
+  background: linear-gradient(136.4deg, #3bdc48, #5cd12e);
+}
+.card:nth-child(4n)::after {
+  background: linear-gradient(136.4deg, #febe2b, #ffa300);
+}
+.card:nth-child(5n)::after {
+  background: linear-gradient(136.4deg, #9475f7, #7753e9);
+}
+
 
 .card:hover {
     transform: scale(1.1);
@@ -90,6 +118,9 @@ comments: true
     margin-top: 2px;
 }
 </style>
+
+---
+
 <div class="post-body">
    <div id="links">
       <div class="links-content">
@@ -126,3 +157,29 @@ comments: true
       </div>
    </div>
 </div>
+
+---
+
+**交换友链：**
+
+请添加本站友链后在下方留言申请（也可在下方公众号上发消息给我），期望您的站点:
+
+- 独立博客
+- 以原创内容为主，原创内容10篇以上
+- 处于活跃状态，有一定的更新频率
+- 未添加友链或申请未通过，评论留言会被隐藏。
+
+**友链格式示例:**
+
+名称: 甜点cc
+链接: https://blog.i-xiao.space/
+头像: https://blog.i-xiao.space/images/base/profile.jpg
+简介: 一片自留地，欢快地生长着🌱🍅🥦
+
+---
+
+<center>欢迎微信扫码关注 "看见另一种可能"！</center>
+
+<img src="/images/contact/qrcode_wechat.jpg" alt="wechat：看见另一种可能" />
+
+<!-- ![wechat：看见另一种可能](https://raw.githubusercontent.com/all-smile/nav/v1.0.6/static/images/qrcode_wechat.jpg) -->

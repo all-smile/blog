@@ -125,7 +125,7 @@ menu:
 # Enable / Disable menu icons / item badges.
 menu_settings:
   icons: true
-  badges: false
+  badges: true
 
 
 # ---------------------------------------------------------------
@@ -652,12 +652,12 @@ changyan:
 
 # LiveRe comments system
 # You can get your uid from https://livere.com/insight/myCode (General web site)
-livere_uid: # MTAyMC81NzE5Ni8zMzY2MA== # <your_uid>
+livere_uid: MTAyMC81NzE5Ni8zMzY2MA== # <your_uid>
 
 # Gitalk
 # For more information: https://gitalk.github.io
 gitalk:
-  enable: false
+  enable: true
   github_id: all-smile # GitHub repo owner
   repo: blog-comments # Repository name to store issues
   client_id: c0e4644dc71118574f29 # 2517cadef198080ada74 # GitHub Application Client ID
@@ -756,11 +756,11 @@ matomo:
 # You can visit https://www.leancloud.cn to get AppID and AppKey.
 # npm install hexo-leancloud-counter-security
 leancloud_visitors:
-  enable: true
+  enable: false
   app_id: 6o213f6ejhGlUWPb9i4CSz0E-MdYXbMMI # <your app id>
   app_key: oO7PKRrUJLDX0g8FQ5aSLUJR # <your app key>
   # Required for apps from CN region
-  server_url: # <your server url>
+  server_url: https://blog.i-xiao.space # <your server url>
   # Dependencies: https://github.com/theme-next/hexo-leancloud-counter-security
   # If you don't care about security in leancloud counter and just want to use it directly
   # (without hexo-leancloud-counter-security plugin), set `security` to `false`.
