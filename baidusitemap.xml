@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://blog.i-xiao.space/posts/3616955208.html</loc>
-    <lastmod>2022-09-16</lastmod>
-  </url>
-  <url>
     <loc>https://blog.i-xiao.space/posts/3740751445.html</loc>
     <lastmod>2022-09-16</lastmod>
   </url>
@@ -77,11 +73,11 @@
     <lastmod>2022-09-16</lastmod>
   </url>
   <url>
-    <loc>https://blog.i-xiao.space/posts/2165908694.html</loc>
+    <loc>https://blog.i-xiao.space/posts/1327063303.html</loc>
     <lastmod>2022-09-16</lastmod>
   </url>
   <url>
-    <loc>https://blog.i-xiao.space/posts/1327063303.html</loc>
+    <loc>https://blog.i-xiao.space/posts/2165908694.html</loc>
     <lastmod>2022-09-16</lastmod>
   </url>
   <url>
@@ -90,6 +86,10 @@
   </url>
   <url>
     <loc>https://blog.i-xiao.space/posts/899051033.html</loc>
+    <lastmod>2022-09-16</lastmod>
+  </url>
+  <url>
+    <loc>https://blog.i-xiao.space/posts/3616955208.html</loc>
     <lastmod>2022-09-16</lastmod>
   </url>
 </urlset> 
