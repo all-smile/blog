@@ -620,8 +620,8 @@ comments:
     gitalk:
       text: gitalk # 描述
       order: -2
-    valine:
-      text: valine # 描述
+    changyan:
+      text: changyan # 描述
       order: -3
 
 # Disqus
@@ -646,9 +646,9 @@ disqusjs:
 # Changyan
 # For more information: https://changyan.kuaizhan.com
 changyan:
-  enable: false
-  appid:
-  appkey:
+  enable: true
+  appid: cywhm2DQY
+  appkey: 00d235a4137669da05eda5c49e64b7cb
 
 # LiveRe comments system
 # You can get your uid from https://livere.com/insight/myCode (General web site)
