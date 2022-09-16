@@ -95,6 +95,7 @@ open_graph:
 # Key is the name of menu item. If the translation for this item is available, the translated text will be loaded, otherwise the Key name will be used. Key is case-sensitive.
 # Value before `||` delimiter is the target link, value after `||` delimiter is the name of Font Awesome icon.
 # External url should start with http:// or https://
+# icon: https://fontawesome.com/icons
 menu:
   home: / || fa fa-home
   about: /about/ || fa fa-user
@@ -106,6 +107,7 @@ menu:
   # 公益: /404/ || fa fa-heartbeat # 公益 commonweal 404
   留言: /message/ || fa fa-comment
   札记: /notes/ || fa fa-book
+  友链: /friends/ || fa fa-link
   # 电影: /movie/ || fa fa-video-camera
 
   # 动态子菜单
@@ -425,7 +427,7 @@ reading_progress:
 
 # Bookmark Support
 bookmark:
-  enable: true
+  enable: false
   # Customize the color of the bookmark.
   color: "#222"
   # If auto, save the reading progress when closing the page or clicking the bookmark-icon.
@@ -650,12 +652,12 @@ changyan:
 
 # LiveRe comments system
 # You can get your uid from https://livere.com/insight/myCode (General web site)
-livere_uid: MTAyMC81NzE5Ni8zMzY2MA== # <your_uid>
+livere_uid: # MTAyMC81NzE5Ni8zMzY2MA== # <your_uid>
 
 # Gitalk
 # For more information: https://gitalk.github.io
 gitalk:
-  enable: true
+  enable: false
   github_id: all-smile # GitHub repo owner
   repo: blog-comments # Repository name to store issues
   client_id: c0e4644dc71118574f29 # 2517cadef198080ada74 # GitHub Application Client ID
@@ -685,12 +687,12 @@ isso: # <data_isso>
 
 valine:
   enable: true # 设置为true，默认为false
-  appid: 6o213f6ejhGlUWPb9i4CSz0E-MdYXbMMI # 将应用key的App ID设置在这里
-  appkey: oO7PKRrUJLDX0g8FQ5aSLUJR # 将应用key的App Key设置在这里
+  v_appId: 6o213f6ejhGlUWPb9i4CSz0E-MdYXbMMI # 将应用key的App ID设置在这里
+  v_appKey: oO7PKRrUJLDX0g8FQ5aSLUJR # 将应用key的App Key设置在这里
   notify: false # 邮箱通知 , https://github.com/xCss/Valine/wiki，默认为false
   verify: false # 验证码 默认为false
   placeholder: Just go go ^_^ # 初始化评论显示，根据自己修改，这里默认，
-  avatar: monsterid # 头像风格，默认为mm，可进入网址：https://valine.js.org/visitor.html查看头像设置，这里有许多头像风格，进行设置
+  avatar: monsterid # 头像风格，默认为mm ''/mm/identicon/monsterid/wavatar/retro/hide，可进入网址：https://valine.js.org/visitor.html查看头像设置，这里有许多头像风格，进行设置
   guest_info: nick,mail,link # 自定义评论标题
   pageSize: 10 # 分页大小，10页就自动分页
   visitor: true # 是否允许游客评论 ，进入官网查看设置：https://valine.js.org/visitor.html
