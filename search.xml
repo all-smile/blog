@@ -1876,9 +1876,13 @@
     <title>最近接触的东西</title>
     <url>/posts/2564859285.html</url>
     <content><![CDATA[<html><head></head><body><p>我的博客最开始采用的是<code>Hexo</code>+<code>hexo-theme-next</code>搭建的，使用<code>GitHub Pages</code>托管并进行自动化部署，写文发布的流程非常简单方便，云端写作发布也轻而易举。</p>
-<h2 id="装备"><a href="#装备" class="headerlink" title="装备"></a>装备</h2><p>本来事情到这里就应该结束了，但是，我又进行了下面的一些尝试</p>
-<ol>
-<li>美化博客</li>
+<p>本来事情到这里就应该结束了，但是，我又进行了下面的一些尝试</p>
+<h2 id="装备"><a href="#装备" class="headerlink" title="装备"></a>装备</h2><ol>
+<li>美化博客<ul>
+<li><code>NexT</code>主题允许通过<code>custom_file_path</code>设置外挂文件进行修改</li>
+<li>自定义界面修改</li>
+</ul>
+</li>
 <li>图片加载优化<ul>
 <li><code>lazyload</code></li>
 </ul>
@@ -1920,7 +1924,7 @@
 <li>评论插件：隐私、可管理、可迁移，较低的侵入性，不需要魔改主题文件，不然主题升级会带来很多麻烦</li>
 <li>搜索引擎优化：基本都是同一个路子，添加验证、网站收录url等，效果还不是很明显，需要进一步研究</li>
 <li>友链页面：本着最少改动、不影响主题升级，自己动手开发</li>
-<li>托管部署：有很多平台可供部署网站，集成云数据库、<code>Serverless</code>等功能，没有云服务器同样可以部署网站😃</li>
+<li>托管部署：有很多平台可供部署网站，集成云数据库、<code>Serverless</code>等功能，部署成功之后生成一个平台自动分配的域名，也可以绑定个人域名。没有云服务器同样可以部署网站😃</li>
 </ol>
 <hr>
 <p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
@@ -1929,8 +1933,11 @@
 <p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
 </body></html>]]></content>
       <categories>
-        <category>IT</category>
+        <category>Hexo</category>
       </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
   </entry>
   <entry>
     <title>认识Chrome扩展插件</title>
