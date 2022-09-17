@@ -50,7 +50,7 @@ darkmode: false
 # ---------------------------------------------------------------
 
 favicon:
-  small: /images/base/favicon.ico
+  small: /images/base/favicon.ico # /images/logo.jpg
   medium: /images/base/favicon.ico
   apple_touch_icon: /images/base/favicon.ico
   safari_pinned_tab: /images/base/favicon.ico
