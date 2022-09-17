@@ -23,23 +23,71 @@ comments: true
 }
 
 .link-navigation {
-    display: flex;
-    justify-content: flex-start;
-    flex-flow: row wrap;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: repeat(2,50%);
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    margin: 5px;
+    position: relative;
+}
+
+@media only screen and (max-width: 800px) {
+  .link-navigation {
+      grid-template-columns: repeat(1,100%);
+  }
 }
 
 .card {
-    flex: 0 0 50%;
-    overflow: hidden;
-    padding: 1em;
-    box-sizing: border-box;
-    font-size: 1rem;
-    border-radius: 4px;
-    transition-duration: 0.15s;
-    margin-bottom: 1rem;
-    display: flex;
+    width: 350px;
+    box-shadow: 0 4px 11px 0 rgb(37 44 97 / 10%), 0 1px 3px 0 rgb(93 100 148 / 13%);
     position: relative;
+    padding: 0 6px;
+    max-width: 100%;
+    height: 70px;
+    align-items: center;
+    display: flex;
+    border-radius: 6px;
+    background-color: #fff;
+    margin: 10px 5px;
+    color: #6b7280;
+    cursor: pointer;
+    justify-self: center;
+}
+.card:nth-child(3n+0) .links-icon {
+    background-color: #34d399;
+}
+.card:nth-child(3n+1) .links-icon {
+    background-color: #a78bfa;
+}
+.card:nth-child(3n+2) .links-icon {
+    background-color: #f87171;
+}
+.links-icon {
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: -8px;
+    margin-top: -7px;
+    align-items: center;
+    display: flex;
+    border-radius: 6px;
+    --transform-rotate: 45deg;
+    transform: rotate(45deg);
+    --tw-shadow: 0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);
+    box-shadow: 0 0 transparent,0 0 transparent,var(--tw-shadow);
+}
+.links-icon a {
+    --transform-rotate: -45deg;
+    transform: rotate(-45deg);
+}
+.links-icon a i.fa {
+    color: #fff;
+    position: relative;
+    top: 1px;
+    left: 3px;
+    font-size: 12px;
 }
 
 .card::after {
@@ -70,8 +118,7 @@ comments: true
 
 
 .card:hover {
-    transform: scale(1.1);
-    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.12), 0 0 6px 0 rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 11px 0 rgb(37 44 97 / 17%), 0 1px 3px 0 rgb(93 100 148 / 20%);
 }
 
 .card a {
@@ -79,29 +126,34 @@ comments: true
 }
 
 .card .ava {
-    width: 3rem!important;
-    height: 3rem!important;
-    margin: 0!important;
-    margin-right: 1em!important;
-    border-radius: 4px;
+    display: inline-block;
+    width: 60px !important;
+    height: 60px !important;
+    max-width: unset !important;
+    border-radius: 6px;
+    display: block;
+    vertical-align: middle;
+    margin-bottom: 0 !important;
+    margin-left: 5px !important;
 }
 
 .card .card-header {
+    margin-left: 10px;
+    width: calc(100% - 80px);
     font-style: italic;
     overflow: hidden;
-    width: 100%;
     display: flex;
     flex-direction: column;
-    margin-left: 3px;
 }
 
 .card .card-header a {
     font-style: normal;
-    color: #2bbc8a;
+    color: #777aaf;
     font-weight: bold;
     text-decoration: none;
     height: 20px;
     line-height: 20px;
+    font-size: 16px;
 }
 
 .card .card-header a:hover {
@@ -110,9 +162,9 @@ comments: true
 }
 
 .card .card-header .info {
-    font-style: normal;
-    color: #a3a3a3;
-    font-size: 14px;
+    font-style: oblique;
+    color: #6b7280;
+    font-size: 12px;
     min-width: 0;
     line-height: 22px;
     margin-top: 2px;
@@ -128,29 +180,49 @@ comments: true
             <div class="card">
                <img class="ava" src="https://m.i-xiao.space/images/base/profile.jpg" />
                <div class="card-header">
-                  <a class="ellipsis" title="甜点cc’s blog" href="https://blog.i-xiao.space/">甜点cc’s blog</a>
-                  <div class="info clamp2" title="这是一个分享IT技术的小站。GitHub Pages站点">这是一个分享IT技术的小站。GitHub Pages站点</div>
+                  <a class="ellipsis" title="甜点cc’s blog" href="https://blog.i-xiao.space/" target="_blank">甜点cc’s blog</a>
+                  <div class="info ellipsis" title="这是一个分享IT技术的小站。GitHub Pages站点">这是一个分享IT技术的小站。GitHub Pages站点</div>
+               </div>
+               <div class="links-icon">
+                  <a href="https://blog.i-xiao.space/" target="_blank" title="访问链接">
+                  <i class="fa fa-paper-plane"></i>
+                  </a>
                </div>
             </div>
             <div class="card">
-               <img class="ava" src="https://m.i-xiao.space/images/base/profile.jpg" />
+               <img class="ava" src="https://m.i-xiao.space/images/base/grow.jpg" />
                <div class="card-header">
-                  <a class="ellipsis" title="xiaojt’s blog" href="https://m.i-xiao.space/">xiaojt's Blog</a>
-                  <div class="info clamp2" title="Netlify站点">Netlify站点</div>
+                  <a class="ellipsis" title="xiaojt’s blog" href="https://m.i-xiao.space/" target="_blank">xiaojt's Blog</a>
+                  <div class="info ellipsis" title="Netlify站点">Netlify站点</div>
+               </div>
+               <div class="links-icon">
+                  <a href="https://blog.i-xiao.space/" target="_blank" title="访问链接">
+                  <i class="fa fa-heart"></i>
+                  </a>
                </div>
             </div>
             <div class="card">
-               <img class="ava" src="https://m.i-xiao.space/images/base/profile.jpg" />
+               <img class="ava" src="https://m.i-xiao.space/images/base/lion.png" />
                <div class="card-header">
-                  <a class="ellipsis" title="xiaojt’s Garden" href="https://m.i-xiao.space/">xiaojt’s Garden</a>
-                  <div class="info clamp2" title="Netlify站点">Netlify站点</div>
+                  <a class="ellipsis" title="xiaojt’s Garden" href="https://m.i-xiao.space/" target="_blank">xiaojt’s Garden</a>
+                  <div class="info ellipsis" title="Netlify站点">Netlify站点</div>
+               </div>
+               <div class="links-icon">
+                  <a href="https://blog.i-xiao.space/" target="_blank" title="访问链接">
+                  <i class="fa fa-paper-plane"></i>
+                  </a>
                </div>
             </div>
             <div class="card">
-               <img class="ava" src="https://m.i-xiao.space/images/base/profile.jpg" />
+               <img class="ava" src="https://m.i-xiao.space/images/logo.jpg" />
                <div class="card-header">
-                  <a class="ellipsis" title="xiaojt’s Garden" href="https://m.i-xiao.space/">xiaojt's Garden</a>
-                  <div class="info clamp2" title="一片自留地，欢快地生长着🌱🍅🥦">一片自留地，欢快地生长着🌱🍅🥦</div>
+                  <a class="ellipsis" title="xiaojt’s Garden" href="https://m.i-xiao.space/" target="_blank">xiaojt's Garden</a>
+                  <div class="info ellipsis" title="一片自留地，欢快地生长着🌱🍅🥦">一片自留地，欢快地生长着🌱🍅🥦</div>
+               </div>
+               <div class="links-icon">
+                  <a href="https://blog.i-xiao.space/" target="_blank" title="访问链接">
+                  <i class="fa fa-heart"></i>
+                  </a>
                </div>
             </div>
          </div>
@@ -173,7 +245,7 @@ comments: true
 
 名称: 甜点cc
 链接: https://blog.i-xiao.space/
-头像: https://blog.i-xiao.space/images/base/profile.jpg
+头像: https://blog.i-xiao.space/images/logo.jpg
 简介: 一片自留地，欢快地生长着🌱🍅🥦
 
 ---
