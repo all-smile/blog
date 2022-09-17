@@ -604,7 +604,7 @@ comments:
   style: tabs
   # Choose a comment system to be displayed by default.
   # Available values: disqus | disqusjs | changyan | livere | gitalk | utterances
-  active: livere
+  active: changyan
   # Setting `true` means remembering the comment system selected by the visitor.
   storage: true
   # Lazyload all comment systems.
@@ -614,14 +614,14 @@ comments:
     #disqus:
     #  text: Load Disqus
     #  order: -1
-    livere:
-      text: 来必力 # 描述
-      order: -1
+    # livere:
+    #   text: 来必力 # 描述
+    #   order: -1
     gitalk:
       text: gitalk # 描述
       order: -2
     changyan:
-      text: changyan # 描述
+      text: 畅言 # 描述
       order: -3
 
 # Disqus
@@ -652,7 +652,7 @@ changyan:
 
 # LiveRe comments system
 # You can get your uid from https://livere.com/insight/myCode (General web site)
-livere_uid: MTAyMC81NzE5Ni8zMzY2MA== # <your_uid>
+livere_uid: # MTAyMC81NzE5Ni8zMzY2MA== # <your_uid>
 
 # Gitalk
 # For more information: https://gitalk.github.io
