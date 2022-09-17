@@ -4,7 +4,7 @@ date: 2022-09-16 11:34:27
 comments: true
 ---
 <style>
-  .ellipsis {
+.ellipsis {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -128,29 +128,29 @@ comments: true
             <div class="card">
                <img class="ava" src="https://m.i-xiao.space/images/base/profile.jpg" />
                <div class="card-header">
-                     <a href="https://blog.i-xiao.space/">甜点cc’s blog</a>
+                  <a class="ellipsis" title="甜点cc’s blog" href="https://blog.i-xiao.space/">甜点cc’s blog</a>
                   <div class="info clamp2" title="这是一个分享IT技术的小站。GitHub Pages站点">这是一个分享IT技术的小站。GitHub Pages站点</div>
                </div>
             </div>
             <div class="card">
                <img class="ava" src="https://m.i-xiao.space/images/base/profile.jpg" />
                <div class="card-header">
-                     <a href="https://m.i-xiao.space/">xiaojt's Blog</a>
+                  <a class="ellipsis" title="xiaojt’s blog" href="https://m.i-xiao.space/">xiaojt's Blog</a>
                   <div class="info clamp2" title="Netlify站点">Netlify站点</div>
                </div>
             </div>
             <div class="card">
                <img class="ava" src="https://m.i-xiao.space/images/base/profile.jpg" />
                <div class="card-header">
-                     <a href="https://m.i-xiao.space/">xiaojt's Blog</a>
+                  <a class="ellipsis" title="xiaojt’s Garden" href="https://m.i-xiao.space/">xiaojt’s Garden</a>
                   <div class="info clamp2" title="Netlify站点">Netlify站点</div>
                </div>
             </div>
             <div class="card">
                <img class="ava" src="https://m.i-xiao.space/images/base/profile.jpg" />
                <div class="card-header">
-                     <a href="https://m.i-xiao.space/">xiaojt's Blog</a>
-                  <div class="info clamp2" title="Netlify站点">Netlify站点</div>
+                  <a class="ellipsis" title="xiaojt’s Garden" href="https://m.i-xiao.space/">xiaojt's Garden</a>
+                  <div class="info clamp2" title="一片自留地，欢快地生长着🌱🍅🥦">一片自留地，欢快地生长着🌱🍅🥦</div>
                </div>
             </div>
          </div>
