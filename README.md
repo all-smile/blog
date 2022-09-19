@@ -1,4 +1,13 @@
 ![pages workflow](https://github.com/all-smile/blog/actions/workflows/pages.yml/badge.svg)
+
+预览地址: [XiaoJt's Garden](https://blog.i-xiao.space/)
+备用地址: [XiaoJt's Garden](https://m.i-xiao.space/)
+
+<center>欢迎微信扫码关注 "看见另一种可能"！</center>
+
+<center><img src="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.6/static/images/qrcode_wechat.jpg" alt="wechat：看见另一种可能" /></center>
+
+---
 # 1、整体流程概览（手动部署下）
 1. 搭建hexo环境（一系列软件安装，配置）
 2. hexo new post "文章名称"
