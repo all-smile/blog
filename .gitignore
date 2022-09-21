@@ -7,3 +7,5 @@ public/
 .deploy*/
 _multiconfig.yml
 themes/tenacity
+themes/next
+source/lib/bookmark

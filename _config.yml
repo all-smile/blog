@@ -3,12 +3,12 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 甜点cc
-subtitle: '看见另一种可能'
-description: '甜点cc'
-keywords: '前端,JavaScript,Vue,React,Golang,Nginx,DevOps'
-author: 甜点cc
-avatar: https://pic.imgdb.cn/item/6315700316f2c2beb119d392.jpg
+title: XiaoJt
+subtitle: 看见另一种可能
+description: XiaoJt's Garden
+keywords: 甜点cc,前端,JavaScript,Vue,React,Golang,Nginx,DevOps
+author: XiaoJt
+avatar: https://pic.imgdb.cn/item/6315700316f2c2beb119d392.jpg # cat
 # https://raw.githubusercontent.com/all-smile/nav/master/static/images/cattle.jpg
 # 多语言
 language:
@@ -19,8 +19,10 @@ timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://all-smile.github.io/blog
-root: /blog/
+# url: https://all-smile.github.io/blog
+# root: /blog/
+url: https://blog.i-xiao.space
+root: /
 
 permalink: posts/:abbrlink.html # 添加了 .html 的后缀， 利于seo
 
@@ -63,10 +65,10 @@ future: true
 highlight:
   enable: true
   line_number: true
-  auto_detect: false
+  auto_detect: true
   tab_replace: ''
   wrap: true
-  hljs: false
+  hljs: true
 prismjs:
   enable: false
   preprocess: true
@@ -123,7 +125,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: tenacity
+theme: next # tenacity
 # landscape stellar tenacity Yelee Bcxm Amazing hexo-theme-cola Async
 
 # Deployment
@@ -157,39 +159,50 @@ symbols_count_time:
   # 站点底端是否显示站点总字数
   total_symbols: true
   # 站点底端是否显示总阅读时间
-  total_time: false
+  total_time: true
   # 是否移除代码块
   exclude_codeblock: false
   # separated_meta: true
   # item_text_post: true
   # item_text_total: false
   # exclude_codeblock: true
-  # awl: 2
-  # wpm: 300
+  awl: 4
+  wpm: 275 # 每分钟平均字数
 
 
 # Lazyload
-## Depends on hexo-lazyload-image
+## Depends on hexo-lazyload hexo-lazyload-image
+## npm install hexo-lazyload -S
+## q: generateThumb fail xxx
 lazyload:
   enable: true
-  onlypost: false
+  onlypost: true
   # 图片尚未加载完时，显示指定图片。目录地址为博客根目录下的 source/
   # 变量引用 ${root}
-  loadingImg: /blog/images/base/gloading.gif
+  loadingImg: /images/base/loading03.svg # loading02.gif /blog/images/base/gloading.gif
 
-# 站内搜索
+# 站内搜索 - 同时设置 _config_next.yml local_search
 search:
   path: search.xml
   field: post
+  content: true
   format: html
-  limit: 10000
 
-# npm install hexo-generator-sitemap --save
+# chrome: npm install hexo-generator-sitemap --save
+# baidu： npm install hexo-generator-baidu-sitemap --save
+# public文件夹下自动生成sitemap.xml和baidusitemap.xml分别用于Google和百度
 # 是一个生成网站 sitemap 工具，你可以主动将生成的 sitemap.xml 提交给搜索引擎，
+# bing seo : BingSiteAuth.xml
 # 这样搜索引擎就可以更好的抓取你的博文
 sitemap:
   path: sitemap.xml
   rel: false
+  tags: false # 不需要生成分类和标签的地图,反而降低权重
+  categories: false
+baidusitemap:
+  path: baidusitemap.xml
+  tags: false
+  categories: false
 
 
 # `Follow me on GitHub` banner in the top-right corner.
@@ -197,3 +210,35 @@ github_banner:
   enable: false
   permalink: https://github.com/all-smile
   title: Follow me on GitHub
+
+# 博文压缩
+# npm install hexo-neat --save
+neat_enable: true
+# 压缩html
+neat_html:
+  enable: true
+  exclude:
+# 压缩css
+neat_css:
+  enable: true
+  exclude:
+    - '**/*.min.css'
+# 压缩js
+neat_js:
+  enable: true
+  mangle: true
+  output:
+  compress:
+  exclude:
+    - '**/*.min.js'
+    - '**/jquery.fancybox.pack.js'
+    - '**/index.js'
+    - '**/clicklove.js'
+    - '**/firework.js'
+# npm install hexo-leancloud-counter-security
+leancloud_counter_security:
+  enable_sync: true
+  app_id: 6o213f6ejhGlUWPb9i4CSz0E-MdYXbMMI
+  app_key: oO7PKRrUJLDX0g8FQ5aSLUJR
+  username: # <your username> # Will be asked while deploying if is left blank
+  password: # <your password> # Recommmended to be left blank. Will be asked while deploying if is left blank

@@ -69,9 +69,7 @@ halt                # 关机，相当于 shutdown -h now
 
 ```
 
-![](https://files.mdnice.com/user/34064/aff0bdac-3d98-4b92-bb66-31b64553af07.png)
-
-![图片测试](https://gitee.com/hey-u/nav/raw/master/static/images/Golden_Leaf.jpg)
+![](https://pic.imgdb.cn/item/6318559c16f2c2beb1e9ba0a.png)
 
 
 # 4、文件属性
@@ -96,7 +94,7 @@ halt                # 关机，相当于 shutdown -h now
 
 - 3、6、9：可执行
 
-![](https://files.mdnice.com/user/34064/add9ba6d-077c-418b-8cf1-07bd8718b247.png)
+![](https://pic.imgdb.cn/item/6318556c16f2c2beb1e97901.png)
 
 ## 4.1、更改文件权限
 ```bash
@@ -131,7 +129,7 @@ ln 01 02  # 给01文件创建一个硬链接02，01和02指向同一个文件，
 ln -s 01 03
 ```
 
-![](https://files.mdnice.com/user/34064/a522099f-11fd-419d-9e45-b934fca5f2fd.png)
+![](https://pic.imgdb.cn/item/631854f516f2c2beb1e8e786.png)
 
 
 # 6、账号管理
@@ -240,7 +238,7 @@ passwd -d xiaotest  # -d  删除密码，给用户输入空口令，没有密码
 passwd -u xiaotest
 ```
 
-![](https://files.mdnice.com/user/34064/61f7e942-9401-4aa7-a001-81b97b19a115.png)
+![](https://pic.imgdb.cn/item/6318550b16f2c2beb1e9059c.png)
 
 # 7、用户组管理
 
@@ -367,10 +365,10 @@ du -h --max-depth=1
 
 ```
 
-![](https://files.mdnice.com/user/34064/ceab08f4-9ec2-4cf8-b3c7-55f8b8e59491.png)
+![](https://pic.imgdb.cn/item/6318551816f2c2beb1e916e3.png)
 
 
-![](https://files.mdnice.com/user/34064/38149daa-3e4b-460d-b8df-75b08375bd23.png)
+![](https://pic.imgdb.cn/item/6318552816f2c2beb1e92b24.png)
 
 ## 8.1、释放空间
 
@@ -450,11 +448,11 @@ pstree -pu
 
 ```
 
-![](https://files.mdnice.com/user/34064/915527df-3b7d-45df-95ab-440ed0444969.png)
+![](https://pic.imgdb.cn/item/6318553416f2c2beb1e938f0.png)
 
 ## 9.4、top命令
 
-![](https://files.mdnice.com/user/34064/b211a66e-8f66-47f7-9281-1bc7f6356a79.png)
+![](https://pic.imgdb.cn/item/6318554716f2c2beb1e94e0b.png)
 
 ## 9.5、结束进程
 

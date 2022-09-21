@@ -1,0 +1,224 @@
+// 禁止选中文本
+body {
+  // -moz-user-select: none; /* Firefox私有属性 */
+  // -webkit-user-select: none; /* WebKit内核私有属性 */
+  // -ms-user-select: none; /* IE私有属性(IE10及以后) */
+  // -khtml-user-select: none; /* KHTML内核私有属性 */
+  // -o-user-select: none; /* Opera私有属性 */
+  // user-select: none; /* CSS3属性 */
+}
+
+// 选中文本样式
+::selection {
+  color: #fff !important;
+  background: #318EFD !important;
+}
+
+// github banner
+.github-corner svg {
+  color: #fff;
+  fill: var(--theme-color);
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 5;
+}
+
+.github-corner svg:hover {
+  fill: #4186F5;
+}
+
+// open chat btn
+.gitter-open-chat-button {
+  padding: 10px;
+  // background: #A63271;
+}
+
+a:hover {
+  color: #40A5F5;
+  border-bottom-color: #40A5F5;
+}
+
+// footer 茶杯
+.fa-coffee {
+  color: #54BDDD;
+}
+
+// footer 心
+.fa-heart {
+  color: red;
+}
+
+// footer 统计
+.fa-chart-line {
+  color: #757BF2;
+}
+
+// sidebar home
+.fa-home {
+  color: #ED5564;
+}
+
+// sidebar 电影
+.fa-video-camera {
+  color: #FFAA44;
+}
+
+// sidebar 札记
+.fa-book {
+  color: red;
+}
+
+// sidebar search
+.fa-search {
+  color: #AAAAF8;
+}
+
+// 友链
+.fa-link {
+  color: #f07b4a;
+}
+
+// sidebar 公益
+.fa-heartbeat {
+  color: #0396FF;
+}
+
+// sidebar 留言
+.fa-comment {
+  color: #A871FF;
+}
+
+// sidebar 站点地图
+.fa-sitemap {
+  color: #22B4FF;
+}
+
+// posts 创建日期
+.fa-calendar {
+  color: #FF5F5F;
+}
+
+// posts 修改日期
+.fa-calendar-check {
+  color: #30C694;
+}
+
+// posts 分类
+.fa-folder {
+  color: #8C7BFD;
+}
+
+// posts 字数
+.fa-file-word {
+  color: #007EE6;
+}
+
+// posts 阅读时长
+.fa-clock {
+  color: #FF7744;
+}
+
+// footer 访客
+.fa-user {
+  color: #5F87E3;
+}
+
+// footer 阅读量
+.fa-eye {
+  color: #FFB5EC;
+}
+
+// 返回顶部
+.back-to-top {
+  background: #EEF6FF;
+  padding: 6px;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px #ccc;
+  color: #000;
+}
+
+// ------------ 修改浏览器默认滚动条样式 start ------------
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+}
+
+::-webkit-scrollbar { // e-ui弹出框
+  width: 5px;
+  height: 10px;
+  background-color: #fff;
+}
+
+::-webkit-scrollbar-thumb { // e-ui弹出框
+  border-radius: 10px;
+  box-shadow: inset 0 0 6px rgba(180, 180, 180, 0.3);
+  background-color: #ddd;
+}
+
+// ------------ 修改浏览器默认滚动条样式 end ------------
+// 分页样式
+.pagination .page-number.current {
+  background: #fff;
+  color: #4760f0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.14);
+  border-radius: 6px;
+}
+
+.pagination .next, .pagination .page-number, .pagination .prev {
+  border-top: 0;
+  border-bottom: 0;
+  cursor: pointer;
+}
+
+.pagination .page-number:hover {
+  background: #fff;
+  color: #4760f0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.14);
+  border-radius: 6px;
+}
+
+// code 标签样式
+code {
+  background: #eae6f1;
+  color: #6f42c1;
+}
+
+// 畅言标志隐藏
+.section-service-w {
+  display: none !important;
+  font-size: 0 !important;
+}
+
+// -------畅言输入框背景图 start------
+.textarea-bf {
+  height: 170px !important;
+  background: url('/images/base/wind_girl.webp') no-repeat center right !important;
+}
+
+.post-wrap-border-l {
+  height: 195px !important;
+  background: unset !important;
+  border: 1px solid #4398ED !important;
+  border-right: 0 !important;
+}
+
+.post-wrap-border-r {
+  height: 195px !important;
+  background: unset !important;
+  border: 1px solid #4398ED !important;
+  border-left: 0 !important;
+}
+
+.post-wrap-main {
+  // margin: 0px !important;
+  height: 196px !important;
+}
+
+// -------畅言输入框背景图 end------
+
+// 文章摘要
+.posts-expand .post-meta-container .post-description {
+  font-size: 1.2em;
+}

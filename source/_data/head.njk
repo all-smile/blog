@@ -1,0 +1,86 @@
+{# 看板娘 waifu2x是使用深度卷积神经网络的图片超解析系统 二次元图片 #}
+{# <script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script> #}
+{# 自定义操作 #}
+<script>
+;
+(function () {
+  handleAddListener('load', getTiming)
+  function handleAddListener(type, fn) {
+    if (window.addEventListener) {
+      window.addEventListener(type, fn)
+    } else {
+      window.attachEvent('on' + type, fn)
+    }
+  }
+  function getTiming() {
+    try {
+      console.clear(); // 清除 log
+      console.log("%c 甜点cc：相逢的还会再相逢", "color: #A871FF;font-size: 20px;font-weight: bold")
+      // const time = performance.timing;
+      const time = window.performance && window.performance.timing;
+      let timingObj = {};
+      // const loadTime = (time.loadEventEnd - time.loadEventStart) / 1000; console.log('time===', time, loadTime); if
+      // (loadTime < 0) {
+      //     setTimeout(function() {
+      //         getTiming();
+      //     }, 200);
+      //     return;
+      // }
+      timingObj['重定向时间'] = (time.redirectEnd - time.redirectStart) / 1000;
+      timingObj['DNS解析时间'] = (time.domainLookupEnd - time.domainLookupStart) / 1000;
+      timingObj['TCP完成握手时间'] = (time.connectEnd - time.connectStart) / 1000;
+      timingObj['HTTP请求响应完成时间'] = (time.responseEnd - time.requestStart) / 1000;
+      timingObj['DOM开始加载前所花费时间'] = (time.responseEnd - time.navigationStart) / 1000;
+      timingObj['DOM加载完成时间'] = (time.domComplete - time.domLoading) / 1000;
+      timingObj['首屏到达时间'] = (new Date().getTime() - time.navigationStart) / 1000;
+      timingObj['DOM结构解析完成时间'] = (time.domInteractive - time.domLoading) / 1000;
+      timingObj['脚本加载时间'] = (time.domContentLoadedEventEnd - time.domContentLoadedEventStart) / 1000;
+      // timingObj['onload事件时间'] = (time.loadEventEnd - time.loadEventStart) / 1000;
+      timingObj['页面完全加载时间'] = (
+        timingObj['重定向时间'] + timingObj['DNS解析时间'] + timingObj['TCP完成握手时间'] + timingObj['HTTP请求响应完成时间'] + timingObj['DOM结构解析完成时间'] + timingObj['DOM加载完成时间']
+      );
+      // for (item in timingObj) { console.log(item + ":" + timingObj[item] + '秒(s)'); }
+      console.log(timingObj)
+    } catch (err) {
+      console.log(err)
+      console.log(timingObj)
+      console.log(performance.timing);
+    }
+  }
+})();
+
+// 崩溃欺骗
+const OriginTitle = document.title;
+let titleTime;
+document.addEventListener('visibilitychange', function () {
+  if (document.hidden) { // $('[rel="icon"]').attr('href', "/images/base/crashed.png");
+    document.title = '゜zｚＺ页面崩溃啦 ~';
+    clearTimeout(titleTime);
+  } else { // $('[rel="icon"]').attr('href', "/images/base/favicon.ico"); https://pic.imgdb.cn/item/631869a616f2c2beb101201c.jpg
+    document.title = '♪(´▽｀)噫又好了~' + OriginTitle;
+    titleTime = setTimeout(function () {
+      document.title = OriginTitle;
+    }, 2000);
+  }
+});
+
+// 修改复制文字
+document.addEventListener("copy", function (evt) {
+  const clipboard_data = evt.clipboardData || window.clipboardData;
+  if (! clipboard_data) {
+    return;
+  }
+  const selectionData = window.getSelection()
+  const text = selectionData.toString();
+  const {
+    baseURI = ''
+  } = selectionData.baseNode
+  if (text) {
+    // const {origin = 'https://blog.i-xiao.space'} =location
+    evt.preventDefault(); // 敲黑板
+    clipboard_data.setData(
+    "text/plain", text + "\n\n转载请注明出处\n本文作者： 甜点cc（https://blog.i-xiao.space）\n本文链接： " + baseURI + "\n");
+  }
+})
+
+</script>

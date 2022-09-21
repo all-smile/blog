@@ -210,7 +210,7 @@ docker inspect 容器ID | grep IPAddress
 
 如下图👇
 
-![](https://files.mdnice.com/user/34064/322be90a-063f-429b-9241-0293a832757f.png)
+![](https://pic.imgdb.cn/item/6311936716f2c2beb1dc0720.png)
 
 ## 5、容器通信原理
 
@@ -222,11 +222,11 @@ docker inspect 容器ID | grep IPAddress
 
 - 删除容器之后，虚拟网卡就自动消失了。（**虚拟网卡传递效率高！**）
 
-![](https://files.mdnice.com/user/34064/08caee17-aad2-473f-bd89-adafd9a08caf.png)
+![](https://pic.imgdb.cn/item/63184efd16f2c2beb1e0c421.png)
 
 启动容器不设置网络，容器ip由docker0自动分配情况下，容器间的通信，要经过`evth-pair`技术实现，**并不是直连的**。(跟计算机网络通信类似，分层模型，TCP/IP协议数据报封装解封装)
 
-![](https://files.mdnice.com/user/34064/05840b3b-e40f-4b39-9a78-78c43838f9dc.png)
+![](https://pic.imgdb.cn/item/63184f0f16f2c2beb1e0dbff.png)
 
 ### 5.1、结论
 
@@ -234,7 +234,7 @@ docker inspect 容器ID | grep IPAddress
 
 2. 所有的容器启动时，如果不指定网络的情况下，都是docker0路由的。65535
 
-![](https://files.mdnice.com/user/34064/348baac0-815d-4df3-b9b8-fe9dd07c8bfb.png)
+![](https://pic.imgdb.cn/item/63184f2116f2c2beb1e0f432.png)
 
 ## 最后
 
