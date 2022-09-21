@@ -1,4 +1,5 @@
 ![pages workflow](https://github.com/all-smile/blog/actions/workflows/pages.yml/badge.svg)
+[![Join the chat at https://gitter.im/allblog/community](https://badges.gitter.im/allblog/community.svg)](https://gitter.im/allblog/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 预览地址: [XiaoJt's Garden](https://blog.i-xiao.space/)
 备用地址: [XiaoJt's Garden](https://m.i-xiao.space/)
