@@ -84,6 +84,8 @@ hexo g -d             # 生成页面并部署
 hexo s                # 本地预览
 hexo clean            # 清除缓存文件 (db.json) 和已生成的静态文件 (public)。在某些情况（尤其是更换主题后），如果发现您对站点的更改无论如何也不生效，您可能需要运行该命令。
 hexo help             # 帮助
+hexo --debug          # 调试模式
+hexo --draft          # 显示 source/_drafts 文件夹中的草稿文章
 ```
 
 # 5、安装主题 `NexT`
