@@ -203,7 +203,7 @@ const renderDom = {
 
 ### 4、页面组件调用
 
-```
+```js
 <template>
   <div class="customer">
     <table-list v-loading="p_loading" :tableData="p_listdata" :fieldList="fieldList"></table-list>
