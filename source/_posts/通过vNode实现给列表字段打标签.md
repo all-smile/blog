@@ -116,7 +116,7 @@ export default {
 
 ### 2、封装列表渲染组件
 
-```vue
+```js
 <template>
   <ul class="listV2">
     <li class="listV2_row-title">
@@ -203,7 +203,7 @@ const renderDom = {
 
 ### 4、页面组件调用
 
-```vue
+```
 <template>
   <div class="customer">
     <table-list v-loading="p_loading" :tableData="p_listdata" :fieldList="fieldList"></table-list>
