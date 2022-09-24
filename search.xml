@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Actions</title>
+    <url>/posts/3405105267.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>持续集成、持续部署</p>
+</body></html>]]></content>
+  </entry>
+  <entry>
     <title>2022年中秋佳节，于梦开始的地方</title>
     <url>/posts/4798453.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -34,91 +40,6 @@
       </categories>
       <tags>
         <tag>梦开始的地方</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Actions</title>
-    <url>/posts/3405105267.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>持续集成、持续部署</p>
-</body></html>]]></content>
-  </entry>
-  <entry>
-    <title>Docker0网络及原理探究</title>
-    <url>/posts/2165908694.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>个人观点：Docker网络通信在容器编排、集群部署中具有举足轻重的地位，（玩docker不懂docker0那就……玩不透哇👀）本篇分析Docker网络，并通过启动几个容器来探究Docker网络及容器通信，帮助读者理解一下😊。</p>
-</blockquote>
-<h2 id="1、Docker0"><a href="#1、Docker0" class="headerlink" title="1、Docker0"></a>1、Docker0</h2><p>Docker 服务默认会创建一个 docker0 网桥（其上有一个 docker0 内部接口），它在内核层连通了其他的物理或虚拟网卡，这就将所有容器和本地主机都放到同一个物理网络。</p>
-<p>Docker 默认指定了 docker0 接口 的 IP 地址和子网掩码，让主机和容器之间可以通过网桥相互通信，它还给出了 MTU（接口允许接收的最大传输单元），通常是 1500 Bytes，或宿主主机网络路由上支持的默认值。这些值都可以在服务启动的时候进行配置。</p>
-<h2 id="2、清空所有镜像"><a href="#2、清空所有镜像" class="headerlink" title="2、清空所有镜像"></a>2、清空所有镜像</h2><p>如果是初学者，还不是很了解docker0的情况下，建议清空所有镜像，创造一个比较干净的容器网络环境，更加清晰，有助于学习docker0😃</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 查看运行的容器</span></span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 停掉所有正在运行的容器(否则删除不掉)</span></span><br><span class="line">docker stop [containerID]   <span class="comment"># docker stop $(docker container ls -q)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 执行删除</span></span><br><span class="line">docker rmi -f $(docker images -aq)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 查看镜像</span></span><br><span class="line">docker images</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="3、查看网卡信息"><a href="#3、查看网卡信息" class="headerlink" title="3、查看网卡信息"></a>3、查看网卡信息</h2><ol>
-<li>先了解一下<code>ip addr</code>命令</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">ip addr</span><br><span class="line"></span><br><span class="line">lo        <span class="comment"># 本机回环地址 127.0.0.1</span></span><br><span class="line">eth0      <span class="comment"># 阿里云内网地址 172.31.81.32</span></span><br><span class="line">docker0   <span class="comment"># docker生成的网卡 172.17.0.1</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>获取当前网卡ip地址和mac地址</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># ip addr</span></span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:16:3e:0a:00:34 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.31.81.32/20 brd 172.31.95.255 scope global dynamic eth0</span><br><span class="line">       valid_lft 291944112sec preferred_lft 291944112sec</span><br><span class="line">3: docker0: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:a4:2f:c5:62 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">[root@--- ~]<span class="comment">#</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p>下面通过docker启动几个容器来探究一下Docker网络👇</p>
-</blockquote>
-<h2 id="4、运行容器之后，再次查看网卡信息"><a href="#4、运行容器之后，再次查看网卡信息" class="headerlink" title="4、运行容器之后，再次查看网卡信息"></a>4、运行容器之后，再次查看网卡信息</h2><p>安装Docker时，它会<strong>自动创建</strong>三个网络，默认<code>bridge</code>网桥（创建容器默认连接到此网络）、 <code>none</code> 、<code>host</code></p>
-<h3 id="4-1、运行mysql01-centos01-centos02容器"><a href="#4-1、运行mysql01-centos01-centos02容器" class="headerlink" title="4.1、运行mysql01, centos01, centos02容器"></a>4.1、运行<code>mysql01</code>, <code>centos01</code>, <code>centos02</code>容器</h3><ul>
-<li>启动时，docker默认的bridge网桥，docker0给容器服务自动分配ip</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it --name mysql01 -e MYSQL_ROOT_PASSWORD=123 mysql:5.7</span><br><span class="line">docker run -it --name centos01  centos /bin/bash</span><br><span class="line">docker run -it --name centos02  centos /bin/bash</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="4-2、查看ip、mac地址信息"><a href="#4-2、查看ip、mac地址信息" class="headerlink" title="4.2、查看ip、mac地址信息"></a>4.2、查看ip、mac地址信息</h3><ul>
-<li>可以看到上面启动的三个容器服务的<code>mac</code>信息</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ ip addr</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:16:3e:0a:00:34 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.31.81.32/20 brd 172.31.95.255 scope global dynamic eth0</span><br><span class="line">       valid_lft 291916543sec preferred_lft 291916543sec</span><br><span class="line">3: docker0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:a4:2f:c5:62 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">140: br-799426d70aa2: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:7f:01:1d:00 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.18.0.1/16 brd 172.18.255.255 scope global br-799426d70aa2</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">154: vethe3da564@if153: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether ea:84:fb:14:47:99 brd ff:ff:ff:ff:ff:ff link-netnsid 0</span><br><span class="line">156: veth6477da5@if155: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether 86:35:30:8d:14:85 brd ff:ff:ff:ff:ff:ff link-netnsid 1</span><br><span class="line">158: veth17b2712@if157: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether 72:76:f0:3c:17:e8 brd ff:ff:ff:ff:ff:ff link-netnsid 2</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="4-3、查看docker网络"><a href="#4-3、查看docker网络" class="headerlink" title="4.3、查看docker网络"></a>4.3、查看docker网络</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network ls</span></span><br><span class="line">NETWORK ID     NAME      DRIVER    SCOPE</span><br><span class="line">feafa30d4051   bridge    bridge    <span class="built_in">local</span></span><br><span class="line">e8bf4fced9e2   host      host      <span class="built_in">local</span></span><br><span class="line">6263db0933b9   none      null      <span class="built_in">local</span></span><br><span class="line">[root@--- ~]<span class="comment">#</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="4-4、查看默认bridge网桥-docker0"><a href="#4-4、查看默认bridge网桥-docker0" class="headerlink" title="4.4、查看默认bridge网桥(docker0)"></a>4.4、查看默认bridge网桥(docker0)</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network inspect feafa30d4051</span></span><br><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        <span class="string">"Name"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"feafa30d4051f24353508959bd420fd163ad0c98d6b30ec8ff13b59a59552bb1"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2021-09-26T15:10:27.167774553+08:00"</span>,</span><br><span class="line">        <span class="string">"Scope"</span>: <span class="string">"local"</span>,</span><br><span class="line">        <span class="string">"Driver"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"EnableIPv6"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"IPAM"</span>: {</span><br><span class="line">            <span class="string">"Driver"</span>: <span class="string">"default"</span>,</span><br><span class="line">            <span class="string">"Options"</span>: null,</span><br><span class="line">            <span class="string">"Config"</span>: [</span><br><span class="line">                {</span><br><span class="line">                    <span class="string">"Subnet"</span>: <span class="string">"172.17.0.0/16"</span>,</span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"172.17.0.1"</span></span><br><span class="line">                }</span><br><span class="line">            ]</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Internal"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Attachable"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Ingress"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"ConfigFrom"</span>: {</span><br><span class="line">            <span class="string">"Network"</span>: <span class="string">""</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"ConfigOnly"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Containers"</span>: {</span><br><span class="line">            <span class="string">"29298987c51b777b546bf6626560020ce235e390e1d7fcfe188c6db228ca4edf"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"mysql01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"f6572c49234f74a6c0b652a379bb386f843ebd23b02abd59b1f6a9d1c9534b17"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:11:00:02"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.17.0.2/16"</span>,    <span class="comment"># ✨容器的IP✨</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">"cb1922b95b9316d129b54f3545fad9729092926e10a1d5517f8928db42706151"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"centos01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"ef6cfa74f56bfa4f49143aa08cf323812002236bc63f75204dee7c3ec1162250"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:11:00:03"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.17.0.3/16"</span>,    <span class="comment"># ✨容器的IP✨</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">"cc6f510b9765ba018dbafd416c9774ddf5fd3ff55fa992827f55516e8dc70b6a"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"centos02"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"2f901aec8f8b455d1fb06112c9035a19f34cc597d8907f26f1b896f12d7eb7ba"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:11:00:04"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.17.0.4/16"</span>,    <span class="comment"># ✨容器的IP✨</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            }</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Options"</span>: {</span><br><span class="line">            <span class="string">"com.docker.network.bridge.default_bridge"</span>: <span class="string">"true"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.enable_icc"</span>: <span class="string">"true"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.enable_ip_masquerade"</span>: <span class="string">"true"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.host_binding_ipv4"</span>: <span class="string">"0.0.0.0"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.name"</span>: <span class="string">"docker0"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.driver.mtu"</span>: <span class="string">"1500"</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Labels"</span>: {}</span><br><span class="line">    }</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="4-5、测试容器通信"><a href="#4-5、测试容器通信" class="headerlink" title="4.5、测试容器通信"></a>4.5、测试容器通信</h3><blockquote>
-<p>此时，进入<code>centos01</code>容器，<code>ping</code> mysql容器的<code>ip</code>可以ping通，但是ping不通容器名 ❗</p>
-</blockquote>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it cb1922b95b93 /bin/bash</span><br><span class="line">ping 172.17.0.2</span><br><span class="line"></span><br><span class="line"><span class="comment"># docker0不支持容器名连接访问</span></span><br><span class="line">ping mysql01</span><br><span class="line">ping: mysql01: Name or service not known</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">docker run 启动镜像的时候docker都会分配一个网卡地址</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看运行容器的ip</span></span><br><span class="line">docker inspect 容器ID | grep IPAddress</span><br></pre></td></tr></tbody></table></figure>
-
-<p>如下图👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311936716f2c2beb1dc0720.png"></p>
-<h2 id="5、容器通信原理"><a href="#5、容器通信原理" class="headerlink" title="5、容器通信原理"></a>5、容器通信原理</h2><ul>
-<li><p>只要我们安装了docker，就会有一个网卡docker0（相当于一个路由器），每启动一个docker容器，docker都会给docker容器分配一个ip（连接路由器的终端，同一网段下终端可以互相通信），</p>
-</li>
-<li><p>通过<code>evth-pair</code>技术实现，<code>evth-pair</code>就是一对<em>虚拟设备接口</em>，他们都是成对出现的，一端连着协议，一端彼此相连，<code>evth-pair</code>充当一个桥梁，连接各种虚拟网络设备。</p>
-</li>
-<li><p>Docker网络使用的是<code>Linux桥接</code>，宿主机是docker容器的网桥，docker0，最多分配65535个</p>
-</li>
-<li><p>删除容器之后，虚拟网卡就自动消失了。（<strong>虚拟网卡传递效率高！</strong>）</p>
-</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184efd16f2c2beb1e0c421.png"></p>
-<p>启动容器不设置网络，容器ip由docker0自动分配情况下，容器间的通信，要经过<code>evth-pair</code>技术实现，<strong>并不是直连的</strong>。(跟计算机网络通信类似，分层模型，TCP/IP协议数据报封装解封装)</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f0f16f2c2beb1e0dbff.png"></p>
-<h3 id="5-1、结论"><a href="#5-1、结论" class="headerlink" title="5.1、结论"></a>5.1、结论</h3><ol>
-<li><p><code>tomcat01</code>,<code>tomcat02</code>是共用的一个路由器，docker0</p>
-</li>
-<li><p>所有的容器启动时，如果不指定网络的情况下，都是docker0路由的。65535</p>
-</li>
-</ol>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f2116f2c2beb1e0f432.png"></p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>上面<code>docker0</code>不支持容器名连接访问，容器通信只可以通过容器<code>ip</code>通信，docker也无法保证容器重启后的IP地址不变，所以更好的方式是<strong>通过别名进行互联</strong>，下篇继续讲解怎么通过别名进行容器通信，😊😊。</p>
-<hr>
-<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>后端运维</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
       </tags>
   </entry>
   <entry>
@@ -337,6 +258,85 @@
       </categories>
       <tags>
         <tag>V8</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker0网络及原理探究</title>
+    <url>/posts/2165908694.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>个人观点：Docker网络通信在容器编排、集群部署中具有举足轻重的地位，（玩docker不懂docker0那就……玩不透哇👀）本篇分析Docker网络，并通过启动几个容器来探究Docker网络及容器通信，帮助读者理解一下😊。</p>
+</blockquote>
+<h2 id="1、Docker0"><a href="#1、Docker0" class="headerlink" title="1、Docker0"></a>1、Docker0</h2><p>Docker 服务默认会创建一个 docker0 网桥（其上有一个 docker0 内部接口），它在内核层连通了其他的物理或虚拟网卡，这就将所有容器和本地主机都放到同一个物理网络。</p>
+<p>Docker 默认指定了 docker0 接口 的 IP 地址和子网掩码，让主机和容器之间可以通过网桥相互通信，它还给出了 MTU（接口允许接收的最大传输单元），通常是 1500 Bytes，或宿主主机网络路由上支持的默认值。这些值都可以在服务启动的时候进行配置。</p>
+<h2 id="2、清空所有镜像"><a href="#2、清空所有镜像" class="headerlink" title="2、清空所有镜像"></a>2、清空所有镜像</h2><p>如果是初学者，还不是很了解docker0的情况下，建议清空所有镜像，创造一个比较干净的容器网络环境，更加清晰，有助于学习docker0😃</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 查看运行的容器</span></span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 停掉所有正在运行的容器(否则删除不掉)</span></span><br><span class="line">docker stop [containerID]   <span class="comment"># docker stop $(docker container ls -q)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 执行删除</span></span><br><span class="line">docker rmi -f $(docker images -aq)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 查看镜像</span></span><br><span class="line">docker images</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="3、查看网卡信息"><a href="#3、查看网卡信息" class="headerlink" title="3、查看网卡信息"></a>3、查看网卡信息</h2><ol>
+<li>先了解一下<code>ip addr</code>命令</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">ip addr</span><br><span class="line"></span><br><span class="line">lo        <span class="comment"># 本机回环地址 127.0.0.1</span></span><br><span class="line">eth0      <span class="comment"># 阿里云内网地址 172.31.81.32</span></span><br><span class="line">docker0   <span class="comment"># docker生成的网卡 172.17.0.1</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>获取当前网卡ip地址和mac地址</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># ip addr</span></span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:16:3e:0a:00:34 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.31.81.32/20 brd 172.31.95.255 scope global dynamic eth0</span><br><span class="line">       valid_lft 291944112sec preferred_lft 291944112sec</span><br><span class="line">3: docker0: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:a4:2f:c5:62 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">[root@--- ~]<span class="comment">#</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>下面通过docker启动几个容器来探究一下Docker网络👇</p>
+</blockquote>
+<h2 id="4、运行容器之后，再次查看网卡信息"><a href="#4、运行容器之后，再次查看网卡信息" class="headerlink" title="4、运行容器之后，再次查看网卡信息"></a>4、运行容器之后，再次查看网卡信息</h2><p>安装Docker时，它会<strong>自动创建</strong>三个网络，默认<code>bridge</code>网桥（创建容器默认连接到此网络）、 <code>none</code> 、<code>host</code></p>
+<h3 id="4-1、运行mysql01-centos01-centos02容器"><a href="#4-1、运行mysql01-centos01-centos02容器" class="headerlink" title="4.1、运行mysql01, centos01, centos02容器"></a>4.1、运行<code>mysql01</code>, <code>centos01</code>, <code>centos02</code>容器</h3><ul>
+<li>启动时，docker默认的bridge网桥，docker0给容器服务自动分配ip</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it --name mysql01 -e MYSQL_ROOT_PASSWORD=123 mysql:5.7</span><br><span class="line">docker run -it --name centos01  centos /bin/bash</span><br><span class="line">docker run -it --name centos02  centos /bin/bash</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="4-2、查看ip、mac地址信息"><a href="#4-2、查看ip、mac地址信息" class="headerlink" title="4.2、查看ip、mac地址信息"></a>4.2、查看ip、mac地址信息</h3><ul>
+<li>可以看到上面启动的三个容器服务的<code>mac</code>信息</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ ip addr</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:16:3e:0a:00:34 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.31.81.32/20 brd 172.31.95.255 scope global dynamic eth0</span><br><span class="line">       valid_lft 291916543sec preferred_lft 291916543sec</span><br><span class="line">3: docker0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:a4:2f:c5:62 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">140: br-799426d70aa2: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:7f:01:1d:00 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.18.0.1/16 brd 172.18.255.255 scope global br-799426d70aa2</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">154: vethe3da564@if153: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether ea:84:fb:14:47:99 brd ff:ff:ff:ff:ff:ff link-netnsid 0</span><br><span class="line">156: veth6477da5@if155: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether 86:35:30:8d:14:85 brd ff:ff:ff:ff:ff:ff link-netnsid 1</span><br><span class="line">158: veth17b2712@if157: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP group default</span><br><span class="line">    <span class="built_in">link</span>/ether 72:76:f0:3c:17:e8 brd ff:ff:ff:ff:ff:ff link-netnsid 2</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="4-3、查看docker网络"><a href="#4-3、查看docker网络" class="headerlink" title="4.3、查看docker网络"></a>4.3、查看docker网络</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network ls</span></span><br><span class="line">NETWORK ID     NAME      DRIVER    SCOPE</span><br><span class="line">feafa30d4051   bridge    bridge    <span class="built_in">local</span></span><br><span class="line">e8bf4fced9e2   host      host      <span class="built_in">local</span></span><br><span class="line">6263db0933b9   none      null      <span class="built_in">local</span></span><br><span class="line">[root@--- ~]<span class="comment">#</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="4-4、查看默认bridge网桥-docker0"><a href="#4-4、查看默认bridge网桥-docker0" class="headerlink" title="4.4、查看默认bridge网桥(docker0)"></a>4.4、查看默认bridge网桥(docker0)</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network inspect feafa30d4051</span></span><br><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        <span class="string">"Name"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"feafa30d4051f24353508959bd420fd163ad0c98d6b30ec8ff13b59a59552bb1"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2021-09-26T15:10:27.167774553+08:00"</span>,</span><br><span class="line">        <span class="string">"Scope"</span>: <span class="string">"local"</span>,</span><br><span class="line">        <span class="string">"Driver"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"EnableIPv6"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"IPAM"</span>: {</span><br><span class="line">            <span class="string">"Driver"</span>: <span class="string">"default"</span>,</span><br><span class="line">            <span class="string">"Options"</span>: null,</span><br><span class="line">            <span class="string">"Config"</span>: [</span><br><span class="line">                {</span><br><span class="line">                    <span class="string">"Subnet"</span>: <span class="string">"172.17.0.0/16"</span>,</span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"172.17.0.1"</span></span><br><span class="line">                }</span><br><span class="line">            ]</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Internal"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Attachable"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Ingress"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"ConfigFrom"</span>: {</span><br><span class="line">            <span class="string">"Network"</span>: <span class="string">""</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"ConfigOnly"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Containers"</span>: {</span><br><span class="line">            <span class="string">"29298987c51b777b546bf6626560020ce235e390e1d7fcfe188c6db228ca4edf"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"mysql01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"f6572c49234f74a6c0b652a379bb386f843ebd23b02abd59b1f6a9d1c9534b17"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:11:00:02"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.17.0.2/16"</span>,    <span class="comment"># ✨容器的IP✨</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">"cb1922b95b9316d129b54f3545fad9729092926e10a1d5517f8928db42706151"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"centos01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"ef6cfa74f56bfa4f49143aa08cf323812002236bc63f75204dee7c3ec1162250"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:11:00:03"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.17.0.3/16"</span>,    <span class="comment"># ✨容器的IP✨</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">"cc6f510b9765ba018dbafd416c9774ddf5fd3ff55fa992827f55516e8dc70b6a"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"centos02"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"2f901aec8f8b455d1fb06112c9035a19f34cc597d8907f26f1b896f12d7eb7ba"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:11:00:04"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.17.0.4/16"</span>,    <span class="comment"># ✨容器的IP✨</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            }</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Options"</span>: {</span><br><span class="line">            <span class="string">"com.docker.network.bridge.default_bridge"</span>: <span class="string">"true"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.enable_icc"</span>: <span class="string">"true"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.enable_ip_masquerade"</span>: <span class="string">"true"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.host_binding_ipv4"</span>: <span class="string">"0.0.0.0"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.bridge.name"</span>: <span class="string">"docker0"</span>,</span><br><span class="line">            <span class="string">"com.docker.network.driver.mtu"</span>: <span class="string">"1500"</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Labels"</span>: {}</span><br><span class="line">    }</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="4-5、测试容器通信"><a href="#4-5、测试容器通信" class="headerlink" title="4.5、测试容器通信"></a>4.5、测试容器通信</h3><blockquote>
+<p>此时，进入<code>centos01</code>容器，<code>ping</code> mysql容器的<code>ip</code>可以ping通，但是ping不通容器名 ❗</p>
+</blockquote>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it cb1922b95b93 /bin/bash</span><br><span class="line">ping 172.17.0.2</span><br><span class="line"></span><br><span class="line"><span class="comment"># docker0不支持容器名连接访问</span></span><br><span class="line">ping mysql01</span><br><span class="line">ping: mysql01: Name or service not known</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">docker run 启动镜像的时候docker都会分配一个网卡地址</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看运行容器的ip</span></span><br><span class="line">docker inspect 容器ID | grep IPAddress</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如下图👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311936716f2c2beb1dc0720.png"></p>
+<h2 id="5、容器通信原理"><a href="#5、容器通信原理" class="headerlink" title="5、容器通信原理"></a>5、容器通信原理</h2><ul>
+<li><p>只要我们安装了docker，就会有一个网卡docker0（相当于一个路由器），每启动一个docker容器，docker都会给docker容器分配一个ip（连接路由器的终端，同一网段下终端可以互相通信），</p>
+</li>
+<li><p>通过<code>evth-pair</code>技术实现，<code>evth-pair</code>就是一对<em>虚拟设备接口</em>，他们都是成对出现的，一端连着协议，一端彼此相连，<code>evth-pair</code>充当一个桥梁，连接各种虚拟网络设备。</p>
+</li>
+<li><p>Docker网络使用的是<code>Linux桥接</code>，宿主机是docker容器的网桥，docker0，最多分配65535个</p>
+</li>
+<li><p>删除容器之后，虚拟网卡就自动消失了。（<strong>虚拟网卡传递效率高！</strong>）</p>
+</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184efd16f2c2beb1e0c421.png"></p>
+<p>启动容器不设置网络，容器ip由docker0自动分配情况下，容器间的通信，要经过<code>evth-pair</code>技术实现，<strong>并不是直连的</strong>。(跟计算机网络通信类似，分层模型，TCP/IP协议数据报封装解封装)</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f0f16f2c2beb1e0dbff.png"></p>
+<h3 id="5-1、结论"><a href="#5-1、结论" class="headerlink" title="5.1、结论"></a>5.1、结论</h3><ol>
+<li><p><code>tomcat01</code>,<code>tomcat02</code>是共用的一个路由器，docker0</p>
+</li>
+<li><p>所有的容器启动时，如果不指定网络的情况下，都是docker0路由的。65535</p>
+</li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f2116f2c2beb1e0f432.png"></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>上面<code>docker0</code>不支持容器名连接访问，容器通信只可以通过容器<code>ip</code>通信，docker也无法保证容器重启后的IP地址不变，所以更好的方式是<strong>通过别名进行互联</strong>，下篇继续讲解怎么通过别名进行容器通信，😊😊。</p>
+<hr>
+<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
+</body></html>]]></content>
+      <categories>
+        <category>后端运维</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
       </tags>
   </entry>
   <entry>
@@ -1012,6 +1012,121 @@
       </tags>
   </entry>
   <entry>
+    <title>React Native环境配置、初始化项目、打包安装到手机，以及开发小知识</title>
+    <url>/posts/252268106.html</url>
+    <content><![CDATA[<html><head></head><body><h1 id="1、前言"><a href="#1、前言" class="headerlink" title="1、前言"></a>1、前言</h1><p>环境：Win10 + Android</p>
+<p>已经在Windows电脑上安装好 <a href="https://nodejs.org/en/">Node</a>（v14+）、Git、Yarn、<br><a href="https://www.oracle.com/java/technologies/downloads/#java11">JDK</a>(v11)</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">javac -version</span><br><span class="line">javac 11.0.15.1</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">node -v</span><br><span class="line">v16.14.1</span><br></pre></td></tr></tbody></table></figure>
+<p>👉 <a href="https://www.react-native.cn/docs/next/environment-setup">官方文档</a></p>
+<h1 id="2、Android-Studio下载安装"><a href="#2、Android-Studio下载安装" class="headerlink" title="2、Android Studio下载安装"></a>2、Android Studio下载安装</h1><ul>
+<li><a href="https://developer.android.google.cn/studio/">下载地址</a></li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631855c416f2c2beb1e9e38c.png"></p>
+<h1 id="3、Android-SDK-下载安装"><a href="#3、Android-SDK-下载安装" class="headerlink" title="3、Android SDK 下载安装"></a>3、Android SDK 下载安装</h1><ul>
+<li>安装 android sdk</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318562016f2c2beb1ea4698.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318567d16f2c2beb1eab904.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318569116f2c2beb1eacfb0.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856a016f2c2beb1eae08f.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856be16f2c2beb1eb068f.png"></p>
+<h2 id="3-1、环境变量配置"><a href="#3-1、环境变量配置" class="headerlink" title="3.1、环境变量配置"></a>3.1、环境变量配置</h2><ul>
+<li><p>配置系统变量<br><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856cf16f2c2beb1eb1c1c.png"></p>
+</li>
+<li><p>Path 配置：</p>
+</li>
+</ul>
+<figure class="highlight haml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\platform-tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\emulator</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools\bin</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="4、Scrcpy-手机模拟器下载安装使用"><a href="#4、Scrcpy-手机模拟器下载安装使用" class="headerlink" title="4、Scrcpy 手机模拟器下载安装使用"></a>4、Scrcpy 手机模拟器下载安装使用</h1><ul>
+<li><a href="https://github.com/Genymobile/scrcpy">下载地址</a></li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856e916f2c2beb1eb3879.png"></p>
+<p>下载zip文件，解压，双击运行 <code>scrcpy.exe</code> 可执行文件即可在电脑上投影手机屏幕，如下图👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856fb16f2c2beb1eb4fb0.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318571216f2c2beb1eb7443.png" alt="image.png"></p>
+<blockquote>
+<p>运行可执行文件之前，使用<strong>数据线</strong>连接Android手机，进行开发者选项设置（不同的手机进入开发者模式略有差异，自行搜索，我用的是华为手机）</p>
+</blockquote>
+<ul>
+<li>电脑端查看连接设备<br><code>adb devices</code></li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">adb devices</span><br><span class="line">List of devices attached</span><br><span class="line">8TFDU18719000649        device</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>adb 命令，在下载 <code>scrcpy</code> 的时候已经内置了</p>
+</blockquote>
+<h1 id="5、安装-React-Native"><a href="#5、安装-React-Native" class="headerlink" title="5、安装 React Native"></a>5、安装 React Native</h1><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm i react-native-cli -g</span><br><span class="line"></span><br><span class="line">$ react-native -v</span><br><span class="line">react-native-cli: 2.0.1</span><br><span class="line">react-native: n/a - not inside a React Native project directory</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="6、初始化项目"><a href="#6、初始化项目" class="headerlink" title="6、初始化项目"></a>6、初始化项目</h1><p>进入到自己的工作目录，执行下面的命令创建 react native 项目</p>
+<figure class="highlight actionscript"><table><tbody><tr><td class="code"><pre><span class="line">npx react-<span class="keyword">native</span> init AwesomeProject</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="7、运行项目安装软件到安卓机"><a href="#7、运行项目安装软件到安卓机" class="headerlink" title="7、运行项目安装软件到安卓机"></a>7、运行项目安装软件到安卓机</h1><h2 id="7-1、先用数据线连接手机和电脑，运行scrcpy-软件"><a href="#7-1、先用数据线连接手机和电脑，运行scrcpy-软件" class="headerlink" title="7.1、先用数据线连接手机和电脑，运行scrcpy 软件"></a>7.1、先用数据线连接手机和电脑，运行scrcpy 软件</h2><p>开发者选项配置修改，最终实现在电脑上可以投屏手机，并可以在电脑上操控手机</p>
+<h2 id="7-2、打开-android-studio-编辑器，运行项目"><a href="#7-2、打开-android-studio-编辑器，运行项目" class="headerlink" title="7.2、打开 android studio 编辑器，运行项目"></a>7.2、打开 android studio 编辑器，运行项目</h2><figure class="highlight asciidoc"><table><tbody><tr><td class="code"><pre><span class="line">npm run android</span><br><span class="line"></span><br><span class="line"><span class="section">or</span></span><br><span class="line"><span class="section">-------------------</span></span><br><span class="line">cd AwesomeProject</span><br><span class="line">yarn android</span><br><span class="line"># 或者</span><br><span class="line">yarn react-native run-android</span><br></pre></td></tr></tbody></table></figure>
+
+<p>运行的时候会在手机上弹窗 “是否统一安装软件”之类的提示，点击同意即可</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318572616f2c2beb1eb9161.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318573616f2c2beb1eba516.png"></p>
+<h2 id="7-3、adb-reverse-命令使用"><a href="#7-3、adb-reverse-命令使用" class="headerlink" title="7.3、adb reverse  命令使用"></a>7.3、adb reverse  命令使用</h2><p><a href="https://developer.android.google.cn/studio/command-line/adb?hl=zh-cn">adb 文档</a></p>
+<h4 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h4><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318574916f2c2beb1ebbc88.png"></p>
+<p>猜测是多设备连接受影响了，可以尝试重启手机解决<br>也可以尝试如下步骤： 启停 adb 服务器</p>
+<blockquote>
+<p>在某些情况下，您可能需要终止 adb 服务器进程，然后重启以解决问题（例如，如果 adb 不响应命令）。</p>
+<p>如需停止 adb 服务器，请使用 adb kill-server 命令。然后，您可以通过发出其他任何 adb 命令来重启服务器。</p>
+</blockquote>
+<figure class="highlight pgsql"><table><tbody><tr><td class="code"><pre><span class="line">adb kill-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">start</span>-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">reverse</span> tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><figure class="highlight apache"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attribute">adb</span> reverse tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>这条命令的意思是，Android允许我们通过ADB，把Android上的某个端口映射到电脑（adb forward），或者把电脑的某个端口映射到Android系统（adb reverse），在这里假设电脑上开启的服务，监听的端口为8081。Android手机通过USB连接电脑后，在终端直接执行<code>adb reverse tcp:8081 tcp:8081</code>，然后在手机中访问<code>127.0.0.1:8081</code>，就可以访问到电脑上启动的服务了。</p>
+<p>注意：</p>
+<ol>
+<li>必须是在连接数据线usb的前提下才能使用该方案进行代码调试。</li>
+<li>(Android 5.0 及以上)使用 adb reverse 命令，这个选项只能在 5.0 以上版本(API 21+)的安卓设备上使用。</li>
+</ol>
+<h1 id="8、react-native开发小知识"><a href="#8、react-native开发小知识" class="headerlink" title="8、react-native开发小知识"></a>8、react-native开发小知识</h1><h2 id="8-1、vscode-上代码飘红"><a href="#8-1、vscode-上代码飘红" class="headerlink" title="8.1、vscode 上代码飘红"></a>8.1、vscode 上代码飘红</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318575a16f2c2beb1ebd220.png"></p>
+<ul>
+<li>问题原因：</li>
+</ul>
+<p>VScode是默认解析ts的，但是不会默认识别 <a href="https://flow.org/en/docs/react/"><code>Flow</code></a>(<strong>静态类型检测工具</strong>)的语法，所以这种的代码会被解析成ts语法。</p>
+<ul>
+<li>解决方法：<br>快捷键<code>Ctrl+Shift+P</code>，输入<code>setting.json</code>，选择 首选项:打开设置(json)。</li>
+</ul>
+<p><code>settings.json</code></p>
+<figure class="highlight awk"><table><tbody><tr><td class="code"><pre><span class="line"><span class="regexp">//</span> <span class="string">"import type"</span> 声明只能在 TypeScript 文件中使用。</span><br><span class="line"><span class="string">"javascript.validate.enable"</span>: false,</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="8-2、npm-run-android-每次都需要在手机上重新安装软件包"><a href="#8-2、npm-run-android-每次都需要在手机上重新安装软件包" class="headerlink" title="8.2、npm run android 每次都需要在手机上重新安装软件包"></a>8.2、npm run android 每次都需要在手机上重新安装软件包</h2><p>开发者模式 -&gt; USB调试 -&gt; 监控ADB安装应用 -&gt; 关闭, 即可解决。</p>
+<h2 id="8-3、本地开发启动多个项目"><a href="#8-3、本地开发启动多个项目" class="headerlink" title="8.3、本地开发启动多个项目"></a>8.3、本地开发启动多个项目</h2><p>默认端口号是8081，通过指定不同的端口号来启动。</p>
+<figure class="highlight livecodeserver"><table><tbody><tr><td class="code"><pre><span class="line">react-native <span class="built_in">start</span> <span class="comment">--port=8082</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="8-4、修改软件包名称"><a href="#8-4、修改软件包名称" class="headerlink" title="8.4、修改软件包名称"></a>8.4、修改软件包名称</h2><ol>
+<li>修改配置文件<br>Android<br>修改配置文件里的 <code>app_name</code> 即可，重新 <code>yarn android</code> ，发现手机上软件的名称已修改成功。</li>
+</ol>
+<p>文件： <code>android\app\src\main\res\values\strings.xml</code></p>
+<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">string</span> <span class="attr">name</span>=<span class="string">"app_name"</span>&gt;</span>远点<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>react-native-rename 插件修改</li>
+</ol>
+<p>通过插件修改名字，必须是 使用 <code>react-native init xxx</code> 创建的项目</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 安装</span></span><br><span class="line">npm install react-native-rename -g</span><br><span class="line">or</span><br><span class="line">yarn global add react-native-rename</span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目根目录执行命令</span></span><br><span class="line">npx react-native-rename &lt;newName&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>修改完成。</p>
+<p>本篇完！后面继续分享如何调试react native项目。</p>
+<hr>
+<p>🎈🎈🎈</p>
+<p>🌹 关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>✨ 欢迎大家转发、评论交流</p>
+<p>🎁 蟹蟹😊</p>
+</body></html>]]></content>
+      <categories>
+        <category>React Native</category>
+      </categories>
+      <tags>
+        <tag>React Native</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux操作系统学习（运维必会）</title>
     <url>/posts/1915044345.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1189,121 +1304,6 @@
       </categories>
       <tags>
         <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>React Native环境配置、初始化项目、打包安装到手机，以及开发小知识</title>
-    <url>/posts/252268106.html</url>
-    <content><![CDATA[<html><head></head><body><h1 id="1、前言"><a href="#1、前言" class="headerlink" title="1、前言"></a>1、前言</h1><p>环境：Win10 + Android</p>
-<p>已经在Windows电脑上安装好 <a href="https://nodejs.org/en/">Node</a>（v14+）、Git、Yarn、<br><a href="https://www.oracle.com/java/technologies/downloads/#java11">JDK</a>(v11)</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">javac -version</span><br><span class="line">javac 11.0.15.1</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">node -v</span><br><span class="line">v16.14.1</span><br></pre></td></tr></tbody></table></figure>
-<p>👉 <a href="https://www.react-native.cn/docs/next/environment-setup">官方文档</a></p>
-<h1 id="2、Android-Studio下载安装"><a href="#2、Android-Studio下载安装" class="headerlink" title="2、Android Studio下载安装"></a>2、Android Studio下载安装</h1><ul>
-<li><a href="https://developer.android.google.cn/studio/">下载地址</a></li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631855c416f2c2beb1e9e38c.png"></p>
-<h1 id="3、Android-SDK-下载安装"><a href="#3、Android-SDK-下载安装" class="headerlink" title="3、Android SDK 下载安装"></a>3、Android SDK 下载安装</h1><ul>
-<li>安装 android sdk</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318562016f2c2beb1ea4698.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318567d16f2c2beb1eab904.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318569116f2c2beb1eacfb0.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856a016f2c2beb1eae08f.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856be16f2c2beb1eb068f.png"></p>
-<h2 id="3-1、环境变量配置"><a href="#3-1、环境变量配置" class="headerlink" title="3.1、环境变量配置"></a>3.1、环境变量配置</h2><ul>
-<li><p>配置系统变量<br><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856cf16f2c2beb1eb1c1c.png"></p>
-</li>
-<li><p>Path 配置：</p>
-</li>
-</ul>
-<figure class="highlight haml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\platform-tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\emulator</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools\bin</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="4、Scrcpy-手机模拟器下载安装使用"><a href="#4、Scrcpy-手机模拟器下载安装使用" class="headerlink" title="4、Scrcpy 手机模拟器下载安装使用"></a>4、Scrcpy 手机模拟器下载安装使用</h1><ul>
-<li><a href="https://github.com/Genymobile/scrcpy">下载地址</a></li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856e916f2c2beb1eb3879.png"></p>
-<p>下载zip文件，解压，双击运行 <code>scrcpy.exe</code> 可执行文件即可在电脑上投影手机屏幕，如下图👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856fb16f2c2beb1eb4fb0.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318571216f2c2beb1eb7443.png" alt="image.png"></p>
-<blockquote>
-<p>运行可执行文件之前，使用<strong>数据线</strong>连接Android手机，进行开发者选项设置（不同的手机进入开发者模式略有差异，自行搜索，我用的是华为手机）</p>
-</blockquote>
-<ul>
-<li>电脑端查看连接设备<br><code>adb devices</code></li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">adb devices</span><br><span class="line">List of devices attached</span><br><span class="line">8TFDU18719000649        device</span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<p>adb 命令，在下载 <code>scrcpy</code> 的时候已经内置了</p>
-</blockquote>
-<h1 id="5、安装-React-Native"><a href="#5、安装-React-Native" class="headerlink" title="5、安装 React Native"></a>5、安装 React Native</h1><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm i react-native-cli -g</span><br><span class="line"></span><br><span class="line">$ react-native -v</span><br><span class="line">react-native-cli: 2.0.1</span><br><span class="line">react-native: n/a - not inside a React Native project directory</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="6、初始化项目"><a href="#6、初始化项目" class="headerlink" title="6、初始化项目"></a>6、初始化项目</h1><p>进入到自己的工作目录，执行下面的命令创建 react native 项目</p>
-<figure class="highlight actionscript"><table><tbody><tr><td class="code"><pre><span class="line">npx react-<span class="keyword">native</span> init AwesomeProject</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="7、运行项目安装软件到安卓机"><a href="#7、运行项目安装软件到安卓机" class="headerlink" title="7、运行项目安装软件到安卓机"></a>7、运行项目安装软件到安卓机</h1><h2 id="7-1、先用数据线连接手机和电脑，运行scrcpy-软件"><a href="#7-1、先用数据线连接手机和电脑，运行scrcpy-软件" class="headerlink" title="7.1、先用数据线连接手机和电脑，运行scrcpy 软件"></a>7.1、先用数据线连接手机和电脑，运行scrcpy 软件</h2><p>开发者选项配置修改，最终实现在电脑上可以投屏手机，并可以在电脑上操控手机</p>
-<h2 id="7-2、打开-android-studio-编辑器，运行项目"><a href="#7-2、打开-android-studio-编辑器，运行项目" class="headerlink" title="7.2、打开 android studio 编辑器，运行项目"></a>7.2、打开 android studio 编辑器，运行项目</h2><figure class="highlight asciidoc"><table><tbody><tr><td class="code"><pre><span class="line">npm run android</span><br><span class="line"></span><br><span class="line"><span class="section">or</span></span><br><span class="line"><span class="section">-------------------</span></span><br><span class="line">cd AwesomeProject</span><br><span class="line">yarn android</span><br><span class="line"># 或者</span><br><span class="line">yarn react-native run-android</span><br></pre></td></tr></tbody></table></figure>
-
-<p>运行的时候会在手机上弹窗 “是否统一安装软件”之类的提示，点击同意即可</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318572616f2c2beb1eb9161.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318573616f2c2beb1eba516.png"></p>
-<h2 id="7-3、adb-reverse-命令使用"><a href="#7-3、adb-reverse-命令使用" class="headerlink" title="7.3、adb reverse  命令使用"></a>7.3、adb reverse  命令使用</h2><p><a href="https://developer.android.google.cn/studio/command-line/adb?hl=zh-cn">adb 文档</a></p>
-<h4 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h4><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318574916f2c2beb1ebbc88.png"></p>
-<p>猜测是多设备连接受影响了，可以尝试重启手机解决<br>也可以尝试如下步骤： 启停 adb 服务器</p>
-<blockquote>
-<p>在某些情况下，您可能需要终止 adb 服务器进程，然后重启以解决问题（例如，如果 adb 不响应命令）。</p>
-<p>如需停止 adb 服务器，请使用 adb kill-server 命令。然后，您可以通过发出其他任何 adb 命令来重启服务器。</p>
-</blockquote>
-<figure class="highlight pgsql"><table><tbody><tr><td class="code"><pre><span class="line">adb kill-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">start</span>-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">reverse</span> tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><figure class="highlight apache"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attribute">adb</span> reverse tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>这条命令的意思是，Android允许我们通过ADB，把Android上的某个端口映射到电脑（adb forward），或者把电脑的某个端口映射到Android系统（adb reverse），在这里假设电脑上开启的服务，监听的端口为8081。Android手机通过USB连接电脑后，在终端直接执行<code>adb reverse tcp:8081 tcp:8081</code>，然后在手机中访问<code>127.0.0.1:8081</code>，就可以访问到电脑上启动的服务了。</p>
-<p>注意：</p>
-<ol>
-<li>必须是在连接数据线usb的前提下才能使用该方案进行代码调试。</li>
-<li>(Android 5.0 及以上)使用 adb reverse 命令，这个选项只能在 5.0 以上版本(API 21+)的安卓设备上使用。</li>
-</ol>
-<h1 id="8、react-native开发小知识"><a href="#8、react-native开发小知识" class="headerlink" title="8、react-native开发小知识"></a>8、react-native开发小知识</h1><h2 id="8-1、vscode-上代码飘红"><a href="#8-1、vscode-上代码飘红" class="headerlink" title="8.1、vscode 上代码飘红"></a>8.1、vscode 上代码飘红</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318575a16f2c2beb1ebd220.png"></p>
-<ul>
-<li>问题原因：</li>
-</ul>
-<p>VScode是默认解析ts的，但是不会默认识别 <a href="https://flow.org/en/docs/react/"><code>Flow</code></a>(<strong>静态类型检测工具</strong>)的语法，所以这种的代码会被解析成ts语法。</p>
-<ul>
-<li>解决方法：<br>快捷键<code>Ctrl+Shift+P</code>，输入<code>setting.json</code>，选择 首选项:打开设置(json)。</li>
-</ul>
-<p><code>settings.json</code></p>
-<figure class="highlight awk"><table><tbody><tr><td class="code"><pre><span class="line"><span class="regexp">//</span> <span class="string">"import type"</span> 声明只能在 TypeScript 文件中使用。</span><br><span class="line"><span class="string">"javascript.validate.enable"</span>: false,</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="8-2、npm-run-android-每次都需要在手机上重新安装软件包"><a href="#8-2、npm-run-android-每次都需要在手机上重新安装软件包" class="headerlink" title="8.2、npm run android 每次都需要在手机上重新安装软件包"></a>8.2、npm run android 每次都需要在手机上重新安装软件包</h2><p>开发者模式 -&gt; USB调试 -&gt; 监控ADB安装应用 -&gt; 关闭, 即可解决。</p>
-<h2 id="8-3、本地开发启动多个项目"><a href="#8-3、本地开发启动多个项目" class="headerlink" title="8.3、本地开发启动多个项目"></a>8.3、本地开发启动多个项目</h2><p>默认端口号是8081，通过指定不同的端口号来启动。</p>
-<figure class="highlight livecodeserver"><table><tbody><tr><td class="code"><pre><span class="line">react-native <span class="built_in">start</span> <span class="comment">--port=8082</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="8-4、修改软件包名称"><a href="#8-4、修改软件包名称" class="headerlink" title="8.4、修改软件包名称"></a>8.4、修改软件包名称</h2><ol>
-<li>修改配置文件<br>Android<br>修改配置文件里的 <code>app_name</code> 即可，重新 <code>yarn android</code> ，发现手机上软件的名称已修改成功。</li>
-</ol>
-<p>文件： <code>android\app\src\main\res\values\strings.xml</code></p>
-<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">string</span> <span class="attr">name</span>=<span class="string">"app_name"</span>&gt;</span>远点<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>react-native-rename 插件修改</li>
-</ol>
-<p>通过插件修改名字，必须是 使用 <code>react-native init xxx</code> 创建的项目</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 安装</span></span><br><span class="line">npm install react-native-rename -g</span><br><span class="line">or</span><br><span class="line">yarn global add react-native-rename</span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目根目录执行命令</span></span><br><span class="line">npx react-native-rename &lt;newName&gt;</span><br></pre></td></tr></tbody></table></figure>
-
-<p>修改完成。</p>
-<p>本篇完！后面继续分享如何调试react native项目。</p>
-<hr>
-<p>🎈🎈🎈</p>
-<p>🌹 关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>✨ 欢迎大家转发、评论交流</p>
-<p>🎁 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>React Native</category>
-      </categories>
-      <tags>
-        <tag>React Native</tag>
       </tags>
   </entry>
   <entry>
@@ -1521,6 +1521,40 @@
       </tags>
   </entry>
   <entry>
+    <title>关于Web和App的一点点思考</title>
+    <url>/posts/4136692609.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>朋友在微信上分享给我一个“PDD”砍一刀的链接，让我帮忙砍一刀助力，我点开链接之后，让我去下载App，然后去应用商店下载一个App，注册登录完成之后，回到微信里面点击链接，就会唤醒App，接着就是在App里面一顿操作，还不能退出到首页，我呆了😮</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>从我的角度看，有两个点不是很明白：</p>
+<ol>
+<li>不可以在浏览器里面以Web的方式直接打开助力吗，显然是可以的，事实是非得让下载App才可以</li>
+<li>助力的流程怎么回事，为什么不可以退出这个流程呢，一直在里面来回转啊转啊，清除后台运行程序才可以退出？还是我没有发现别的退出路径呢？</li>
+</ol>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><ul>
+<li><p>Web发展方向，在进入移动互联网时代后，国内外出现了不同的发展路线：国外依然致力于精致Web的研发，国内则是随着微信小程序的推出，让一个App里面可以运行其它的“App”，出现了几大平台自研小程序的现象，而且不同的小程序之间还设有壁垒，不通用，接着又出现了一些搞兼容多方小程序的技术，其实就是做了一些“框架”级别的适配器，封装向下转型、向上转型。</p>
+</li>
+<li><p>那到底有没有一种技术可以让很多不用的程序都在上面跑呢，答案是确定的，不但有，而且已经发展了很多年了，那就是Web，让所有的应用程序都运行在浏览器里面。</p>
+</li>
+</ul>
+<p>这些家伙们在做什么？自己给自己出题玩？到底有没有推动技术的发展，“我不考虑这个，我要赚钱！”</p>
+<blockquote>
+<p>类小程序技术也不是微信的第一个尝试的，还有几大手机厂商的“快应用”等。<br>从中你会发现小公司只要有创新，没有展露头角发展不下去是死路一条，展露头角被大公司抄袭又是一死，<strong>这就是申请软件著作权，申请专利的重要性。</strong></p>
+</blockquote>
+<h2 id="期待"><a href="#期待" class="headerlink" title="期待"></a>期待</h2><p>前端的细分领域真的是太多太多了，期待Web技术会有更好的发展，不要往那些不能长久的、可持续发展的事物上投入太多精力，让那些细枝末节快点走进历史吧。</p>
+<hr>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>博客园美化</title>
     <url>/posts/2159164587.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1585,40 +1619,6 @@
       </tags>
   </entry>
   <entry>
-    <title>关于Web和App的一点点思考</title>
-    <url>/posts/4136692609.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>朋友在微信上分享给我一个“PDD”砍一刀的链接，让我帮忙砍一刀助力，我点开链接之后，让我去下载App，然后去应用商店下载一个App，注册登录完成之后，回到微信里面点击链接，就会唤醒App，接着就是在App里面一顿操作，还不能退出到首页，我呆了😮</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>从我的角度看，有两个点不是很明白：</p>
-<ol>
-<li>不可以在浏览器里面以Web的方式直接打开助力吗，显然是可以的，事实是非得让下载App才可以</li>
-<li>助力的流程怎么回事，为什么不可以退出这个流程呢，一直在里面来回转啊转啊，清除后台运行程序才可以退出？还是我没有发现别的退出路径呢？</li>
-</ol>
-<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><ul>
-<li><p>Web发展方向，在进入移动互联网时代后，国内外出现了不同的发展路线：国外依然致力于精致Web的研发，国内则是随着微信小程序的推出，让一个App里面可以运行其它的“App”，出现了几大平台自研小程序的现象，而且不同的小程序之间还设有壁垒，不通用，接着又出现了一些搞兼容多方小程序的技术，其实就是做了一些“框架”级别的适配器，封装向下转型、向上转型。</p>
-</li>
-<li><p>那到底有没有一种技术可以让很多不用的程序都在上面跑呢，答案是确定的，不但有，而且已经发展了很多年了，那就是Web，让所有的应用程序都运行在浏览器里面。</p>
-</li>
-</ul>
-<p>这些家伙们在做什么？自己给自己出题玩？到底有没有推动技术的发展，“我不考虑这个，我要赚钱！”</p>
-<blockquote>
-<p>类小程序技术也不是微信的第一个尝试的，还有几大手机厂商的“快应用”等。<br>从中你会发现小公司只要有创新，没有展露头角发展不下去是死路一条，展露头角被大公司抄袭又是一死，<strong>这就是申请软件著作权，申请专利的重要性。</strong></p>
-</blockquote>
-<h2 id="期待"><a href="#期待" class="headerlink" title="期待"></a>期待</h2><p>前端的细分领域真的是太多太多了，期待Web技术会有更好的发展，不要往那些不能长久的、可持续发展的事物上投入太多精力，让那些细枝末节快点走进历史吧。</p>
-<hr>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>博客评论插件Beaudar安装使用</title>
     <url>/posts/34114278.html</url>
     <content><![CDATA[<html><head></head><body><h2 id="Beaudar"><a href="#Beaudar" class="headerlink" title="Beaudar"></a>Beaudar</h2><p><code>Hexo</code>主题选用的<a href="https://xaoxuu.com/wiki/stellar/"><code>Stellar</code></a></p>
@@ -1664,61 +1664,6 @@
       </categories>
       <tags>
         <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>多路径来源页面导航高亮以及面包屑导航修改</title>
-    <url>/posts/2025032412.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="问题缘由"><a href="#问题缘由" class="headerlink" title="问题缘由"></a>问题缘由</h2><p>这个问题比较普遍，原因是业务方面对产品进行多维度的划分（或者对产品进行归档、打标签、收藏等等），反应在前端方面就是同一个页面可以有不同的入口（产品目录结构划分）</p>
-<p>干说不如举个例子：</p>
-<ol>
-<li><p>“活期储蓄”产品属于负债类理财产品（导航菜单）</p>
-</li>
-<li><p>关注“活期储蓄”产品</p>
-</li>
-<li><p>在“我的关注”菜单里也存在“活期储蓄”产品</p>
-</li>
-</ol>
-<p>从上面的描述中不难发现，“活期储蓄”产品既可以从“负债类理财产品”菜单进入，也可以从“我的关注”菜单进入。</p>
-<p>这就带来了两个问题：</p>
-<ol>
-<li><p>当进入“活期储蓄”产品详情页面的时候，高亮哪个导航菜单</p>
-</li>
-<li><p>当进入“活期储蓄”产品详情页面的时候，面包屑导航怎么显示</p>
-</li>
-</ol>
-<p>从用户角度来说自然是我从哪里点进去的就高亮哪个菜单，面包屑也真实的反应“来源路径”</p>
-<h2 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h2><p>项目采用的技术： Vue，Element UI，vue-router</p>
-<p>采用的 element ui 的 导航组件和面包屑组件。</p>
-<p>面包屑是借助 vue-router 的 matched 方法 匹配到的路由对象数据注入ui组件实现的</p>
-<h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><ul>
-<li><p>如果可以从后端数据上进行处理当然更好，现实是没有如果。</p>
-</li>
-<li><p>前端处理，分别针对导高亮和面包屑处理</p>
-</li>
-</ul>
-<h3 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h3><ol>
-<li><p>在进入详情页面的行为中增加标记（我使用 sessionStorage 标记，标记信息包括路径path、title，path用于高亮导航，title用于面包屑展示）</p>
-</li>
-<li><p>在离开详情页的时候移除标记（通过路由守卫实现，目的是标记不会带来别的副作用）</p>
-</li>
-<li><p>根据标记修正菜单高亮、面包屑展示</p>
-</li>
-</ol>
-<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>分析完之后发现写代码就跟玩一样，没有什么技术含量，就不贴代码了</p>
-<p>有一点需要注意：</p>
-<p>在上面思路分析中，当进入详情页，刷新页面，可能会存在时序问题，具体就是面包屑组件里标记信息不能及时同步，这里我采用的是在<code>data</code>上面定义属性<code>signTitle</code>承接<code>sessionStorage</code>，然后在 <code>computed</code> 里面以<code>signTitle</code>为源数据得到最新的标记信息</p>
-<p>可以使用全局状态管理方式替代sessionStorage，状态持久化就可以了</p>
-<hr>
-<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>前端</tag>
       </tags>
   </entry>
   <entry>
@@ -1783,6 +1728,61 @@
 </li>
 </ol>
 <p>接着调用<code>created、mounted</code>等等</p>
+<hr>
+<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>前端</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>多路径来源页面导航高亮以及面包屑导航修改</title>
+    <url>/posts/2025032412.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="问题缘由"><a href="#问题缘由" class="headerlink" title="问题缘由"></a>问题缘由</h2><p>这个问题比较普遍，原因是业务方面对产品进行多维度的划分（或者对产品进行归档、打标签、收藏等等），反应在前端方面就是同一个页面可以有不同的入口（产品目录结构划分）</p>
+<p>干说不如举个例子：</p>
+<ol>
+<li><p>“活期储蓄”产品属于负债类理财产品（导航菜单）</p>
+</li>
+<li><p>关注“活期储蓄”产品</p>
+</li>
+<li><p>在“我的关注”菜单里也存在“活期储蓄”产品</p>
+</li>
+</ol>
+<p>从上面的描述中不难发现，“活期储蓄”产品既可以从“负债类理财产品”菜单进入，也可以从“我的关注”菜单进入。</p>
+<p>这就带来了两个问题：</p>
+<ol>
+<li><p>当进入“活期储蓄”产品详情页面的时候，高亮哪个导航菜单</p>
+</li>
+<li><p>当进入“活期储蓄”产品详情页面的时候，面包屑导航怎么显示</p>
+</li>
+</ol>
+<p>从用户角度来说自然是我从哪里点进去的就高亮哪个菜单，面包屑也真实的反应“来源路径”</p>
+<h2 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h2><p>项目采用的技术： Vue，Element UI，vue-router</p>
+<p>采用的 element ui 的 导航组件和面包屑组件。</p>
+<p>面包屑是借助 vue-router 的 matched 方法 匹配到的路由对象数据注入ui组件实现的</p>
+<h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><ul>
+<li><p>如果可以从后端数据上进行处理当然更好，现实是没有如果。</p>
+</li>
+<li><p>前端处理，分别针对导高亮和面包屑处理</p>
+</li>
+</ul>
+<h3 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h3><ol>
+<li><p>在进入详情页面的行为中增加标记（我使用 sessionStorage 标记，标记信息包括路径path、title，path用于高亮导航，title用于面包屑展示）</p>
+</li>
+<li><p>在离开详情页的时候移除标记（通过路由守卫实现，目的是标记不会带来别的副作用）</p>
+</li>
+<li><p>根据标记修正菜单高亮、面包屑展示</p>
+</li>
+</ol>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>分析完之后发现写代码就跟玩一样，没有什么技术含量，就不贴代码了</p>
+<p>有一点需要注意：</p>
+<p>在上面思路分析中，当进入详情页，刷新页面，可能会存在时序问题，具体就是面包屑组件里标记信息不能及时同步，这里我采用的是在<code>data</code>上面定义属性<code>signTitle</code>承接<code>sessionStorage</code>，然后在 <code>computed</code> 里面以<code>signTitle</code>为源数据得到最新的标记信息</p>
+<p>可以使用全局状态管理方式替代sessionStorage，状态持久化就可以了</p>
 <hr>
 <p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
 <p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
@@ -2013,92 +2013,6 @@
       </tags>
   </entry>
   <entry>
-    <title>捕获404页面，并重定向页面</title>
-    <url>/posts/3730822077.html</url>
-    <content><![CDATA[<html><head></head><body><p>话不多说，直接上代码：</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 捕获404页面，并重定向</span></span><br><span class="line"><span class="keyword">const</span> isRunUrl = <span class="keyword">function</span> (<span class="params">url</span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="keyword">function</span> (<span class="params">resolve, reject</span>) {</span><br><span class="line">    <span class="comment">// 测试链接连通性, 主要检测404错误</span></span><br><span class="line">    <span class="comment">// 由于AJAX通常无法区分404和跨域问题，所以只能用script 或者 link标签，link比script更容易捕获错误</span></span><br><span class="line">    <span class="keyword">var</span> dom = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">'link'</span>);</span><br><span class="line">    dom.<span class="property">href</span> = url;</span><br><span class="line">    dom.<span class="property">rel</span> = <span class="string">'stylesheet'</span>;</span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">appendChild</span>(dom);</span><br><span class="line">    dom.<span class="property">onload</span> = <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">removeChild</span>(dom);</span><br><span class="line">      <span class="title function_">resolve</span>();</span><br><span class="line">    }</span><br><span class="line">    dom.<span class="property">onerror</span> = reject;</span><br><span class="line">  });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="title function_">isRunUrl</span>(<span class="string">"your url"</span>).<span class="title function_">then</span>(</span><br><span class="line">  <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理resolve的代码</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"ok"</span>, data);;</span><br><span class="line">  }, <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理reject的代码，重定向逻辑</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"err"</span>, err);</span><br><span class="line">  }</span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<center>欢迎微信扫码关注 "看见另一种可能"！</center>
-
-<img data-src="/images/base/loading03.svg" data-original="/images/contact/qrcode_wechat.jpg" alt="wechat：看见另一种可能"></body></html>]]></content>
-      <categories>
-        <category>Javascript</category>
-      </categories>
-      <tags>
-        <tag>404</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>最近接触的东西</title>
-    <url>/posts/2564859285.html</url>
-    <content><![CDATA[<html><head></head><body><p>我的博客最开始采用的是<code>Hexo</code>+<code>hexo-theme-next</code>搭建的，使用<code>GitHub Pages</code>托管并进行自动化部署，写文发布的流程非常简单方便，云端写作发布也轻而易举。</p>
-<p>本来事情到这里就应该结束了，但是，我又进行了下面的一些尝试</p>
-<h2 id="装备"><a href="#装备" class="headerlink" title="装备"></a>装备</h2><ol>
-<li>美化博客<ul>
-<li><code>NexT</code>主题允许通过<code>custom_file_path</code>设置外挂文件进行修改</li>
-<li>自定义界面修改</li>
-</ul>
-</li>
-<li>图片加载优化<ul>
-<li><code>lazyload</code></li>
-</ul>
-</li>
-<li>图床使用<ul>
-<li>目前使用的<code>聚合图床</code>效果不佳</li>
-<li><a href="https://img.show/">img.show</a></li>
-<li><a href="https://imagelol.com/">笑果图床</a></li>
-</ul>
-</li>
-<li>文章压缩发布<ul>
-<li><code>hexo-neat</code></li>
-</ul>
-</li>
-<li>评论、统计分析插件<ul>
-<li><code>valine</code>、<code>waline</code>、<code>changyan</code>、<code>livere</code>、<code>gitalk</code></li>
-<li><code>busuanzi</code>、<code>leancloud</code>、<code>cloudflare</code></li>
-</ul>
-</li>
-<li>搜索引擎优化<ul>
-<li><code>Bing</code></li>
-<li><code>Baidu</code></li>
-<li><code>sogou</code></li>
-<li>……</li>
-</ul>
-</li>
-<li><a href="https://www.addthis.com/">AddThis</a>挂件添加</li>
-<li>友链页面定制开发</li>
-<li>本地搜索<code>local_search</code></li>
-<li><a href="https://gitter.im/">Gitter</a>聊天工具添加</li>
-<li>备案信息</li>
-<li>……</li>
-</ol>
-<p><code>NexT</code>主题虽好，但还是有一些界面样式不太美观，我就开始动手修改。不得不说美化主题这件事真的很费心思，自己内心对美的追求让我反复修改，不禁让我想起来工作中产品经理频繁改方案的场景。经过反复拉扯，最终还算满意。</p>
-<p>本来事情到这里就应该结束了，但是，国内访问<code>GitHub Pages</code>部署的站点加载比较慢，所以，我就开始尝试部署到<code>Netlify</code>、<code>Vercel</code>上，</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>个人觉得任何改动都要有一个长远的打算，比如要考虑<code>NexT</code>主题升级、评论数据可迁移，总之，一个原则：<strong>使用平台的同时不能受制于平台</strong>。</p>
-<ol>
-<li>图床使用：稳定、高速</li>
-<li>评论插件：隐私、可管理、可迁移，较低的侵入性，不需要魔改主题文件，不然主题升级会带来很多麻烦</li>
-<li>搜索引擎优化：基本都是同一个路子，添加验证、网站收录url等，效果还不是很明显，需要进一步研究</li>
-<li>友链页面：本着最少改动、不影响主题升级，自己动手开发</li>
-<li>托管部署：有很多平台可供部署网站，集成云数据库、<code>Serverless</code>等功能，部署成功之后生成一个平台自动分配的域名，也可以绑定个人域名。没有云服务器同样可以部署网站😃</li>
-</ol>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>常用的SSH，你了解多少？（长文警告）</title>
     <url>/posts/184663689.html</url>
     <content><![CDATA[<html><head></head><body><h1 id="1、SSH工作原理"><a href="#1、SSH工作原理" class="headerlink" title="1、SSH工作原理"></a>1、SSH工作原理</h1><p>从ssh的<strong>加密方式</strong>说开去，看下文👇</p>
@@ -2245,6 +2159,92 @@
       </categories>
       <tags>
         <tag>SSH</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>捕获404页面，并重定向页面</title>
+    <url>/posts/3730822077.html</url>
+    <content><![CDATA[<html><head></head><body><p>话不多说，直接上代码：</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 捕获404页面，并重定向</span></span><br><span class="line"><span class="keyword">const</span> isRunUrl = <span class="keyword">function</span> (<span class="params">url</span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="keyword">function</span> (<span class="params">resolve, reject</span>) {</span><br><span class="line">    <span class="comment">// 测试链接连通性, 主要检测404错误</span></span><br><span class="line">    <span class="comment">// 由于AJAX通常无法区分404和跨域问题，所以只能用script 或者 link标签，link比script更容易捕获错误</span></span><br><span class="line">    <span class="keyword">var</span> dom = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">'link'</span>);</span><br><span class="line">    dom.<span class="property">href</span> = url;</span><br><span class="line">    dom.<span class="property">rel</span> = <span class="string">'stylesheet'</span>;</span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">appendChild</span>(dom);</span><br><span class="line">    dom.<span class="property">onload</span> = <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">removeChild</span>(dom);</span><br><span class="line">      <span class="title function_">resolve</span>();</span><br><span class="line">    }</span><br><span class="line">    dom.<span class="property">onerror</span> = reject;</span><br><span class="line">  });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="title function_">isRunUrl</span>(<span class="string">"your url"</span>).<span class="title function_">then</span>(</span><br><span class="line">  <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理resolve的代码</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"ok"</span>, data);;</span><br><span class="line">  }, <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理reject的代码，重定向逻辑</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"err"</span>, err);</span><br><span class="line">  }</span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<center>欢迎微信扫码关注 "看见另一种可能"！</center>
+
+<img data-src="/images/base/loading03.svg" data-original="/images/contact/qrcode_wechat.jpg" alt="wechat：看见另一种可能"></body></html>]]></content>
+      <categories>
+        <category>Javascript</category>
+      </categories>
+      <tags>
+        <tag>404</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>最近接触的东西</title>
+    <url>/posts/2564859285.html</url>
+    <content><![CDATA[<html><head></head><body><p>我的博客最开始采用的是<code>Hexo</code>+<code>hexo-theme-next</code>搭建的，使用<code>GitHub Pages</code>托管并进行自动化部署，写文发布的流程非常简单方便，云端写作发布也轻而易举。</p>
+<p>本来事情到这里就应该结束了，但是，我又进行了下面的一些尝试</p>
+<h2 id="装备"><a href="#装备" class="headerlink" title="装备"></a>装备</h2><ol>
+<li>美化博客<ul>
+<li><code>NexT</code>主题允许通过<code>custom_file_path</code>设置外挂文件进行修改</li>
+<li>自定义界面修改</li>
+</ul>
+</li>
+<li>图片加载优化<ul>
+<li><code>lazyload</code></li>
+</ul>
+</li>
+<li>图床使用<ul>
+<li>目前使用的<code>聚合图床</code>效果不佳</li>
+<li><a href="https://img.show/">img.show</a></li>
+<li><a href="https://imagelol.com/">笑果图床</a></li>
+</ul>
+</li>
+<li>文章压缩发布<ul>
+<li><code>hexo-neat</code></li>
+</ul>
+</li>
+<li>评论、统计分析插件<ul>
+<li><code>valine</code>、<code>waline</code>、<code>changyan</code>、<code>livere</code>、<code>gitalk</code></li>
+<li><code>busuanzi</code>、<code>leancloud</code>、<code>cloudflare</code></li>
+</ul>
+</li>
+<li>搜索引擎优化<ul>
+<li><code>Bing</code></li>
+<li><code>Baidu</code></li>
+<li><code>sogou</code></li>
+<li>……</li>
+</ul>
+</li>
+<li><a href="https://www.addthis.com/">AddThis</a>挂件添加</li>
+<li>友链页面定制开发</li>
+<li>本地搜索<code>local_search</code></li>
+<li><a href="https://gitter.im/">Gitter</a>聊天工具添加</li>
+<li>备案信息</li>
+<li>……</li>
+</ol>
+<p><code>NexT</code>主题虽好，但还是有一些界面样式不太美观，我就开始动手修改。不得不说美化主题这件事真的很费心思，自己内心对美的追求让我反复修改，不禁让我想起来工作中产品经理频繁改方案的场景。经过反复拉扯，最终还算满意。</p>
+<p>本来事情到这里就应该结束了，但是，国内访问<code>GitHub Pages</code>部署的站点加载比较慢，所以，我就开始尝试部署到<code>Netlify</code>、<code>Vercel</code>上，</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>个人觉得任何改动都要有一个长远的打算，比如要考虑<code>NexT</code>主题升级、评论数据可迁移，总之，一个原则：<strong>使用平台的同时不能受制于平台</strong>。</p>
+<ol>
+<li>图床使用：稳定、高速</li>
+<li>评论插件：隐私、可管理、可迁移，较低的侵入性，不需要魔改主题文件，不然主题升级会带来很多麻烦</li>
+<li>搜索引擎优化：基本都是同一个路子，添加验证、网站收录url等，效果还不是很明显，需要进一步研究</li>
+<li>友链页面：本着最少改动、不影响主题升级，自己动手开发</li>
+<li>托管部署：有很多平台可供部署网站，集成云数据库、<code>Serverless</code>等功能，部署成功之后生成一个平台自动分配的域名，也可以绑定个人域名。没有云服务器同样可以部署网站😃</li>
+</ol>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
