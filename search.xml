@@ -2248,6 +2248,57 @@
       </tags>
   </entry>
   <entry>
+    <title>移动端touch拖动事件和click事件冲突问题解决</title>
+    <url>/posts/372820594.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>通过一个悬浮球交互功能的案例来阐述问题，以及解决办法。</p>
+</blockquote>
+<h2 id="实现效果"><a href="#实现效果" class="headerlink" title="实现效果"></a>实现效果</h2><p>类似微信里的悬浮窗效果，苹果手机的悬浮球功能效果</p>
+<ol>
+<li>可以点击拖动，然后吸附在窗口边缘</li>
+<li>点击悬浮球，可以跳转界面，或者更改悬浮球的形态</li>
+</ol>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><ol>
+<li>移动端使用<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/TouchEvent"> <code>touch</code>事件类型</a>：</li>
+</ol>
+<ul>
+<li><code>touchstart</code>当用户在触摸平面上放置了一个触点时触发 （手指放到屏幕上）</li>
+<li><code>touchmove</code>当用户在触摸平面上移动触点时触发 （手指在屏幕上滑动）</li>
+<li><code>touchend</code>当一个触点被用户从触摸平面上移除（抬起手指）</li>
+<li><code>touchcancel</code>终止触摸事件</li>
+</ul>
+<p><strong>多点触控</strong></p>
+<ol start="2">
+<li>TouchEvent.<strong>targetTouches</strong> 只读</li>
+</ol>
+<p>一个 TouchList 对象，是包含了如下触点的 Touch 对象：触摸起始于当前事件的目标 element 上，并且仍然没有离开触摸平面的触点。</p>
+<p>视口处于第四象限，原点在左上角</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line">event.<span class="property">targetTouches</span>.<span class="property">clientX</span> <span class="comment">// 触摸元素横坐标</span></span><br><span class="line">event.<span class="property">targetTouches</span>.<span class="property">clientY</span> <span class="comment">// 触摸元素纵坐标</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>TouchEvent.<strong>touches</strong> 只读</li>
+</ol>
+<p>一 个 TouchList 对象，包含了所有当前接触触摸平面的触点的 Touch 对象，无论它们的起始于哪个 element 上，也无论它们状态是否发生了变化。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>通过设置悬浮球定位样式，拖动的时候计算坐标，然后动态的修改悬浮球的定位偏移量，结合<code>transtion</code>过渡效果，实现平滑的过渡</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>触摸事件机制：</p>
+<ul>
+<li>如果有拖动行为，事件执行次序为：<code>touchstart</code>-&gt; <code>touchmove</code>-&gt; <code>touchend</code></li>
+<li>没有拖动行为，事件执行次序为：<code>touchstart</code>-&gt; <code>touchend</code></li>
+</ul>
+<p>当给元素添加了<code>touch</code>事件之后，<code>click</code>事件就不会出发了，那么怎么模拟点击效果呢，我是这么做的：</p>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><ol>
+<li>在<code>touchmove</code>事件中增加一个是否移动过的标记<code>isMoved: true</code></li>
+<li>在<code>touchend</code>事件中判断<code>isMoved</code>是否为<code>true</code>，是<code>true</code>则按原有逻辑执行，是<code>false</code>则说明没有移动过，属于点击行为</li>
+<li>在<code>touchend</code>事件最后，重置<code>isMoved</code>为初始值<code>false</code>，这样每一个触摸操作都可以进入同样的逻辑，不用担心状态混乱</li>
+</ol>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+  </entry>
+  <entry>
     <title>认识Chrome扩展插件</title>
     <url>/posts/9575625.html</url>
     <content><![CDATA[<html><head></head><body><hr>
