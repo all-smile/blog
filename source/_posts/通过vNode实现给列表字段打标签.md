@@ -1,12 +1,13 @@
 ---
 title: 通过vNode实现给列表字段打标签
-date: 2022-09-23 10:14:48
 tags:
   - vNode
   - JSX
 categories:
   - Vue
 description: 怎么实现给列表数据的特定字段打不同类型的标签？看我是怎么使用JSX做到的(￣▽￣)"
+abbrlink: 1525901815
+date: 2022-09-23 10:14:48
 ---
 ## 问题
 

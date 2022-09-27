@@ -1,11 +1,13 @@
 ---
-title: .env.[mode]文件中如何添加注释？
-date: 2022-09-22 10:35:33
+title: '.env.[mode]文件中如何添加注释？'
 tags:
   - vue
 categories:
   - 前端
-description: 本文从抛砖引玉，从.env[mode]文件中如何添加注释入手，浅析.env[mode]文件是如何被dotenv插件加载并注入到process.env变量中的，更多请自行探索，不难。
+description: >-
+  本文从抛砖引玉，从.env[mode]文件中如何添加注释入手，浅析.env[mode]文件是如何被dotenv插件加载并注入到process.env变量中的，更多请自行探索，不难。
+abbrlink: 2584380968
+date: 2022-09-22 10:35:33
 ---
 
 ## 前言
