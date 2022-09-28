@@ -1,9 +1,9 @@
 ---
 title: 移动端touch拖动事件和click事件冲突问题解决
 date: 2022-09-27 18:43:14
-tags:
-categories:
-description: 移动端touch拖动事件和click事件冲突问题解决
+tags: TouchEvent
+categories: H5
+description: 本文分析移动端touch拖动事件和click事件冲突问题，通过一个悬浮球交互功能的案例来讲解，以及问题的解决办法。
 ---
 
 > 通过一个悬浮球交互功能的案例来阐述问题，以及解决办法。
@@ -45,6 +45,8 @@ event.targetTouches.clientY // 触摸元素纵坐标
 ## 实现
 
 通过设置悬浮球定位样式，拖动的时候计算坐标，然后动态的修改悬浮球的定位偏移量，结合`transtion`过渡效果，实现平滑的过渡
+
+代码比较简单，就不贴了。
 
 ## 问题
 
