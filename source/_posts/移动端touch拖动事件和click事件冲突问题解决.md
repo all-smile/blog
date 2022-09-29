@@ -1,9 +1,10 @@
 ---
 title: 移动端touch拖动事件和click事件冲突问题解决
-date: 2022-09-27 18:43:14
 tags: TouchEvent
 categories: H5
 description: 本文分析移动端touch拖动事件和click事件冲突问题，通过一个悬浮球交互功能的案例来讲解，以及问题的解决办法。
+abbrlink: 372820594
+date: 2022-09-27 18:43:14
 ---
 
 > 通过一个悬浮球交互功能的案例来阐述问题，以及解决办法。
