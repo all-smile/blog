@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Actions</title>
-    <url>/posts/3405105267.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>持续集成、持续部署</p>
-</body></html>]]></content>
-  </entry>
-  <entry>
     <title>2022年中秋佳节，于梦开始的地方</title>
     <url>/posts/4798453.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -41,6 +35,12 @@
       <tags>
         <tag>梦开始的地方</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Actions</title>
+    <url>/posts/3405105267.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>持续集成、持续部署</p>
+</body></html>]]></content>
   </entry>
   <entry>
     <title>D8调试工具——jsvu的使用细则</title>
@@ -340,90 +340,6 @@
       </tags>
   </entry>
   <entry>
-    <title>GitHub Pages 站点建设</title>
-    <url>/posts/899051033.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h2><ul>
-<li><p>GitHub Pages 是通过 GitHub 托管和发布的公共网页，将纯文本转换为静态博客网站。</p>
-</li>
-<li><p>您可以使用 GitHub Pages 来展示一些开源项目、博客甚或分享您的简历，有内存限制，可以绑定个人域名。</p>
-</li>
-<li><p>启动和运行的最快方法是使用 <a href="https://jekyllcn.com/">Jekyll</a> 主题选择器加载预置主题。 然后，您可以修改 GitHub Pages 的内容和样式。👉 <a href="https://docs.github.com/cn/pages/getting-started-with-github-pages/about-github-pages">文档</a></p>
-</li>
-</ul>
-<h2 id="2、创建仓库"><a href="#2、创建仓库" class="headerlink" title="2、创建仓库"></a>2、创建仓库</h2><p>仓库名： <code>&lt;username&gt;.github.io</code><br><code>username</code> 是GitHub的用户名</p>
-<h2 id="3、创建站点"><a href="#3、创建站点" class="headerlink" title="3、创建站点"></a>3、创建站点</h2><p>在 <code>repo</code> 下创建 <code>index.md</code>文件，随便写点东西保存。然后，点击 <code>settings</code>选项卡，单机左侧 <code>Pages</code>进行设置，如下图：</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fae16f2c2beb1e1d288.png"></p>
-<p>🔊 此时站点已经建成，可以访问 <code>https://&lt;username&gt;.github.io/</code> 查看，如果已经有个人域名了，也可以绑定个人域名，继续往下看👇</p>
-<h2 id="4、仓库文件目录"><a href="#4、仓库文件目录" class="headerlink" title="4、仓库文件目录"></a>4、仓库文件目录</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fbe16f2c2beb1e1e89f.png"></p>
-<h2 id="5、绑定域名"><a href="#5、绑定域名" class="headerlink" title="5、绑定域名"></a>5、绑定域名</h2><p>我个人购买的一级域名是 i-xiao ，域名后缀是 space，专门给GitHub Pages 增加一个CNAME记录（blog），解析二级域名，绑定 <username>github.io 域名。</username></p>
-<h3 id="5-1、域名相关知识"><a href="#5-1、域名相关知识" class="headerlink" title="5.1、域名相关知识"></a>5.1、域名相关知识</h3><ul>
-<li>www：主机名，i-xiao : 域名主体(一级域名)，.space : 域名后缀<br>注册一级域名的时候是需要付费的</li>
-<li>二级域名，是依附一级域名的存在而存在的，也就是说要是顶级域名消失了，二级域名也也会不复存在。反而来说，二级域名的网站不做了，主域名网站是不受影响的。</li>
-<li>一级域名、二级域名区别：<br>DNS收录一级域名更快；还有就是解析速度，下一跳路由就不说了，找到目的主机之后，二级域名层级更深，需要多一层计算（其实这是我瞎写的🤣，猜测应该跟 nginx location匹配类似）</li>
-</ul>
-<h3 id="5-2、GitHub上配置自定义域名"><a href="#5-2、GitHub上配置自定义域名" class="headerlink" title="5.2、GitHub上配置自定义域名"></a>5.2、GitHub上配置自定义域名</h3><p>进入 <username>github.io 仓库，进入设置页面，点击左边 Pages 选项卡，进行下面的配置。</username></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6116f2c2beb1e1511a.png"></p>
-<h2 id="6、配置域名映射"><a href="#6、配置域名映射" class="headerlink" title="6、配置域名映射"></a>6、配置域名映射</h2><p><strong>各记录类型使用目的</strong></p>
-<table>
-<thead>
-<tr>
-<th>记录类型</th>
-<th>使用目的</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ce5/">A 记录</a></td>
-<td>将域名指向一个 IP 地址（外网地址）。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9cf9/">CNAME 记录</a></td>
-<td>将域名指向另一个域名，再由另一个域名提供 IP 地址（外网地址）。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9cff/">MX 记录</a></td>
-<td>设置邮箱，让邮箱能收到邮件。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d11/">NS 记录</a></td>
-<td>将子域名交给其他 DNS 服务商解析。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d0b/">AAAA 记录</a></td>
-<td>将域名指向一个 IPv6 地址。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d17/">SRV 记录</a></td>
-<td>用来标识某台服务器使用了某个服务，常见于微软系统的目录管理。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d05/">TXT 记录</a></td>
-<td>对域名进行标识和说明，绝大多数的 TXT 记录是用来做 SPF 记录（反垃圾邮件）。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ced/">隐、显性 URL 记录</a></td>
-<td>将一个域名指向另外一个已经存在的站点。</td>
-</tr>
-</tbody></table>
-<p><strong>如下图</strong></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6f16f2c2beb1e16954.png"></p>
-<h2 id="7、DNS检测"><a href="#7、DNS检测" class="headerlink" title="7、DNS检测"></a>7、DNS检测</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f7816f2c2beb1e1785b.png"></p>
-<h2 id="8、查看Pages"><a href="#8、查看Pages" class="headerlink" title="8、查看Pages"></a>8、查看Pages</h2><p>成功解析之后，还存在DNS缓存，一般还需要再等待一会（一般十分钟，或许更长时间）才能生效，如下图成功显示👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f8c16f2c2beb1e1a34c.png"></p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>站点绑定的域名已经更换，访问请到👉 <a href="https://home.i-xiao.space/">这里</a></p>
-<hr>
-<p>🎈🎈🎈</p>
-<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>GitHub</category>
-      </categories>
-      <tags>
-        <tag>GitHub</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker网络模型以及容器通信</title>
     <url>/posts/1604561083.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -566,6 +482,90 @@
       </categories>
       <tags>
         <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GitHub Pages 站点建设</title>
+    <url>/posts/899051033.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h2><ul>
+<li><p>GitHub Pages 是通过 GitHub 托管和发布的公共网页，将纯文本转换为静态博客网站。</p>
+</li>
+<li><p>您可以使用 GitHub Pages 来展示一些开源项目、博客甚或分享您的简历，有内存限制，可以绑定个人域名。</p>
+</li>
+<li><p>启动和运行的最快方法是使用 <a href="https://jekyllcn.com/">Jekyll</a> 主题选择器加载预置主题。 然后，您可以修改 GitHub Pages 的内容和样式。👉 <a href="https://docs.github.com/cn/pages/getting-started-with-github-pages/about-github-pages">文档</a></p>
+</li>
+</ul>
+<h2 id="2、创建仓库"><a href="#2、创建仓库" class="headerlink" title="2、创建仓库"></a>2、创建仓库</h2><p>仓库名： <code>&lt;username&gt;.github.io</code><br><code>username</code> 是GitHub的用户名</p>
+<h2 id="3、创建站点"><a href="#3、创建站点" class="headerlink" title="3、创建站点"></a>3、创建站点</h2><p>在 <code>repo</code> 下创建 <code>index.md</code>文件，随便写点东西保存。然后，点击 <code>settings</code>选项卡，单机左侧 <code>Pages</code>进行设置，如下图：</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fae16f2c2beb1e1d288.png"></p>
+<p>🔊 此时站点已经建成，可以访问 <code>https://&lt;username&gt;.github.io/</code> 查看，如果已经有个人域名了，也可以绑定个人域名，继续往下看👇</p>
+<h2 id="4、仓库文件目录"><a href="#4、仓库文件目录" class="headerlink" title="4、仓库文件目录"></a>4、仓库文件目录</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fbe16f2c2beb1e1e89f.png"></p>
+<h2 id="5、绑定域名"><a href="#5、绑定域名" class="headerlink" title="5、绑定域名"></a>5、绑定域名</h2><p>我个人购买的一级域名是 i-xiao ，域名后缀是 space，专门给GitHub Pages 增加一个CNAME记录（blog），解析二级域名，绑定 <username>github.io 域名。</username></p>
+<h3 id="5-1、域名相关知识"><a href="#5-1、域名相关知识" class="headerlink" title="5.1、域名相关知识"></a>5.1、域名相关知识</h3><ul>
+<li>www：主机名，i-xiao : 域名主体(一级域名)，.space : 域名后缀<br>注册一级域名的时候是需要付费的</li>
+<li>二级域名，是依附一级域名的存在而存在的，也就是说要是顶级域名消失了，二级域名也也会不复存在。反而来说，二级域名的网站不做了，主域名网站是不受影响的。</li>
+<li>一级域名、二级域名区别：<br>DNS收录一级域名更快；还有就是解析速度，下一跳路由就不说了，找到目的主机之后，二级域名层级更深，需要多一层计算（其实这是我瞎写的🤣，猜测应该跟 nginx location匹配类似）</li>
+</ul>
+<h3 id="5-2、GitHub上配置自定义域名"><a href="#5-2、GitHub上配置自定义域名" class="headerlink" title="5.2、GitHub上配置自定义域名"></a>5.2、GitHub上配置自定义域名</h3><p>进入 <username>github.io 仓库，进入设置页面，点击左边 Pages 选项卡，进行下面的配置。</username></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6116f2c2beb1e1511a.png"></p>
+<h2 id="6、配置域名映射"><a href="#6、配置域名映射" class="headerlink" title="6、配置域名映射"></a>6、配置域名映射</h2><p><strong>各记录类型使用目的</strong></p>
+<table>
+<thead>
+<tr>
+<th>记录类型</th>
+<th>使用目的</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ce5/">A 记录</a></td>
+<td>将域名指向一个 IP 地址（外网地址）。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9cf9/">CNAME 记录</a></td>
+<td>将域名指向另一个域名，再由另一个域名提供 IP 地址（外网地址）。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9cff/">MX 记录</a></td>
+<td>设置邮箱，让邮箱能收到邮件。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d11/">NS 记录</a></td>
+<td>将子域名交给其他 DNS 服务商解析。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d0b/">AAAA 记录</a></td>
+<td>将域名指向一个 IPv6 地址。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d17/">SRV 记录</a></td>
+<td>用来标识某台服务器使用了某个服务，常见于微软系统的目录管理。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d05/">TXT 记录</a></td>
+<td>对域名进行标识和说明，绝大多数的 TXT 记录是用来做 SPF 记录（反垃圾邮件）。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ced/">隐、显性 URL 记录</a></td>
+<td>将一个域名指向另外一个已经存在的站点。</td>
+</tr>
+</tbody></table>
+<p><strong>如下图</strong></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6f16f2c2beb1e16954.png"></p>
+<h2 id="7、DNS检测"><a href="#7、DNS检测" class="headerlink" title="7、DNS检测"></a>7、DNS检测</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f7816f2c2beb1e1785b.png"></p>
+<h2 id="8、查看Pages"><a href="#8、查看Pages" class="headerlink" title="8、查看Pages"></a>8、查看Pages</h2><p>成功解析之后，还存在DNS缓存，一般还需要再等待一会（一般十分钟，或许更长时间）才能生效，如下图成功显示👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f8c16f2c2beb1e1a34c.png"></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>站点绑定的域名已经更换，访问请到👉 <a href="https://home.i-xiao.space/">这里</a></p>
+<hr>
+<p>🎈🎈🎈</p>
+<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
+</body></html>]]></content>
+      <categories>
+        <category>GitHub</category>
+      </categories>
+      <tags>
+        <tag>GitHub</tag>
       </tags>
   </entry>
   <entry>
@@ -1012,121 +1012,6 @@
       </tags>
   </entry>
   <entry>
-    <title>React Native环境配置、初始化项目、打包安装到手机，以及开发小知识</title>
-    <url>/posts/252268106.html</url>
-    <content><![CDATA[<html><head></head><body><h1 id="1、前言"><a href="#1、前言" class="headerlink" title="1、前言"></a>1、前言</h1><p>环境：Win10 + Android</p>
-<p>已经在Windows电脑上安装好 <a href="https://nodejs.org/en/">Node</a>（v14+）、Git、Yarn、<br><a href="https://www.oracle.com/java/technologies/downloads/#java11">JDK</a>(v11)</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">javac -version</span><br><span class="line">javac 11.0.15.1</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">node -v</span><br><span class="line">v16.14.1</span><br></pre></td></tr></tbody></table></figure>
-<p>👉 <a href="https://www.react-native.cn/docs/next/environment-setup">官方文档</a></p>
-<h1 id="2、Android-Studio下载安装"><a href="#2、Android-Studio下载安装" class="headerlink" title="2、Android Studio下载安装"></a>2、Android Studio下载安装</h1><ul>
-<li><a href="https://developer.android.google.cn/studio/">下载地址</a></li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631855c416f2c2beb1e9e38c.png"></p>
-<h1 id="3、Android-SDK-下载安装"><a href="#3、Android-SDK-下载安装" class="headerlink" title="3、Android SDK 下载安装"></a>3、Android SDK 下载安装</h1><ul>
-<li>安装 android sdk</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318562016f2c2beb1ea4698.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318567d16f2c2beb1eab904.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318569116f2c2beb1eacfb0.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856a016f2c2beb1eae08f.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856be16f2c2beb1eb068f.png"></p>
-<h2 id="3-1、环境变量配置"><a href="#3-1、环境变量配置" class="headerlink" title="3.1、环境变量配置"></a>3.1、环境变量配置</h2><ul>
-<li><p>配置系统变量<br><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856cf16f2c2beb1eb1c1c.png"></p>
-</li>
-<li><p>Path 配置：</p>
-</li>
-</ul>
-<figure class="highlight haml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\platform-tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\emulator</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools\bin</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="4、Scrcpy-手机模拟器下载安装使用"><a href="#4、Scrcpy-手机模拟器下载安装使用" class="headerlink" title="4、Scrcpy 手机模拟器下载安装使用"></a>4、Scrcpy 手机模拟器下载安装使用</h1><ul>
-<li><a href="https://github.com/Genymobile/scrcpy">下载地址</a></li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856e916f2c2beb1eb3879.png"></p>
-<p>下载zip文件，解压，双击运行 <code>scrcpy.exe</code> 可执行文件即可在电脑上投影手机屏幕，如下图👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856fb16f2c2beb1eb4fb0.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318571216f2c2beb1eb7443.png" alt="image.png"></p>
-<blockquote>
-<p>运行可执行文件之前，使用<strong>数据线</strong>连接Android手机，进行开发者选项设置（不同的手机进入开发者模式略有差异，自行搜索，我用的是华为手机）</p>
-</blockquote>
-<ul>
-<li>电脑端查看连接设备<br><code>adb devices</code></li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">adb devices</span><br><span class="line">List of devices attached</span><br><span class="line">8TFDU18719000649        device</span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<p>adb 命令，在下载 <code>scrcpy</code> 的时候已经内置了</p>
-</blockquote>
-<h1 id="5、安装-React-Native"><a href="#5、安装-React-Native" class="headerlink" title="5、安装 React Native"></a>5、安装 React Native</h1><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm i react-native-cli -g</span><br><span class="line"></span><br><span class="line">$ react-native -v</span><br><span class="line">react-native-cli: 2.0.1</span><br><span class="line">react-native: n/a - not inside a React Native project directory</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="6、初始化项目"><a href="#6、初始化项目" class="headerlink" title="6、初始化项目"></a>6、初始化项目</h1><p>进入到自己的工作目录，执行下面的命令创建 react native 项目</p>
-<figure class="highlight actionscript"><table><tbody><tr><td class="code"><pre><span class="line">npx react-<span class="keyword">native</span> init AwesomeProject</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="7、运行项目安装软件到安卓机"><a href="#7、运行项目安装软件到安卓机" class="headerlink" title="7、运行项目安装软件到安卓机"></a>7、运行项目安装软件到安卓机</h1><h2 id="7-1、先用数据线连接手机和电脑，运行scrcpy-软件"><a href="#7-1、先用数据线连接手机和电脑，运行scrcpy-软件" class="headerlink" title="7.1、先用数据线连接手机和电脑，运行scrcpy 软件"></a>7.1、先用数据线连接手机和电脑，运行scrcpy 软件</h2><p>开发者选项配置修改，最终实现在电脑上可以投屏手机，并可以在电脑上操控手机</p>
-<h2 id="7-2、打开-android-studio-编辑器，运行项目"><a href="#7-2、打开-android-studio-编辑器，运行项目" class="headerlink" title="7.2、打开 android studio 编辑器，运行项目"></a>7.2、打开 android studio 编辑器，运行项目</h2><figure class="highlight asciidoc"><table><tbody><tr><td class="code"><pre><span class="line">npm run android</span><br><span class="line"></span><br><span class="line"><span class="section">or</span></span><br><span class="line"><span class="section">-------------------</span></span><br><span class="line">cd AwesomeProject</span><br><span class="line">yarn android</span><br><span class="line"># 或者</span><br><span class="line">yarn react-native run-android</span><br></pre></td></tr></tbody></table></figure>
-
-<p>运行的时候会在手机上弹窗 “是否统一安装软件”之类的提示，点击同意即可</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318572616f2c2beb1eb9161.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318573616f2c2beb1eba516.png"></p>
-<h2 id="7-3、adb-reverse-命令使用"><a href="#7-3、adb-reverse-命令使用" class="headerlink" title="7.3、adb reverse  命令使用"></a>7.3、adb reverse  命令使用</h2><p><a href="https://developer.android.google.cn/studio/command-line/adb?hl=zh-cn">adb 文档</a></p>
-<h4 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h4><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318574916f2c2beb1ebbc88.png"></p>
-<p>猜测是多设备连接受影响了，可以尝试重启手机解决<br>也可以尝试如下步骤： 启停 adb 服务器</p>
-<blockquote>
-<p>在某些情况下，您可能需要终止 adb 服务器进程，然后重启以解决问题（例如，如果 adb 不响应命令）。</p>
-<p>如需停止 adb 服务器，请使用 adb kill-server 命令。然后，您可以通过发出其他任何 adb 命令来重启服务器。</p>
-</blockquote>
-<figure class="highlight pgsql"><table><tbody><tr><td class="code"><pre><span class="line">adb kill-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">start</span>-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">reverse</span> tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><figure class="highlight apache"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attribute">adb</span> reverse tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>这条命令的意思是，Android允许我们通过ADB，把Android上的某个端口映射到电脑（adb forward），或者把电脑的某个端口映射到Android系统（adb reverse），在这里假设电脑上开启的服务，监听的端口为8081。Android手机通过USB连接电脑后，在终端直接执行<code>adb reverse tcp:8081 tcp:8081</code>，然后在手机中访问<code>127.0.0.1:8081</code>，就可以访问到电脑上启动的服务了。</p>
-<p>注意：</p>
-<ol>
-<li>必须是在连接数据线usb的前提下才能使用该方案进行代码调试。</li>
-<li>(Android 5.0 及以上)使用 adb reverse 命令，这个选项只能在 5.0 以上版本(API 21+)的安卓设备上使用。</li>
-</ol>
-<h1 id="8、react-native开发小知识"><a href="#8、react-native开发小知识" class="headerlink" title="8、react-native开发小知识"></a>8、react-native开发小知识</h1><h2 id="8-1、vscode-上代码飘红"><a href="#8-1、vscode-上代码飘红" class="headerlink" title="8.1、vscode 上代码飘红"></a>8.1、vscode 上代码飘红</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318575a16f2c2beb1ebd220.png"></p>
-<ul>
-<li>问题原因：</li>
-</ul>
-<p>VScode是默认解析ts的，但是不会默认识别 <a href="https://flow.org/en/docs/react/"><code>Flow</code></a>(<strong>静态类型检测工具</strong>)的语法，所以这种的代码会被解析成ts语法。</p>
-<ul>
-<li>解决方法：<br>快捷键<code>Ctrl+Shift+P</code>，输入<code>setting.json</code>，选择 首选项:打开设置(json)。</li>
-</ul>
-<p><code>settings.json</code></p>
-<figure class="highlight awk"><table><tbody><tr><td class="code"><pre><span class="line"><span class="regexp">//</span> <span class="string">"import type"</span> 声明只能在 TypeScript 文件中使用。</span><br><span class="line"><span class="string">"javascript.validate.enable"</span>: false,</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="8-2、npm-run-android-每次都需要在手机上重新安装软件包"><a href="#8-2、npm-run-android-每次都需要在手机上重新安装软件包" class="headerlink" title="8.2、npm run android 每次都需要在手机上重新安装软件包"></a>8.2、npm run android 每次都需要在手机上重新安装软件包</h2><p>开发者模式 -&gt; USB调试 -&gt; 监控ADB安装应用 -&gt; 关闭, 即可解决。</p>
-<h2 id="8-3、本地开发启动多个项目"><a href="#8-3、本地开发启动多个项目" class="headerlink" title="8.3、本地开发启动多个项目"></a>8.3、本地开发启动多个项目</h2><p>默认端口号是8081，通过指定不同的端口号来启动。</p>
-<figure class="highlight livecodeserver"><table><tbody><tr><td class="code"><pre><span class="line">react-native <span class="built_in">start</span> <span class="comment">--port=8082</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="8-4、修改软件包名称"><a href="#8-4、修改软件包名称" class="headerlink" title="8.4、修改软件包名称"></a>8.4、修改软件包名称</h2><ol>
-<li>修改配置文件<br>Android<br>修改配置文件里的 <code>app_name</code> 即可，重新 <code>yarn android</code> ，发现手机上软件的名称已修改成功。</li>
-</ol>
-<p>文件： <code>android\app\src\main\res\values\strings.xml</code></p>
-<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">string</span> <span class="attr">name</span>=<span class="string">"app_name"</span>&gt;</span>远点<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>react-native-rename 插件修改</li>
-</ol>
-<p>通过插件修改名字，必须是 使用 <code>react-native init xxx</code> 创建的项目</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 安装</span></span><br><span class="line">npm install react-native-rename -g</span><br><span class="line">or</span><br><span class="line">yarn global add react-native-rename</span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目根目录执行命令</span></span><br><span class="line">npx react-native-rename &lt;newName&gt;</span><br></pre></td></tr></tbody></table></figure>
-
-<p>修改完成。</p>
-<p>本篇完！后面继续分享如何调试react native项目。</p>
-<hr>
-<p>🎈🎈🎈</p>
-<p>🌹 关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>✨ 欢迎大家转发、评论交流</p>
-<p>🎁 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>React Native</category>
-      </categories>
-      <tags>
-        <tag>React Native</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux操作系统学习（运维必会）</title>
     <url>/posts/1915044345.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1307,6 +1192,120 @@
       </tags>
   </entry>
   <entry>
+    <title>React Native环境配置、初始化项目、打包安装到手机，以及开发小知识</title>
+    <url>/posts/252268106.html</url>
+    <content><![CDATA[<html><head></head><body><h1 id="1、前言"><a href="#1、前言" class="headerlink" title="1、前言"></a>1、前言</h1><p>环境：Win10 + Android</p>
+<p>已经在Windows电脑上安装好 <a href="https://nodejs.org/en/">Node</a>（v14+）、Git、Yarn、<br><a href="https://www.oracle.com/java/technologies/downloads/#java11">JDK</a>(v11)</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">javac -version</span><br><span class="line">javac 11.0.15.1</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">node -v</span><br><span class="line">v16.14.1</span><br></pre></td></tr></tbody></table></figure>
+<p>👉 <a href="https://www.react-native.cn/docs/next/environment-setup">官方文档</a></p>
+<h1 id="2、Android-Studio下载安装"><a href="#2、Android-Studio下载安装" class="headerlink" title="2、Android Studio下载安装"></a>2、Android Studio下载安装</h1><ul>
+<li><a href="https://developer.android.google.cn/studio/">下载地址</a></li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631855c416f2c2beb1e9e38c.png"></p>
+<h1 id="3、Android-SDK-下载安装"><a href="#3、Android-SDK-下载安装" class="headerlink" title="3、Android SDK 下载安装"></a>3、Android SDK 下载安装</h1><ul>
+<li>安装 android sdk</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318562016f2c2beb1ea4698.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318567d16f2c2beb1eab904.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318569116f2c2beb1eacfb0.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856a016f2c2beb1eae08f.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856be16f2c2beb1eb068f.png"></p>
+<h2 id="3-1、环境变量配置"><a href="#3-1、环境变量配置" class="headerlink" title="3.1、环境变量配置"></a>3.1、环境变量配置</h2><ul>
+<li><p>配置系统变量<br><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856cf16f2c2beb1eb1c1c.png"></p>
+</li>
+<li><p>Path 配置：</p>
+</li>
+</ul>
+<figure class="highlight haml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\platform-tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\emulator</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools\bin</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="4、Scrcpy-手机模拟器下载安装使用"><a href="#4、Scrcpy-手机模拟器下载安装使用" class="headerlink" title="4、Scrcpy 手机模拟器下载安装使用"></a>4、Scrcpy 手机模拟器下载安装使用</h1><ul>
+<li><a href="https://github.com/Genymobile/scrcpy">下载地址</a></li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856e916f2c2beb1eb3879.png"></p>
+<p>下载zip文件，解压，双击运行 <code>scrcpy.exe</code> 可执行文件即可在电脑上投影手机屏幕，如下图👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856fb16f2c2beb1eb4fb0.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318571216f2c2beb1eb7443.png" alt="image.png"></p>
+<blockquote>
+<p>运行可执行文件之前，使用<strong>数据线</strong>连接Android手机，进行开发者选项设置（不同的手机进入开发者模式略有差异，自行搜索，我用的是华为手机）</p>
+</blockquote>
+<ul>
+<li>电脑端查看连接设备<br><code>adb devices</code></li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">adb devices</span><br><span class="line">List of devices attached</span><br><span class="line">8TFDU18719000649        device</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>adb 命令，在下载 <code>scrcpy</code> 的时候已经内置了</p>
+</blockquote>
+<h1 id="5、安装-React-Native"><a href="#5、安装-React-Native" class="headerlink" title="5、安装 React Native"></a>5、安装 React Native</h1><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm i react-native-cli -g</span><br><span class="line"></span><br><span class="line">$ react-native -v</span><br><span class="line">react-native-cli: 2.0.1</span><br><span class="line">react-native: n/a - not inside a React Native project directory</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="6、初始化项目"><a href="#6、初始化项目" class="headerlink" title="6、初始化项目"></a>6、初始化项目</h1><p>进入到自己的工作目录，执行下面的命令创建 react native 项目</p>
+<figure class="highlight actionscript"><table><tbody><tr><td class="code"><pre><span class="line">npx react-<span class="keyword">native</span> init AwesomeProject</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="7、运行项目安装软件到安卓机"><a href="#7、运行项目安装软件到安卓机" class="headerlink" title="7、运行项目安装软件到安卓机"></a>7、运行项目安装软件到安卓机</h1><h2 id="7-1、先用数据线连接手机和电脑，运行scrcpy-软件"><a href="#7-1、先用数据线连接手机和电脑，运行scrcpy-软件" class="headerlink" title="7.1、先用数据线连接手机和电脑，运行scrcpy 软件"></a>7.1、先用数据线连接手机和电脑，运行scrcpy 软件</h2><p>开发者选项配置修改，最终实现在电脑上可以投屏手机，并可以在电脑上操控手机</p>
+<h2 id="7-2、打开-android-studio-编辑器，运行项目"><a href="#7-2、打开-android-studio-编辑器，运行项目" class="headerlink" title="7.2、打开 android studio 编辑器，运行项目"></a>7.2、打开 android studio 编辑器，运行项目</h2><figure class="highlight asciidoc"><table><tbody><tr><td class="code"><pre><span class="line">npm run android</span><br><span class="line"></span><br><span class="line"><span class="section">or</span></span><br><span class="line"><span class="section">-------------------</span></span><br><span class="line">cd AwesomeProject</span><br><span class="line">yarn android</span><br><span class="line"># 或者</span><br><span class="line">yarn react-native run-android</span><br></pre></td></tr></tbody></table></figure>
+
+<p>运行的时候会在手机上弹窗 “是否统一安装软件”之类的提示，点击同意即可</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318572616f2c2beb1eb9161.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318573616f2c2beb1eba516.png"></p>
+<h2 id="7-3、adb-reverse-命令使用"><a href="#7-3、adb-reverse-命令使用" class="headerlink" title="7.3、adb reverse  命令使用"></a>7.3、adb reverse  命令使用</h2><p><a href="https://developer.android.google.cn/studio/command-line/adb?hl=zh-cn">adb 文档</a></p>
+<h4 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h4><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318574916f2c2beb1ebbc88.png"></p>
+<p>猜测是多设备连接受影响了，可以尝试重启手机解决<br>也可以尝试如下步骤： 启停 adb 服务器</p>
+<blockquote>
+<p>在某些情况下，您可能需要终止 adb 服务器进程，然后重启以解决问题（例如，如果 adb 不响应命令）。</p>
+<p>如需停止 adb 服务器，请使用 adb kill-server 命令。然后，您可以通过发出其他任何 adb 命令来重启服务器。</p>
+</blockquote>
+<figure class="highlight pgsql"><table><tbody><tr><td class="code"><pre><span class="line">adb kill-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">start</span>-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">reverse</span> tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><figure class="highlight apache"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attribute">adb</span> reverse tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>这条命令的意思是，Android允许我们通过ADB，把Android上的某个端口映射到电脑（adb forward），或者把电脑的某个端口映射到Android系统（adb reverse），在这里假设电脑上开启的服务，监听的端口为8081。Android手机通过USB连接电脑后，在终端直接执行<code>adb reverse tcp:8081 tcp:8081</code>，然后在手机中访问<code>127.0.0.1:8081</code>，就可以访问到电脑上启动的服务了。</p>
+<p>注意：</p>
+<ol>
+<li>必须是在连接数据线usb的前提下才能使用该方案进行代码调试。</li>
+<li>(Android 5.0 及以上)使用 adb reverse 命令，这个选项只能在 5.0 以上版本(API 21+)的安卓设备上使用。</li>
+</ol>
+<h1 id="8、react-native开发小知识"><a href="#8、react-native开发小知识" class="headerlink" title="8、react-native开发小知识"></a>8、react-native开发小知识</h1><h2 id="8-1、vscode-上代码飘红"><a href="#8-1、vscode-上代码飘红" class="headerlink" title="8.1、vscode 上代码飘红"></a>8.1、vscode 上代码飘红</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318575a16f2c2beb1ebd220.png"></p>
+<ul>
+<li>问题原因：</li>
+</ul>
+<p>VScode是默认解析ts的，但是不会默认识别 <a href="https://flow.org/en/docs/react/"><code>Flow</code></a>(<strong>静态类型检测工具</strong>)的语法，所以这种的代码会被解析成ts语法。</p>
+<ul>
+<li>解决方法：<br>快捷键<code>Ctrl+Shift+P</code>，输入<code>setting.json</code>，选择 首选项:打开设置(json)。</li>
+</ul>
+<p><code>settings.json</code></p>
+<figure class="highlight awk"><table><tbody><tr><td class="code"><pre><span class="line"><span class="regexp">//</span> <span class="string">"import type"</span> 声明只能在 TypeScript 文件中使用。</span><br><span class="line"><span class="string">"javascript.validate.enable"</span>: false,</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="8-2、npm-run-android-每次都需要在手机上重新安装软件包"><a href="#8-2、npm-run-android-每次都需要在手机上重新安装软件包" class="headerlink" title="8.2、npm run android 每次都需要在手机上重新安装软件包"></a>8.2、npm run android 每次都需要在手机上重新安装软件包</h2><p>开发者模式 -&gt; USB调试 -&gt; 监控ADB安装应用 -&gt; 关闭, 即可解决。</p>
+<h2 id="8-3、本地开发启动多个项目"><a href="#8-3、本地开发启动多个项目" class="headerlink" title="8.3、本地开发启动多个项目"></a>8.3、本地开发启动多个项目</h2><p>默认端口号是8081，通过指定不同的端口号来启动。</p>
+<figure class="highlight livecodeserver"><table><tbody><tr><td class="code"><pre><span class="line">react-native <span class="built_in">start</span> <span class="comment">--port=8082</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="8-4、修改软件包名称"><a href="#8-4、修改软件包名称" class="headerlink" title="8.4、修改软件包名称"></a>8.4、修改软件包名称</h2><ol>
+<li>修改配置文件<br>Android<br>修改配置文件里的 <code>app_name</code> 即可，重新 <code>yarn android</code> ，发现手机上软件的名称已修改成功。</li>
+</ol>
+<p>文件： <code>android\app\src\main\res\values\strings.xml</code></p>
+<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">string</span> <span class="attr">name</span>=<span class="string">"app_name"</span>&gt;</span>远点<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>react-native-rename 插件修改</li>
+</ol>
+<p>通过插件修改名字，必须是 使用 <code>react-native init xxx</code> 创建的项目</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 安装</span></span><br><span class="line">npm install react-native-rename -g</span><br><span class="line">or</span><br><span class="line">yarn global add react-native-rename</span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目根目录执行命令</span></span><br><span class="line">npx react-native-rename &lt;newName&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>修改完成。</p>
+<p>本篇完！后面继续分享如何调试react native项目。</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>React Native</category>
+      </categories>
+      <tags>
+        <tag>React Native</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>V8中的快慢数组（附源码分析、图文更易理解😃）</title>
     <url>/posts/1787681656.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1449,124 +1448,6 @@
       </tags>
   </entry>
   <entry>
-    <title>.env.[mode]文件中如何添加注释？</title>
-    <url>/posts/2584380968.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>Vue-Cli</code> 允许我们在项目根目录创建<code>.env.[mode]</code>文件来设置一些打包编译的启动参数，通过执行脚本的时候加<code>mode</code>参数，指定不同环境需要加载的配置文件</p>
-<p>形如： <code>.env.prod</code></p>
-<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>怎么在 <code>.env.prod</code> 文件中添加注释呢？</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这要看<code>vue</code>是怎么解析 <code>.env.prod</code> 文件的</p>
-<p>通过启动脚本参数 <code>--mode prod</code>，一路找到了处理 <code>.env.prod</code> 文件的逻辑，让我们一块看下</p>
-<p><code>path：node_modules\@vue\cli-service\lib\Service.js</code></p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> dotenv = <span class="built_in">require</span>(<span class="string">'dotenv'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">loadEnv (mode) {</span><br><span class="line">    <span class="keyword">const</span> logger = <span class="title function_">debug</span>(<span class="string">'vue:env'</span>)</span><br><span class="line">    <span class="keyword">const</span> basePath = path.<span class="title function_">resolve</span>(<span class="variable language_">this</span>.<span class="property">context</span>, <span class="string">`.env<span class="subst">${mode ? <span class="string">`.<span class="subst">${mode}</span>`</span> : <span class="string">``</span>}</span>`</span>)</span><br><span class="line">    <span class="keyword">const</span> localPath = <span class="string">`<span class="subst">${basePath}</span>.local`</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="title function_">load</span> = envPath =&gt; {</span><br><span class="line">      <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">const</span> env = dotenv.<span class="title function_">config</span>({ <span class="attr">path</span>: envPath, <span class="attr">debug</span>: process.<span class="property">env</span>.<span class="property">DEBUG</span> })</span><br><span class="line">        <span class="title function_">dotenvExpand</span>(env)</span><br><span class="line">        <span class="title function_">logger</span>(envPath, env)</span><br><span class="line">      } <span class="keyword">catch</span> (err) {</span><br><span class="line">        <span class="comment">// only ignore error if file is not found</span></span><br><span class="line">        <span class="keyword">if</span> (err.<span class="title function_">toString</span>().<span class="title function_">indexOf</span>(<span class="string">'ENOENT'</span>) &lt; <span class="number">0</span>) {</span><br><span class="line">          <span class="title function_">error</span>(err)</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="title function_">load</span>(localPath)</span><br><span class="line">    <span class="title function_">load</span>(basePath)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// by default, NODE_ENV and BABEL_ENV are set to "development" unless mode</span></span><br><span class="line">    <span class="comment">// is production or test. However the value in .env files will take higher</span></span><br><span class="line">    <span class="comment">// priority.</span></span><br><span class="line">    <span class="keyword">if</span> (mode) {</span><br><span class="line">      <span class="comment">// always set NODE_ENV during tests</span></span><br><span class="line">      <span class="comment">// as that is necessary for tests to not be affected by each other</span></span><br><span class="line">      <span class="keyword">const</span> shouldForceDefaultEnv = (</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST</span> &amp;&amp;</span><br><span class="line">        !process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST_TESTING_ENV</span></span><br><span class="line">      )</span><br><span class="line">      <span class="keyword">const</span> defaultNodeEnv = (mode === <span class="string">'production'</span> || mode === <span class="string">'test'</span>)</span><br><span class="line">        ? mode</span><br><span class="line">        : <span class="string">'development'</span></span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">NODE_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">NODE_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br></pre></td></tr></tbody></table></figure>
-
-<p>从上面的代码，可以得知，<code>vue</code>使用<code>dotenv</code>解析<code> .env.prod</code> 文件，并将环境变量从 <code>.env[mode]</code> 文件中加载到 <code>process.env</code> 环境变量中</p>
-<h2 id="解决（dotenv）"><a href="#解决（dotenv）" class="headerlink" title="解决（dotenv）"></a>解决（dotenv）</h2><p><code>dotenv</code>插件已经被 <code>Vue-Cli</code> 集成了</p>
-<p><a href="https://github.com/motdotla/dotenv#rules">GitHub地址</a></p>
-<p><code>README.md</code> 中有这么一段话：</p>
-<ul>
-<li>“# marks the beginning of a comment (unless when the value is wrapped in quotes)”</li>
-</ul>
-<p>这就是我们要找的，在<code>.env.[mode]</code> 文件中，可以使用 <code>#</code> 进行注释</p>
-<h3 id="使用测试"><a href="#使用测试" class="headerlink" title="使用测试"></a>使用测试</h3><ol>
-<li><code>path: .env.prod</code> 参数配置</li>
-</ol>
-<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="comment"># VUE_APP_PATH='/pc/'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li><code>package.json</code> 文件脚本命令配置<code>--mode</code>参数</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: {</span><br><span class="line">    <span class="string">"build"</span>: <span class="string">"vue-cli-service build --mode prod"</span>,</span><br><span class="line">  },</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="3">
-<li>执行 <code>npm run build</code> 命令，输出如下：</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">NODE_ENV=== production</span><br><span class="line">VUE_APP_PATH=== ./</span><br></pre></td></tr></tbody></table></figure>
-
-<p>本文到此为止，要想了解更多<code>dotenv</code>请自行探索，感谢观看😉</p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://img-blog.csdnimg.cn/img_convert/bd14318dfe358078af5f56cdf6895446.gif"></p>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>vue</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>js获取项目git分支信息</title>
-    <url>/posts/3067788882.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="1、git-bash-获取分支信息"><a href="#1、git-bash-获取分支信息" class="headerlink" title="1、git bash 获取分支信息"></a>1、git bash 获取分支信息</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 获取当前分支名</span></span><br><span class="line">git rev-parse --abbrev-ref HEAD</span><br><span class="line">git branch --show-current</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取当前hash</span></span><br><span class="line">git rev-parse HEAD</span><br><span class="line">git rev-parse --short HEAD  <span class="comment"># 短的</span></span><br></pre></td></tr></tbody></table></figure>
-<p>上面的代码是通过git命令获取的分支信息，怎么可以在项目代码里面获取分支信息呢？请看下文👇</p>
-<h2 id="2、JavaScript-通过-execa-插件获取项目分支信息"><a href="#2、JavaScript-通过-execa-插件获取项目分支信息" class="headerlink" title="2、JavaScript 通过 execa 插件获取项目分支信息"></a>2、JavaScript 通过 <a href="https://github.com/sindresorhus/execa">execa</a> 插件获取项目分支信息</h2><p>execa具备如下特点：</p>
-<ul>
-<li><p>Promise接口</p>
-</li>
-<li><p>从输出中删除最后的换行符，这样您就不必执行stdout.trim()</p>
-</li>
-<li><p>支持<strong>跨平台</strong>的shebang二进制文件</p>
-</li>
-<li><p>改进Windows支持。</p>
-</li>
-<li><p>更高的最大缓冲区。100mb而不是200kb。</p>
-</li>
-<li><p>按名称执行本地安装的二进制文件。</p>
-</li>
-<li><p>在父进程终止时清除派生的进程。</p>
-</li>
-<li><p>从 stdout和stderr获得交错输出，类似于在终端上打印的输出。(<strong>异步</strong>)</p>
-</li>
-<li><p>可以指定文件和参数作为一个单一的字符串没有外壳</p>
-</li>
-<li><p>更具描述性的错误。</p>
-</li>
-</ul>
-<ol>
-<li><p>安装 execa</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm install execa -S</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>简单使用 execa</p>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line">(<span class="keyword">async</span> () =&gt; {</span><br><span class="line">    <span class="keyword">const</span> {stdout} = <span class="keyword">await</span> <span class="title function_">execa</span>(<span class="string">'echo'</span>, [<span class="string">'unicorns'</span>]);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(stdout);</span><br><span class="line">    <span class="comment">//=&gt; 'unicorns'</span></span><br><span class="line">})();</span><br><span class="line"></span><br><span class="line"><span class="comment">// stdout 表示执行命令的输出结果</span></span><br><span class="line"><span class="comment">/*{</span></span><br><span class="line"><span class="comment">  command: 'echo unicorns',</span></span><br><span class="line"><span class="comment">  escapedCommand: 'echo unicorns',</span></span><br><span class="line"><span class="comment">  exitCode: 0,</span></span><br><span class="line"><span class="comment">  stdout: '"unicorns"',</span></span><br><span class="line"><span class="comment">  stderr: '',</span></span><br><span class="line"><span class="comment">  all: undefined,</span></span><br><span class="line"><span class="comment">  failed: false,</span></span><br><span class="line"><span class="comment">  timedOut: false,</span></span><br><span class="line"><span class="comment">  isCanceled: false,</span></span><br><span class="line"><span class="comment">  killed: false</span></span><br><span class="line"><span class="comment">}*/</span></span><br></pre></td></tr></tbody></table></figure>
-<p>execa还可以执行脚本命令，并输出结果，下面看一下如何在代码里面获取当前操作的分支👇</p>
-</li>
-<li><p>实际项目中的代码</p>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getGitBranch</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">const</span> res = execa.<span class="title function_">commandSync</span>(<span class="string">'git rev-parse --abbrev-ref HEAD'</span>);</span><br><span class="line">  <span class="keyword">return</span> res.<span class="property">stdout</span>;</span><br><span class="line">}</span><br><span class="line"><span class="keyword">const</span> curbranch = <span class="title function_">getGitBranch</span>()</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'curbranch=='</span>, curbranch); <span class="comment">// master</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 以下是res输出</span></span><br><span class="line">curbranch== master</span><br><span class="line">{</span><br><span class="line">  <span class="attr">command</span>: <span class="string">'git rev-parse --abbrev-ref HEAD'</span>,</span><br><span class="line">  <span class="attr">escapedCommand</span>: <span class="string">'git rev-parse --abbrev-ref HEAD'</span>,</span><br><span class="line">  <span class="attr">exitCode</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="attr">stdout</span>: <span class="string">'master'</span>, # 命令执行结果输出</span><br><span class="line">  <span class="attr">stderr</span>: <span class="string">''</span>,</span><br><span class="line">  <span class="attr">failed</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">timedOut</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">isCanceled</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">killed</span>: <span class="literal">false</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>下面说一下脚本获取方式</p>
-</li>
-</ol>
-<h2 id="3、脚本获取"><a href="#3、脚本获取" class="headerlink" title="3、脚本获取"></a>3、脚本获取</h2><blockquote>
-<p>我在掘金 <a href="https://juejin.cn/post/7113502858481254413">git编写脚本 组合 commit-msg</a> 一文中使用脚本获取分支信息，感兴趣可以看一下。</p>
-</blockquote>
-<ol>
-<li><p>可以看一下项目中 <code>.git/HEAD</code> 文件中的内容</p>
-<p> HEAD指向最新放入仓库的版本</p>
-</li>
-</ol>
-<figure class="highlight angelscript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">ref</span>: <span class="built_in">ref</span>s/heads/dev_0922</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>编写脚本</li>
-</ol>
-<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取当前分支</span></span><br><span class="line">line=$(<span class="built_in">head</span> -n +1 .git/HEAD)</span><br><span class="line">branch=<span class="variable">${line##*/}</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$branch</span> <span class="comment"># dev_0922</span></span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker常用命令——排错很有帮助😏</title>
     <url>/posts/1627929391.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1659,6 +1540,124 @@
       </tags>
   </entry>
   <entry>
+    <title>js获取项目git分支信息</title>
+    <url>/posts/3067788882.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="1、git-bash-获取分支信息"><a href="#1、git-bash-获取分支信息" class="headerlink" title="1、git bash 获取分支信息"></a>1、git bash 获取分支信息</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 获取当前分支名</span></span><br><span class="line">git rev-parse --abbrev-ref HEAD</span><br><span class="line">git branch --show-current</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取当前hash</span></span><br><span class="line">git rev-parse HEAD</span><br><span class="line">git rev-parse --short HEAD  <span class="comment"># 短的</span></span><br></pre></td></tr></tbody></table></figure>
+<p>上面的代码是通过git命令获取的分支信息，怎么可以在项目代码里面获取分支信息呢？请看下文👇</p>
+<h2 id="2、JavaScript-通过-execa-插件获取项目分支信息"><a href="#2、JavaScript-通过-execa-插件获取项目分支信息" class="headerlink" title="2、JavaScript 通过 execa 插件获取项目分支信息"></a>2、JavaScript 通过 <a href="https://github.com/sindresorhus/execa">execa</a> 插件获取项目分支信息</h2><p>execa具备如下特点：</p>
+<ul>
+<li><p>Promise接口</p>
+</li>
+<li><p>从输出中删除最后的换行符，这样您就不必执行stdout.trim()</p>
+</li>
+<li><p>支持<strong>跨平台</strong>的shebang二进制文件</p>
+</li>
+<li><p>改进Windows支持。</p>
+</li>
+<li><p>更高的最大缓冲区。100mb而不是200kb。</p>
+</li>
+<li><p>按名称执行本地安装的二进制文件。</p>
+</li>
+<li><p>在父进程终止时清除派生的进程。</p>
+</li>
+<li><p>从 stdout和stderr获得交错输出，类似于在终端上打印的输出。(<strong>异步</strong>)</p>
+</li>
+<li><p>可以指定文件和参数作为一个单一的字符串没有外壳</p>
+</li>
+<li><p>更具描述性的错误。</p>
+</li>
+</ul>
+<ol>
+<li><p>安装 execa</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm install execa -S</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>简单使用 execa</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line">(<span class="keyword">async</span> () =&gt; {</span><br><span class="line">    <span class="keyword">const</span> {stdout} = <span class="keyword">await</span> <span class="title function_">execa</span>(<span class="string">'echo'</span>, [<span class="string">'unicorns'</span>]);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(stdout);</span><br><span class="line">    <span class="comment">//=&gt; 'unicorns'</span></span><br><span class="line">})();</span><br><span class="line"></span><br><span class="line"><span class="comment">// stdout 表示执行命令的输出结果</span></span><br><span class="line"><span class="comment">/*{</span></span><br><span class="line"><span class="comment">  command: 'echo unicorns',</span></span><br><span class="line"><span class="comment">  escapedCommand: 'echo unicorns',</span></span><br><span class="line"><span class="comment">  exitCode: 0,</span></span><br><span class="line"><span class="comment">  stdout: '"unicorns"',</span></span><br><span class="line"><span class="comment">  stderr: '',</span></span><br><span class="line"><span class="comment">  all: undefined,</span></span><br><span class="line"><span class="comment">  failed: false,</span></span><br><span class="line"><span class="comment">  timedOut: false,</span></span><br><span class="line"><span class="comment">  isCanceled: false,</span></span><br><span class="line"><span class="comment">  killed: false</span></span><br><span class="line"><span class="comment">}*/</span></span><br></pre></td></tr></tbody></table></figure>
+<p>execa还可以执行脚本命令，并输出结果，下面看一下如何在代码里面获取当前操作的分支👇</p>
+</li>
+<li><p>实际项目中的代码</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getGitBranch</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">const</span> res = execa.<span class="title function_">commandSync</span>(<span class="string">'git rev-parse --abbrev-ref HEAD'</span>);</span><br><span class="line">  <span class="keyword">return</span> res.<span class="property">stdout</span>;</span><br><span class="line">}</span><br><span class="line"><span class="keyword">const</span> curbranch = <span class="title function_">getGitBranch</span>()</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'curbranch=='</span>, curbranch); <span class="comment">// master</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 以下是res输出</span></span><br><span class="line">curbranch== master</span><br><span class="line">{</span><br><span class="line">  <span class="attr">command</span>: <span class="string">'git rev-parse --abbrev-ref HEAD'</span>,</span><br><span class="line">  <span class="attr">escapedCommand</span>: <span class="string">'git rev-parse --abbrev-ref HEAD'</span>,</span><br><span class="line">  <span class="attr">exitCode</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="attr">stdout</span>: <span class="string">'master'</span>, # 命令执行结果输出</span><br><span class="line">  <span class="attr">stderr</span>: <span class="string">''</span>,</span><br><span class="line">  <span class="attr">failed</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">timedOut</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">isCanceled</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">killed</span>: <span class="literal">false</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>下面说一下脚本获取方式</p>
+</li>
+</ol>
+<h2 id="3、脚本获取"><a href="#3、脚本获取" class="headerlink" title="3、脚本获取"></a>3、脚本获取</h2><blockquote>
+<p>我在掘金 <a href="https://juejin.cn/post/7113502858481254413">git编写脚本 组合 commit-msg</a> 一文中使用脚本获取分支信息，感兴趣可以看一下。</p>
+</blockquote>
+<ol>
+<li><p>可以看一下项目中 <code>.git/HEAD</code> 文件中的内容</p>
+<p> HEAD指向最新放入仓库的版本</p>
+</li>
+</ol>
+<figure class="highlight angelscript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">ref</span>: <span class="built_in">ref</span>s/heads/dev_0922</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>编写脚本</li>
+</ol>
+<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取当前分支</span></span><br><span class="line">line=$(<span class="built_in">head</span> -n +1 .git/HEAD)</span><br><span class="line">branch=<span class="variable">${line##*/}</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$branch</span> <span class="comment"># dev_0922</span></span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>.env.[mode]文件中如何添加注释？</title>
+    <url>/posts/2584380968.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>Vue-Cli</code> 允许我们在项目根目录创建<code>.env.[mode]</code>文件来设置一些打包编译的启动参数，通过执行脚本的时候加<code>mode</code>参数，指定不同环境需要加载的配置文件</p>
+<p>形如： <code>.env.prod</code></p>
+<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>怎么在 <code>.env.prod</code> 文件中添加注释呢？</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这要看<code>vue</code>是怎么解析 <code>.env.prod</code> 文件的</p>
+<p>通过启动脚本参数 <code>--mode prod</code>，一路找到了处理 <code>.env.prod</code> 文件的逻辑，让我们一块看下</p>
+<p><code>path：node_modules\@vue\cli-service\lib\Service.js</code></p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> dotenv = <span class="built_in">require</span>(<span class="string">'dotenv'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">loadEnv (mode) {</span><br><span class="line">    <span class="keyword">const</span> logger = <span class="title function_">debug</span>(<span class="string">'vue:env'</span>)</span><br><span class="line">    <span class="keyword">const</span> basePath = path.<span class="title function_">resolve</span>(<span class="variable language_">this</span>.<span class="property">context</span>, <span class="string">`.env<span class="subst">${mode ? <span class="string">`.<span class="subst">${mode}</span>`</span> : <span class="string">``</span>}</span>`</span>)</span><br><span class="line">    <span class="keyword">const</span> localPath = <span class="string">`<span class="subst">${basePath}</span>.local`</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="title function_">load</span> = envPath =&gt; {</span><br><span class="line">      <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">const</span> env = dotenv.<span class="title function_">config</span>({ <span class="attr">path</span>: envPath, <span class="attr">debug</span>: process.<span class="property">env</span>.<span class="property">DEBUG</span> })</span><br><span class="line">        <span class="title function_">dotenvExpand</span>(env)</span><br><span class="line">        <span class="title function_">logger</span>(envPath, env)</span><br><span class="line">      } <span class="keyword">catch</span> (err) {</span><br><span class="line">        <span class="comment">// only ignore error if file is not found</span></span><br><span class="line">        <span class="keyword">if</span> (err.<span class="title function_">toString</span>().<span class="title function_">indexOf</span>(<span class="string">'ENOENT'</span>) &lt; <span class="number">0</span>) {</span><br><span class="line">          <span class="title function_">error</span>(err)</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="title function_">load</span>(localPath)</span><br><span class="line">    <span class="title function_">load</span>(basePath)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// by default, NODE_ENV and BABEL_ENV are set to "development" unless mode</span></span><br><span class="line">    <span class="comment">// is production or test. However the value in .env files will take higher</span></span><br><span class="line">    <span class="comment">// priority.</span></span><br><span class="line">    <span class="keyword">if</span> (mode) {</span><br><span class="line">      <span class="comment">// always set NODE_ENV during tests</span></span><br><span class="line">      <span class="comment">// as that is necessary for tests to not be affected by each other</span></span><br><span class="line">      <span class="keyword">const</span> shouldForceDefaultEnv = (</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST</span> &amp;&amp;</span><br><span class="line">        !process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST_TESTING_ENV</span></span><br><span class="line">      )</span><br><span class="line">      <span class="keyword">const</span> defaultNodeEnv = (mode === <span class="string">'production'</span> || mode === <span class="string">'test'</span>)</span><br><span class="line">        ? mode</span><br><span class="line">        : <span class="string">'development'</span></span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">NODE_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">NODE_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br></pre></td></tr></tbody></table></figure>
+
+<p>从上面的代码，可以得知，<code>vue</code>使用<code>dotenv</code>解析<code> .env.prod</code> 文件，并将环境变量从 <code>.env[mode]</code> 文件中加载到 <code>process.env</code> 环境变量中</p>
+<h2 id="解决（dotenv）"><a href="#解决（dotenv）" class="headerlink" title="解决（dotenv）"></a>解决（dotenv）</h2><p><code>dotenv</code>插件已经被 <code>Vue-Cli</code> 集成了</p>
+<p><a href="https://github.com/motdotla/dotenv#rules">GitHub地址</a></p>
+<p><code>README.md</code> 中有这么一段话：</p>
+<ul>
+<li>“# marks the beginning of a comment (unless when the value is wrapped in quotes)”</li>
+</ul>
+<p>这就是我们要找的，在<code>.env.[mode]</code> 文件中，可以使用 <code>#</code> 进行注释</p>
+<h3 id="使用测试"><a href="#使用测试" class="headerlink" title="使用测试"></a>使用测试</h3><ol>
+<li><code>path: .env.prod</code> 参数配置</li>
+</ol>
+<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="comment"># VUE_APP_PATH='/pc/'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li><code>package.json</code> 文件脚本命令配置<code>--mode</code>参数</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: {</span><br><span class="line">    <span class="string">"build"</span>: <span class="string">"vue-cli-service build --mode prod"</span>,</span><br><span class="line">  },</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>执行 <code>npm run build</code> 命令，输出如下：</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">NODE_ENV=== production</span><br><span class="line">VUE_APP_PATH=== ./</span><br></pre></td></tr></tbody></table></figure>
+
+<p>本文到此为止，要想了解更多<code>dotenv</code>请自行探索，感谢观看😉</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://img-blog.csdnimg.cn/img_convert/bd14318dfe358078af5f56cdf6895446.gif"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>npm 脚本命令使用解析</title>
     <url>/posts/2334529800.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1742,6 +1741,196 @@
       </tags>
   </entry>
   <entry>
+    <title>关于Web和App的一点点思考</title>
+    <url>/posts/4136692609.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>朋友在微信上分享给我一个“PDD”砍一刀的链接，让我帮忙砍一刀助力，我点开链接之后，让我去下载App，然后去应用商店下载一个App，注册登录完成之后，回到微信里面点击链接，就会唤醒App，接着就是在App里面一顿操作，还不能退出到首页，我呆了😮</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>从我的角度看，有两个点不是很明白：</p>
+<ol>
+<li>不可以在浏览器里面以Web的方式直接打开助力吗，显然是可以的，事实是非得让下载App才可以</li>
+<li>助力的流程怎么回事，为什么不可以退出这个流程呢，一直在里面来回转啊转啊，清除后台运行程序才可以退出？还是我没有发现别的退出路径呢？</li>
+</ol>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><ul>
+<li><p>Web发展方向，在进入移动互联网时代后，国内外出现了不同的发展路线：国外依然致力于精致Web的研发，国内则是随着微信小程序的推出，让一个App里面可以运行其它的“App”，出现了几大平台自研小程序的现象，而且不同的小程序之间还设有壁垒，不通用，接着又出现了一些搞兼容多方小程序的技术，其实就是做了一些“框架”级别的适配器，封装向下转型、向上转型。</p>
+</li>
+<li><p>那到底有没有一种技术可以让很多不用的程序都在上面跑呢，答案是确定的，不但有，而且已经发展了很多年了，那就是Web，让所有的应用程序都运行在浏览器里面。</p>
+</li>
+</ul>
+<p>这些家伙们在做什么？自己给自己出题玩？到底有没有推动技术的发展，“我不考虑这个，我要赚钱！”</p>
+<blockquote>
+<p>类小程序技术也不是微信的第一个尝试的，还有几大手机厂商的“快应用”等。<br>从中你会发现小公司只要有创新，没有展露头角发展不下去是死路一条，展露头角被大公司抄袭又是一死，<strong>这就是申请软件著作权，申请专利的重要性。</strong></p>
+</blockquote>
+<h2 id="期待"><a href="#期待" class="headerlink" title="期待"></a>期待</h2><p>前端的细分领域真的是太多太多了，期待Web技术会有更好的发展，不要往那些不能长久的、可持续发展的事物上投入太多精力，让那些细枝末节快点走进历史吧。</p>
+<hr>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>单据架构+数据字典——实现页面可配置化</title>
+    <url>/posts/668634675.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇是对以前工作中的单据架构实现做的总结，目前工作中我负责的系统也从零开始实现了这套架构功能。</p>
+<p>👉“单据”：金融、外贸行业术语，<a href="https://wiki.mbalib.com/wiki/%E5%8D%95%E6%8D%AE">货运单据</a></p>
+<p>👀以前做外贸行业的SaaS软件，表单字段数量之多，没接触过的人肯定难以想象😮。现在在金融行业工作（也有物联网、互联网服务行业工作经验），觉得外贸、财务、金融行业的业务相对来说复杂度更高🎨，技术实现上也更加复杂（👉没有接触过的请先了解一下再发表意见😊）。就比如本篇要讲的表单，不是想象的几个表单字段提交那么简单，除了核心的业务数据字段还涉及到非常多的行业术语字段，整体复杂度一下子提升很多，而且单据类型多样，传统的在页面上堆字段的开发方式显然不适用了🤔。所以，就开始在<strong>基础业务架构</strong>上进行探索创新，有兴趣请看下文👇</p>
+</blockquote>
+<h2 id="1、使用场景及功能"><a href="#1、使用场景及功能" class="headerlink" title="1、使用场景及功能"></a>1、使用场景及功能</h2><h3 id="1-1、使用场景"><a href="#1-1、使用场景" class="headerlink" title="1.1、使用场景"></a>1.1、使用场景</h3><p>可用于常见任何表单性质的页面，筛选字段组件等。</p>
+<h3 id="1-2、功能"><a href="#1-2、功能" class="headerlink" title="1.2、功能"></a>1.2、功能</h3><ol>
+<li><p>页面可配置化</p>
+</li>
+<li><p>样式排版可控制</p>
+</li>
+<li><p>增查修功能三位一体</p>
+</li>
+<li><p>碎片化修改</p>
+</li>
+<li><p>字段联动展示</p>
+</li>
+<li><p>字段联动展示</p>
+</li>
+<li><p>字段参数预置</p>
+</li>
+<li><p>……</p>
+</li>
+</ol>
+<h2 id="2、前置思考"><a href="#2、前置思考" class="headerlink" title="2、前置思考"></a>2、前置思考</h2><p>最根本的还是<strong>组件开发</strong>，并在此基础上给组件赋能，采用自下而上的设计。</p>
+<ol>
+<li><p><strong>复合组件+扩展组件+自定义组件</strong></p>
+</li>
+<li><p>组件开发三要素：<strong>属性、事件、方法</strong></p>
+</li>
+<li><p>组件的关系：<strong>依赖、联动</strong></p>
+</li>
+<li><p>业务字段+业务字典</p>
+<ul>
+<li><p>业务字段设置: 用于配置页面需要显示的字段信息</p>
+</li>
+<li><p>业务字典设置: 用于字段枚举值获取显示</p>
+</li>
+</ul>
+</li>
+<li><p><strong>业务组件：</strong> -&gt; 架构</p>
+<ul>
+<li><p>相似的业务活动</p>
+</li>
+<li><p>使用类似的数据</p>
+</li>
+<li><p>具有通用的处理流程</p>
+</li>
+<li><p>通用的业务目标</p>
+</li>
+<li><p>是密切联系的组织单元</p>
+</li>
+</ul>
+</li>
+<li><p>最后, 模块划分, 后端采用RESTful接口设计风格, 实现 CRUD</p>
+</li>
+</ol>
+<h2 id="3、开发流程拆解"><a href="#3、开发流程拆解" class="headerlink" title="3、开发流程拆解"></a>3、开发流程拆解</h2><ol>
+<li><p>基础控件开发（“小池子”）</p>
+<ul>
+<li><p>初始化数据填入（带入值回显）： initVal()</p>
+</li>
+<li><p>更新： updata()</p>
+</li>
+<li><p>修改事件： change()</p>
+<ul>
+<li>联动数据标记： $emit(‘handleReletedFields’, xxx, xxx)</li>
+<li>修改 controlData 得值，用于收集输入值。值类型一般是字符串、数字、布尔值、数组（多选时）</li>
+</ul>
+</li>
+<li><p>重置数据： reset()</p>
+</li>
+<li><p>移除校验： initVal 方法里 执行 clearVerfy() - this.$refs.form.clearValidate()</p>
+</li>
+<li><p>必填项校验： verifyForm() prop属性</p>
+</li>
+<li><p>控件数据获取：</p>
+<ul>
+<li>获取码值配置数据 - 业务字典</li>
+<li>普通接口获取业务数据</li>
+<li>vuex 存储的码值数据</li>
+</ul>
+</li>
+<li><p>收集控件并暴露给收发组件使用</p>
+</li>
+<li><p>排版样式处理</p>
+</li>
+</ul>
+</li>
+<li><p>控件收发控制 （“三通”）</p>
+<ul>
+<li><p><strong>以动态组件方式实现数据流的收发</strong></p>
+</li>
+<li><p>初始化数据： initData()，调用基础控件的 initVal()方法，或者 updata()方法</p>
+</li>
+<li><p>重置数据： reset() 调用基础控件的 reset()方法</p>
+</li>
+<li><p>提交数据： submit()</p>
+<ul>
+<li>调用基础控件的 verifyForm()方法验证必填项，如果没有填写，则进行滚动定位到需要填写的组件(offsetTop)</li>
+<li>控件输入值收集： 提取各个业务字段的 controlData 值，组装表单信息</li>
+</ul>
+</li>
+<li><p>数据联动： handleReletedFields()</p>
+<ul>
+<li>调用联动控件的 initVal()方法实现数据联动</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>具体业务组件 （数据流“主管道”，总线）</p>
+<ul>
+<li><p>业务字段信息组装，props传递给收发控制组件</p>
+</li>
+<li><p>提交数据： submitForm() 调用收发控制组件的 submit() 方法，拿到业务字段输入信息。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="4、控件参数（业务字段配置）"><a href="#4、控件参数（业务字段配置）" class="headerlink" title="4、控件参数（业务字段配置）"></a>4、控件参数（业务字段配置）</h2><p>下面是单个控件的参数配置, 🧨要实现整个页面的可配置化, 需要配置业务字段</p>
+<figure class="highlight actionscript"><table><tbody><tr><td class="code"><pre><span class="line">{</span><br><span class="line">  <span class="string">"fieldLabel"</span>: <span class="string">"控件名称"</span>，</span><br><span class="line">  <span class="string">"showLabel"</span>: <span class="literal">true</span>, <span class="comment">// 是否显示label</span></span><br><span class="line">  <span class="string">"fieldName"</span>: <span class="string">"appId"</span>,</span><br><span class="line">  <span class="string">"controlName"</span>: <span class="string">"SingleSelectDownBox"</span>,</span><br><span class="line">  <span class="string">"controlData"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="string">"defaultValue"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="string">"defaultOptions"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="string">"localVuexDictData"</span>: <span class="literal">true</span>, <span class="comment">// 控件数据是否从vuex里获取</span></span><br><span class="line">  <span class="string">"remoteDictOptionsData"</span>: <span class="literal">false</span>, <span class="comment">// 控件数据是否从接口里获取</span></span><br><span class="line">  <span class="string">"remoteOtherApi"</span>: <span class="string">""</span>, <span class="comment">// 单独接口获取，在api里面定义的名称，采用策略模式使用</span></span><br><span class="line">  <span class="string">"labelWidth"</span>: <span class="string">"100px"</span>,</span><br><span class="line">  <span class="string">"rightWidth"</span>: <span class="string">"220px"</span>,</span><br><span class="line">  <span class="string">"labelPosition"</span>: <span class="string">"right"</span>,</span><br><span class="line">  <span class="string">"isNotNull"</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="string">"placeholder"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="string">"dictKey"</span>: <span class="string">"OperateTypeEnum"</span>,</span><br><span class="line">  <span class="string">"keyCode"</span>: <span class="string">"dictCode"</span>,</span><br><span class="line">  <span class="string">"controlSize"</span>: <span class="string">"100%"</span>,</span><br><span class="line">  <span class="string">"column"</span>: <span class="string">"1"</span>,</span><br><span class="line">  <span class="string">"readonly"</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="string">"relatedFields"</span>: <span class="string">"platformCheckStatus=platformCheckStatus;"</span> <span class="comment">// 多个关联字段用;分割</span></span><br><span class="line">  <span class="string">"clearable"</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="string">"editable"</span>: <span class="literal">false</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="4-1、页面业务字段配置示例"><a href="#4-1、页面业务字段配置示例" class="headerlink" title="4.1、页面业务字段配置示例"></a>4.1、页面业务字段配置示例</h3><p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/633e9da016f2c2beb1da2256.jpg"></p>
+<h2 id="5、联动字段配置说明"><a href="#5、联动字段配置说明" class="headerlink" title="5、联动字段配置说明"></a>5、联动字段配置说明</h2><figure class="highlight awk"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">"relatedFields"</span>: <span class="string">"platformCheckStatus=aaa;customField=bbb"</span></span><br><span class="line"></span><br><span class="line"><span class="regexp">//</span> 或者</span><br><span class="line"><span class="string">"relatedFields"</span>: <span class="string">"platformCheckStatus=platformCheckStatus;customField=customField"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>platformCheckStatus=aaa中”=“左边的platformCheckStatus，表示当前字段要关联的字段名称，”=“右边的aaa，表示回传信息的键名，用于确定关联字段要显示的值。</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> info = {</span><br><span class="line">  <span class="attr">aaa</span>: <span class="string">'xiao'</span>,</span><br><span class="line">  <span class="attr">bbb</span>: <span class="string">'xixi'</span>,</span><br><span class="line">  <span class="comment">// platformCheckStatus: '',</span></span><br><span class="line">  <span class="comment">// customField: '',</span></span><br><span class="line">}</span><br><span class="line"><span class="variable language_">this</span>.$emit(<span class="string">'handleReletedFields'</span>, info, <span class="variable language_">this</span>.<span class="property">itemData</span>.<span class="property">relatedFields</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+
+<h2 id="6、字典值配置"><a href="#6、字典值配置" class="headerlink" title="6、字典值配置"></a>6、字典值配置</h2><p>多用于单选、多选、级联框备选项数据，以下是<strong>字典数据结构</strong>👇</p>
+<figure class="highlight prolog"><table><tbody><tr><td class="code"><pre><span class="line">data: [{</span><br><span class="line">    <span class="string">"alias"</span>: <span class="string">"scale"</span>,</span><br><span class="line">    <span class="string">"dictCode"</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="string">"dictItems"</span>: [</span><br><span class="line">        {</span><br><span class="line">            <span class="string">"dictItem"</span>: [],</span><br><span class="line">            <span class="string">"dictItemCode"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="string">"id"</span>: <span class="number">512323</span>,</span><br><span class="line">            <span class="string">"inUse"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="string">"itemEnName"</span>: <span class="string">"1-5 people"</span>,</span><br><span class="line">            <span class="string">"itemName"</span>: <span class="string">"1-5人"</span>,</span><br><span class="line">            <span class="string">"itemValue"</span>: <span class="string">""</span></span><br><span class="line">        },</span><br><span class="line">        {</span><br><span class="line">            <span class="string">"dictItem"</span>: [],</span><br><span class="line">            <span class="string">"dictItemCode"</span>: <span class="number">2</span>,</span><br><span class="line">            <span class="string">"id"</span>: <span class="number">512324</span>,</span><br><span class="line">            <span class="string">"inUse"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="string">"itemEnName"</span>: <span class="string">"6-10 people"</span>,</span><br><span class="line">            <span class="string">"itemName"</span>: <span class="string">"6-10人"</span>,</span><br><span class="line">            <span class="string">"itemValue"</span>: <span class="string">""</span></span><br><span class="line">        }</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"dictName"</span>: <span class="string">"规模"</span>,</span><br><span class="line">    <span class="string">"id"</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="string">"moduleCode"</span>: <span class="string">"A001"</span>,</span><br><span class="line">    <span class="string">"sortOrder"</span>: <span class="number">0</span></span><br><span class="line">}]</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>架构设计要遵循三个设计原则:</p>
+<ol>
+<li><p>不多也不少 (架构都是适合当时的情况, 解决当时的问题, 重要的是不做过多设计, 这是一个陷阱)</p>
+</li>
+<li><p>演进式 (根据变化及时改进和调整架构)</p>
+</li>
+<li><p>持续性 (自身的能力也是逐步提升的, 设计的时候需要为未来改进留下一定的空间)</p>
+</li>
+</ol>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>架构</category>
+      </categories>
+      <tags>
+        <tag>架构</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>博客园美化</title>
     <url>/posts/2159164587.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1803,40 +1992,6 @@
       </categories>
       <tags>
         <tag>前端</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>关于Web和App的一点点思考</title>
-    <url>/posts/4136692609.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>朋友在微信上分享给我一个“PDD”砍一刀的链接，让我帮忙砍一刀助力，我点开链接之后，让我去下载App，然后去应用商店下载一个App，注册登录完成之后，回到微信里面点击链接，就会唤醒App，接着就是在App里面一顿操作，还不能退出到首页，我呆了😮</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>从我的角度看，有两个点不是很明白：</p>
-<ol>
-<li>不可以在浏览器里面以Web的方式直接打开助力吗，显然是可以的，事实是非得让下载App才可以</li>
-<li>助力的流程怎么回事，为什么不可以退出这个流程呢，一直在里面来回转啊转啊，清除后台运行程序才可以退出？还是我没有发现别的退出路径呢？</li>
-</ol>
-<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><ul>
-<li><p>Web发展方向，在进入移动互联网时代后，国内外出现了不同的发展路线：国外依然致力于精致Web的研发，国内则是随着微信小程序的推出，让一个App里面可以运行其它的“App”，出现了几大平台自研小程序的现象，而且不同的小程序之间还设有壁垒，不通用，接着又出现了一些搞兼容多方小程序的技术，其实就是做了一些“框架”级别的适配器，封装向下转型、向上转型。</p>
-</li>
-<li><p>那到底有没有一种技术可以让很多不用的程序都在上面跑呢，答案是确定的，不但有，而且已经发展了很多年了，那就是Web，让所有的应用程序都运行在浏览器里面。</p>
-</li>
-</ul>
-<p>这些家伙们在做什么？自己给自己出题玩？到底有没有推动技术的发展，“我不考虑这个，我要赚钱！”</p>
-<blockquote>
-<p>类小程序技术也不是微信的第一个尝试的，还有几大手机厂商的“快应用”等。<br>从中你会发现小公司只要有创新，没有展露头角发展不下去是死路一条，展露头角被大公司抄袭又是一死，<strong>这就是申请软件著作权，申请专利的重要性。</strong></p>
-</blockquote>
-<h2 id="期待"><a href="#期待" class="headerlink" title="期待"></a>期待</h2><p>前端的细分领域真的是太多太多了，期待Web技术会有更好的发展，不要往那些不能长久的、可持续发展的事物上投入太多精力，让那些细枝末节快点走进历史吧。</p>
-<hr>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
       </tags>
   </entry>
   <entry>
@@ -2234,25 +2389,6 @@
       </tags>
   </entry>
   <entry>
-    <title>捕获404页面，并重定向页面</title>
-    <url>/posts/3730822077.html</url>
-    <content><![CDATA[<html><head></head><body><p>话不多说，直接上代码：</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 捕获404页面，并重定向</span></span><br><span class="line"><span class="keyword">const</span> isRunUrl = <span class="keyword">function</span> (<span class="params">url</span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="keyword">function</span> (<span class="params">resolve, reject</span>) {</span><br><span class="line">    <span class="comment">// 测试链接连通性, 主要检测404错误</span></span><br><span class="line">    <span class="comment">// 由于AJAX通常无法区分404和跨域问题，所以只能用script 或者 link标签，link比script更容易捕获错误</span></span><br><span class="line">    <span class="keyword">var</span> dom = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">'link'</span>);</span><br><span class="line">    dom.<span class="property">href</span> = url;</span><br><span class="line">    dom.<span class="property">rel</span> = <span class="string">'stylesheet'</span>;</span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">appendChild</span>(dom);</span><br><span class="line">    dom.<span class="property">onload</span> = <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">removeChild</span>(dom);</span><br><span class="line">      <span class="title function_">resolve</span>();</span><br><span class="line">    }</span><br><span class="line">    dom.<span class="property">onerror</span> = reject;</span><br><span class="line">  });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="title function_">isRunUrl</span>(<span class="string">"your url"</span>).<span class="title function_">then</span>(</span><br><span class="line">  <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理resolve的代码</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"ok"</span>, data);;</span><br><span class="line">  }, <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理reject的代码，重定向逻辑</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"err"</span>, err);</span><br><span class="line">  }</span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<center>欢迎微信扫码关注 "看见另一种可能"！</center>
-
-<img data-src="/images/base/loading03.svg" data-original="/images/contact/qrcode_wechat.jpg" alt="wechat：看见另一种可能"></body></html>]]></content>
-      <categories>
-        <category>Javascript</category>
-      </categories>
-      <tags>
-        <tag>404</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>常用的SSH，你了解多少？（长文警告）</title>
     <url>/posts/184663689.html</url>
     <content><![CDATA[<html><head></head><body><h1 id="1、SSH工作原理"><a href="#1、SSH工作原理" class="headerlink" title="1、SSH工作原理"></a>1、SSH工作原理</h1><p>从ssh的<strong>加密方式</strong>说开去，看下文👇</p>
@@ -2402,6 +2538,25 @@
       </tags>
   </entry>
   <entry>
+    <title>捕获404页面，并重定向页面</title>
+    <url>/posts/3730822077.html</url>
+    <content><![CDATA[<html><head></head><body><p>话不多说，直接上代码：</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 捕获404页面，并重定向</span></span><br><span class="line"><span class="keyword">const</span> isRunUrl = <span class="keyword">function</span> (<span class="params">url</span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="keyword">function</span> (<span class="params">resolve, reject</span>) {</span><br><span class="line">    <span class="comment">// 测试链接连通性, 主要检测404错误</span></span><br><span class="line">    <span class="comment">// 由于AJAX通常无法区分404和跨域问题，所以只能用script 或者 link标签，link比script更容易捕获错误</span></span><br><span class="line">    <span class="keyword">var</span> dom = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">'link'</span>);</span><br><span class="line">    dom.<span class="property">href</span> = url;</span><br><span class="line">    dom.<span class="property">rel</span> = <span class="string">'stylesheet'</span>;</span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">appendChild</span>(dom);</span><br><span class="line">    dom.<span class="property">onload</span> = <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">removeChild</span>(dom);</span><br><span class="line">      <span class="title function_">resolve</span>();</span><br><span class="line">    }</span><br><span class="line">    dom.<span class="property">onerror</span> = reject;</span><br><span class="line">  });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="title function_">isRunUrl</span>(<span class="string">"your url"</span>).<span class="title function_">then</span>(</span><br><span class="line">  <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理resolve的代码</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"ok"</span>, data);;</span><br><span class="line">  }, <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理reject的代码，重定向逻辑</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"err"</span>, err);</span><br><span class="line">  }</span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<center>欢迎微信扫码关注 "看见另一种可能"！</center>
+
+<img data-src="/images/base/loading03.svg" data-original="/images/contact/qrcode_wechat.jpg" alt="wechat：看见另一种可能"></body></html>]]></content>
+      <categories>
+        <category>Javascript</category>
+      </categories>
+      <tags>
+        <tag>404</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>最近接触的东西</title>
     <url>/posts/2564859285.html</url>
     <content><![CDATA[<html><head></head><body><p>我的博客最开始采用的是<code>Hexo</code>+<code>hexo-theme-next</code>搭建的，使用<code>GitHub Pages</code>托管并进行自动化部署，写文发布的流程非常简单方便，云端写作发布也轻而易举。</p>
@@ -2484,6 +2639,11 @@
 </blockquote>
 <p>喜欢读书，在上海那几年喜欢读“无用之书”（历史、文学、小说，技能相关的书籍也买了些许），到现在也基本忘了看过的书了，还是要学以致用，以用为学。</p>
 <p>不问收获，但问耕耘。自主反思，归纳总结，把知识内化。</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
 </body></html>]]></content>
       <categories>
         <category>书籍</category>
@@ -2955,6 +3115,41 @@
       </tags>
   </entry>
   <entry>
+    <title>通过vNode实现给列表字段打标签</title>
+    <url>/posts/1525901815.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>如何给列表数据打标签？类似下面这种样子👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/632d17c616f2c2beb116edbb.jpg"></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li>数模转化（对接口请求回来的数据进行过滤标记，返回新的数据）</li>
+<li>渲染新的数据模型</li>
+</ol>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="1、过滤数据，需要打标签的采用jsx写法"><a href="#1、过滤数据，需要打标签的采用jsx写法" class="headerlink" title="1、过滤数据，需要打标签的采用jsx写法"></a>1、过滤数据，需要打标签的采用<code>jsx</code>写法</h3><p>业务数据的处理我封装在 <code>mixins</code> 里面</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 存放全局的mixin， 可拆分到模块独享</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> { mapGetters } <span class="keyword">from</span> <span class="string">'vuex'</span></span><br><span class="line"><span class="keyword">import</span> { fetchListData } <span class="keyword">from</span> <span class="string">'@/api/global/api.js'</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> {</span><br><span class="line">  <span class="title function_">data</span>(<span class="params"></span>) {</span><br><span class="line">    <span class="keyword">return</span> {</span><br><span class="line">      <span class="attr">p_category</span>: [],</span><br><span class="line">      <span class="attr">listdata</span>: [],</span><br><span class="line">      <span class="attr">p_total</span>: <span class="number">0</span>,</span><br><span class="line">      <span class="attr">p_loading</span>: <span class="literal">false</span>,</span><br><span class="line">    }</span><br><span class="line">  },</span><br><span class="line">  <span class="attr">computed</span>: {</span><br><span class="line">    <span class="comment">// ...mapGetters(['productLevel', 'productLevelInfo']),</span></span><br><span class="line">    <span class="title function_">p_listdata</span>(<span class="params"></span>) {</span><br><span class="line">      <span class="keyword">const</span> data = <span class="variable language_">this</span>.<span class="property">listdata</span>;</span><br><span class="line">      data.<span class="title function_">forEach</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> {</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        <span class="comment">// jsx 方式，打标签</span></span><br><span class="line">        <span class="keyword">if</span> (item.<span class="property">status</span> === <span class="number">2</span> || item.<span class="property">status</span> === <span class="number">3</span>) {</span><br><span class="line">          item.<span class="property">status</span> = <span class="language-xml"><span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">{{color:</span> '#<span class="attr">999</span>'}}&gt;</span>停售<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">          item.<span class="property">status</span> = item.<span class="property">status</span></span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (item.<span class="property">age</span> &lt;= <span class="number">25</span>) {</span><br><span class="line">          item.<span class="property">age</span> = <span class="language-xml"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"badge_info"</span>&gt;</span>{item.age}<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (item.<span class="property">sex</span> === <span class="string">'Man'</span>) {</span><br><span class="line">          item.<span class="property">sex</span> = <span class="language-xml"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"badge_default"</span>&gt;</span>{item.sex}<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line">        }</span><br><span class="line">      })</span><br><span class="line">      <span class="keyword">return</span> data;</span><br><span class="line">    }</span><br><span class="line">  },</span><br><span class="line">  <span class="attr">methods</span>: {</span><br><span class="line">    <span class="keyword">async</span> <span class="title function_">getProductList</span>(<span class="params">params = {}</span>) {</span><br><span class="line">      <span class="keyword">try</span> {</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">p_loading</span> = <span class="literal">true</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">listdata</span> = []</span><br><span class="line">        <span class="keyword">const</span> res = <span class="keyword">await</span> <span class="title function_">fetchListData</span>(params)</span><br><span class="line">        <span class="keyword">if</span> (res.<span class="property">code</span> === <span class="number">0</span>) {</span><br><span class="line">          <span class="keyword">const</span> { data = [], total = <span class="number">0</span> } = res || {}</span><br><span class="line">          <span class="keyword">if</span> (<span class="title class_">Array</span>.<span class="title function_">isArray</span>(data)) {</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">listdata</span> = [...data]</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">p_total</span> = total</span><br><span class="line">          } <span class="keyword">else</span> {</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">listdata</span> = []</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">p_total</span> = <span class="number">0</span></span><br><span class="line">          }</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">listdata</span> = []</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">p_total</span> = <span class="number">0</span></span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">error</span>(res.<span class="property">message</span> || <span class="string">'出错了'</span>)</span><br><span class="line">        }</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">p_loading</span> = <span class="literal">false</span>;</span><br><span class="line">      } <span class="keyword">catch</span> (err) {</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">p_loading</span> = <span class="literal">false</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">listdata</span> = []</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">p_total</span> = <span class="number">0</span></span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="base-less-定义标签样式"><a href="#base-less-定义标签样式" class="headerlink" title="base.less 定义标签样式"></a><code>base.less</code> 定义标签样式</h4><figure class="highlight less"><table><tbody><tr><td class="code"><pre><span class="line"><span class="selector-class">.badge_info</span> {</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#4760f0</span>;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#1C84C6</span>;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">5px</span> <span class="number">8px</span>;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#fff</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.badge_default</span> {</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#4760f0</span>;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#4760f0</span>;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">5px</span> <span class="number">8px</span>;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#fff</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="2、封装列表渲染组件"><a href="#2、封装列表渲染组件" class="headerlink" title="2、封装列表渲染组件"></a>2、封装列表渲染组件</h3><figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">"listV2"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"listV2_row-title"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">span</span> <span class="attr">v-for</span>=<span class="string">"(col, index) in fieldList"</span> <span class="attr">:key</span>=<span class="string">"index"</span> <span class="attr">class</span>=<span class="string">"listV2_cell ellipsis"</span> <span class="attr">:name</span>=<span class="string">"col.fieldName"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        {{col.fieldLabel}}</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="comment">&lt;!-- 行 --&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">v-if</span>=<span class="string">"tableData.length === 0"</span> <span class="attr">class</span>=<span class="string">"nodata"</span>&gt;</span>暂无数据<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">li</span> <span class="attr">v-for</span>=<span class="string">"(row, index) in tableData"</span> <span class="attr">:key</span>=<span class="string">"index"</span> <span class="attr">class</span>=<span class="string">"listV2_row pointer"</span> @<span class="attr">click</span>=<span class="string">"rowClickToDetail(row)"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="comment">&lt;!-- 单元格-列 --&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">span</span> <span class="attr">v-for</span>=<span class="string">"(col, index) in fieldList"</span> <span class="attr">:key</span>=<span class="string">"index"</span> <span class="attr">class</span>=<span class="string">"listV2_cell ellipsis"</span> <span class="attr">:name</span>=<span class="string">"col.fieldName"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">RenderDom</span> <span class="attr">:vNode</span>=<span class="string">"row[col.fieldName] || '-'"</span>&gt;</span><span class="tag">&lt;/<span class="name">RenderDom</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">import</span> <span class="title class_">RenderDom</span> <span class="keyword">from</span> <span class="string">"./renderDom"</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">export</span> <span class="keyword">default</span> {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">name</span>: <span class="string">'TableList'</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">props</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">tableData</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">type</span>: <span class="title class_">Array</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">required</span>: <span class="literal">true</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">fieldList</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">type</span>: <span class="title class_">Array</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">required</span>: <span class="literal">true</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">align</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">type</span>: <span class="title class_">String</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">default</span>: <span class="string">'left'</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">components</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="title class_">RenderDom</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">data</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="keyword">return</span> {}</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">computed</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">watch</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">created</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">mounted</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">methods</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">updated</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">beforeDestroy</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  }</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">style</span> <span class="attr">lang</span>=<span class="string">'less'</span> <span class="attr">rel</span>=<span class="string">'stylesheet/less'</span> <span class="attr">scoped</span>&gt;</span><span class="language-css"></span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">  <span class="keyword">@import</span> <span class="string">"./index.less"</span>;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="3、封装渲染vNode的方法"><a href="#3、封装渲染vNode的方法" class="headerlink" title="3、封装渲染vNode的方法"></a>3、封装渲染vNode的方法</h3><figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> renderDom = {</span><br><span class="line">  <span class="attr">props</span>: {</span><br><span class="line">    <span class="attr">vNode</span>: {</span><br><span class="line">      <span class="attr">type</span>: [<span class="title class_">Array</span>, <span class="title class_">String</span>, <span class="title class_">Object</span>,<span class="title class_">Number</span>],</span><br><span class="line">    },</span><br><span class="line">  },</span><br><span class="line">  <span class="title function_">render</span>(<span class="params">h</span>) {</span><br><span class="line">    <span class="comment">// jsx - vNode 直接返回，交给框架处理（js语法带来很多可能，列表打标签功能）</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable language_">this</span>.<span class="property">vNode</span> === <span class="string">'object'</span>) {</span><br><span class="line">      <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">vNode</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// 普通数据，直接包一层div，然后返回给页面</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">h</span>(</span><br><span class="line">      <span class="string">'div'</span>,</span><br><span class="line">      {</span><br><span class="line">        <span class="attr">class</span>: <span class="string">'ellipsis'</span>,</span><br><span class="line">      },</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">vNode</span></span><br><span class="line">    )</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="4、页面组件调用"><a href="#4、页面组件调用" class="headerlink" title="4、页面组件调用"></a>4、页面组件调用</h3><figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"customer"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">table-list</span> <span class="attr">v-loading</span>=<span class="string">"p_loading"</span> <span class="attr">:tableData</span>=<span class="string">"p_listdata"</span> <span class="attr">:fieldList</span>=<span class="string">"fieldList"</span>&gt;</span><span class="tag">&lt;/<span class="name">table-list</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">import</span> <span class="title class_">TableList</span> <span class="keyword">from</span> <span class="string">'@/basecomponents/TableList/index'</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">import</span> $_pMixins <span class="keyword">from</span> <span class="string">"@/mixins/product.js"</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">import</span> enums <span class="keyword">from</span> <span class="string">'./enum.js'</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">export</span> <span class="keyword">default</span> {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">name</span>: <span class="string">'Customer'</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">props</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">components</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="string">'table-list'</span>: <span class="title class_">TableList</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">mixins</span>: [$_pMixins],</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">data</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="keyword">return</span> {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">tableData</span>: [],</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">fieldList</span>: <span class="title class_">Object</span>.<span class="title function_">freeze</span>(enums.<span class="property">Enum_customerFieldList</span>),</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      }</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">computed</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">watch</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">created</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">mounted</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="variable language_">this</span>.<span class="title function_">initData</span>()</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">methods</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="title function_">initData</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="variable language_">this</span>.<span class="title function_">getProductList</span>()</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      }</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">updated</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">beforeDestroy</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  }</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">style</span> <span class="attr">lang</span>=<span class="string">'less'</span> <span class="attr">rel</span>=<span class="string">'stylesheet/less'</span> <span class="attr">scoped</span>&gt;</span><span class="language-css"></span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">  <span class="keyword">@import</span> <span class="string">"./index.less"</span>;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/632d182616f2c2beb11753e7.jpg"></p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Vue</category>
+      </categories>
+      <tags>
+        <tag>vNode</tag>
+        <tag>JSX</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>部署Netlify站点博客</title>
     <url>/posts/818123119.html</url>
     <content><![CDATA[<html><head></head><body><h2 id="Netlify站点部署静态博客"><a href="#Netlify站点部署静态博客" class="headerlink" title="Netlify站点部署静态博客"></a>Netlify站点部署静态博客</h2><p>今天尝试把站点部署在<a href="https://app.netlify.com/">Netlify</a>上，因为部署在GitHub Pages上，国内访问速度太慢了，所以就尝试一下别的站点，部署成功之后发现速度还是不太行，后边继续找找原因</p>
@@ -3008,41 +3203,6 @@
       </categories>
       <tags>
         <tag>站点建设</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>通过vNode实现给列表字段打标签</title>
-    <url>/posts/1525901815.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>如何给列表数据打标签？类似下面这种样子👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/632d17c616f2c2beb116edbb.jpg"></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
-<li>数模转化（对接口请求回来的数据进行过滤标记，返回新的数据）</li>
-<li>渲染新的数据模型</li>
-</ol>
-<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="1、过滤数据，需要打标签的采用jsx写法"><a href="#1、过滤数据，需要打标签的采用jsx写法" class="headerlink" title="1、过滤数据，需要打标签的采用jsx写法"></a>1、过滤数据，需要打标签的采用<code>jsx</code>写法</h3><p>业务数据的处理我封装在 <code>mixins</code> 里面</p>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 存放全局的mixin， 可拆分到模块独享</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> { mapGetters } <span class="keyword">from</span> <span class="string">'vuex'</span></span><br><span class="line"><span class="keyword">import</span> { fetchListData } <span class="keyword">from</span> <span class="string">'@/api/global/api.js'</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> {</span><br><span class="line">  <span class="title function_">data</span>(<span class="params"></span>) {</span><br><span class="line">    <span class="keyword">return</span> {</span><br><span class="line">      <span class="attr">p_category</span>: [],</span><br><span class="line">      <span class="attr">listdata</span>: [],</span><br><span class="line">      <span class="attr">p_total</span>: <span class="number">0</span>,</span><br><span class="line">      <span class="attr">p_loading</span>: <span class="literal">false</span>,</span><br><span class="line">    }</span><br><span class="line">  },</span><br><span class="line">  <span class="attr">computed</span>: {</span><br><span class="line">    <span class="comment">// ...mapGetters(['productLevel', 'productLevelInfo']),</span></span><br><span class="line">    <span class="title function_">p_listdata</span>(<span class="params"></span>) {</span><br><span class="line">      <span class="keyword">const</span> data = <span class="variable language_">this</span>.<span class="property">listdata</span>;</span><br><span class="line">      data.<span class="title function_">forEach</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> {</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        <span class="comment">// jsx 方式，打标签</span></span><br><span class="line">        <span class="keyword">if</span> (item.<span class="property">status</span> === <span class="number">2</span> || item.<span class="property">status</span> === <span class="number">3</span>) {</span><br><span class="line">          item.<span class="property">status</span> = <span class="language-xml"><span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">{{color:</span> '#<span class="attr">999</span>'}}&gt;</span>停售<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">          item.<span class="property">status</span> = item.<span class="property">status</span></span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (item.<span class="property">age</span> &lt;= <span class="number">25</span>) {</span><br><span class="line">          item.<span class="property">age</span> = <span class="language-xml"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"badge_info"</span>&gt;</span>{item.age}<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (item.<span class="property">sex</span> === <span class="string">'Man'</span>) {</span><br><span class="line">          item.<span class="property">sex</span> = <span class="language-xml"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"badge_default"</span>&gt;</span>{item.sex}<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line">        }</span><br><span class="line">      })</span><br><span class="line">      <span class="keyword">return</span> data;</span><br><span class="line">    }</span><br><span class="line">  },</span><br><span class="line">  <span class="attr">methods</span>: {</span><br><span class="line">    <span class="keyword">async</span> <span class="title function_">getProductList</span>(<span class="params">params = {}</span>) {</span><br><span class="line">      <span class="keyword">try</span> {</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">p_loading</span> = <span class="literal">true</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">listdata</span> = []</span><br><span class="line">        <span class="keyword">const</span> res = <span class="keyword">await</span> <span class="title function_">fetchListData</span>(params)</span><br><span class="line">        <span class="keyword">if</span> (res.<span class="property">code</span> === <span class="number">0</span>) {</span><br><span class="line">          <span class="keyword">const</span> { data = [], total = <span class="number">0</span> } = res || {}</span><br><span class="line">          <span class="keyword">if</span> (<span class="title class_">Array</span>.<span class="title function_">isArray</span>(data)) {</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">listdata</span> = [...data]</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">p_total</span> = total</span><br><span class="line">          } <span class="keyword">else</span> {</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">listdata</span> = []</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">p_total</span> = <span class="number">0</span></span><br><span class="line">          }</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">listdata</span> = []</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">p_total</span> = <span class="number">0</span></span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">error</span>(res.<span class="property">message</span> || <span class="string">'出错了'</span>)</span><br><span class="line">        }</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">p_loading</span> = <span class="literal">false</span>;</span><br><span class="line">      } <span class="keyword">catch</span> (err) {</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">p_loading</span> = <span class="literal">false</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">listdata</span> = []</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">p_total</span> = <span class="number">0</span></span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="base-less-定义标签样式"><a href="#base-less-定义标签样式" class="headerlink" title="base.less 定义标签样式"></a><code>base.less</code> 定义标签样式</h4><figure class="highlight less"><table><tbody><tr><td class="code"><pre><span class="line"><span class="selector-class">.badge_info</span> {</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#4760f0</span>;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#1C84C6</span>;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">5px</span> <span class="number">8px</span>;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#fff</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.badge_default</span> {</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#4760f0</span>;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#4760f0</span>;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">5px</span> <span class="number">8px</span>;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#fff</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="2、封装列表渲染组件"><a href="#2、封装列表渲染组件" class="headerlink" title="2、封装列表渲染组件"></a>2、封装列表渲染组件</h3><figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">"listV2"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"listV2_row-title"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">span</span> <span class="attr">v-for</span>=<span class="string">"(col, index) in fieldList"</span> <span class="attr">:key</span>=<span class="string">"index"</span> <span class="attr">class</span>=<span class="string">"listV2_cell ellipsis"</span> <span class="attr">:name</span>=<span class="string">"col.fieldName"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        {{col.fieldLabel}}</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="comment">&lt;!-- 行 --&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">v-if</span>=<span class="string">"tableData.length === 0"</span> <span class="attr">class</span>=<span class="string">"nodata"</span>&gt;</span>暂无数据<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">li</span> <span class="attr">v-for</span>=<span class="string">"(row, index) in tableData"</span> <span class="attr">:key</span>=<span class="string">"index"</span> <span class="attr">class</span>=<span class="string">"listV2_row pointer"</span> @<span class="attr">click</span>=<span class="string">"rowClickToDetail(row)"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="comment">&lt;!-- 单元格-列 --&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">span</span> <span class="attr">v-for</span>=<span class="string">"(col, index) in fieldList"</span> <span class="attr">:key</span>=<span class="string">"index"</span> <span class="attr">class</span>=<span class="string">"listV2_cell ellipsis"</span> <span class="attr">:name</span>=<span class="string">"col.fieldName"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">RenderDom</span> <span class="attr">:vNode</span>=<span class="string">"row[col.fieldName] || '-'"</span>&gt;</span><span class="tag">&lt;/<span class="name">RenderDom</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">import</span> <span class="title class_">RenderDom</span> <span class="keyword">from</span> <span class="string">"./renderDom"</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">export</span> <span class="keyword">default</span> {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">name</span>: <span class="string">'TableList'</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">props</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">tableData</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">type</span>: <span class="title class_">Array</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">required</span>: <span class="literal">true</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">fieldList</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">type</span>: <span class="title class_">Array</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">required</span>: <span class="literal">true</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">align</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">type</span>: <span class="title class_">String</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">default</span>: <span class="string">'left'</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">components</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="title class_">RenderDom</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">data</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="keyword">return</span> {}</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">computed</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">watch</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">created</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">mounted</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">methods</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">updated</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">beforeDestroy</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  }</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">style</span> <span class="attr">lang</span>=<span class="string">'less'</span> <span class="attr">rel</span>=<span class="string">'stylesheet/less'</span> <span class="attr">scoped</span>&gt;</span><span class="language-css"></span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">  <span class="keyword">@import</span> <span class="string">"./index.less"</span>;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="3、封装渲染vNode的方法"><a href="#3、封装渲染vNode的方法" class="headerlink" title="3、封装渲染vNode的方法"></a>3、封装渲染vNode的方法</h3><figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> renderDom = {</span><br><span class="line">  <span class="attr">props</span>: {</span><br><span class="line">    <span class="attr">vNode</span>: {</span><br><span class="line">      <span class="attr">type</span>: [<span class="title class_">Array</span>, <span class="title class_">String</span>, <span class="title class_">Object</span>,<span class="title class_">Number</span>],</span><br><span class="line">    },</span><br><span class="line">  },</span><br><span class="line">  <span class="title function_">render</span>(<span class="params">h</span>) {</span><br><span class="line">    <span class="comment">// jsx - vNode 直接返回，交给框架处理（js语法带来很多可能，列表打标签功能）</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable language_">this</span>.<span class="property">vNode</span> === <span class="string">'object'</span>) {</span><br><span class="line">      <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">vNode</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// 普通数据，直接包一层div，然后返回给页面</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">h</span>(</span><br><span class="line">      <span class="string">'div'</span>,</span><br><span class="line">      {</span><br><span class="line">        <span class="attr">class</span>: <span class="string">'ellipsis'</span>,</span><br><span class="line">      },</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">vNode</span></span><br><span class="line">    )</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="4、页面组件调用"><a href="#4、页面组件调用" class="headerlink" title="4、页面组件调用"></a>4、页面组件调用</h3><figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"customer"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">table-list</span> <span class="attr">v-loading</span>=<span class="string">"p_loading"</span> <span class="attr">:tableData</span>=<span class="string">"p_listdata"</span> <span class="attr">:fieldList</span>=<span class="string">"fieldList"</span>&gt;</span><span class="tag">&lt;/<span class="name">table-list</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">import</span> <span class="title class_">TableList</span> <span class="keyword">from</span> <span class="string">'@/basecomponents/TableList/index'</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">import</span> $_pMixins <span class="keyword">from</span> <span class="string">"@/mixins/product.js"</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">import</span> enums <span class="keyword">from</span> <span class="string">'./enum.js'</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">export</span> <span class="keyword">default</span> {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">name</span>: <span class="string">'Customer'</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">props</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">components</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="string">'table-list'</span>: <span class="title class_">TableList</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">mixins</span>: [$_pMixins],</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">data</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="keyword">return</span> {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">tableData</span>: [],</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">fieldList</span>: <span class="title class_">Object</span>.<span class="title function_">freeze</span>(enums.<span class="property">Enum_customerFieldList</span>),</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      }</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">computed</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">watch</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">created</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">mounted</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="variable language_">this</span>.<span class="title function_">initData</span>()</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">methods</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="title function_">initData</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="variable language_">this</span>.<span class="title function_">getProductList</span>()</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      }</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">updated</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">beforeDestroy</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  }</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">style</span> <span class="attr">lang</span>=<span class="string">'less'</span> <span class="attr">rel</span>=<span class="string">'stylesheet/less'</span> <span class="attr">scoped</span>&gt;</span><span class="language-css"></span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">  <span class="keyword">@import</span> <span class="string">"./index.less"</span>;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/632d182616f2c2beb11753e7.jpg"></p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>Vue</category>
-      </categories>
-      <tags>
-        <tag>vNode</tag>
-        <tag>JSX</tag>
       </tags>
   </entry>
   <entry>
