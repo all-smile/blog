@@ -20,7 +20,7 @@
   </url>
   
   <url>
-    <loc>https://blog.i-xiao.space/schedule/index.html</loc>
+    <loc>https://blog.i-xiao.space/notes/index.html</loc>
     
     <lastmod>2022-10-07</lastmod>
     
@@ -29,7 +29,7 @@
   </url>
   
   <url>
-    <loc>https://blog.i-xiao.space/notes/index.html</loc>
+    <loc>https://blog.i-xiao.space/schedule/index.html</loc>
     
     <lastmod>2022-10-07</lastmod>
     
@@ -281,7 +281,7 @@
   </url>
   
   <url>
-    <loc>https://blog.i-xiao.space/posts/3730822077.html</loc>
+    <loc>https://blog.i-xiao.space/posts/184663689.html</loc>
     
     <lastmod>2022-10-07</lastmod>
     
@@ -290,7 +290,7 @@
   </url>
   
   <url>
-    <loc>https://blog.i-xiao.space/posts/184663689.html</loc>
+    <loc>https://blog.i-xiao.space/posts/3730822077.html</loc>
     
     <lastmod>2022-10-07</lastmod>
     
@@ -344,15 +344,6 @@
   </url>
   
   <url>
-    <loc>https://blog.i-xiao.space/posts/2156089668.html</loc>
-    
-    <lastmod>2022-10-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.i-xiao.space/posts/3163405351.html</loc>
     
     <lastmod>2022-10-07</lastmod>
@@ -362,7 +353,7 @@
   </url>
   
   <url>
-    <loc>https://blog.i-xiao.space/posts/1525901815.html</loc>
+    <loc>https://blog.i-xiao.space/posts/2156089668.html</loc>
     
     <lastmod>2022-10-07</lastmod>
     
@@ -381,6 +372,15 @@
   
   <url>
     <loc>https://blog.i-xiao.space/posts/2912186581.html</loc>
+    
+    <lastmod>2022-10-07</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.i-xiao.space/posts/1525901815.html</loc>
     
     <lastmod>2022-10-07</lastmod>
     
