@@ -1,9 +1,10 @@
 ---
 title: Docker | 镜像浅析，以及制作自己的镜像
+tags: Docker
+categories: Docker
+description: 本文主要讲述我对Docker镜像的理解，以及如何制作一个简单的Docker镜像。欢迎访问
+abbrlink: 1309038568
 date: 2022-10-08 10:53:05
-tags:
-categories:
-description:
 ---
 
 ![](https://pic1.imgdb.cn/item/6340e6a716f2c2beb102f10f.jpg)
