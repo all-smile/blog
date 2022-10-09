@@ -1,10 +1,10 @@
 ---
-title: Docker | 安装
+title: Docker | 超全的环境配置教程，以及问题解决
 abbrlink: 1689142117
 date: 2022-10-07 21:44:43
 tags: Docker
 categories: Docker
-description: 本文记录 Docker 系列的安装，讲解在centos 7 环境安装docker环境，并简单运行一个hello world，以及安装中的问题解决。
+description: 本文记录 Docker 系列之环境配置，讲解在centos 7 环境安装docker环境，并简单运行一个hello world，以及安装中的问题解决。
 ---
 
 ## 环境准备
