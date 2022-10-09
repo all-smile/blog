@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Actions</title>
-    <url>/posts/3405105267.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>持续集成、持续部署</p>
-</body></html>]]></content>
-  </entry>
-  <entry>
     <title>2022年中秋佳节，于梦开始的地方</title>
     <url>/posts/4798453.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -43,136 +37,10 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker | 安装</title>
-    <url>/posts/1689142117.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p><a href="https://docs.docker.com/get-started/overview/">文档</a>非常用心🌹</p>
-<p>我的服务器是 <code>centos 7</code> 环境</p>
-<p>如果CentOS系统内核低于3.10，可以升级软件包及内核，通过 <code>yum update</code> 升级</p>
-<blockquote>
-<p>Linux系统分为两种：</p>
-<ol>
-<li><p>RedHat系列：Redhat、Centos、Fedora等</p>
-</li>
-<li><p>Debian系列：Debian、Ubuntu等</p>
-</li>
-</ol>
-<p>RedHat系列的包管理工具是<code>yum</code></p>
-<p>Debian系列的包管理工具是<code>apt-get</code></p>
-</blockquote>
-<ol>
-<li>查看系统版本:</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/version</span><br><span class="line">Linux version 3.10.0-1062.1.2.el7.x86_64 (mockbuild@kbuilder.bsys.centos.org) (gcc version 4.8.5 20150623 (Red Hat 4.8.5-39) (GCC) ) <span class="comment">#1 SMP Mon Sep 30 14:19:46 UTC 2019</span></span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p>我的系统是<code>Red hat</code>， 所以使用的包管理工具是<code>yum</code></p>
-</blockquote>
-<ol start="2">
-<li><p>查看系统内核</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">uname</span> -r // 查看系统内核</span><br><span class="line">3.10.0-1062.1.2.el7.x86_64</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>查看系统配置</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/os-release // 查看系统配置</span><br><span class="line">NAME=<span class="string">"CentOS Linux"</span></span><br><span class="line">VERSION=<span class="string">"7 (Core)"</span></span><br><span class="line">ID=<span class="string">"centos"</span></span><br><span class="line">ID_LIKE=<span class="string">"rhel fedora"</span></span><br><span class="line">VERSION_ID=<span class="string">"7"</span></span><br><span class="line">PRETTY_NAME=<span class="string">"CentOS Linux 7 (Core)"</span></span><br><span class="line">ANSI_COLOR=<span class="string">"0;31"</span></span><br><span class="line">CPE_NAME=<span class="string">"cpe:/o:centos:centos:7"</span></span><br><span class="line">HOME_URL=<span class="string">"https://www.centos.org/"</span></span><br><span class="line">BUG_REPORT_URL=<span class="string">"https://bugs.centos.org/"</span></span><br><span class="line"></span><br><span class="line">CENTOS_MANTISBT_PROJECT=<span class="string">"CentOS-7"</span></span><br><span class="line">CENTOS_MANTISBT_PROJECT_VERSION=<span class="string">"7"</span></span><br><span class="line">REDHAT_SUPPORT_PRODUCT=<span class="string">"centos"</span></span><br><span class="line">REDHAT_SUPPORT_PRODUCT_VERSION=<span class="string">"7"</span></span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63402e1016f2c2beb1228dbc.jpg"></p>
-<p>文档传送门：<a href="https://docs.docker.com/engine/install/centos/">https://docs.docker.com/engine/install/centos/</a></p>
-<h2 id="安装并运行一个hello-world"><a href="#安装并运行一个hello-world" class="headerlink" title="安装并运行一个hello-world"></a>安装并运行一个<code>hello-world</code></h2><h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><h4 id="1、卸载旧版本"><a href="#1、卸载旧版本" class="headerlink" title="1、卸载旧版本"></a>1、卸载旧版本</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum remove docker \</span><br><span class="line">                  docker-client \</span><br><span class="line">                  docker-client-latest \</span><br><span class="line">                  docker-common \</span><br><span class="line">                  docker-latest \</span><br><span class="line">                  docker-latest-logrotate \</span><br><span class="line">                  docker-logrotate \</span><br><span class="line">                  docker-engine</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="2、需要的安装包"><a href="#2、需要的安装包" class="headerlink" title="2、需要的安装包"></a>2、需要的安装包</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum install -y yum-utils</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="3、设置镜像仓库"><a href="#3、设置镜像仓库" class="headerlink" title="3、设置镜像仓库"></a>3、设置镜像仓库</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum-config-manager \</span><br><span class="line">    --add-repo \</span><br><span class="line">    https://download.docker.com/linux/centos/docker-ce.repo // 默认是国外的</span><br><span class="line"></span><br><span class="line">		http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo //  阿里云镜像地址</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="4、更新yum软件包索引"><a href="#4、更新yum软件包索引" class="headerlink" title="4、更新yum软件包索引"></a>4、更新<code>yum</code>软件包索引</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum makecache fast</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="5、安装docker相关的内容"><a href="#5、安装docker相关的内容" class="headerlink" title="5、安装docker相关的内容"></a>5、安装docker相关的内容</h4><ul>
-<li><p><code>docker-ce</code> 社区版</p>
-</li>
-<li><p><code>ee</code> 企业版</p>
-</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum install docker-ce docker-ce-cli containerd.io</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="6、配置阿里云镜像加速"><a href="#6、配置阿里云镜像加速" class="headerlink" title="6、配置阿里云镜像加速"></a>6、配置阿里云镜像加速</h4><p>登录阿里云，找到容器镜像服务，找到自己的镜像加速器</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63402e3116f2c2beb122c809.jpg"></p>
-<p>配置步骤如下👇</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 1</span></span><br><span class="line">sudo <span class="built_in">mkdir</span> -p /etc/docker</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2 编写配置文件</span></span><br><span class="line">sudo <span class="built_in">tee</span> /etc/docker/daemon.json &lt;&lt;-<span class="string">'EOF'</span></span><br><span class="line">{</span><br><span class="line">  <span class="string">"registry-mirrors"</span>: [<span class="string">"https://xxxx.mirror.aliyuncs.com"</span>]</span><br><span class="line">}</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3 重新加载配置</span></span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4 启动</span></span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="7、重新加载配置文件"><a href="#7、重新加载配置文件" class="headerlink" title="7、重新加载配置文件"></a>7、重新加载配置文件</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">systemctl daemon-reload</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="8、启动"><a href="#8、启动" class="headerlink" title="8、启动"></a>8、启动</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">systemctl start docker</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="9、查看是否启动成功"><a href="#9、查看是否启动成功" class="headerlink" title="9、查看是否启动成功"></a>9、查看是否启动成功</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker version</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63402e3d16f2c2beb122df6e.jpg"></p>
-<h4 id="10、hello-world"><a href="#10、hello-world" class="headerlink" title="10、hello-world"></a>10、<code>hello-world</code></h4><ol>
-<li>直接运行<code>run</code>命令</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run hello-world</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63402e5516f2c2beb1230628.jpg"></p>
-<ol start="2">
-<li><code>run</code>命令工作流程图解</li>
-</ol>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63402e6e16f2c2beb1233443.jpg"></p>
-<h4 id="11、查看下载的hello-world镜像"><a href="#11、查看下载的hello-world镜像" class="headerlink" title="11、查看下载的hello-world镜像"></a>11、查看下载的hello-world镜像</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63402e7e16f2c2beb1234da4.jpg"></p>
-<h2 id="卸载docker"><a href="#卸载docker" class="headerlink" title="卸载docker"></a>卸载docker</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 卸载依赖</span></span><br><span class="line">yum remove docker-ce docker-ce-cli containerd.io</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 删除目录</span></span><br><span class="line"><span class="built_in">rm</span> -rf /var/lib/docker</span><br><span class="line"><span class="built_in">rm</span> -rf /var/lib/containerd</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="问题汇总"><a href="#问题汇总" class="headerlink" title="问题汇总"></a>问题汇总</h2><h3 id="docker-启动报错"><a href="#docker-启动报错" class="headerlink" title="docker 启动报错"></a>docker 启动报错</h3><blockquote>
-<p>Job for docker.service failed because the control process exited with error code. See “systemctl status docker.service” and “journalctl -xe” for details.</p>
-</blockquote>
-<p>修改<code>/usr/lib/systemd/system/docker.service</code></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63402e9816f2c2beb123788f.jpg"></p>
-<ul>
-<li>错误原因：</li>
-</ul>
-<p><code>docker</code>的<code>socket</code>配置出现了冲突，<code>docker</code>在运行时的启动入口文件为：<code>/lib/systemd/system/docker.service</code>，我们在配置镜像加速之后又添加了一个守护进程文件：<code>/etc/docker/daemon.json</code>，两个文件对<code>host</code>进行了配置，发生冲突。</p>
-<ul>
-<li>查看报错详情 <code>journalctl -xe</code></li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63402eb616f2c2beb123b024.jpg"></p>
-<blockquote>
-<p>failed to start daemon: error initializing graphdriver: /var/lib/docker contains several valid graphdrivers: devicemapper, o</p>
-</blockquote>
-<ul>
-<li>解决办法：</li>
-</ul>
-<p>修改 <code>/etc/docker/daemon.json</code></p>
-<p>增加：</p>
-<figure class="highlight prolog"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">"storage-driver"</span>: <span class="string">"overlay2"</span>,</span><br><span class="line">  <span class="string">"storage-opts"</span>: [</span><br><span class="line">    <span class="string">"overlay2.override_kernel_check=true"</span></span><br><span class="line"> ]</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63402ec916f2c2beb123d2df.jpg"></p>
-<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><ol>
-<li><p>查看版本 <code>docker -v</code></p>
-</li>
-<li><p>设置服务器开机启动</p>
-</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> docker</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="3">
-<li>停止<code>docker</code></li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">systemctl stop docker</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="4">
-<li>systemctl 方式</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 守护进程重启</span></span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启docker服务</span></span><br><span class="line">sudo systemctl restart docker</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭docker</span></span><br><span class="line">sudo systemctl stop docker</span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+    <title>Actions</title>
+    <url>/posts/3405105267.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>持续集成、持续部署</p>
 </body></html>]]></content>
-      <categories>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-      </tags>
   </entry>
   <entry>
     <title>D8调试工具——jsvu的使用细则</title>
@@ -393,6 +261,192 @@
       </tags>
   </entry>
   <entry>
+    <title>Docker | 超全的环境配置教程，以及问题解决</title>
+    <url>/posts/1689142117.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p><a href="https://docs.docker.com/get-started/overview/">文档</a>非常用心🌹</p>
+<p>我的服务器是 <code>centos 7</code> 环境</p>
+<p>如果CentOS系统内核低于3.10，可以升级软件包及内核，通过 <code>yum update</code> 升级</p>
+<blockquote>
+<p>Linux系统分为两种：</p>
+<ol>
+<li><p>RedHat系列：Redhat、Centos、Fedora等</p>
+</li>
+<li><p>Debian系列：Debian、Ubuntu等</p>
+</li>
+</ol>
+<p>RedHat系列的包管理工具是<code>yum</code></p>
+<p>Debian系列的包管理工具是<code>apt-get</code></p>
+</blockquote>
+<ol>
+<li>查看系统版本:</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/version</span><br><span class="line">Linux version 3.10.0-1062.1.2.el7.x86_64 (mockbuild@kbuilder.bsys.centos.org) (gcc version 4.8.5 20150623 (Red Hat 4.8.5-39) (GCC) ) <span class="comment">#1 SMP Mon Sep 30 14:19:46 UTC 2019</span></span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>我的系统是<code>Red hat</code>， 所以使用的包管理工具是<code>yum</code></p>
+</blockquote>
+<ol start="2">
+<li><p>查看系统内核</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">uname</span> -r // 查看系统内核</span><br><span class="line">3.10.0-1062.1.2.el7.x86_64</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>查看系统配置</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/os-release // 查看系统配置</span><br><span class="line">NAME=<span class="string">"CentOS Linux"</span></span><br><span class="line">VERSION=<span class="string">"7 (Core)"</span></span><br><span class="line">ID=<span class="string">"centos"</span></span><br><span class="line">ID_LIKE=<span class="string">"rhel fedora"</span></span><br><span class="line">VERSION_ID=<span class="string">"7"</span></span><br><span class="line">PRETTY_NAME=<span class="string">"CentOS Linux 7 (Core)"</span></span><br><span class="line">ANSI_COLOR=<span class="string">"0;31"</span></span><br><span class="line">CPE_NAME=<span class="string">"cpe:/o:centos:centos:7"</span></span><br><span class="line">HOME_URL=<span class="string">"https://www.centos.org/"</span></span><br><span class="line">BUG_REPORT_URL=<span class="string">"https://bugs.centos.org/"</span></span><br><span class="line"></span><br><span class="line">CENTOS_MANTISBT_PROJECT=<span class="string">"CentOS-7"</span></span><br><span class="line">CENTOS_MANTISBT_PROJECT_VERSION=<span class="string">"7"</span></span><br><span class="line">REDHAT_SUPPORT_PRODUCT=<span class="string">"centos"</span></span><br><span class="line">REDHAT_SUPPORT_PRODUCT_VERSION=<span class="string">"7"</span></span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63402e1016f2c2beb1228dbc.jpg"></p>
+<p>文档传送门：<a href="https://docs.docker.com/engine/install/centos/">https://docs.docker.com/engine/install/centos/</a></p>
+<h2 id="安装并运行一个hello-world"><a href="#安装并运行一个hello-world" class="headerlink" title="安装并运行一个hello-world"></a>安装并运行一个<code>hello-world</code></h2><h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><h4 id="1、卸载旧版本"><a href="#1、卸载旧版本" class="headerlink" title="1、卸载旧版本"></a>1、卸载旧版本</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum remove docker \</span><br><span class="line">                  docker-client \</span><br><span class="line">                  docker-client-latest \</span><br><span class="line">                  docker-common \</span><br><span class="line">                  docker-latest \</span><br><span class="line">                  docker-latest-logrotate \</span><br><span class="line">                  docker-logrotate \</span><br><span class="line">                  docker-engine</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="2、需要的安装包"><a href="#2、需要的安装包" class="headerlink" title="2、需要的安装包"></a>2、需要的安装包</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum install -y yum-utils</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="3、设置镜像仓库"><a href="#3、设置镜像仓库" class="headerlink" title="3、设置镜像仓库"></a>3、设置镜像仓库</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum-config-manager \</span><br><span class="line">    --add-repo \</span><br><span class="line">    https://download.docker.com/linux/centos/docker-ce.repo // 默认是国外的</span><br><span class="line"></span><br><span class="line">		http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo //  阿里云镜像地址</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="4、更新yum软件包索引"><a href="#4、更新yum软件包索引" class="headerlink" title="4、更新yum软件包索引"></a>4、更新<code>yum</code>软件包索引</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum makecache fast</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="5、安装docker相关的内容"><a href="#5、安装docker相关的内容" class="headerlink" title="5、安装docker相关的内容"></a>5、安装docker相关的内容</h4><ul>
+<li><p><code>docker-ce</code> 社区版</p>
+</li>
+<li><p><code>ee</code> 企业版</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum install docker-ce docker-ce-cli containerd.io</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="6、配置阿里云镜像加速"><a href="#6、配置阿里云镜像加速" class="headerlink" title="6、配置阿里云镜像加速"></a>6、配置阿里云镜像加速</h4><p>登录阿里云，找到容器镜像服务，找到自己的镜像加速器</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63402e3116f2c2beb122c809.jpg"></p>
+<p>配置步骤如下👇</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 1</span></span><br><span class="line">sudo <span class="built_in">mkdir</span> -p /etc/docker</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2 编写配置文件</span></span><br><span class="line">sudo <span class="built_in">tee</span> /etc/docker/daemon.json &lt;&lt;-<span class="string">'EOF'</span></span><br><span class="line">{</span><br><span class="line">  <span class="string">"registry-mirrors"</span>: [<span class="string">"https://xxxx.mirror.aliyuncs.com"</span>]</span><br><span class="line">}</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3 重新加载配置</span></span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4 启动</span></span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="7、重新加载配置文件"><a href="#7、重新加载配置文件" class="headerlink" title="7、重新加载配置文件"></a>7、重新加载配置文件</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">systemctl daemon-reload</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="8、启动"><a href="#8、启动" class="headerlink" title="8、启动"></a>8、启动</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">systemctl start docker</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="9、查看是否启动成功"><a href="#9、查看是否启动成功" class="headerlink" title="9、查看是否启动成功"></a>9、查看是否启动成功</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker version</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63402e3d16f2c2beb122df6e.jpg"></p>
+<h4 id="10、hello-world"><a href="#10、hello-world" class="headerlink" title="10、hello-world"></a>10、<code>hello-world</code></h4><ol>
+<li>直接运行<code>run</code>命令</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run hello-world</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63402e5516f2c2beb1230628.jpg"></p>
+<ol start="2">
+<li><code>run</code>命令工作流程图解</li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63402e6e16f2c2beb1233443.jpg"></p>
+<h4 id="11、查看下载的hello-world镜像"><a href="#11、查看下载的hello-world镜像" class="headerlink" title="11、查看下载的hello-world镜像"></a>11、查看下载的hello-world镜像</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63402e7e16f2c2beb1234da4.jpg"></p>
+<h2 id="卸载docker"><a href="#卸载docker" class="headerlink" title="卸载docker"></a>卸载docker</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 卸载依赖</span></span><br><span class="line">yum remove docker-ce docker-ce-cli containerd.io</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 删除目录</span></span><br><span class="line"><span class="built_in">rm</span> -rf /var/lib/docker</span><br><span class="line"><span class="built_in">rm</span> -rf /var/lib/containerd</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="问题汇总"><a href="#问题汇总" class="headerlink" title="问题汇总"></a>问题汇总</h2><h3 id="docker-启动报错"><a href="#docker-启动报错" class="headerlink" title="docker 启动报错"></a>docker 启动报错</h3><blockquote>
+<p>Job for docker.service failed because the control process exited with error code. See “systemctl status docker.service” and “journalctl -xe” for details.</p>
+</blockquote>
+<p>修改<code>/usr/lib/systemd/system/docker.service</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63402e9816f2c2beb123788f.jpg"></p>
+<ul>
+<li>错误原因：</li>
+</ul>
+<p><code>docker</code>的<code>socket</code>配置出现了冲突，<code>docker</code>在运行时的启动入口文件为：<code>/lib/systemd/system/docker.service</code>，我们在配置镜像加速之后又添加了一个守护进程文件：<code>/etc/docker/daemon.json</code>，两个文件对<code>host</code>进行了配置，发生冲突。</p>
+<ul>
+<li>查看报错详情 <code>journalctl -xe</code></li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63402eb616f2c2beb123b024.jpg"></p>
+<blockquote>
+<p>failed to start daemon: error initializing graphdriver: /var/lib/docker contains several valid graphdrivers: devicemapper, o</p>
+</blockquote>
+<ul>
+<li>解决办法：</li>
+</ul>
+<p>修改 <code>/etc/docker/daemon.json</code></p>
+<p>增加：</p>
+<figure class="highlight prolog"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">"storage-driver"</span>: <span class="string">"overlay2"</span>,</span><br><span class="line">  <span class="string">"storage-opts"</span>: [</span><br><span class="line">    <span class="string">"overlay2.override_kernel_check=true"</span></span><br><span class="line"> ]</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63402ec916f2c2beb123d2df.jpg"></p>
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><ol>
+<li><p>查看版本 <code>docker -v</code></p>
+</li>
+<li><p>设置服务器开机启动</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> docker</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>停止<code>docker</code></li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">systemctl stop docker</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="4">
+<li>systemctl 方式</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 守护进程重启</span></span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启docker服务</span></span><br><span class="line">sudo systemctl restart docker</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭docker</span></span><br><span class="line">sudo systemctl stop docker</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker | 部署nginx服务</title>
+    <url>/posts/1512743311.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>容器时相互隔离的，<code>docker</code>启动的<code>nginx</code>是容器内的服务，不影响我原先服务器上的<code>nginx</code>服务，小伙伴们可大胆尝试😃</p>
+</blockquote>
+<p>本篇实在linux环境下操作的，主要目的是夺人眼目，对使用Docker部署服务进行尝鲜，先体会一下Docker的便捷之处。</p>
+<h2 id="1、下载nginx镜像"><a href="#1、下载nginx镜像" class="headerlink" title="1、下载nginx镜像"></a>1、下载nginx镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker pull nginx</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="2、查看下载的镜像"><a href="#2、查看下载的镜像" class="headerlink" title="2、查看下载的镜像"></a>2、查看下载的镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="3、启动nginx镜像"><a href="#3、启动nginx镜像" class="headerlink" title="3、启动nginx镜像"></a>3、启动nginx镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -d --name nginx01 -p 3344:80 nginx（镜像名或者镜像<span class="built_in">id</span>）</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63423e4516f2c2beb109d82d.jpg"></p>
+<h2 id="4、查看启动的nginx"><a href="#4、查看启动的nginx" class="headerlink" title="4、查看启动的nginx"></a>4、查看启动的nginx</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="5、访问启动的nginx"><a href="#5、访问启动的nginx" class="headerlink" title="5、访问启动的nginx"></a>5、访问启动的nginx</h2><p>在云服务器内使用 curl 测试访问</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">curl localhost:3344</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63423e5d16f2c2beb10a0248.jpg"></p>
+<h3 id="5-1、linux开放防火墙端口"><a href="#5-1、linux开放防火墙端口" class="headerlink" title="5.1、linux开放防火墙端口"></a>5.1、linux开放防火墙端口</h3><p><code>firewall-cmd</code>位于<code>firewalld</code>包中</p>
+<p><code>systemctl</code>位于<code>systemd</code>包中</p>
+<p><strong>安装防火墙工具：</strong></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum install firewalld systemd -y</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>常用命令：</strong></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 查看firewall(防火墙)服务状态</span></span><br><span class="line">systemctl status firewalld</span><br><span class="line"></span><br><span class="line"><span class="comment">#开启防火墙</span></span><br><span class="line">systemctl start firewalld</span><br><span class="line"></span><br><span class="line"><span class="comment">#重启防火墙</span></span><br><span class="line">service firewalld  restart</span><br><span class="line"></span><br><span class="line"><span class="comment">#关闭防火墙</span></span><br><span class="line">service firewalld  stop</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看防火墙规则</span></span><br><span class="line">firewall-cmd --list-all　　 　　<span class="comment">#查看全部信息</span></span><br><span class="line">firewall-cmd --list-ports 　　  <span class="comment">#只看端口信息</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#添加防火墙开放端口</span></span><br><span class="line">firewall-cmd --add-port=8001/tcp --permanent</span><br><span class="line">or</span><br><span class="line">firewall-cmd --zone=public --add-port=8080/tcp --permanent</span><br><span class="line">命令含义:</span><br><span class="line">　　--zone 　　　　　　　　 <span class="comment">#作用域（public标识公共的）</span></span><br><span class="line">　　--add-port=80/tcp 　　<span class="comment">#添加端口， 格式为:端口/通讯协议</span></span><br><span class="line">　　--permanent 　　　　　　<span class="comment">#永久生效，没有此参数重启后失效</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 不要忘记reload！</span></span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="5-2、阿里云服务器需要配置安全组规则"><a href="#5-2、阿里云服务器需要配置安全组规则" class="headerlink" title="5.2、阿里云服务器需要配置安全组规则"></a>5.2、阿里云服务器需要配置安全组规则</h3><p>配置完之后就可以在浏览器访问<code>公网ip+3344端口号</code>查看了</p>
+<h3 id="5-3、原理"><a href="#5-3、原理" class="headerlink" title="5.3、原理"></a>5.3、原理</h3><p>端口暴露，linux端口映射到容器端口</p>
+<p>0.0.0.0:3344-&gt;80/tcp</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63423e7416f2c2beb10a2e22.jpg"></p>
+<h2 id="6-进入nginx容器"><a href="#6-进入nginx容器" class="headerlink" title="6.进入nginx容器"></a>6.进入nginx容器</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it 0a7ebd6bc291 /bin/bash</span><br><span class="line">root@0a7ebd6bc291:/<span class="comment"># ls</span></span><br><span class="line">bin  boot  dev	docker-entrypoint.d  docker-entrypoint.sh  etc	home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var</span><br><span class="line">root@0a7ebd6bc291:/<span class="comment"># whereis nginx</span></span><br><span class="line">nginx: /usr/sbin/nginx /usr/lib/nginx /etc/nginx /usr/share/nginx</span><br><span class="line">root@0a7ebd6bc291:/<span class="comment"># cd /etc/nginx/</span></span><br><span class="line">root@0a7ebd6bc291:/etc/nginx<span class="comment"># ls</span></span><br><span class="line">conf.d	fastcgi_params	mime.types  modules  nginx.conf  scgi_params  uwsgi_params</span><br><span class="line">root@0a7ebd6bc291:/etc/nginx<span class="comment">#</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="问题探索"><a href="#问题探索" class="headerlink" title="问题探索"></a>问题探索</h2><p>每次改动<code>nginx</code>配置，都需要进入容器内部修改，十分麻烦，能否在容器外部提供一个映射路径，达到修改配置文件，容器内部就会自动修改？</p>
+<blockquote>
+<p>数据卷技术</p>
+<p><code>nginx.conf</code>配置文件，注意<code>Nginx</code>默认是后台运行的，但<code>Docker</code>需要其在前台运行，否则直接退出容器。配置文件中添加<code>daemon off;</code>关闭后台运行。可以通过<code>Dockerfile</code>配置CMD命令实现</p>
+</blockquote>
+<p>感谢阅读，本篇完，数据卷技术下文继续分享！</p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+        <category>Nginx</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+        <tag>Nginx</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker | 镜像浅析，以及制作自己的镜像</title>
     <url>/posts/1309038568.html</url>
     <content><![CDATA[<html><head></head><body><p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6340e6a716f2c2beb102f10f.jpg"></p>
@@ -555,90 +609,6 @@
       </tags>
   </entry>
   <entry>
-    <title>GitHub Pages 站点建设</title>
-    <url>/posts/899051033.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h2><ul>
-<li><p>GitHub Pages 是通过 GitHub 托管和发布的公共网页，将纯文本转换为静态博客网站。</p>
-</li>
-<li><p>您可以使用 GitHub Pages 来展示一些开源项目、博客甚或分享您的简历，有内存限制，可以绑定个人域名。</p>
-</li>
-<li><p>启动和运行的最快方法是使用 <a href="https://jekyllcn.com/">Jekyll</a> 主题选择器加载预置主题。 然后，您可以修改 GitHub Pages 的内容和样式。👉 <a href="https://docs.github.com/cn/pages/getting-started-with-github-pages/about-github-pages">文档</a></p>
-</li>
-</ul>
-<h2 id="2、创建仓库"><a href="#2、创建仓库" class="headerlink" title="2、创建仓库"></a>2、创建仓库</h2><p>仓库名： <code>&lt;username&gt;.github.io</code><br><code>username</code> 是GitHub的用户名</p>
-<h2 id="3、创建站点"><a href="#3、创建站点" class="headerlink" title="3、创建站点"></a>3、创建站点</h2><p>在 <code>repo</code> 下创建 <code>index.md</code>文件，随便写点东西保存。然后，点击 <code>settings</code>选项卡，单机左侧 <code>Pages</code>进行设置，如下图：</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fae16f2c2beb1e1d288.png"></p>
-<p>🔊 此时站点已经建成，可以访问 <code>https://&lt;username&gt;.github.io/</code> 查看，如果已经有个人域名了，也可以绑定个人域名，继续往下看👇</p>
-<h2 id="4、仓库文件目录"><a href="#4、仓库文件目录" class="headerlink" title="4、仓库文件目录"></a>4、仓库文件目录</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fbe16f2c2beb1e1e89f.png"></p>
-<h2 id="5、绑定域名"><a href="#5、绑定域名" class="headerlink" title="5、绑定域名"></a>5、绑定域名</h2><p>我个人购买的一级域名是 i-xiao ，域名后缀是 space，专门给GitHub Pages 增加一个CNAME记录（blog），解析二级域名，绑定 <username>github.io 域名。</username></p>
-<h3 id="5-1、域名相关知识"><a href="#5-1、域名相关知识" class="headerlink" title="5.1、域名相关知识"></a>5.1、域名相关知识</h3><ul>
-<li>www：主机名，i-xiao : 域名主体(一级域名)，.space : 域名后缀<br>注册一级域名的时候是需要付费的</li>
-<li>二级域名，是依附一级域名的存在而存在的，也就是说要是顶级域名消失了，二级域名也也会不复存在。反而来说，二级域名的网站不做了，主域名网站是不受影响的。</li>
-<li>一级域名、二级域名区别：<br>DNS收录一级域名更快；还有就是解析速度，下一跳路由就不说了，找到目的主机之后，二级域名层级更深，需要多一层计算（其实这是我瞎写的🤣，猜测应该跟 nginx location匹配类似）</li>
-</ul>
-<h3 id="5-2、GitHub上配置自定义域名"><a href="#5-2、GitHub上配置自定义域名" class="headerlink" title="5.2、GitHub上配置自定义域名"></a>5.2、GitHub上配置自定义域名</h3><p>进入 <username>github.io 仓库，进入设置页面，点击左边 Pages 选项卡，进行下面的配置。</username></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6116f2c2beb1e1511a.png"></p>
-<h2 id="6、配置域名映射"><a href="#6、配置域名映射" class="headerlink" title="6、配置域名映射"></a>6、配置域名映射</h2><p><strong>各记录类型使用目的</strong></p>
-<table>
-<thead>
-<tr>
-<th>记录类型</th>
-<th>使用目的</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ce5/">A 记录</a></td>
-<td>将域名指向一个 IP 地址（外网地址）。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9cf9/">CNAME 记录</a></td>
-<td>将域名指向另一个域名，再由另一个域名提供 IP 地址（外网地址）。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9cff/">MX 记录</a></td>
-<td>设置邮箱，让邮箱能收到邮件。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d11/">NS 记录</a></td>
-<td>将子域名交给其他 DNS 服务商解析。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d0b/">AAAA 记录</a></td>
-<td>将域名指向一个 IPv6 地址。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d17/">SRV 记录</a></td>
-<td>用来标识某台服务器使用了某个服务，常见于微软系统的目录管理。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d05/">TXT 记录</a></td>
-<td>对域名进行标识和说明，绝大多数的 TXT 记录是用来做 SPF 记录（反垃圾邮件）。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ced/">隐、显性 URL 记录</a></td>
-<td>将一个域名指向另外一个已经存在的站点。</td>
-</tr>
-</tbody></table>
-<p><strong>如下图</strong></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6f16f2c2beb1e16954.png"></p>
-<h2 id="7、DNS检测"><a href="#7、DNS检测" class="headerlink" title="7、DNS检测"></a>7、DNS检测</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f7816f2c2beb1e1785b.png"></p>
-<h2 id="8、查看Pages"><a href="#8、查看Pages" class="headerlink" title="8、查看Pages"></a>8、查看Pages</h2><p>成功解析之后，还存在DNS缓存，一般还需要再等待一会（一般十分钟，或许更长时间）才能生效，如下图成功显示👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f8c16f2c2beb1e1a34c.png"></p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>站点绑定的域名已经更换，访问请到👉 <a href="https://home.i-xiao.space/">这里</a></p>
-<hr>
-<p>🎈🎈🎈</p>
-<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>GitHub</category>
-      </categories>
-      <tags>
-        <tag>GitHub</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker网络模型以及容器通信</title>
     <url>/posts/1604561083.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -784,176 +754,87 @@
       </tags>
   </entry>
   <entry>
-    <title>Hybrid app本地开发如何调用JSBridge</title>
-    <url>/posts/3740751445.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>前天同事问我公司内部的小程序怎么对接的，我回忆了一下，简单记录了一下前端同学需要注意的点。</p>
-<p>背后还有小程序架构、网络策略等等。当时恰逢小程序架构调整，（老架构的时候我就发现了有一个问题点可以优化，但是跟那边人反馈之后，人家表示不要我管😂，新架构时发现这个问题还巧妙的遗留下来了😮）我虽然不负责那块，但是本着<strong>这样不优雅</strong>的原则，还是跟新架构的对接人讲了我的优化方案，讲明白了之后，同时上报各自直系领导，并建议我领导牵头开会推动。最后，无奈存量数据太多，老架构那边权衡之后决定不改动。（多说了几句，权当记录一下）</p>
-</blockquote>
-<h1 id="1、背景"><a href="#1、背景" class="headerlink" title="1、背景"></a>1、背景</h1><p>公司研发的一款服务软件App（姑且称为“大地”），提供了包涵消息、待办、工作台、同事圈和通讯录五大功能模块，其中，工作台里集成了包括公司的移动客户端、PC端以及第三方平台的部分功能/服务（统称为“应用”）。</p>
-<p>我今天要讲的是这个集成平台以什么方式展现“应用”，答案是：借鉴了微信的架构，自研了“小程序”接入“应用”。</p>
-<p>我司小程序具有一种相对开放能力（面向全公司），赋能业务快速数字化、场景敏捷迭代，并且可在“大地”上便捷的获取和使用，同时具有完善的使用体验（这就是严格的接入审核标准带来的好处）。</p>
-<p>在“大地”开发者平台，创建小程序会自动创建配套的公众号（公众号是为了推送消息使用，可订阅）。小程序开发不限制技术选型，开发完成之后按照小程序接入规范打包上架小程序，审核发布。</p>
-<blockquote>
-<p>简单来说，可以把“大地”看成是一个“钉钉”，我现在要把我们的业务功能投放到“大地”上，就需要接入“大地”小程序，以小程序的方式在“大地”上为用户提供服务。</p>
-</blockquote>
-<p>小程序架构：<code>Cordova</code>框架做的<code>WebView</code>，运行我开发的前端程序，通过<code>Nginx</code>帮我把请求代理到微服务网关，由网关转发到目的主机处理请求。它虽然看上去是一个<code>Native App</code>，但只有一个<code>UI WebView</code>，里面访问的是一个<code>Web App</code>，对我来说就是开发一个<code>H5</code>应用调用一些所需的<code>JSBridge</code>，也就是所谓的<code>Hybrid App</code>。</p>
-<p>下面看一下本地开发中的一些问题，以及我是怎么处理的</p>
-<h1 id="2、问题"><a href="#2、问题" class="headerlink" title="2、问题"></a>2、问题</h1><p><code>Hybrid App</code>本地开发过程中没有真实的<code>Native</code>环境的，同样也无法使用<code>JSBridge</code>，这就会带来一个问题：跟原生交互的行为只能发布小程序才可以调试，本地玩不了，这…，相当fuck。</p>
-<p>目的是想让本地开发同小程序测试环境具有相同的体验，我的想法是在本地模拟<code>JSBridge</code>的方法，尽管不能带来真实的效果，至少触发了某个行为之后要有个反应，不至于让操作流程看起来像是“脱节”的（实际跟原生的交互行为并不多，比如：拍照、弹窗提示、定位等等）。</p>
-<p>因此，我要做的就是本地模拟<code>JSBridge</code>的一些方法，开发时触发了这些原生交互行为之后提示一些信息，等到上架小程序测试环境时，在手机上会用真实的<code>JSBridge</code>方法自动替换掉我模拟实现的方法。</p>
-<p>于是我就开始了下面的准备工作。</p>
-<ol>
-<li><p>搞清楚<code>JSBridge</code>运行的原理</p>
+    <title>GitHub Pages 站点建设</title>
+    <url>/posts/899051033.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h2><ul>
+<li><p>GitHub Pages 是通过 GitHub 托管和发布的公共网页，将纯文本转换为静态博客网站。</p>
 </li>
-<li><p>本地模拟<code>JSBridge</code>的方法</p>
+<li><p>您可以使用 GitHub Pages 来展示一些开源项目、博客甚或分享您的简历，有内存限制，可以绑定个人域名。</p>
 </li>
-<li><p>上架小程序是自动使用真实的<code>JSBridge</code></p>
-</li>
-</ol>
-<h1 id="3、了解JSBridge"><a href="#3、了解JSBridge" class="headerlink" title="3、了解JSBridge"></a>3、了解<code>JSBridge</code></h1><p><strong>JSBridge</strong>：望文生义就是<code>js</code>和<code>Native</code>之前的桥梁，而实际上<code>JSBridge</code>确实是<code>JS</code>和<code>Native</code>之前的<strong>一种通信方式</strong>。</p>
-<p>简单的说，<code>JSBridge</code>就是定义<code>Native</code>和<code>JS</code>的通信，<code>Native</code>只通过一个固定的桥对象调用<code>JS</code>，<code>JS</code>也只通过固定的桥对象调用<code>Native</code>。<code>JSBridge</code>另一个叫法及大家熟知的<code>Hybrid app</code>技术。</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeacc16f2c2beb1834bb9.png"></p>
-<p>了解即可，更多的请参考</p>
-<ul>
-<li><p><a href="https://www.jianshu.com/p/0bd13e9059fb">Cordova浅析架构原理</a></p>
-</li>
-<li><p><a href="https://toutiao.io/posts/07qll1/preview">JSBridge 深度剖析</a></p>
+<li><p>启动和运行的最快方法是使用 <a href="https://jekyllcn.com/">Jekyll</a> 主题选择器加载预置主题。 然后，您可以修改 GitHub Pages 的内容和样式。👉 <a href="https://docs.github.com/cn/pages/getting-started-with-github-pages/about-github-pages">文档</a></p>
 </li>
 </ul>
-<p>下图展示了<code>JSBridge</code>的工作流程👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeaee16f2c2beb18371d9.png"></p>
-<p>上图中左侧部分正式我要做的，具体请看下文</p>
-<blockquote>
-<p>看累了，三连一下，回看不迷路哟😉</p>
-</blockquote>
-<h2 id="3-1、我们的JSBridge"><a href="#3-1、我们的JSBridge" class="headerlink" title="3.1、我们的JSBridge"></a>3.1、我们的<code>JSBridge</code></h2><p>推测“大地”那边的<code>JSBridge</code>应该是自己写的，没有初始化<code>JSBridge</code>的操作</p>
-<p>当调用<code>JSBridge</code>时，必须在页面完全加载完成之后才能够拿到全局的<code>JSBridge</code>，<code>Cordova</code>框架提供<code>deviceready</code>事件，该事件触发的时候表示全局的<code>JSBridge</code>挂载成功。（注意：这就是我接下来操作的切入点，嘻嘻）</p>
-<p>简单写下如下：</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'deviceready OK!'</span>);</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">showToast</span>(<span class="number">0</span>, <span class="string">'提示信息'</span>)</span><br><span class="line">}, <span class="literal">false</span>)</span><br></pre></td></tr></tbody></table></figure>
-
-<p>需要注意的是，在开发环境，是没有 <code>deviceready</code> 事件的，所以上面的代码并不会执行，只有在<code>app</code>里面运行的时候才会执行。</p>
-<p><strong>思考：</strong></p>
-<p><code>JSBridge</code>必须是在<code>deviceready</code>事件触发后方能使用的，因此首先要做的就是自定义<code>deviceready</code>事件，本地环境可以手动触发自定义<code>deviceready</code>事件，生产环境下直接监听<code>deviceready</code>事件即可</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeafd16f2c2beb1838190.png"></p>
-<h1 id="4、JS发起自定义事件"><a href="#4、JS发起自定义事件" class="headerlink" title="4、JS发起自定义事件"></a>4、JS发起自定义事件</h1><p>我是用 <code>CustomEvent</code> 构造函数，继承至 <code>Event</code>，文档看<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/CustomEvent">这里</a></p>
-<ol>
-<li>用法</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="title class_">CustomEvent</span>(eventName, params);</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>示例</li>
-</ol>
-<p>创建一个自定义事件</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> event=<span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'mock-event'</span>);</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="3">
-<li>传递参数</li>
-</ol>
-<p>这里值得注意，需要把想要传递的参数包裹在一个包含<code>detail</code>属性的对象，否则传递的参数不会被挂载</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createEvent</span>(<span class="params">params, eventName = <span class="string">'mock-event'</span></span>) {</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(eventName, { <span class="attr">detail</span>: params });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> event = <span class="title function_">createEvent</span>({ <span class="attr">id</span>: <span class="string">'0010'</span> });</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="4">
-<li>发起事件</li>
-</ol>
-<p>调用<code>dispatchEvent</code>方法发起事件，传入你刚才创建的方法</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">dispatchEvent</span>(event);</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="5">
-<li>监听事件</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'mock-event'</span>, <span class="function">(<span class="params">{ detail: { id } }</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'id'</span>,id) <span class="comment">// 会在控制台打印0010</span></span><br><span class="line">});</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="6">
-<li>示例：</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">addEventListener</span>(<span class="string">'show'</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> { <span class="variable language_">console</span>.<span class="title function_">log</span>(event.<span class="property">detail</span>); });</span><br><span class="line"><span class="comment">// 触发</span></span><br><span class="line"><span class="keyword">let</span> myEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'show'</span>, {</span><br><span class="line">    <span class="attr">detail</span>: {</span><br><span class="line">        <span class="attr">username</span>: <span class="string">'xixi'</span>,</span><br><span class="line">        <span class="attr">userid</span>: <span class="string">'2022'</span></span><br><span class="line">    }</span><br><span class="line">});</span><br><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">dispatchEvent</span>(myEvent);</span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p>了解了自定义事件之后，通过自定义事件模拟触发<code>deviceready</code>事件，这样上面的 <code>deviceready</code> 事件监听就可以执行了。</p>
-<p><strong>注意</strong>：这里还要确定一个问题，在什么时候触发自定义事件<code>deviceready</code>呢？</p>
-</blockquote>
-<h1 id="5、确定-deviceready-事件执行时机"><a href="#5、确定-deviceready-事件执行时机" class="headerlink" title="5、确定 deviceready 事件执行时机"></a>5、确定 <code>deviceready</code> 事件执行时机</h1><ul>
-<li>只需要编写如下代码，查看输出结果即可</li>
+<h2 id="2、创建仓库"><a href="#2、创建仓库" class="headerlink" title="2、创建仓库"></a>2、创建仓库</h2><p>仓库名： <code>&lt;username&gt;.github.io</code><br><code>username</code> 是GitHub的用户名</p>
+<h2 id="3、创建站点"><a href="#3、创建站点" class="headerlink" title="3、创建站点"></a>3、创建站点</h2><p>在 <code>repo</code> 下创建 <code>index.md</code>文件，随便写点东西保存。然后，点击 <code>settings</code>选项卡，单机左侧 <code>Pages</code>进行设置，如下图：</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fae16f2c2beb1e1d288.png"></p>
+<p>🔊 此时站点已经建成，可以访问 <code>https://&lt;username&gt;.github.io/</code> 查看，如果已经有个人域名了，也可以绑定个人域名，继续往下看👇</p>
+<h2 id="4、仓库文件目录"><a href="#4、仓库文件目录" class="headerlink" title="4、仓库文件目录"></a>4、仓库文件目录</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fbe16f2c2beb1e1e89f.png"></p>
+<h2 id="5、绑定域名"><a href="#5、绑定域名" class="headerlink" title="5、绑定域名"></a>5、绑定域名</h2><p>我个人购买的一级域名是 i-xiao ，域名后缀是 space，专门给GitHub Pages 增加一个CNAME记录（blog），解析二级域名，绑定 <username>github.io 域名。</username></p>
+<h3 id="5-1、域名相关知识"><a href="#5-1、域名相关知识" class="headerlink" title="5.1、域名相关知识"></a>5.1、域名相关知识</h3><ul>
+<li>www：主机名，i-xiao : 域名主体(一级域名)，.space : 域名后缀<br>注册一级域名的时候是需要付费的</li>
+<li>二级域名，是依附一级域名的存在而存在的，也就是说要是顶级域名消失了，二级域名也也会不复存在。反而来说，二级域名的网站不做了，主域名网站是不受影响的。</li>
+<li>一级域名、二级域名区别：<br>DNS收录一级域名更快；还有就是解析速度，下一跳路由就不说了，找到目的主机之后，二级域名层级更深，需要多一层计算（其实这是我瞎写的🤣，猜测应该跟 nginx location匹配类似）</li>
 </ul>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'load'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'load OK!'</span>);</span><br><span class="line">}, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'deviceready OK!'</span>);</span><br><span class="line">}, <span class="literal">false</span>);</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>结果输出</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">load OK!</span><br><span class="line">deviceready OK!</span><br></pre></td></tr></tbody></table></figure>
-
-<p>由此可知，执行顺序：<code>load</code> –&gt; <code>deviceready</code></p>
-<h1 id="6、自定义事件模拟Cordova-deviceready事件"><a href="#6、自定义事件模拟Cordova-deviceready事件" class="headerlink" title="6、自定义事件模拟Cordova deviceready事件"></a>6、自定义事件模拟<code>Cordova</code> <code>deviceready</code>事件</h1><ol>
-<li><p>自定义<code>deviceready</code>事件</p>
-</li>
-<li><p>根据上面测试执行顺序得出的结论，我在<code>load</code>事件里触发自定义事件</p>
-</li>
-<li><p>在开发环境下模拟一些用到的<code>JSBridge-API</code>，比如下面写到的 <code>JSAPI.showToast()</code> 方法</p>
-</li>
-</ol>
-<ul>
-<li>mockEvent.js<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (process.<span class="property">env</span>.<span class="property">NODE_ENV</span> === <span class="string">'development'</span>) {</span><br><span class="line">  <span class="comment">//  自定义事件</span></span><br><span class="line">  <span class="keyword">let</span> myEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'deviceready'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 模拟JSAPI事件</span></span><br><span class="line">  <span class="variable language_">window</span>[<span class="string">'JSAPI'</span>] = {</span><br><span class="line">    <span class="title function_">showToast</span>(<span class="params">type, desc</span>) {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(type, desc);</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 开发环境下，在 原生 load 方法之后 触发自定义事件</span></span><br><span class="line">  <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'load'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'load OK!'</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> {</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">dispatchEvent</span>(myEvent);</span><br><span class="line">    }, <span class="number">100</span>)</span><br><span class="line">  }, <span class="literal">false</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h1 id="7、封装deviceReady方法"><a href="#7、封装deviceReady方法" class="headerlink" title="7、封装deviceReady方法"></a>7、封装<code>deviceReady</code>方法</h1><p>实现在<code>Cordova</code>框架触发<code>deviceready</code>事件的时候感知到，以便于在<code>deviceReady</code>事件触发后执行<code>JS-API</code>。</p>
-<p><strong>可用于开发环境和非开发环境</strong></p>
-<h2 id="7-1、方式一"><a href="#7-1、方式一" class="headerlink" title="7.1、方式一"></a>7.1、方式一</h2><p>这里采用<strong>链式调用</strong>的方式，</p>
-<p>以下这种借助 <code>Promise</code> 的实现，在这种场景下其实是不合理的👀<br>只是形式上类似，其实并不是</p>
-<ol>
-<li>定义</li>
-</ol>
-<ul>
-<li>mixin.js</li>
-</ul>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">deviceReady</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">      <span class="title function_">resolve</span>(<span class="string">"ready go!"</span>);</span><br><span class="line">    }, <span class="literal">false</span>);</span><br><span class="line">  })</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>组件内使用<code>JS-API</code></li>
-</ol>
-<p>使用<code>JSAPI</code>可以如下这么写</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">deviceReady</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res); <span class="comment">// ready go!</span></span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">showToast</span>(<span class="number">0</span>, <span class="string">'提示'</span>)</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="variable language_">this</span>.<span class="title function_">deviceReady</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">getUserInfo</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">  }, <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">  });</span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="3">
-<li>开发环境执行效果如下</li>
-</ol>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeb0a16f2c2beb183900d.png"></p>
-<h2 id="7-2、方式二（推荐）"><a href="#7-2、方式二（推荐）" class="headerlink" title="7.2、方式二（推荐）"></a>7.2、方式二（推荐）</h2><p>改写成通用的事件监听函数，支持链式调用</p>
-<blockquote>
-<ul>
-<li><p>开发环境下，由<code>mockEvent.js</code>文件里的<code>dispatchEvent</code>触发自定义的<code>deviceready</code>事件；</p>
-</li>
-<li><p>小程序里运行，则由真实的<code>deviceready</code>事件触发</p>
-</li>
-</ul>
-</blockquote>
-<ol>
-<li>定义</li>
-</ol>
-<ul>
-<li>mixin.js</li>
-</ul>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">receiver</span>(<span class="params">type</span>) {</span><br><span class="line">  <span class="keyword">let</span> callbacks = {</span><br><span class="line">      <span class="attr">fns</span>: [],</span><br><span class="line">      <span class="attr">then</span>: <span class="keyword">function</span>(<span class="params">cb</span>){</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">fns</span>.<span class="title function_">push</span>(cb);</span><br><span class="line">          <span class="keyword">return</span> <span class="variable language_">this</span>;</span><br><span class="line">      }</span><br><span class="line">  };</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(type, <span class="keyword">function</span>(<span class="params">ev</span>) {</span><br><span class="line">    <span class="keyword">let</span> fns = callbacks.<span class="property">fns</span>.<span class="title function_">slice</span>();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>, l = fns.<span class="property">length</span>; i &lt; l; i++){</span><br><span class="line">        fns[i].<span class="title function_">call</span>(<span class="variable language_">this</span>, ev);</span><br><span class="line">    }</span><br><span class="line">  });</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> callbacks;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>使用</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">receiver</span>(<span class="string">'deviceready'</span>).<span class="title function_">then</span>(<span class="function">(<span class="params">ev</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(ev);</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">getUserInfo</span>(</span><br><span class="line">    <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">    },</span><br><span class="line">    <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">    }</span><br><span class="line">  )</span><br><span class="line">})</span><br><span class="line"><span class="variable language_">this</span>.<span class="title function_">receiver</span>(<span class="string">"click"</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"hi"</span>))</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">()=&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">22</span>));</span><br></pre></td></tr></tbody></table></figure>
-
-
-<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>当应用发布到<code>app</code>上，就是监听的真实的 <code>Cordova</code>框架的 <code>deviceready</code> 事件了，之后也就可以拿到真实的<code>JSAPI</code>了，以上只是为了在开发环境的时候模拟使用<code>JSAPI</code>。防止在开发环境下直接调用<code>JSAPI</code>飘红的情况，当然也是可以加<code>try catch</code>处理的，只不过个人感觉模拟事件使得代码看起来更加优雅别致一点，使用更加丝滑，酌情食用😁。</p>
-<p>软件架构非常有意思，感兴趣的可以交流探索，嘻嘻。</p>
+<h3 id="5-2、GitHub上配置自定义域名"><a href="#5-2、GitHub上配置自定义域名" class="headerlink" title="5.2、GitHub上配置自定义域名"></a>5.2、GitHub上配置自定义域名</h3><p>进入 <username>github.io 仓库，进入设置页面，点击左边 Pages 选项卡，进行下面的配置。</username></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6116f2c2beb1e1511a.png"></p>
+<h2 id="6、配置域名映射"><a href="#6、配置域名映射" class="headerlink" title="6、配置域名映射"></a>6、配置域名映射</h2><p><strong>各记录类型使用目的</strong></p>
+<table>
+<thead>
+<tr>
+<th>记录类型</th>
+<th>使用目的</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ce5/">A 记录</a></td>
+<td>将域名指向一个 IP 地址（外网地址）。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9cf9/">CNAME 记录</a></td>
+<td>将域名指向另一个域名，再由另一个域名提供 IP 地址（外网地址）。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9cff/">MX 记录</a></td>
+<td>设置邮箱，让邮箱能收到邮件。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d11/">NS 记录</a></td>
+<td>将子域名交给其他 DNS 服务商解析。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d0b/">AAAA 记录</a></td>
+<td>将域名指向一个 IPv6 地址。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d17/">SRV 记录</a></td>
+<td>用来标识某台服务器使用了某个服务，常见于微软系统的目录管理。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d05/">TXT 记录</a></td>
+<td>对域名进行标识和说明，绝大多数的 TXT 记录是用来做 SPF 记录（反垃圾邮件）。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ced/">隐、显性 URL 记录</a></td>
+<td>将一个域名指向另外一个已经存在的站点。</td>
+</tr>
+</tbody></table>
+<p><strong>如下图</strong></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6f16f2c2beb1e16954.png"></p>
+<h2 id="7、DNS检测"><a href="#7、DNS检测" class="headerlink" title="7、DNS检测"></a>7、DNS检测</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f7816f2c2beb1e1785b.png"></p>
+<h2 id="8、查看Pages"><a href="#8、查看Pages" class="headerlink" title="8、查看Pages"></a>8、查看Pages</h2><p>成功解析之后，还存在DNS缓存，一般还需要再等待一会（一般十分钟，或许更长时间）才能生效，如下图成功显示👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f8c16f2c2beb1e1a34c.png"></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>站点绑定的域名已经更换，访问请到👉 <a href="https://home.i-xiao.space/">这里</a></p>
 <hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
+<p>🎈🎈🎈</p>
+<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
 </body></html>]]></content>
       <categories>
-        <category>前端</category>
+        <category>GitHub</category>
       </categories>
       <tags>
-        <tag>Hybrid app</tag>
+        <tag>GitHub</tag>
       </tags>
   </entry>
   <entry>
@@ -1224,6 +1105,179 @@
       <tags>
         <tag>Hexo</tag>
         <tag>GitHub Actions</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hybrid app本地开发如何调用JSBridge</title>
+    <url>/posts/3740751445.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>前天同事问我公司内部的小程序怎么对接的，我回忆了一下，简单记录了一下前端同学需要注意的点。</p>
+<p>背后还有小程序架构、网络策略等等。当时恰逢小程序架构调整，（老架构的时候我就发现了有一个问题点可以优化，但是跟那边人反馈之后，人家表示不要我管😂，新架构时发现这个问题还巧妙的遗留下来了😮）我虽然不负责那块，但是本着<strong>这样不优雅</strong>的原则，还是跟新架构的对接人讲了我的优化方案，讲明白了之后，同时上报各自直系领导，并建议我领导牵头开会推动。最后，无奈存量数据太多，老架构那边权衡之后决定不改动。（多说了几句，权当记录一下）</p>
+</blockquote>
+<h1 id="1、背景"><a href="#1、背景" class="headerlink" title="1、背景"></a>1、背景</h1><p>公司研发的一款服务软件App（姑且称为“大地”），提供了包涵消息、待办、工作台、同事圈和通讯录五大功能模块，其中，工作台里集成了包括公司的移动客户端、PC端以及第三方平台的部分功能/服务（统称为“应用”）。</p>
+<p>我今天要讲的是这个集成平台以什么方式展现“应用”，答案是：借鉴了微信的架构，自研了“小程序”接入“应用”。</p>
+<p>我司小程序具有一种相对开放能力（面向全公司），赋能业务快速数字化、场景敏捷迭代，并且可在“大地”上便捷的获取和使用，同时具有完善的使用体验（这就是严格的接入审核标准带来的好处）。</p>
+<p>在“大地”开发者平台，创建小程序会自动创建配套的公众号（公众号是为了推送消息使用，可订阅）。小程序开发不限制技术选型，开发完成之后按照小程序接入规范打包上架小程序，审核发布。</p>
+<blockquote>
+<p>简单来说，可以把“大地”看成是一个“钉钉”，我现在要把我们的业务功能投放到“大地”上，就需要接入“大地”小程序，以小程序的方式在“大地”上为用户提供服务。</p>
+</blockquote>
+<p>小程序架构：<code>Cordova</code>框架做的<code>WebView</code>，运行我开发的前端程序，通过<code>Nginx</code>帮我把请求代理到微服务网关，由网关转发到目的主机处理请求。它虽然看上去是一个<code>Native App</code>，但只有一个<code>UI WebView</code>，里面访问的是一个<code>Web App</code>，对我来说就是开发一个<code>H5</code>应用调用一些所需的<code>JSBridge</code>，也就是所谓的<code>Hybrid App</code>。</p>
+<p>下面看一下本地开发中的一些问题，以及我是怎么处理的</p>
+<h1 id="2、问题"><a href="#2、问题" class="headerlink" title="2、问题"></a>2、问题</h1><p><code>Hybrid App</code>本地开发过程中没有真实的<code>Native</code>环境的，同样也无法使用<code>JSBridge</code>，这就会带来一个问题：跟原生交互的行为只能发布小程序才可以调试，本地玩不了，这…，相当fuck。</p>
+<p>目的是想让本地开发同小程序测试环境具有相同的体验，我的想法是在本地模拟<code>JSBridge</code>的方法，尽管不能带来真实的效果，至少触发了某个行为之后要有个反应，不至于让操作流程看起来像是“脱节”的（实际跟原生的交互行为并不多，比如：拍照、弹窗提示、定位等等）。</p>
+<p>因此，我要做的就是本地模拟<code>JSBridge</code>的一些方法，开发时触发了这些原生交互行为之后提示一些信息，等到上架小程序测试环境时，在手机上会用真实的<code>JSBridge</code>方法自动替换掉我模拟实现的方法。</p>
+<p>于是我就开始了下面的准备工作。</p>
+<ol>
+<li><p>搞清楚<code>JSBridge</code>运行的原理</p>
+</li>
+<li><p>本地模拟<code>JSBridge</code>的方法</p>
+</li>
+<li><p>上架小程序是自动使用真实的<code>JSBridge</code></p>
+</li>
+</ol>
+<h1 id="3、了解JSBridge"><a href="#3、了解JSBridge" class="headerlink" title="3、了解JSBridge"></a>3、了解<code>JSBridge</code></h1><p><strong>JSBridge</strong>：望文生义就是<code>js</code>和<code>Native</code>之前的桥梁，而实际上<code>JSBridge</code>确实是<code>JS</code>和<code>Native</code>之前的<strong>一种通信方式</strong>。</p>
+<p>简单的说，<code>JSBridge</code>就是定义<code>Native</code>和<code>JS</code>的通信，<code>Native</code>只通过一个固定的桥对象调用<code>JS</code>，<code>JS</code>也只通过固定的桥对象调用<code>Native</code>。<code>JSBridge</code>另一个叫法及大家熟知的<code>Hybrid app</code>技术。</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeacc16f2c2beb1834bb9.png"></p>
+<p>了解即可，更多的请参考</p>
+<ul>
+<li><p><a href="https://www.jianshu.com/p/0bd13e9059fb">Cordova浅析架构原理</a></p>
+</li>
+<li><p><a href="https://toutiao.io/posts/07qll1/preview">JSBridge 深度剖析</a></p>
+</li>
+</ul>
+<p>下图展示了<code>JSBridge</code>的工作流程👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeaee16f2c2beb18371d9.png"></p>
+<p>上图中左侧部分正式我要做的，具体请看下文</p>
+<blockquote>
+<p>看累了，三连一下，回看不迷路哟😉</p>
+</blockquote>
+<h2 id="3-1、我们的JSBridge"><a href="#3-1、我们的JSBridge" class="headerlink" title="3.1、我们的JSBridge"></a>3.1、我们的<code>JSBridge</code></h2><p>推测“大地”那边的<code>JSBridge</code>应该是自己写的，没有初始化<code>JSBridge</code>的操作</p>
+<p>当调用<code>JSBridge</code>时，必须在页面完全加载完成之后才能够拿到全局的<code>JSBridge</code>，<code>Cordova</code>框架提供<code>deviceready</code>事件，该事件触发的时候表示全局的<code>JSBridge</code>挂载成功。（注意：这就是我接下来操作的切入点，嘻嘻）</p>
+<p>简单写下如下：</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'deviceready OK!'</span>);</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">showToast</span>(<span class="number">0</span>, <span class="string">'提示信息'</span>)</span><br><span class="line">}, <span class="literal">false</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>需要注意的是，在开发环境，是没有 <code>deviceready</code> 事件的，所以上面的代码并不会执行，只有在<code>app</code>里面运行的时候才会执行。</p>
+<p><strong>思考：</strong></p>
+<p><code>JSBridge</code>必须是在<code>deviceready</code>事件触发后方能使用的，因此首先要做的就是自定义<code>deviceready</code>事件，本地环境可以手动触发自定义<code>deviceready</code>事件，生产环境下直接监听<code>deviceready</code>事件即可</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeafd16f2c2beb1838190.png"></p>
+<h1 id="4、JS发起自定义事件"><a href="#4、JS发起自定义事件" class="headerlink" title="4、JS发起自定义事件"></a>4、JS发起自定义事件</h1><p>我是用 <code>CustomEvent</code> 构造函数，继承至 <code>Event</code>，文档看<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/CustomEvent">这里</a></p>
+<ol>
+<li>用法</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="title class_">CustomEvent</span>(eventName, params);</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>示例</li>
+</ol>
+<p>创建一个自定义事件</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> event=<span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'mock-event'</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>传递参数</li>
+</ol>
+<p>这里值得注意，需要把想要传递的参数包裹在一个包含<code>detail</code>属性的对象，否则传递的参数不会被挂载</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createEvent</span>(<span class="params">params, eventName = <span class="string">'mock-event'</span></span>) {</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(eventName, { <span class="attr">detail</span>: params });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> event = <span class="title function_">createEvent</span>({ <span class="attr">id</span>: <span class="string">'0010'</span> });</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="4">
+<li>发起事件</li>
+</ol>
+<p>调用<code>dispatchEvent</code>方法发起事件，传入你刚才创建的方法</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">dispatchEvent</span>(event);</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="5">
+<li>监听事件</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'mock-event'</span>, <span class="function">(<span class="params">{ detail: { id } }</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'id'</span>,id) <span class="comment">// 会在控制台打印0010</span></span><br><span class="line">});</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="6">
+<li>示例：</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">addEventListener</span>(<span class="string">'show'</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> { <span class="variable language_">console</span>.<span class="title function_">log</span>(event.<span class="property">detail</span>); });</span><br><span class="line"><span class="comment">// 触发</span></span><br><span class="line"><span class="keyword">let</span> myEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'show'</span>, {</span><br><span class="line">    <span class="attr">detail</span>: {</span><br><span class="line">        <span class="attr">username</span>: <span class="string">'xixi'</span>,</span><br><span class="line">        <span class="attr">userid</span>: <span class="string">'2022'</span></span><br><span class="line">    }</span><br><span class="line">});</span><br><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">dispatchEvent</span>(myEvent);</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>了解了自定义事件之后，通过自定义事件模拟触发<code>deviceready</code>事件，这样上面的 <code>deviceready</code> 事件监听就可以执行了。</p>
+<p><strong>注意</strong>：这里还要确定一个问题，在什么时候触发自定义事件<code>deviceready</code>呢？</p>
+</blockquote>
+<h1 id="5、确定-deviceready-事件执行时机"><a href="#5、确定-deviceready-事件执行时机" class="headerlink" title="5、确定 deviceready 事件执行时机"></a>5、确定 <code>deviceready</code> 事件执行时机</h1><ul>
+<li>只需要编写如下代码，查看输出结果即可</li>
+</ul>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'load'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'load OK!'</span>);</span><br><span class="line">}, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'deviceready OK!'</span>);</span><br><span class="line">}, <span class="literal">false</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>结果输出</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">load OK!</span><br><span class="line">deviceready OK!</span><br></pre></td></tr></tbody></table></figure>
+
+<p>由此可知，执行顺序：<code>load</code> –&gt; <code>deviceready</code></p>
+<h1 id="6、自定义事件模拟Cordova-deviceready事件"><a href="#6、自定义事件模拟Cordova-deviceready事件" class="headerlink" title="6、自定义事件模拟Cordova deviceready事件"></a>6、自定义事件模拟<code>Cordova</code> <code>deviceready</code>事件</h1><ol>
+<li><p>自定义<code>deviceready</code>事件</p>
+</li>
+<li><p>根据上面测试执行顺序得出的结论，我在<code>load</code>事件里触发自定义事件</p>
+</li>
+<li><p>在开发环境下模拟一些用到的<code>JSBridge-API</code>，比如下面写到的 <code>JSAPI.showToast()</code> 方法</p>
+</li>
+</ol>
+<ul>
+<li>mockEvent.js<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (process.<span class="property">env</span>.<span class="property">NODE_ENV</span> === <span class="string">'development'</span>) {</span><br><span class="line">  <span class="comment">//  自定义事件</span></span><br><span class="line">  <span class="keyword">let</span> myEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'deviceready'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 模拟JSAPI事件</span></span><br><span class="line">  <span class="variable language_">window</span>[<span class="string">'JSAPI'</span>] = {</span><br><span class="line">    <span class="title function_">showToast</span>(<span class="params">type, desc</span>) {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(type, desc);</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 开发环境下，在 原生 load 方法之后 触发自定义事件</span></span><br><span class="line">  <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'load'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'load OK!'</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> {</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">dispatchEvent</span>(myEvent);</span><br><span class="line">    }, <span class="number">100</span>)</span><br><span class="line">  }, <span class="literal">false</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h1 id="7、封装deviceReady方法"><a href="#7、封装deviceReady方法" class="headerlink" title="7、封装deviceReady方法"></a>7、封装<code>deviceReady</code>方法</h1><p>实现在<code>Cordova</code>框架触发<code>deviceready</code>事件的时候感知到，以便于在<code>deviceReady</code>事件触发后执行<code>JS-API</code>。</p>
+<p><strong>可用于开发环境和非开发环境</strong></p>
+<h2 id="7-1、方式一"><a href="#7-1、方式一" class="headerlink" title="7.1、方式一"></a>7.1、方式一</h2><p>这里采用<strong>链式调用</strong>的方式，</p>
+<p>以下这种借助 <code>Promise</code> 的实现，在这种场景下其实是不合理的👀<br>只是形式上类似，其实并不是</p>
+<ol>
+<li>定义</li>
+</ol>
+<ul>
+<li>mixin.js</li>
+</ul>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">deviceReady</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">      <span class="title function_">resolve</span>(<span class="string">"ready go!"</span>);</span><br><span class="line">    }, <span class="literal">false</span>);</span><br><span class="line">  })</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>组件内使用<code>JS-API</code></li>
+</ol>
+<p>使用<code>JSAPI</code>可以如下这么写</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">deviceReady</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res); <span class="comment">// ready go!</span></span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">showToast</span>(<span class="number">0</span>, <span class="string">'提示'</span>)</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="variable language_">this</span>.<span class="title function_">deviceReady</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">getUserInfo</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">  }, <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">  });</span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>开发环境执行效果如下</li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeb0a16f2c2beb183900d.png"></p>
+<h2 id="7-2、方式二（推荐）"><a href="#7-2、方式二（推荐）" class="headerlink" title="7.2、方式二（推荐）"></a>7.2、方式二（推荐）</h2><p>改写成通用的事件监听函数，支持链式调用</p>
+<blockquote>
+<ul>
+<li><p>开发环境下，由<code>mockEvent.js</code>文件里的<code>dispatchEvent</code>触发自定义的<code>deviceready</code>事件；</p>
+</li>
+<li><p>小程序里运行，则由真实的<code>deviceready</code>事件触发</p>
+</li>
+</ul>
+</blockquote>
+<ol>
+<li>定义</li>
+</ol>
+<ul>
+<li>mixin.js</li>
+</ul>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">receiver</span>(<span class="params">type</span>) {</span><br><span class="line">  <span class="keyword">let</span> callbacks = {</span><br><span class="line">      <span class="attr">fns</span>: [],</span><br><span class="line">      <span class="attr">then</span>: <span class="keyword">function</span>(<span class="params">cb</span>){</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">fns</span>.<span class="title function_">push</span>(cb);</span><br><span class="line">          <span class="keyword">return</span> <span class="variable language_">this</span>;</span><br><span class="line">      }</span><br><span class="line">  };</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(type, <span class="keyword">function</span>(<span class="params">ev</span>) {</span><br><span class="line">    <span class="keyword">let</span> fns = callbacks.<span class="property">fns</span>.<span class="title function_">slice</span>();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>, l = fns.<span class="property">length</span>; i &lt; l; i++){</span><br><span class="line">        fns[i].<span class="title function_">call</span>(<span class="variable language_">this</span>, ev);</span><br><span class="line">    }</span><br><span class="line">  });</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> callbacks;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>使用</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">receiver</span>(<span class="string">'deviceready'</span>).<span class="title function_">then</span>(<span class="function">(<span class="params">ev</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(ev);</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">getUserInfo</span>(</span><br><span class="line">    <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">    },</span><br><span class="line">    <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">    }</span><br><span class="line">  )</span><br><span class="line">})</span><br><span class="line"><span class="variable language_">this</span>.<span class="title function_">receiver</span>(<span class="string">"click"</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"hi"</span>))</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">()=&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">22</span>));</span><br></pre></td></tr></tbody></table></figure>
+
+
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>当应用发布到<code>app</code>上，就是监听的真实的 <code>Cordova</code>框架的 <code>deviceready</code> 事件了，之后也就可以拿到真实的<code>JSAPI</code>了，以上只是为了在开发环境的时候模拟使用<code>JSAPI</code>。防止在开发环境下直接调用<code>JSAPI</code>飘红的情况，当然也是可以加<code>try catch</code>处理的，只不过个人感觉模拟事件使得代码看起来更加优雅别致一点，使用更加丝滑，酌情食用😁。</p>
+<p>软件架构非常有意思，感兴趣的可以交流探索，嘻嘻。</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>Hybrid app</tag>
       </tags>
   </entry>
   <entry>
@@ -2870,35 +2924,6 @@
       </tags>
   </entry>
   <entry>
-    <title>看了的，没看的书</title>
-    <url>/posts/2212813940.html</url>
-    <content><![CDATA[<html><head></head><body><p>书籍是通往智慧的阶梯。</p>
-<p>获得的宝箱就要打开，别舍不得拆，抓住重点！</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/633e989516f2c2beb1d0fe46.jpg"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/633e992616f2c2beb1d22a90.jpg"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/633e993116f2c2beb1d24935.jpg"></p>
-<p>这些书差不多全是这将近两年的时间里买的。其实从书本里得到的理论知识我现在基本上全忘了，留下来的都是实操经验。可见实操是多么的重要，而且在自己动手练习的过程中，还要不断尝试总结、记录学习历程。</p>
-<p>话说回来，卖二手书是真的便宜，大概连都废纸都不如，一本react技术栈，一毛钱一本，what fuck?!</p>
-<p>其实我想卖的是那种基本没什么太多干货的书，一看这么便宜，索性都留着吧。</p>
-<blockquote>
-<p>我说我的 HTTP权威指南 去哪了，找了好久没找到，昨天收拾电脑，忽然发现在电脑下面垫着🤣🤣</p>
-</blockquote>
-<p>喜欢读书，在上海那几年喜欢读“无用之书”（历史、文学、小说，技能相关的书籍也买了些许），到现在也基本忘了看过的书了，还是要学以致用，以用为学。</p>
-<p>不问收获，但问耕耘。自主反思，归纳总结，把知识内化。</p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>书籍</category>
-      </categories>
-      <tags>
-        <tag>书籍</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>最近接触的东西</title>
     <url>/posts/2564859285.html</url>
     <content><![CDATA[<html><head></head><body><p>我的博客最开始采用的是<code>Hexo</code>+<code>hexo-theme-next</code>搭建的，使用<code>GitHub Pages</code>托管并进行自动化部署，写文发布的流程非常简单方便，云端写作发布也轻而易举。</p>
@@ -2963,6 +2988,35 @@
       </categories>
       <tags>
         <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>看了的，没看的书</title>
+    <url>/posts/2212813940.html</url>
+    <content><![CDATA[<html><head></head><body><p>书籍是通往智慧的阶梯。</p>
+<p>获得的宝箱就要打开，别舍不得拆，抓住重点！</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/633e989516f2c2beb1d0fe46.jpg"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/633e992616f2c2beb1d22a90.jpg"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/633e993116f2c2beb1d24935.jpg"></p>
+<p>这些书差不多全是这将近两年的时间里买的。其实从书本里得到的理论知识我现在基本上全忘了，留下来的都是实操经验。可见实操是多么的重要，而且在自己动手练习的过程中，还要不断尝试总结、记录学习历程。</p>
+<p>话说回来，卖二手书是真的便宜，大概连都废纸都不如，一本react技术栈，一毛钱一本，what fuck?!</p>
+<p>其实我想卖的是那种基本没什么太多干货的书，一看这么便宜，索性都留着吧。</p>
+<blockquote>
+<p>我说我的 HTTP权威指南 去哪了，找了好久没找到，昨天收拾电脑，忽然发现在电脑下面垫着🤣🤣</p>
+</blockquote>
+<p>喜欢读书，在上海那几年喜欢读“无用之书”（历史、文学、小说，技能相关的书籍也买了些许），到现在也基本忘了看过的书了，还是要学以致用，以用为学。</p>
+<p>不问收获，但问耕耘。自主反思，归纳总结，把知识内化。</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>书籍</category>
+      </categories>
+      <tags>
+        <tag>书籍</tag>
       </tags>
   </entry>
   <entry>
@@ -3178,77 +3232,6 @@
       </tags>
   </entry>
   <entry>
-    <title>记一个 &#39;奇葩&#39; 需求的实现</title>
-    <url>/posts/2156089668.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们这边没有专门的产品经理，<code>UI</code>对产品的设计基本具有决定权，说实话，是有那么一点可怖的（前后改了很多次，差一点就改回原版了，我自己都觉得不好意思了🤣）。个人感觉我们<code>UI</code>还是体验的少，缺乏对产品以及用户行为的认识。设计出来的东西看似很华丽，其实缺失很多场景下的分析，不切合实际，大多数人说的“用户体验”或许只是主观的、想当然的（我也一样😮）。</p>
-<p>自从接触互联网开始我就在有意的学习怎么做产品，期间还考虑过转产品，永远不要拿业余的跟专业的比，没什么可比性，不成熟。继续保持思考、学习。</p>
-<blockquote>
-<p>所用技术：<code>vue</code>、<code>vue-router</code>、<code>element-ui</code></p>
-</blockquote>
-<h2 id="需求："><a href="#需求：" class="headerlink" title="需求："></a>需求：</h2><blockquote>
-<p>导航菜单（<code>el-menu</code>组件）竖向展示的</p>
-</blockquote>
-<ol>
-<li><p>鼠标移入一级菜单展示下面的子菜单，移出则收起来（手风琴模式，正常状态下只保持一个菜单处于展开状态，手动鼠标悬浮展开的不算）</p>
-</li>
-<li><p>选中某个子菜单时高亮对应的一级菜单，并且当鼠标移出高亮的这个菜单模块时不折叠，但是可以点击一级菜单进行折叠（注意：跟第一条有区别）</p>
-</li>
-</ol>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
-<li><p><code>element-ui</code>的导航组件子菜单打开的触发方式可以通过 <code>menu-trigger</code> 参数控制，但是，只在菜单是水平展示（<code>horizontal</code>）的情况下生效。嘶~！我不禁暗想：垂直模式滑动展开真的会有系统这么做吗？（只能自己修改了）</p>
-</li>
-<li><p><code>unique-opened</code> 参数可以控制是否只保持一个子菜单展开，但是在没有子菜单的情况下失效（需要手动修改）</p>
-</li>
-</ol>
-<h2 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h2><p>导航菜单使用递归<code>el-submenu</code>组件实现</p>
-<ol>
-<li>鼠标滑动展开关闭需求：</li>
-</ol>
-<ul>
-<li><code>el-submenu</code> 组件编写鼠标移入移出事件（<code>mouseenter</code>、<code>mouseleave</code>），拿到<code>indexPath</code>，调用<code>open</code>和<code>close</code>方法打开或者折叠菜单（注意：没有子菜单的一级菜单鼠标移入移出不做处理）</li>
-</ul>
-<ol start="2">
-<li>只保持一个菜单出于展开状态</li>
-</ol>
-<ul>
-<li>先配置 <code>unique-opened</code> 参数为 <code>false</code> ，以保证 <code>openedMenus</code> 只有一个（ <code>openedMenus</code> 是<code>el-menu</code>内部维护的属性, 可以自行打印看一下）</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ebfb16f2c2beb1163942.jpg"></p>
-<blockquote>
-<p>一开始我想在子菜单展开折叠的回调事件（<code>open</code>、<code>close</code>）里写逻辑判断，但是不知道什么原因回调事件不触发（注意：<code>open方法</code>和<code>open事件</code>不一样，组件三大要素：<strong>属性、事件、方法</strong>），所以我就考虑在<code>select</code>回调事件里写逻辑了</p>
-</blockquote>
-<ul>
-<li>在菜单激活的<code>select</code>回调事件中，让上一个打开的菜单调用<code>close</code>方法关闭。（这里需要记录上次打开菜单的<code>index</code>，这里我使用<code>sessionStorage</code>记录）</li>
-</ul>
-<h2 id="代码展示"><a href="#代码展示" class="headerlink" title="代码展示"></a>代码展示</h2><p>只展示代码片段，仅供参考</p>
-<p><code>sessionStorage</code>使用自己封装的，之前文章有写过，感兴趣的可以看一下</p>
-<ul>
-<li><code>el-submenu</code> 组件</li>
-</ul>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">menuEnter</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// isNest 是否还有子菜单 true:没有子菜单 false:有子菜单</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; <span class="variable language_">this</span>.<span class="property">item</span>.<span class="property">alwaysShow</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleOpen'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="title function_">menuLeave</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 存在子菜单，并且不是打开状态的菜单，鼠标离开的时候需要合起来</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; !<span class="variable language_">this</span>.<span class="property">curMenuIsOpened</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleClose'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li><code>el-menu</code> 组件</li>
-</ul>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 登录系统的时候，记录展开的菜单信息，</span></span><br><span class="line"><span class="comment">// 在 mounted 里面获取 openedMenus ，并记录信息</span></span><br><span class="line"><span class="title function_">mounted</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 获取当前展开的菜单 - array</span></span><br><span class="line">  <span class="comment">// 手风琴模式，只有一个展开菜单</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// openedMenus 是内部属性</span></span><br><span class="line">  <span class="keyword">const</span> {openedMenus = []} = <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (openedMenus &amp;&amp; openedMenus.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">    <span class="comment">// 获取展开菜单的 index</span></span><br><span class="line">    <span class="keyword">const</span> index = openedMenus[<span class="number">0</span>];</span><br><span class="line">    sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, index)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="attr">methods</span>: {</span><br><span class="line">  <span class="title function_">handleOpen</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 open 方法, 打开close,</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">open</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handleClose</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 close 方法, 关闭close</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handlerSelect</span>(<span class="params">index, indexPath</span>) {</span><br><span class="line">    <span class="comment">// 1. 获取上次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">const</span> _preActiveMenu = sessionStorage.<span class="title function_">get</span>(<span class="string">'preActiveMenu'</span>) || <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">if</span> (_preActiveMenu) {</span><br><span class="line">      <span class="comment">// 如果存在，则关闭该菜单，再打开新的</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(_preActiveMenu);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 记录这次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">if</span> (indexPath.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">      sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, indexPath[<span class="number">0</span>])</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="最终效果展示"><a href="#最终效果展示" class="headerlink" title="最终效果展示"></a>最终效果展示</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ec1816f2c2beb1164933.jpg"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>用了<code>UI</code>框架之后就不可避免的会跟产品设计风格向左，这就需要在框架基础之上进行修改。框架也是一个个组件组成的，抓住组件设计的三要素：属性、事件、方法，了解框架组件的工作原理，就可以轻松的进行修改啦🎉🎉</p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>vue</tag>
-        <tag>element-ui</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>认识HTTP缓存</title>
     <url>/posts/2358217424.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -3356,38 +3339,74 @@
       </tags>
   </entry>
   <entry>
-    <title>通过vNode实现给列表字段打标签</title>
-    <url>/posts/1525901815.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>如何给列表数据打标签？类似下面这种样子👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/632d17c616f2c2beb116edbb.jpg"></p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
-<li>数模转化（对接口请求回来的数据进行过滤标记，返回新的数据）</li>
-<li>渲染新的数据模型</li>
+    <title>记一个 &#39;奇葩&#39; 需求的实现</title>
+    <url>/posts/2156089668.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们这边没有专门的产品经理，<code>UI</code>对产品的设计基本具有决定权，说实话，是有那么一点可怖的（前后改了很多次，差一点就改回原版了，我自己都觉得不好意思了🤣）。个人感觉我们<code>UI</code>还是体验的少，缺乏对产品以及用户行为的认识。设计出来的东西看似很华丽，其实缺失很多场景下的分析，不切合实际，大多数人说的“用户体验”或许只是主观的、想当然的（我也一样😮）。</p>
+<p>自从接触互联网开始我就在有意的学习怎么做产品，期间还考虑过转产品，永远不要拿业余的跟专业的比，没什么可比性，不成熟。继续保持思考、学习。</p>
+<blockquote>
+<p>所用技术：<code>vue</code>、<code>vue-router</code>、<code>element-ui</code></p>
+</blockquote>
+<h2 id="需求："><a href="#需求：" class="headerlink" title="需求："></a>需求：</h2><blockquote>
+<p>导航菜单（<code>el-menu</code>组件）竖向展示的</p>
+</blockquote>
+<ol>
+<li><p>鼠标移入一级菜单展示下面的子菜单，移出则收起来（手风琴模式，正常状态下只保持一个菜单处于展开状态，手动鼠标悬浮展开的不算）</p>
+</li>
+<li><p>选中某个子菜单时高亮对应的一级菜单，并且当鼠标移出高亮的这个菜单模块时不折叠，但是可以点击一级菜单进行折叠（注意：跟第一条有区别）</p>
+</li>
 </ol>
-<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="1、过滤数据，需要打标签的采用jsx写法"><a href="#1、过滤数据，需要打标签的采用jsx写法" class="headerlink" title="1、过滤数据，需要打标签的采用jsx写法"></a>1、过滤数据，需要打标签的采用<code>jsx</code>写法</h3><p>业务数据的处理我封装在 <code>mixins</code> 里面</p>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 存放全局的mixin， 可拆分到模块独享</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> { mapGetters } <span class="keyword">from</span> <span class="string">'vuex'</span></span><br><span class="line"><span class="keyword">import</span> { fetchListData } <span class="keyword">from</span> <span class="string">'@/api/global/api.js'</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> {</span><br><span class="line">  <span class="title function_">data</span>(<span class="params"></span>) {</span><br><span class="line">    <span class="keyword">return</span> {</span><br><span class="line">      <span class="attr">p_category</span>: [],</span><br><span class="line">      <span class="attr">listdata</span>: [],</span><br><span class="line">      <span class="attr">p_total</span>: <span class="number">0</span>,</span><br><span class="line">      <span class="attr">p_loading</span>: <span class="literal">false</span>,</span><br><span class="line">    }</span><br><span class="line">  },</span><br><span class="line">  <span class="attr">computed</span>: {</span><br><span class="line">    <span class="comment">// ...mapGetters(['productLevel', 'productLevelInfo']),</span></span><br><span class="line">    <span class="title function_">p_listdata</span>(<span class="params"></span>) {</span><br><span class="line">      <span class="keyword">const</span> data = <span class="variable language_">this</span>.<span class="property">listdata</span>;</span><br><span class="line">      data.<span class="title function_">forEach</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> {</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        <span class="comment">// jsx 方式，打标签</span></span><br><span class="line">        <span class="keyword">if</span> (item.<span class="property">status</span> === <span class="number">2</span> || item.<span class="property">status</span> === <span class="number">3</span>) {</span><br><span class="line">          item.<span class="property">status</span> = <span class="language-xml"><span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">{{color:</span> '#<span class="attr">999</span>'}}&gt;</span>停售<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">          item.<span class="property">status</span> = item.<span class="property">status</span></span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (item.<span class="property">age</span> &lt;= <span class="number">25</span>) {</span><br><span class="line">          item.<span class="property">age</span> = <span class="language-xml"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"badge_info"</span>&gt;</span>{item.age}<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (item.<span class="property">sex</span> === <span class="string">'Man'</span>) {</span><br><span class="line">          item.<span class="property">sex</span> = <span class="language-xml"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"badge_default"</span>&gt;</span>{item.sex}<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line">        }</span><br><span class="line">      })</span><br><span class="line">      <span class="keyword">return</span> data;</span><br><span class="line">    }</span><br><span class="line">  },</span><br><span class="line">  <span class="attr">methods</span>: {</span><br><span class="line">    <span class="keyword">async</span> <span class="title function_">getProductList</span>(<span class="params">params = {}</span>) {</span><br><span class="line">      <span class="keyword">try</span> {</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">p_loading</span> = <span class="literal">true</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">listdata</span> = []</span><br><span class="line">        <span class="keyword">const</span> res = <span class="keyword">await</span> <span class="title function_">fetchListData</span>(params)</span><br><span class="line">        <span class="keyword">if</span> (res.<span class="property">code</span> === <span class="number">0</span>) {</span><br><span class="line">          <span class="keyword">const</span> { data = [], total = <span class="number">0</span> } = res || {}</span><br><span class="line">          <span class="keyword">if</span> (<span class="title class_">Array</span>.<span class="title function_">isArray</span>(data)) {</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">listdata</span> = [...data]</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">p_total</span> = total</span><br><span class="line">          } <span class="keyword">else</span> {</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">listdata</span> = []</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">p_total</span> = <span class="number">0</span></span><br><span class="line">          }</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">listdata</span> = []</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">p_total</span> = <span class="number">0</span></span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">error</span>(res.<span class="property">message</span> || <span class="string">'出错了'</span>)</span><br><span class="line">        }</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">p_loading</span> = <span class="literal">false</span>;</span><br><span class="line">      } <span class="keyword">catch</span> (err) {</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">p_loading</span> = <span class="literal">false</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">listdata</span> = []</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">p_total</span> = <span class="number">0</span></span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
+<li><p><code>element-ui</code>的导航组件子菜单打开的触发方式可以通过 <code>menu-trigger</code> 参数控制，但是，只在菜单是水平展示（<code>horizontal</code>）的情况下生效。嘶~！我不禁暗想：垂直模式滑动展开真的会有系统这么做吗？（只能自己修改了）</p>
+</li>
+<li><p><code>unique-opened</code> 参数可以控制是否只保持一个子菜单展开，但是在没有子菜单的情况下失效（需要手动修改）</p>
+</li>
+</ol>
+<h2 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h2><p>导航菜单使用递归<code>el-submenu</code>组件实现</p>
+<ol>
+<li>鼠标滑动展开关闭需求：</li>
+</ol>
+<ul>
+<li><code>el-submenu</code> 组件编写鼠标移入移出事件（<code>mouseenter</code>、<code>mouseleave</code>），拿到<code>indexPath</code>，调用<code>open</code>和<code>close</code>方法打开或者折叠菜单（注意：没有子菜单的一级菜单鼠标移入移出不做处理）</li>
+</ul>
+<ol start="2">
+<li>只保持一个菜单出于展开状态</li>
+</ol>
+<ul>
+<li>先配置 <code>unique-opened</code> 参数为 <code>false</code> ，以保证 <code>openedMenus</code> 只有一个（ <code>openedMenus</code> 是<code>el-menu</code>内部维护的属性, 可以自行打印看一下）</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ebfb16f2c2beb1163942.jpg"></p>
+<blockquote>
+<p>一开始我想在子菜单展开折叠的回调事件（<code>open</code>、<code>close</code>）里写逻辑判断，但是不知道什么原因回调事件不触发（注意：<code>open方法</code>和<code>open事件</code>不一样，组件三大要素：<strong>属性、事件、方法</strong>），所以我就考虑在<code>select</code>回调事件里写逻辑了</p>
+</blockquote>
+<ul>
+<li>在菜单激活的<code>select</code>回调事件中，让上一个打开的菜单调用<code>close</code>方法关闭。（这里需要记录上次打开菜单的<code>index</code>，这里我使用<code>sessionStorage</code>记录）</li>
+</ul>
+<h2 id="代码展示"><a href="#代码展示" class="headerlink" title="代码展示"></a>代码展示</h2><p>只展示代码片段，仅供参考</p>
+<p><code>sessionStorage</code>使用自己封装的，之前文章有写过，感兴趣的可以看一下</p>
+<ul>
+<li><code>el-submenu</code> 组件</li>
+</ul>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">menuEnter</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// isNest 是否还有子菜单 true:没有子菜单 false:有子菜单</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; <span class="variable language_">this</span>.<span class="property">item</span>.<span class="property">alwaysShow</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleOpen'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="title function_">menuLeave</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 存在子菜单，并且不是打开状态的菜单，鼠标离开的时候需要合起来</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; !<span class="variable language_">this</span>.<span class="property">curMenuIsOpened</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleClose'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
-<h4 id="base-less-定义标签样式"><a href="#base-less-定义标签样式" class="headerlink" title="base.less 定义标签样式"></a><code>base.less</code> 定义标签样式</h4><figure class="highlight less"><table><tbody><tr><td class="code"><pre><span class="line"><span class="selector-class">.badge_info</span> {</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#4760f0</span>;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#1C84C6</span>;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">5px</span> <span class="number">8px</span>;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#fff</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.badge_default</span> {</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#4760f0</span>;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#4760f0</span>;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">5px</span> <span class="number">8px</span>;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#fff</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li><code>el-menu</code> 组件</li>
+</ul>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 登录系统的时候，记录展开的菜单信息，</span></span><br><span class="line"><span class="comment">// 在 mounted 里面获取 openedMenus ，并记录信息</span></span><br><span class="line"><span class="title function_">mounted</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 获取当前展开的菜单 - array</span></span><br><span class="line">  <span class="comment">// 手风琴模式，只有一个展开菜单</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// openedMenus 是内部属性</span></span><br><span class="line">  <span class="keyword">const</span> {openedMenus = []} = <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (openedMenus &amp;&amp; openedMenus.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">    <span class="comment">// 获取展开菜单的 index</span></span><br><span class="line">    <span class="keyword">const</span> index = openedMenus[<span class="number">0</span>];</span><br><span class="line">    sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, index)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="attr">methods</span>: {</span><br><span class="line">  <span class="title function_">handleOpen</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 open 方法, 打开close,</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">open</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handleClose</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 close 方法, 关闭close</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handlerSelect</span>(<span class="params">index, indexPath</span>) {</span><br><span class="line">    <span class="comment">// 1. 获取上次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">const</span> _preActiveMenu = sessionStorage.<span class="title function_">get</span>(<span class="string">'preActiveMenu'</span>) || <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">if</span> (_preActiveMenu) {</span><br><span class="line">      <span class="comment">// 如果存在，则关闭该菜单，再打开新的</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(_preActiveMenu);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 记录这次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">if</span> (indexPath.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">      sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, indexPath[<span class="number">0</span>])</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
-<h3 id="2、封装列表渲染组件"><a href="#2、封装列表渲染组件" class="headerlink" title="2、封装列表渲染组件"></a>2、封装列表渲染组件</h3><figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">"listV2"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"listV2_row-title"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">span</span> <span class="attr">v-for</span>=<span class="string">"(col, index) in fieldList"</span> <span class="attr">:key</span>=<span class="string">"index"</span> <span class="attr">class</span>=<span class="string">"listV2_cell ellipsis"</span> <span class="attr">:name</span>=<span class="string">"col.fieldName"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        {{col.fieldLabel}}</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="comment">&lt;!-- 行 --&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">v-if</span>=<span class="string">"tableData.length === 0"</span> <span class="attr">class</span>=<span class="string">"nodata"</span>&gt;</span>暂无数据<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">li</span> <span class="attr">v-for</span>=<span class="string">"(row, index) in tableData"</span> <span class="attr">:key</span>=<span class="string">"index"</span> <span class="attr">class</span>=<span class="string">"listV2_row pointer"</span> @<span class="attr">click</span>=<span class="string">"rowClickToDetail(row)"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="comment">&lt;!-- 单元格-列 --&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">span</span> <span class="attr">v-for</span>=<span class="string">"(col, index) in fieldList"</span> <span class="attr">:key</span>=<span class="string">"index"</span> <span class="attr">class</span>=<span class="string">"listV2_cell ellipsis"</span> <span class="attr">:name</span>=<span class="string">"col.fieldName"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">RenderDom</span> <span class="attr">:vNode</span>=<span class="string">"row[col.fieldName] || '-'"</span>&gt;</span><span class="tag">&lt;/<span class="name">RenderDom</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">import</span> <span class="title class_">RenderDom</span> <span class="keyword">from</span> <span class="string">"./renderDom"</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">export</span> <span class="keyword">default</span> {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">name</span>: <span class="string">'TableList'</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">props</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">tableData</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">type</span>: <span class="title class_">Array</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">required</span>: <span class="literal">true</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">fieldList</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">type</span>: <span class="title class_">Array</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">required</span>: <span class="literal">true</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">align</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">type</span>: <span class="title class_">String</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">default</span>: <span class="string">'left'</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">components</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="title class_">RenderDom</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">data</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="keyword">return</span> {}</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">computed</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">watch</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">created</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">mounted</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">methods</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">updated</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">beforeDestroy</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  }</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">style</span> <span class="attr">lang</span>=<span class="string">'less'</span> <span class="attr">rel</span>=<span class="string">'stylesheet/less'</span> <span class="attr">scoped</span>&gt;</span><span class="language-css"></span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">  <span class="keyword">@import</span> <span class="string">"./index.less"</span>;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="3、封装渲染vNode的方法"><a href="#3、封装渲染vNode的方法" class="headerlink" title="3、封装渲染vNode的方法"></a>3、封装渲染vNode的方法</h3><figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> renderDom = {</span><br><span class="line">  <span class="attr">props</span>: {</span><br><span class="line">    <span class="attr">vNode</span>: {</span><br><span class="line">      <span class="attr">type</span>: [<span class="title class_">Array</span>, <span class="title class_">String</span>, <span class="title class_">Object</span>,<span class="title class_">Number</span>],</span><br><span class="line">    },</span><br><span class="line">  },</span><br><span class="line">  <span class="title function_">render</span>(<span class="params">h</span>) {</span><br><span class="line">    <span class="comment">// jsx - vNode 直接返回，交给框架处理（js语法带来很多可能，列表打标签功能）</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable language_">this</span>.<span class="property">vNode</span> === <span class="string">'object'</span>) {</span><br><span class="line">      <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">vNode</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// 普通数据，直接包一层div，然后返回给页面</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">h</span>(</span><br><span class="line">      <span class="string">'div'</span>,</span><br><span class="line">      {</span><br><span class="line">        <span class="attr">class</span>: <span class="string">'ellipsis'</span>,</span><br><span class="line">      },</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">vNode</span></span><br><span class="line">    )</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="4、页面组件调用"><a href="#4、页面组件调用" class="headerlink" title="4、页面组件调用"></a>4、页面组件调用</h3><figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"customer"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">table-list</span> <span class="attr">v-loading</span>=<span class="string">"p_loading"</span> <span class="attr">:tableData</span>=<span class="string">"p_listdata"</span> <span class="attr">:fieldList</span>=<span class="string">"fieldList"</span>&gt;</span><span class="tag">&lt;/<span class="name">table-list</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">import</span> <span class="title class_">TableList</span> <span class="keyword">from</span> <span class="string">'@/basecomponents/TableList/index'</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">import</span> $_pMixins <span class="keyword">from</span> <span class="string">"@/mixins/product.js"</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">import</span> enums <span class="keyword">from</span> <span class="string">'./enum.js'</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">export</span> <span class="keyword">default</span> {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">name</span>: <span class="string">'Customer'</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">props</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">components</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="string">'table-list'</span>: <span class="title class_">TableList</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">mixins</span>: [$_pMixins],</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">data</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="keyword">return</span> {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">tableData</span>: [],</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">fieldList</span>: <span class="title class_">Object</span>.<span class="title function_">freeze</span>(enums.<span class="property">Enum_customerFieldList</span>),</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      }</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">computed</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">watch</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">created</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">mounted</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="variable language_">this</span>.<span class="title function_">initData</span>()</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">methods</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="title function_">initData</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="variable language_">this</span>.<span class="title function_">getProductList</span>()</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      }</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">updated</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">beforeDestroy</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  }</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">style</span> <span class="attr">lang</span>=<span class="string">'less'</span> <span class="attr">rel</span>=<span class="string">'stylesheet/less'</span> <span class="attr">scoped</span>&gt;</span><span class="language-css"></span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">  <span class="keyword">@import</span> <span class="string">"./index.less"</span>;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/632d182616f2c2beb11753e7.jpg"></p>
+<h2 id="最终效果展示"><a href="#最终效果展示" class="headerlink" title="最终效果展示"></a>最终效果展示</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ec1816f2c2beb1164933.jpg"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>用了<code>UI</code>框架之后就不可避免的会跟产品设计风格向左，这就需要在框架基础之上进行修改。框架也是一个个组件组成的，抓住组件设计的三要素：属性、事件、方法，了解框架组件的工作原理，就可以轻松的进行修改啦🎉🎉</p>
 <hr>
 <p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
 <p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
 </body></html>]]></content>
       <categories>
-        <category>Vue</category>
+        <category>前端</category>
       </categories>
       <tags>
-        <tag>vNode</tag>
-        <tag>JSX</tag>
+        <tag>vue</tag>
+        <tag>element-ui</tag>
       </tags>
   </entry>
   <entry>
@@ -3463,50 +3482,38 @@
       </tags>
   </entry>
   <entry>
-    <title>静态博客SEO优化</title>
-    <url>/posts/2912186581.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p><a href="https://www.sousuoyinqingtijiao.com/">屈站长</a>汇总了各大搜索引擎网站提交入口，非常方便，可以前去提交验证。</p>
-</blockquote>
-<h2 id="Baidu-Webmaster-Tools"><a href="#Baidu-Webmaster-Tools" class="headerlink" title="Baidu Webmaster Tools"></a>Baidu Webmaster Tools</h2><p>首先注册登录<a href="https://ziyuan.baidu.com/site/#/">百度搜索资源平台</a>，然后执行下面的步骤：</p>
-<ol>
-<li>添加网站（输入网站）</li>
-<li>设置站点属性</li>
-<li>验证网站，以下三种方式，任选其一即可<ul>
-<li>文件验证 （下载文件，放到网站根目录，可访问）</li>
-<li><code>HTML</code>标签验证（网站增加 <code>meta</code> 标签）</li>
-<li><code>CNAME</code>验证 （增加域名解析记录）</li>
-</ul>
-</li>
+    <title>通过vNode实现给列表字段打标签</title>
+    <url>/posts/1525901815.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>如何给列表数据打标签？类似下面这种样子👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/632d17c616f2c2beb116edbb.jpg"></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li>数模转化（对接口请求回来的数据进行过滤标记，返回新的数据）</li>
+<li>渲染新的数据模型</li>
 </ol>
-<p>我使用的是<code>HTML</code>标签验证，<code>Hexo</code> 提供的有<code>API</code>， 可以往页面里注入 <code>HTML</code></p>
-<blockquote>
-<p>百度移动统计: <a href="https://mtj.baidu.com/web/dashboard">https://mtj.baidu.com/web/dashboard</a></p>
-</blockquote>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// baidu seo</span></span><br><span class="line">hexo.<span class="property">extend</span>.<span class="property">injector</span>.<span class="title function_">register</span>(</span><br><span class="line">  <span class="string">'head_begin'</span>,</span><br><span class="line">  <span class="string">'&lt;meta name="baidu-site-verification" content="code-xyJs6My2et" /&gt;'</span>,</span><br><span class="line">  <span class="string">'default'</span></span><br><span class="line">);</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="1、过滤数据，需要打标签的采用jsx写法"><a href="#1、过滤数据，需要打标签的采用jsx写法" class="headerlink" title="1、过滤数据，需要打标签的采用jsx写法"></a>1、过滤数据，需要打标签的采用<code>jsx</code>写法</h3><p>业务数据的处理我封装在 <code>mixins</code> 里面</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 存放全局的mixin， 可拆分到模块独享</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> { mapGetters } <span class="keyword">from</span> <span class="string">'vuex'</span></span><br><span class="line"><span class="keyword">import</span> { fetchListData } <span class="keyword">from</span> <span class="string">'@/api/global/api.js'</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> {</span><br><span class="line">  <span class="title function_">data</span>(<span class="params"></span>) {</span><br><span class="line">    <span class="keyword">return</span> {</span><br><span class="line">      <span class="attr">p_category</span>: [],</span><br><span class="line">      <span class="attr">listdata</span>: [],</span><br><span class="line">      <span class="attr">p_total</span>: <span class="number">0</span>,</span><br><span class="line">      <span class="attr">p_loading</span>: <span class="literal">false</span>,</span><br><span class="line">    }</span><br><span class="line">  },</span><br><span class="line">  <span class="attr">computed</span>: {</span><br><span class="line">    <span class="comment">// ...mapGetters(['productLevel', 'productLevelInfo']),</span></span><br><span class="line">    <span class="title function_">p_listdata</span>(<span class="params"></span>) {</span><br><span class="line">      <span class="keyword">const</span> data = <span class="variable language_">this</span>.<span class="property">listdata</span>;</span><br><span class="line">      data.<span class="title function_">forEach</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> {</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        <span class="comment">// jsx 方式，打标签</span></span><br><span class="line">        <span class="keyword">if</span> (item.<span class="property">status</span> === <span class="number">2</span> || item.<span class="property">status</span> === <span class="number">3</span>) {</span><br><span class="line">          item.<span class="property">status</span> = <span class="language-xml"><span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">{{color:</span> '#<span class="attr">999</span>'}}&gt;</span>停售<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">          item.<span class="property">status</span> = item.<span class="property">status</span></span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (item.<span class="property">age</span> &lt;= <span class="number">25</span>) {</span><br><span class="line">          item.<span class="property">age</span> = <span class="language-xml"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"badge_info"</span>&gt;</span>{item.age}<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (item.<span class="property">sex</span> === <span class="string">'Man'</span>) {</span><br><span class="line">          item.<span class="property">sex</span> = <span class="language-xml"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"badge_default"</span>&gt;</span>{item.sex}<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line">        }</span><br><span class="line">      })</span><br><span class="line">      <span class="keyword">return</span> data;</span><br><span class="line">    }</span><br><span class="line">  },</span><br><span class="line">  <span class="attr">methods</span>: {</span><br><span class="line">    <span class="keyword">async</span> <span class="title function_">getProductList</span>(<span class="params">params = {}</span>) {</span><br><span class="line">      <span class="keyword">try</span> {</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">p_loading</span> = <span class="literal">true</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">listdata</span> = []</span><br><span class="line">        <span class="keyword">const</span> res = <span class="keyword">await</span> <span class="title function_">fetchListData</span>(params)</span><br><span class="line">        <span class="keyword">if</span> (res.<span class="property">code</span> === <span class="number">0</span>) {</span><br><span class="line">          <span class="keyword">const</span> { data = [], total = <span class="number">0</span> } = res || {}</span><br><span class="line">          <span class="keyword">if</span> (<span class="title class_">Array</span>.<span class="title function_">isArray</span>(data)) {</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">listdata</span> = [...data]</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">p_total</span> = total</span><br><span class="line">          } <span class="keyword">else</span> {</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">listdata</span> = []</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">p_total</span> = <span class="number">0</span></span><br><span class="line">          }</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">listdata</span> = []</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">p_total</span> = <span class="number">0</span></span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">error</span>(res.<span class="property">message</span> || <span class="string">'出错了'</span>)</span><br><span class="line">        }</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">p_loading</span> = <span class="literal">false</span>;</span><br><span class="line">      } <span class="keyword">catch</span> (err) {</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">p_loading</span> = <span class="literal">false</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">listdata</span> = []</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">p_total</span> = <span class="number">0</span></span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
 
-<p>更多<code>Hexo API</code>请查看<a href="https://hexo.io/api/injector">这里</a></p>
-<h2 id="Bing-Webmaster-Tools"><a href="#Bing-Webmaster-Tools" class="headerlink" title="Bing Webmaster Tools"></a>Bing Webmaster Tools</h2><ul>
-<li><a href="https://www.bing.com/webmasters">必应工具</a>，添加网站</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6322ba7916f2c2beb1bed61e.jpg"></p>
-<ul>
-<li>提交网站地图</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6322bc9716f2c2beb1c1a6db.jpg"></p>
-<p>步骤同百度类似，这里就不介绍了。</p>
-<p><code>NexT</code>官方<code>SEO</code>教程请来<a href="https://theme-next.js.org/docs/theme-settings/seo.html">这里</a></p>
+<h4 id="base-less-定义标签样式"><a href="#base-less-定义标签样式" class="headerlink" title="base.less 定义标签样式"></a><code>base.less</code> 定义标签样式</h4><figure class="highlight less"><table><tbody><tr><td class="code"><pre><span class="line"><span class="selector-class">.badge_info</span> {</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#4760f0</span>;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#1C84C6</span>;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">5px</span> <span class="number">8px</span>;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#fff</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.badge_default</span> {</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#4760f0</span>;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#4760f0</span>;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">5px</span> <span class="number">8px</span>;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#fff</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="2、封装列表渲染组件"><a href="#2、封装列表渲染组件" class="headerlink" title="2、封装列表渲染组件"></a>2、封装列表渲染组件</h3><figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">"listV2"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"listV2_row-title"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">span</span> <span class="attr">v-for</span>=<span class="string">"(col, index) in fieldList"</span> <span class="attr">:key</span>=<span class="string">"index"</span> <span class="attr">class</span>=<span class="string">"listV2_cell ellipsis"</span> <span class="attr">:name</span>=<span class="string">"col.fieldName"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        {{col.fieldLabel}}</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="comment">&lt;!-- 行 --&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">v-if</span>=<span class="string">"tableData.length === 0"</span> <span class="attr">class</span>=<span class="string">"nodata"</span>&gt;</span>暂无数据<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">li</span> <span class="attr">v-for</span>=<span class="string">"(row, index) in tableData"</span> <span class="attr">:key</span>=<span class="string">"index"</span> <span class="attr">class</span>=<span class="string">"listV2_row pointer"</span> @<span class="attr">click</span>=<span class="string">"rowClickToDetail(row)"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="comment">&lt;!-- 单元格-列 --&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">span</span> <span class="attr">v-for</span>=<span class="string">"(col, index) in fieldList"</span> <span class="attr">:key</span>=<span class="string">"index"</span> <span class="attr">class</span>=<span class="string">"listV2_cell ellipsis"</span> <span class="attr">:name</span>=<span class="string">"col.fieldName"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">RenderDom</span> <span class="attr">:vNode</span>=<span class="string">"row[col.fieldName] || '-'"</span>&gt;</span><span class="tag">&lt;/<span class="name">RenderDom</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">import</span> <span class="title class_">RenderDom</span> <span class="keyword">from</span> <span class="string">"./renderDom"</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">export</span> <span class="keyword">default</span> {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">name</span>: <span class="string">'TableList'</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">props</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">tableData</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">type</span>: <span class="title class_">Array</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">required</span>: <span class="literal">true</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">fieldList</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">type</span>: <span class="title class_">Array</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">required</span>: <span class="literal">true</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="attr">align</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">type</span>: <span class="title class_">String</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">default</span>: <span class="string">'left'</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">components</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="title class_">RenderDom</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">data</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="keyword">return</span> {}</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">computed</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">watch</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">created</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">mounted</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">methods</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">updated</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">beforeDestroy</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  }</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">style</span> <span class="attr">lang</span>=<span class="string">'less'</span> <span class="attr">rel</span>=<span class="string">'stylesheet/less'</span> <span class="attr">scoped</span>&gt;</span><span class="language-css"></span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">  <span class="keyword">@import</span> <span class="string">"./index.less"</span>;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="3、封装渲染vNode的方法"><a href="#3、封装渲染vNode的方法" class="headerlink" title="3、封装渲染vNode的方法"></a>3、封装渲染vNode的方法</h3><figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> renderDom = {</span><br><span class="line">  <span class="attr">props</span>: {</span><br><span class="line">    <span class="attr">vNode</span>: {</span><br><span class="line">      <span class="attr">type</span>: [<span class="title class_">Array</span>, <span class="title class_">String</span>, <span class="title class_">Object</span>,<span class="title class_">Number</span>],</span><br><span class="line">    },</span><br><span class="line">  },</span><br><span class="line">  <span class="title function_">render</span>(<span class="params">h</span>) {</span><br><span class="line">    <span class="comment">// jsx - vNode 直接返回，交给框架处理（js语法带来很多可能，列表打标签功能）</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable language_">this</span>.<span class="property">vNode</span> === <span class="string">'object'</span>) {</span><br><span class="line">      <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">vNode</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// 普通数据，直接包一层div，然后返回给页面</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">h</span>(</span><br><span class="line">      <span class="string">'div'</span>,</span><br><span class="line">      {</span><br><span class="line">        <span class="attr">class</span>: <span class="string">'ellipsis'</span>,</span><br><span class="line">      },</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">vNode</span></span><br><span class="line">    )</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="4、页面组件调用"><a href="#4、页面组件调用" class="headerlink" title="4、页面组件调用"></a>4、页面组件调用</h3><figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"customer"</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">table-list</span> <span class="attr">v-loading</span>=<span class="string">"p_loading"</span> <span class="attr">:tableData</span>=<span class="string">"p_listdata"</span> <span class="attr">:fieldList</span>=<span class="string">"fieldList"</span>&gt;</span><span class="tag">&lt;/<span class="name">table-list</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">import</span> <span class="title class_">TableList</span> <span class="keyword">from</span> <span class="string">'@/basecomponents/TableList/index'</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">import</span> $_pMixins <span class="keyword">from</span> <span class="string">"@/mixins/product.js"</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">import</span> enums <span class="keyword">from</span> <span class="string">'./enum.js'</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">export</span> <span class="keyword">default</span> {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">name</span>: <span class="string">'Customer'</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">props</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">components</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="string">'table-list'</span>: <span class="title class_">TableList</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">mixins</span>: [$_pMixins],</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">data</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="keyword">return</span> {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">tableData</span>: [],</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="attr">fieldList</span>: <span class="title class_">Object</span>.<span class="title function_">freeze</span>(enums.<span class="property">Enum_customerFieldList</span>),</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      }</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">computed</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">watch</span>: {},</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">created</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">mounted</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="variable language_">this</span>.<span class="title function_">initData</span>()</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="attr">methods</span>: {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      <span class="title function_">initData</span>(<span class="params"></span>) {</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        <span class="variable language_">this</span>.<span class="title function_">getProductList</span>()</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">      }</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">updated</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    <span class="title function_">beforeDestroy</span>(<span class="params"></span>) { },</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  }</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">style</span> <span class="attr">lang</span>=<span class="string">'less'</span> <span class="attr">rel</span>=<span class="string">'stylesheet/less'</span> <span class="attr">scoped</span>&gt;</span><span class="language-css"></span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">  <span class="keyword">@import</span> <span class="string">"./index.less"</span>;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/632d182616f2c2beb11753e7.jpg"></p>
 <hr>
 <p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
 <p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
 <p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
 </body></html>]]></content>
       <categories>
-        <category>Hexo</category>
+        <category>Vue</category>
       </categories>
       <tags>
-        <tag>SEO</tag>
+        <tag>vNode</tag>
+        <tag>JSX</tag>
       </tags>
   </entry>
   <entry>
@@ -3563,6 +3570,53 @@
       </categories>
       <tags>
         <tag>站点建设</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>静态博客SEO优化</title>
+    <url>/posts/2912186581.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p><a href="https://www.sousuoyinqingtijiao.com/">屈站长</a>汇总了各大搜索引擎网站提交入口，非常方便，可以前去提交验证。</p>
+</blockquote>
+<h2 id="Baidu-Webmaster-Tools"><a href="#Baidu-Webmaster-Tools" class="headerlink" title="Baidu Webmaster Tools"></a>Baidu Webmaster Tools</h2><p>首先注册登录<a href="https://ziyuan.baidu.com/site/#/">百度搜索资源平台</a>，然后执行下面的步骤：</p>
+<ol>
+<li>添加网站（输入网站）</li>
+<li>设置站点属性</li>
+<li>验证网站，以下三种方式，任选其一即可<ul>
+<li>文件验证 （下载文件，放到网站根目录，可访问）</li>
+<li><code>HTML</code>标签验证（网站增加 <code>meta</code> 标签）</li>
+<li><code>CNAME</code>验证 （增加域名解析记录）</li>
+</ul>
+</li>
+</ol>
+<p>我使用的是<code>HTML</code>标签验证，<code>Hexo</code> 提供的有<code>API</code>， 可以往页面里注入 <code>HTML</code></p>
+<blockquote>
+<p>百度移动统计: <a href="https://mtj.baidu.com/web/dashboard">https://mtj.baidu.com/web/dashboard</a></p>
+</blockquote>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// baidu seo</span></span><br><span class="line">hexo.<span class="property">extend</span>.<span class="property">injector</span>.<span class="title function_">register</span>(</span><br><span class="line">  <span class="string">'head_begin'</span>,</span><br><span class="line">  <span class="string">'&lt;meta name="baidu-site-verification" content="code-xyJs6My2et" /&gt;'</span>,</span><br><span class="line">  <span class="string">'default'</span></span><br><span class="line">);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>更多<code>Hexo API</code>请查看<a href="https://hexo.io/api/injector">这里</a></p>
+<h2 id="Bing-Webmaster-Tools"><a href="#Bing-Webmaster-Tools" class="headerlink" title="Bing Webmaster Tools"></a>Bing Webmaster Tools</h2><ul>
+<li><a href="https://www.bing.com/webmasters">必应工具</a>，添加网站</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6322ba7916f2c2beb1bed61e.jpg"></p>
+<ul>
+<li>提交网站地图</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6322bc9716f2c2beb1c1a6db.jpg"></p>
+<p>步骤同百度类似，这里就不介绍了。</p>
+<p><code>NexT</code>官方<code>SEO</code>教程请来<a href="https://theme-next.js.org/docs/theme-settings/seo.html">这里</a></p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>SEO</tag>
       </tags>
   </entry>
 </search>
