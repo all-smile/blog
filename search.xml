@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Actions</title>
+    <url>/posts/3405105267.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>持续集成、持续部署</p>
+</body></html>]]></content>
+  </entry>
+  <entry>
     <title>2022年中秋佳节，于梦开始的地方</title>
     <url>/posts/4798453.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -37,10 +43,86 @@
       </tags>
   </entry>
   <entry>
-    <title>Actions</title>
-    <url>/posts/3405105267.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>持续集成、持续部署</p>
+    <title>Docker | Compose创建mysql容器</title>
+    <url>/posts/2048262040.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本文通过<code>Docker Compose</code>来创建<code>mysql</code>容器</p>
+</blockquote>
+<h2 id="在linux服务器上创建文件，用于管理容器"><a href="#在linux服务器上创建文件，用于管理容器" class="headerlink" title="在linux服务器上创建文件，用于管理容器"></a>在linux服务器上创建文件，用于管理容器</h2><ul>
+<li>mkdir docker-mysql</li>
+<li>cd docker-mysql</li>
+<li>vim docker-compose.yml  #写入如下内容</li>
+</ul>
+<p><code>docker-compose.yml</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">version: <span class="string">"3"</span></span><br><span class="line">services:</span><br><span class="line">  mysqldb:</span><br><span class="line">    image: mysql:5.7</span><br><span class="line">    restart: always</span><br><span class="line">    container_name: mysql57</span><br><span class="line">    ports:</span><br><span class="line">      - 3310:3306</span><br><span class="line">    volumes:</span><br><span class="line">      - /var/vol_dockers/mysqldb/conf:/etc/mysql/conf.d</span><br><span class="line">      - /var/vol_dockers/mysqldb/data:/var/lib/mysql</span><br><span class="line">    environment:</span><br><span class="line">      MYSQL_PSAAWORD: PSAAWORD</span><br><span class="line">      MYSQL_ROOT_PASSWORD: PSAAWORD</span><br><span class="line">      MYSQL_USER: root</span><br><span class="line">      MYSQL_DATABASE: database</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>记得防火墙要开放3306、3310端口</p>
+</blockquote>
+<h2 id="创建启停脚本文件"><a href="#创建启停脚本文件" class="headerlink" title="创建启停脚本文件"></a>创建启停脚本文件</h2><ul>
+<li><p>vim start</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>vim restart</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose restart</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>vim stop</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose stop</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="修改脚本文件权限"><a href="#修改脚本文件权限" class="headerlink" title="修改脚本文件权限"></a>修改脚本文件权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 777 st* restart</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450d9c16f2c2beb1fc717d.jpg"></p>
+<h2 id="启动mysql容器"><a href="#启动mysql容器" class="headerlink" title="启动mysql容器"></a>启动<code>mysql</code>容器</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./start</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>查看容器</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450e0116f2c2beb1fd0442.jpg"></p>
+<h2 id="mysql数据库基本配置"><a href="#mysql数据库基本配置" class="headerlink" title="mysql数据库基本配置"></a>mysql数据库基本配置</h2><ol>
+<li>创建MySql用户</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">CREATE USER dbadmin@localhost IDENTIFIED BY <span class="string">'pwd'</span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>dbadmin@localhost</code>，表示只允许<code>localhost</code>环境的<code>dbadmin</code>用户登录</p>
+<ol start="2">
+<li>设置可访问的主机</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">update user <span class="built_in">set</span> host = <span class="string">'%'</span> <span class="built_in">where</span> user = <span class="string">'dbadmin'</span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>% 表示接受所有主机ip访问</p>
+<ol start="3">
+<li>最后刷新生效</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">flush privileges;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>整体步骤：</strong></p>
+<p>1、连接服务器: mysql -u root -p</p>
+<p>2、看当前所有数据库：show databases;</p>
+<p>3、进入mysql数据库：use mysql;</p>
+<p>4、查看mysql数据库中所有的表：show tables;</p>
+<p>5、查看user表中的数据：select Host, User,Password from user;</p>
+<p>6、修改user表中的Host: update user set Host=’%’ where User=’root’;</p>
+<p>7、最后刷新一下：flush privileges;</p>
+<p><strong>客户端连接</strong></p>
+<p>这里我使用的是<code>SQLyog</code>工具连接<code>MySQL</code>数据库</p>
+<p><code>sqlyog</code>连接服务器的<code>3310</code>端口，<code>3310</code>端口映射<code>MySQL</code>容器的<code>3306</code>端口。</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450db816f2c2beb1fc98ab.jpg"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450def16f2c2beb1fce7fa.jpg"></p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
 </body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker MySQL</tag>
+      </tags>
   </entry>
   <entry>
     <title>D8调试工具——jsvu的使用细则</title>
@@ -258,88 +340,6 @@
       </categories>
       <tags>
         <tag>V8</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Docker | Compose创建mysql容器</title>
-    <url>/posts/2048262040.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>本文通过<code>Docker Compose</code>来创建<code>mysql</code>容器</p>
-</blockquote>
-<h2 id="在linux服务器上创建文件，用于管理容器"><a href="#在linux服务器上创建文件，用于管理容器" class="headerlink" title="在linux服务器上创建文件，用于管理容器"></a>在linux服务器上创建文件，用于管理容器</h2><ul>
-<li>mkdir docker-mysql</li>
-<li>cd docker-mysql</li>
-<li>vim docker-compose.yml  #写入如下内容</li>
-</ul>
-<p><code>docker-compose.yml</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">version: <span class="string">"3"</span></span><br><span class="line">services:</span><br><span class="line">  mysqldb:</span><br><span class="line">    image: mysql:5.7</span><br><span class="line">    restart: always</span><br><span class="line">    container_name: mysql57</span><br><span class="line">    ports:</span><br><span class="line">      - 3310:3306</span><br><span class="line">    volumes:</span><br><span class="line">      - /var/vol_dockers/mysqldb/conf:/etc/mysql/conf.d</span><br><span class="line">      - /var/vol_dockers/mysqldb/data:/var/lib/mysql</span><br><span class="line">    environment:</span><br><span class="line">      MYSQL_PSAAWORD: PSAAWORD</span><br><span class="line">      MYSQL_ROOT_PASSWORD: PSAAWORD</span><br><span class="line">      MYSQL_USER: root</span><br><span class="line">      MYSQL_DATABASE: database</span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p>记得防火墙要开放3306、3310端口</p>
-</blockquote>
-<h2 id="创建启停脚本文件"><a href="#创建启停脚本文件" class="headerlink" title="创建启停脚本文件"></a>创建启停脚本文件</h2><ul>
-<li><p>vim start</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>vim restart</p>
-</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose restart</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>vim stop</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose stop</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="修改脚本文件权限"><a href="#修改脚本文件权限" class="headerlink" title="修改脚本文件权限"></a>修改脚本文件权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 777 st* restart</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450d9c16f2c2beb1fc717d.jpg"></p>
-<h2 id="启动mysql容器"><a href="#启动mysql容器" class="headerlink" title="启动mysql容器"></a>启动<code>mysql</code>容器</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./start</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>查看容器</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450e0116f2c2beb1fd0442.jpg"></p>
-<h2 id="mysql数据库基本配置"><a href="#mysql数据库基本配置" class="headerlink" title="mysql数据库基本配置"></a>mysql数据库基本配置</h2><ol>
-<li>创建MySql用户</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">CREATE USER dbadmin@localhost IDENTIFIED BY <span class="string">'pwd'</span>;</span><br></pre></td></tr></tbody></table></figure>
-
-<p><code>dbadmin@localhost</code>，表示只允许<code>localhost</code>环境的<code>dbadmin</code>用户登录</p>
-<ol start="2">
-<li>设置可访问的主机</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">update user <span class="built_in">set</span> host = <span class="string">'%'</span> <span class="built_in">where</span> user = <span class="string">'dbadmin'</span>;</span><br></pre></td></tr></tbody></table></figure>
-
-<p>% 表示接受所有主机ip访问</p>
-<ol start="3">
-<li>最后刷新生效</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">flush privileges;</span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>整体步骤：</strong></p>
-<p>1、连接服务器: mysql -u root -p</p>
-<p>2、看当前所有数据库：show databases;</p>
-<p>3、进入mysql数据库：use mysql;</p>
-<p>4、查看mysql数据库中所有的表：show tables;</p>
-<p>5、查看user表中的数据：select Host, User,Password from user;</p>
-<p>6、修改user表中的Host: update user set Host=’%’ where User=’root’;</p>
-<p>7、最后刷新一下：flush privileges;</p>
-<p><strong>客户端连接</strong></p>
-<p>这里我使用的是<code>SQLyog</code>工具连接<code>MySQL</code>数据库</p>
-<p><code>sqlyog</code>连接服务器的<code>3310</code>端口，<code>3310</code>端口映射<code>MySQL</code>容器的<code>3306</code>端口。</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450db816f2c2beb1fc98ab.jpg"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450def16f2c2beb1fce7fa.jpg"></p>
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>Docker MySQL</tag>
       </tags>
   </entry>
   <entry>
@@ -577,6 +577,60 @@
       </categories>
       <tags>
         <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker | 制作tomcat镜像并部署项目</title>
+    <url>/posts/2106196415.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本文讲解如何制作自己的tomcat镜像，并使用tomcat部署项目</p>
+</blockquote>
+<h2 id="原料准备："><a href="#原料准备：" class="headerlink" title="原料准备："></a>原料准备：</h2><p>tomcat、jdk安装包，dockerfile文件</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1、准备压缩包"><a href="#1、准备压缩包" class="headerlink" title="1、准备压缩包"></a>1、准备压缩包</h3><p>jdk-8u301-linux-x64.tar.gz -&gt; jdk1.8.0_301</p>
+<p>apache-tomcat-7.0.107.tar.gz -&gt; apache-tomcat-7.0.107</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e93f16f2c2beb17ac00e.jpg"></p>
+<h3 id="2、编写dockerfile文件"><a href="#2、编写dockerfile文件" class="headerlink" title="2、编写dockerfile文件"></a>2、编写dockerfile文件</h3><blockquote>
+<p>官方指定命名<code>Dockerfile</code>，这样构建的时候不用加<code>-f</code>参数指定文件</p>
+</blockquote>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER xiao&lt;find_onepiece@163.com&gt;</span><br><span class="line"></span><br><span class="line">COPY readme.txt /usr/local/readme.txt</span><br><span class="line"></span><br><span class="line">ADD jdk-8u301-linux-x64.tar.gz /usr/local</span><br><span class="line">ADD apache-tomcat-7.0.107.tar.gz /usr/local</span><br><span class="line"></span><br><span class="line">RUN yum -y install vim</span><br><span class="line"></span><br><span class="line">ENV MYPATH /usr/local</span><br><span class="line"></span><br><span class="line">WORKDIR <span class="variable">$MYPATH</span></span><br><span class="line">ENV JAVA_HOME /usr/local/jdk1.8.0_301</span><br><span class="line">ENV CLASSPATH <span class="variable">$JAVA_HOME</span>/lib/dt.jar:<span class="variable">$JAVA_HOME</span>/lib/tools.jar</span><br><span class="line">ENV CATALINA_HOME /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV CATALINE_BASH /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV PATH <span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$CATALINA_HOME</span>/lib:<span class="variable">$CATALINE_HOME</span>/bin</span><br><span class="line"></span><br><span class="line">EXPOSE 8080</span><br><span class="line"></span><br><span class="line">CMD /usr/local/apache-tomcat-7.0.107/bin/startup.sh &amp;&amp; <span class="built_in">tail</span> -f /usr/local/apache-tomcat-7.0.107/bin/logs/catalina.out</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="3、执行构建"><a href="#3、执行构建" class="headerlink" title="3、执行构建"></a>3、执行构建</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -t diytomcat . <span class="comment"># 自动寻找Dockerfile文件</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>构建成功:</strong></p>
+<p>Successfully built e68ad8caa2a4</p>
+<p>Successfully tagged diytomcat:latest</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e96716f2c2beb17b0059.jpg"></p>
+<h3 id="4、启动容器"><a href="#4、启动容器" class="headerlink" title="4、启动容器"></a>4、启动容器</h3><p><code>/webapps/test</code>  部署的项目路径，浏览器访问<code>ip:port/test</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it -p 9090:8080 --name xiaoTomcat -v /home/xiao/build/tomcat/test:/usr/local/apache-tomcat-7.0.107/webapps/test -v /home/xiao/build/tomcat/tomcatlogs/:/usr/local/apache-tomcat-7.0.107/logs diytomcat</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="5、访问查看"><a href="#5、访问查看" class="headerlink" title="5、访问查看"></a>5、访问查看</h3><p>数据卷挂载成功</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e97c16f2c2beb17b2050.jpg"></p>
+<h3 id="6、发布项目"><a href="#6、发布项目" class="headerlink" title="6、发布项目"></a>6、发布项目</h3><p>已经挂载了数据卷，所以编写宿主机的项目文件就可以了</p>
+<p>在挂载路径 <code>/home/xiao/build/tomcat/test</code> 下</p>
+<ol>
+<li>新建文件 <code>web.xml</code>，内容如下：</li>
+</ol>
+<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">version</span>=<span class="string">"2.4"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>新建文件 <code>index.jsp</code>，内容如下：</li>
+</ol>
+<figure class="highlight html"><table><tbody><tr><td class="code"><pre><span class="line">&lt;%@ page contentType="text/html;charset=UTF-8" language="java" %&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Hello World!<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>xiao<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">&lt;%</span><br><span class="line">System.out.println("my tomcat project logs");</span><br><span class="line">%&gt;</span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="7、浏览器访问"><a href="#7、浏览器访问" class="headerlink" title="7、浏览器访问"></a>7、浏览器访问</h3><p>url：<code>ip:port/test</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9ae16f2c2beb17b6a64.jpg"></p>
+<h3 id="8、查看日志卷"><a href="#8、查看日志卷" class="headerlink" title="8、查看日志卷"></a>8、查看日志卷</h3><p><code>tail -f catalina.out</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9bd16f2c2beb17b8250.jpg"></p>
+<h2 id="完成从构建镜像到部署项目🎈🎈"><a href="#完成从构建镜像到部署项目🎈🎈" class="headerlink" title="完成从构建镜像到部署项目🎈🎈"></a>完成从构建镜像到部署项目🎈🎈</h2><hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+        <tag>tomcat</tag>
       </tags>
   </entry>
   <entry>
@@ -3230,25 +3284,6 @@
       </tags>
   </entry>
   <entry>
-    <title>捕获404页面，并重定向页面</title>
-    <url>/posts/3730822077.html</url>
-    <content><![CDATA[<html><head></head><body><p>话不多说，直接上代码：</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 捕获404页面，并重定向</span></span><br><span class="line"><span class="keyword">const</span> isRunUrl = <span class="keyword">function</span> (<span class="params">url</span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="keyword">function</span> (<span class="params">resolve, reject</span>) {</span><br><span class="line">    <span class="comment">// 测试链接连通性, 主要检测404错误</span></span><br><span class="line">    <span class="comment">// 由于AJAX通常无法区分404和跨域问题，所以只能用script 或者 link标签，link比script更容易捕获错误</span></span><br><span class="line">    <span class="keyword">var</span> dom = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">'link'</span>);</span><br><span class="line">    dom.<span class="property">href</span> = url;</span><br><span class="line">    dom.<span class="property">rel</span> = <span class="string">'stylesheet'</span>;</span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">appendChild</span>(dom);</span><br><span class="line">    dom.<span class="property">onload</span> = <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">removeChild</span>(dom);</span><br><span class="line">      <span class="title function_">resolve</span>();</span><br><span class="line">    }</span><br><span class="line">    dom.<span class="property">onerror</span> = reject;</span><br><span class="line">  });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="title function_">isRunUrl</span>(<span class="string">"your url"</span>).<span class="title function_">then</span>(</span><br><span class="line">  <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理resolve的代码</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"ok"</span>, data);;</span><br><span class="line">  }, <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理reject的代码，重定向逻辑</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"err"</span>, err);</span><br><span class="line">  }</span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<center>欢迎微信扫码关注 "看见另一种可能"！</center>
-
-<img data-src="/images/base/loading03.svg" data-original="/images/contact/qrcode_wechat.jpg" alt="wechat：看见另一种可能"></body></html>]]></content>
-      <categories>
-        <category>Javascript</category>
-      </categories>
-      <tags>
-        <tag>404</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>最近接触的东西</title>
     <url>/posts/2564859285.html</url>
     <content><![CDATA[<html><head></head><body><p>我的博客最开始采用的是<code>Hexo</code>+<code>hexo-theme-next</code>搭建的，使用<code>GitHub Pages</code>托管并进行自动化部署，写文发布的流程非常简单方便，云端写作发布也轻而易举。</p>
@@ -3316,32 +3351,22 @@
       </tags>
   </entry>
   <entry>
-    <title>看了的，没看的书</title>
-    <url>/posts/2212813940.html</url>
-    <content><![CDATA[<html><head></head><body><p>书籍是通往智慧的阶梯。</p>
-<p>获得的宝箱就要打开，别舍不得拆，抓住重点！</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/633e989516f2c2beb1d0fe46.jpg"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/633e992616f2c2beb1d22a90.jpg"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/633e993116f2c2beb1d24935.jpg"></p>
-<p>这些书差不多全是这将近两年的时间里买的。其实从书本里得到的理论知识我现在基本上全忘了，留下来的都是实操经验。可见实操是多么的重要，而且在自己动手练习的过程中，还要不断尝试总结、记录学习历程。</p>
-<p>话说回来，卖二手书是真的便宜，大概连都废纸都不如，一本react技术栈，一毛钱一本，what fuck?!</p>
-<p>其实我想卖的是那种基本没什么太多干货的书，一看这么便宜，索性都留着吧。</p>
-<blockquote>
-<p>我说我的 HTTP权威指南 去哪了，找了好久没找到，昨天收拾电脑，忽然发现在电脑下面垫着🤣🤣</p>
-</blockquote>
-<p>喜欢读书，在上海那几年喜欢读“无用之书”（历史、文学、小说，技能相关的书籍也买了些许），到现在也基本忘了看过的书了，还是要学以致用，以用为学。</p>
-<p>不问收获，但问耕耘。自主反思，归纳总结，把知识内化。</p>
+    <title>捕获404页面，并重定向页面</title>
+    <url>/posts/3730822077.html</url>
+    <content><![CDATA[<html><head></head><body><p>话不多说，直接上代码：</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 捕获404页面，并重定向</span></span><br><span class="line"><span class="keyword">const</span> isRunUrl = <span class="keyword">function</span> (<span class="params">url</span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="keyword">function</span> (<span class="params">resolve, reject</span>) {</span><br><span class="line">    <span class="comment">// 测试链接连通性, 主要检测404错误</span></span><br><span class="line">    <span class="comment">// 由于AJAX通常无法区分404和跨域问题，所以只能用script 或者 link标签，link比script更容易捕获错误</span></span><br><span class="line">    <span class="keyword">var</span> dom = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">'link'</span>);</span><br><span class="line">    dom.<span class="property">href</span> = url;</span><br><span class="line">    dom.<span class="property">rel</span> = <span class="string">'stylesheet'</span>;</span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">appendChild</span>(dom);</span><br><span class="line">    dom.<span class="property">onload</span> = <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">removeChild</span>(dom);</span><br><span class="line">      <span class="title function_">resolve</span>();</span><br><span class="line">    }</span><br><span class="line">    dom.<span class="property">onerror</span> = reject;</span><br><span class="line">  });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="title function_">isRunUrl</span>(<span class="string">"your url"</span>).<span class="title function_">then</span>(</span><br><span class="line">  <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理resolve的代码</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"ok"</span>, data);;</span><br><span class="line">  }, <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理reject的代码，重定向逻辑</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"err"</span>, err);</span><br><span class="line">  }</span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
+
 <hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
 <p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<center>欢迎微信扫码关注 "看见另一种可能"！</center>
+
+<img data-src="/images/base/loading03.svg" data-original="/images/contact/qrcode_wechat.jpg" alt="wechat：看见另一种可能"></body></html>]]></content>
       <categories>
-        <category>书籍</category>
+        <category>Javascript</category>
       </categories>
       <tags>
-        <tag>书籍</tag>
+        <tag>404</tag>
       </tags>
   </entry>
   <entry>
@@ -3409,6 +3434,35 @@
       </categories>
       <tags>
         <tag>TouchEvent</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>看了的，没看的书</title>
+    <url>/posts/2212813940.html</url>
+    <content><![CDATA[<html><head></head><body><p>书籍是通往智慧的阶梯。</p>
+<p>获得的宝箱就要打开，别舍不得拆，抓住重点！</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/633e989516f2c2beb1d0fe46.jpg"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/633e992616f2c2beb1d22a90.jpg"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/633e993116f2c2beb1d24935.jpg"></p>
+<p>这些书差不多全是这将近两年的时间里买的。其实从书本里得到的理论知识我现在基本上全忘了，留下来的都是实操经验。可见实操是多么的重要，而且在自己动手练习的过程中，还要不断尝试总结、记录学习历程。</p>
+<p>话说回来，卖二手书是真的便宜，大概连都废纸都不如，一本react技术栈，一毛钱一本，what fuck?!</p>
+<p>其实我想卖的是那种基本没什么太多干货的书，一看这么便宜，索性都留着吧。</p>
+<blockquote>
+<p>我说我的 HTTP权威指南 去哪了，找了好久没找到，昨天收拾电脑，忽然发现在电脑下面垫着🤣🤣</p>
+</blockquote>
+<p>喜欢读书，在上海那几年喜欢读“无用之书”（历史、文学、小说，技能相关的书籍也买了些许），到现在也基本忘了看过的书了，还是要学以致用，以用为学。</p>
+<p>不问收获，但问耕耘。自主反思，归纳总结，把知识内化。</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>书籍</category>
+      </categories>
+      <tags>
+        <tag>书籍</tag>
       </tags>
   </entry>
   <entry>
