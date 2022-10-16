@@ -125,6 +125,70 @@
       </tags>
   </entry>
   <entry>
+    <title>Docker | dockerfile构建centos镜像，以及CMD和ENTRYPOINT的区别</title>
+    <url>/posts/1048738116.html</url>
+    <content><![CDATA[<html><head></head><body><h1 id="构建自己的centos镜像"><a href="#构建自己的centos镜像" class="headerlink" title="构建自己的centos镜像"></a>构建自己的centos镜像</h1><p><code>docker pull centos</code>下载下来的镜像都是基础版本，缺少很多常用的命令功能，比如：<code>ll</code>、<code>vim</code>等等，</p>
+<p>下面介绍制作一个功能较全的自己的centos镜像。</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1、编写dockerfile文件"><a href="#1、编写dockerfile文件" class="headerlink" title="1、编写dockerfile文件"></a>1、编写dockerfile文件</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER xiao&lt;example@163.com&gt;</span><br><span class="line">ENV MYPATH /usr/local</span><br><span class="line">WORKDIR <span class="variable">$MYPATH</span></span><br><span class="line"></span><br><span class="line">RUN yum -y install vim       <span class="comment"># vim命令</span></span><br><span class="line">RUN yum -y install net-tools <span class="comment"># ifconfig命令</span></span><br><span class="line"></span><br><span class="line">EXPOSE 80</span><br><span class="line">CMD <span class="built_in">echo</span> <span class="variable">$MYPATH</span></span><br><span class="line">CMD <span class="built_in">echo</span> <span class="string">"---end--"</span></span><br><span class="line">CMD /bin/bash</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="2、构建镜像"><a href="#2、构建镜像" class="headerlink" title="2、构建镜像"></a>2、构建镜像</h3><ul>
+<li><p>-f  file 指定dockerfile文件的路径</p>
+</li>
+<li><p>-t  tag  指定name:tag</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -f ./mydockerfile -t mycentos:0.1 .</span><br><span class="line"></span><br><span class="line">Successfully built e7527f97f78a</span><br><span class="line">Successfully tagged mycentos:0.1</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="3、测试运行"><a href="#3、测试运行" class="headerlink" title="3、测试运行"></a>3、测试运行</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker images</span><br><span class="line">docker run -it mycentos:0.1</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可以看到进入容器之后，直接就是在 <code>/usr/local</code> 目录下，是因为<code>dockerfile</code>配置的<code>WORKDIR</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92ce16f2c2beb1726bca.jpg"></p>
+<p>这时，<code>ifconfig</code>、<code>vim</code>命令都可以使用了</p>
+<h3 id="4、查看镜像构建历史记录"><a href="#4、查看镜像构建历史记录" class="headerlink" title="4、查看镜像构建历史记录"></a>4、查看镜像构建历史记录</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">history</span> imageID</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92e316f2c2beb1729aca.jpg"></p>
+<h1 id="CMD和ENTRYPOINT的区别"><a href="#CMD和ENTRYPOINT的区别" class="headerlink" title="CMD和ENTRYPOINT的区别"></a>CMD和ENTRYPOINT的区别</h1><h2 id="编写CMD测试dockerfile文件"><a href="#编写CMD测试dockerfile文件" class="headerlink" title="编写CMD测试dockerfile文件"></a>编写CMD测试dockerfile文件</h2><ol>
+<li>编写dockerfile文件</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">CMD [<span class="string">"ls"</span>, <span class="string">"-a"</span>]</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>构建镜像</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -f ./dockerfile -t cmd-test .</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>启动镜像</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run imageID/iamgeName</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92fb16f2c2beb172c300.jpg"></p>
+<p>测试发现，启动镜像时追加的命令替换了<code>CMD</code>命令，如下图所示:</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a930916f2c2beb172d924.jpg"></p>
+<h2 id="编写ENTRYPOINT测试dockerfile文件"><a href="#编写ENTRYPOINT测试dockerfile文件" class="headerlink" title="编写ENTRYPOINT测试dockerfile文件"></a>编写ENTRYPOINT测试dockerfile文件</h2><p>每个<code>Dockerfile</code>只能有一个<code>ENTRYPOINT</code>，如果指定了多个，只有最后一个被执行,而且一定会被执行</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">ENTRYPOINT [<span class="string">"ls"</span>, <span class="string">"-a"</span>]</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># nginx 镜像</span></span><br><span class="line">ENTRYPOINT [ <span class="string">"/usr/sbin/nginx"</span>, <span class="string">"-g"</span>, <span class="string">"daemon off;"</span> ]</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a931916f2c2beb1731507.jpg"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li><code>CMD</code>命令会被启动容器时追加的命令替换执行，</li>
+</ol>
+<p>2.<code>ENTRYPOINT</code>命令不会被启动容器时追加的命令替换，而是合并执行</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a932b16f2c2beb1736e15.jpg"></p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>D8调试工具——jsvu的使用细则</title>
     <url>/posts/1327063303.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -343,58 +407,47 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker | dockerfile构建centos镜像，以及CMD和ENTRYPOINT的区别</title>
-    <url>/posts/1048738116.html</url>
-    <content><![CDATA[<html><head></head><body><h1 id="构建自己的centos镜像"><a href="#构建自己的centos镜像" class="headerlink" title="构建自己的centos镜像"></a>构建自己的centos镜像</h1><p><code>docker pull centos</code>下载下来的镜像都是基础版本，缺少很多常用的命令功能，比如：<code>ll</code>、<code>vim</code>等等，</p>
-<p>下面介绍制作一个功能较全的自己的centos镜像。</p>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1、编写dockerfile文件"><a href="#1、编写dockerfile文件" class="headerlink" title="1、编写dockerfile文件"></a>1、编写dockerfile文件</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER xiao&lt;example@163.com&gt;</span><br><span class="line">ENV MYPATH /usr/local</span><br><span class="line">WORKDIR <span class="variable">$MYPATH</span></span><br><span class="line"></span><br><span class="line">RUN yum -y install vim       <span class="comment"># vim命令</span></span><br><span class="line">RUN yum -y install net-tools <span class="comment"># ifconfig命令</span></span><br><span class="line"></span><br><span class="line">EXPOSE 80</span><br><span class="line">CMD <span class="built_in">echo</span> <span class="variable">$MYPATH</span></span><br><span class="line">CMD <span class="built_in">echo</span> <span class="string">"---end--"</span></span><br><span class="line">CMD /bin/bash</span><br></pre></td></tr></tbody></table></figure>
+    <title>Docker | 制作tomcat镜像并部署项目</title>
+    <url>/posts/2106196415.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本文讲解如何制作自己的tomcat镜像，并使用tomcat部署项目</p>
+</blockquote>
+<h2 id="原料准备："><a href="#原料准备：" class="headerlink" title="原料准备："></a>原料准备：</h2><p>tomcat、jdk安装包，dockerfile文件</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1、准备压缩包"><a href="#1、准备压缩包" class="headerlink" title="1、准备压缩包"></a>1、准备压缩包</h3><p>jdk-8u301-linux-x64.tar.gz -&gt; jdk1.8.0_301</p>
+<p>apache-tomcat-7.0.107.tar.gz -&gt; apache-tomcat-7.0.107</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e93f16f2c2beb17ac00e.jpg"></p>
+<h3 id="2、编写dockerfile文件"><a href="#2、编写dockerfile文件" class="headerlink" title="2、编写dockerfile文件"></a>2、编写dockerfile文件</h3><blockquote>
+<p>官方指定命名<code>Dockerfile</code>，这样构建的时候不用加<code>-f</code>参数指定文件</p>
+</blockquote>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER xiao&lt;find_onepiece@163.com&gt;</span><br><span class="line"></span><br><span class="line">COPY readme.txt /usr/local/readme.txt</span><br><span class="line"></span><br><span class="line">ADD jdk-8u301-linux-x64.tar.gz /usr/local</span><br><span class="line">ADD apache-tomcat-7.0.107.tar.gz /usr/local</span><br><span class="line"></span><br><span class="line">RUN yum -y install vim</span><br><span class="line"></span><br><span class="line">ENV MYPATH /usr/local</span><br><span class="line"></span><br><span class="line">WORKDIR <span class="variable">$MYPATH</span></span><br><span class="line">ENV JAVA_HOME /usr/local/jdk1.8.0_301</span><br><span class="line">ENV CLASSPATH <span class="variable">$JAVA_HOME</span>/lib/dt.jar:<span class="variable">$JAVA_HOME</span>/lib/tools.jar</span><br><span class="line">ENV CATALINA_HOME /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV CATALINE_BASH /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV PATH <span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$CATALINA_HOME</span>/lib:<span class="variable">$CATALINE_HOME</span>/bin</span><br><span class="line"></span><br><span class="line">EXPOSE 8080</span><br><span class="line"></span><br><span class="line">CMD /usr/local/apache-tomcat-7.0.107/bin/startup.sh &amp;&amp; <span class="built_in">tail</span> -f /usr/local/apache-tomcat-7.0.107/bin/logs/catalina.out</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="3、执行构建"><a href="#3、执行构建" class="headerlink" title="3、执行构建"></a>3、执行构建</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -t diytomcat . <span class="comment"># 自动寻找Dockerfile文件</span></span><br></pre></td></tr></tbody></table></figure>
 
-<h3 id="2、构建镜像"><a href="#2、构建镜像" class="headerlink" title="2、构建镜像"></a>2、构建镜像</h3><ul>
-<li><p>-f  file 指定dockerfile文件的路径</p>
-</li>
-<li><p>-t  tag  指定name:tag</p>
-</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -f ./mydockerfile -t mycentos:0.1 .</span><br><span class="line"></span><br><span class="line">Successfully built e7527f97f78a</span><br><span class="line">Successfully tagged mycentos:0.1</span><br></pre></td></tr></tbody></table></figure>
+<p><strong>构建成功:</strong></p>
+<p>Successfully built e68ad8caa2a4</p>
+<p>Successfully tagged diytomcat:latest</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e96716f2c2beb17b0059.jpg"></p>
+<h3 id="4、启动容器"><a href="#4、启动容器" class="headerlink" title="4、启动容器"></a>4、启动容器</h3><p><code>/webapps/test</code>  部署的项目路径，浏览器访问<code>ip:port/test</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it -p 9090:8080 --name xiaoTomcat -v /home/xiao/build/tomcat/test:/usr/local/apache-tomcat-7.0.107/webapps/test -v /home/xiao/build/tomcat/tomcatlogs/:/usr/local/apache-tomcat-7.0.107/logs diytomcat</span><br></pre></td></tr></tbody></table></figure>
 
-<h3 id="3、测试运行"><a href="#3、测试运行" class="headerlink" title="3、测试运行"></a>3、测试运行</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker images</span><br><span class="line">docker run -it mycentos:0.1</span><br></pre></td></tr></tbody></table></figure>
-
-<p>可以看到进入容器之后，直接就是在 <code>/usr/local</code> 目录下，是因为<code>dockerfile</code>配置的<code>WORKDIR</code></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92ce16f2c2beb1726bca.jpg"></p>
-<p>这时，<code>ifconfig</code>、<code>vim</code>命令都可以使用了</p>
-<h3 id="4、查看镜像构建历史记录"><a href="#4、查看镜像构建历史记录" class="headerlink" title="4、查看镜像构建历史记录"></a>4、查看镜像构建历史记录</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">history</span> imageID</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92e316f2c2beb1729aca.jpg"></p>
-<h1 id="CMD和ENTRYPOINT的区别"><a href="#CMD和ENTRYPOINT的区别" class="headerlink" title="CMD和ENTRYPOINT的区别"></a>CMD和ENTRYPOINT的区别</h1><h2 id="编写CMD测试dockerfile文件"><a href="#编写CMD测试dockerfile文件" class="headerlink" title="编写CMD测试dockerfile文件"></a>编写CMD测试dockerfile文件</h2><ol>
-<li>编写dockerfile文件</li>
+<h3 id="5、访问查看"><a href="#5、访问查看" class="headerlink" title="5、访问查看"></a>5、访问查看</h3><p>数据卷挂载成功</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e97c16f2c2beb17b2050.jpg"></p>
+<h3 id="6、发布项目"><a href="#6、发布项目" class="headerlink" title="6、发布项目"></a>6、发布项目</h3><p>已经挂载了数据卷，所以编写宿主机的项目文件就可以了</p>
+<p>在挂载路径 <code>/home/xiao/build/tomcat/test</code> 下</p>
+<ol>
+<li>新建文件 <code>web.xml</code>，内容如下：</li>
 </ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">CMD [<span class="string">"ls"</span>, <span class="string">"-a"</span>]</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">version</span>=<span class="string">"2.4"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
 
 <ol start="2">
-<li>构建镜像</li>
+<li>新建文件 <code>index.jsp</code>，内容如下：</li>
 </ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -f ./dockerfile -t cmd-test .</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight html"><table><tbody><tr><td class="code"><pre><span class="line">&lt;%@ page contentType="text/html;charset=UTF-8" language="java" %&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Hello World!<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>xiao<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">&lt;%</span><br><span class="line">System.out.println("my tomcat project logs");</span><br><span class="line">%&gt;</span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
 
-<ol start="3">
-<li>启动镜像</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run imageID/iamgeName</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92fb16f2c2beb172c300.jpg"></p>
-<p>测试发现，启动镜像时追加的命令替换了<code>CMD</code>命令，如下图所示:</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a930916f2c2beb172d924.jpg"></p>
-<h2 id="编写ENTRYPOINT测试dockerfile文件"><a href="#编写ENTRYPOINT测试dockerfile文件" class="headerlink" title="编写ENTRYPOINT测试dockerfile文件"></a>编写ENTRYPOINT测试dockerfile文件</h2><p>每个<code>Dockerfile</code>只能有一个<code>ENTRYPOINT</code>，如果指定了多个，只有最后一个被执行,而且一定会被执行</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">ENTRYPOINT [<span class="string">"ls"</span>, <span class="string">"-a"</span>]</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># nginx 镜像</span></span><br><span class="line">ENTRYPOINT [ <span class="string">"/usr/sbin/nginx"</span>, <span class="string">"-g"</span>, <span class="string">"daemon off;"</span> ]</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a931916f2c2beb1731507.jpg"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
-<li><code>CMD</code>命令会被启动容器时追加的命令替换执行，</li>
-</ol>
-<p>2.<code>ENTRYPOINT</code>命令不会被启动容器时追加的命令替换，而是合并执行</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a932b16f2c2beb1736e15.jpg"></p>
-<hr>
+<h3 id="7、浏览器访问"><a href="#7、浏览器访问" class="headerlink" title="7、浏览器访问"></a>7、浏览器访问</h3><p>url：<code>ip:port/test</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9ae16f2c2beb17b6a64.jpg"></p>
+<h3 id="8、查看日志卷"><a href="#8、查看日志卷" class="headerlink" title="8、查看日志卷"></a>8、查看日志卷</h3><p><code>tail -f catalina.out</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9bd16f2c2beb17b8250.jpg"></p>
+<h2 id="完成从构建镜像到部署项目🎈🎈"><a href="#完成从构建镜像到部署项目🎈🎈" class="headerlink" title="完成从构建镜像到部署项目🎈🎈"></a>完成从构建镜像到部署项目🎈🎈</h2><hr>
 <p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
 <p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
 <p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
@@ -404,6 +457,7 @@
       </categories>
       <tags>
         <tag>Docker</tag>
+        <tag>tomcat</tag>
       </tags>
   </entry>
   <entry>
@@ -512,47 +566,82 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker | 制作tomcat镜像并部署项目</title>
-    <url>/posts/2106196415.html</url>
+    <title>Docker | 发布镜像到镜像仓库</title>
+    <url>/posts/2796165889.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
-<p>本文讲解如何制作自己的tomcat镜像，并使用tomcat部署项目</p>
+<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
 </blockquote>
-<h2 id="原料准备："><a href="#原料准备：" class="headerlink" title="原料准备："></a>原料准备：</h2><p>tomcat、jdk安装包，dockerfile文件</p>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1、准备压缩包"><a href="#1、准备压缩包" class="headerlink" title="1、准备压缩包"></a>1、准备压缩包</h3><p>jdk-8u301-linux-x64.tar.gz -&gt; jdk1.8.0_301</p>
-<p>apache-tomcat-7.0.107.tar.gz -&gt; apache-tomcat-7.0.107</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e93f16f2c2beb17ac00e.jpg"></p>
-<h3 id="2、编写dockerfile文件"><a href="#2、编写dockerfile文件" class="headerlink" title="2、编写dockerfile文件"></a>2、编写dockerfile文件</h3><blockquote>
-<p>官方指定命名<code>Dockerfile</code>，这样构建的时候不用加<code>-f</code>参数指定文件</p>
-</blockquote>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER xiao&lt;find_onepiece@163.com&gt;</span><br><span class="line"></span><br><span class="line">COPY readme.txt /usr/local/readme.txt</span><br><span class="line"></span><br><span class="line">ADD jdk-8u301-linux-x64.tar.gz /usr/local</span><br><span class="line">ADD apache-tomcat-7.0.107.tar.gz /usr/local</span><br><span class="line"></span><br><span class="line">RUN yum -y install vim</span><br><span class="line"></span><br><span class="line">ENV MYPATH /usr/local</span><br><span class="line"></span><br><span class="line">WORKDIR <span class="variable">$MYPATH</span></span><br><span class="line">ENV JAVA_HOME /usr/local/jdk1.8.0_301</span><br><span class="line">ENV CLASSPATH <span class="variable">$JAVA_HOME</span>/lib/dt.jar:<span class="variable">$JAVA_HOME</span>/lib/tools.jar</span><br><span class="line">ENV CATALINA_HOME /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV CATALINE_BASH /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV PATH <span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$CATALINA_HOME</span>/lib:<span class="variable">$CATALINE_HOME</span>/bin</span><br><span class="line"></span><br><span class="line">EXPOSE 8080</span><br><span class="line"></span><br><span class="line">CMD /usr/local/apache-tomcat-7.0.107/bin/startup.sh &amp;&amp; <span class="built_in">tail</span> -f /usr/local/apache-tomcat-7.0.107/bin/logs/catalina.out</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="3、执行构建"><a href="#3、执行构建" class="headerlink" title="3、执行构建"></a>3、执行构建</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -t diytomcat . <span class="comment"># 自动寻找Dockerfile文件</span></span><br></pre></td></tr></tbody></table></figure>
+<p>本文记录发布镜像到 <code>DockerHub</code> 和 <code>阿里云镜像仓库</code>。工作中使用的是<code>JFrog Artifactory</code> 和 <code>Harbor</code>，没有太大差别。</p>
+<h1 id="发布镜像到DockerHub"><a href="#发布镜像到DockerHub" class="headerlink" title="发布镜像到DockerHub"></a>发布镜像到DockerHub</h1><p><a href="https://hub.docker.com/">https://hub.docker.com/</a> 注册账号</p>
+<h2 id="1、登录docker"><a href="#1、登录docker" class="headerlink" title="1、登录docker"></a>1、登录docker</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker login --help</span></span><br><span class="line"></span><br><span class="line">Usage:  docker login [OPTIONS] [SERVER]</span><br><span class="line"></span><br><span class="line">Log <span class="keyword">in</span> to a Docker registry.</span><br><span class="line">If no server is specified, the default is defined by the daemon.</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">  -p, --password string   Password</span><br><span class="line">      --password-stdin    Take the password from stdin</span><br><span class="line">  -u, --username string   Username</span><br><span class="line">[root@--- ~]<span class="comment">#</span></span><br><span class="line">[root@--- ~]<span class="comment"># docker login -u xiaobluewhale</span></span><br><span class="line">Password:</span><br><span class="line">WARNING! Your password will be stored unencrypted <span class="keyword">in</span> /root/.docker/config.json.</span><br><span class="line">Configure a credential helper to remove this warning. See</span><br><span class="line">https://docs.docker.com/engine/reference/commandline/login/<span class="comment">#credentials-store</span></span><br><span class="line"></span><br><span class="line">Login Succeeded</span><br><span class="line">[root@--- ~]<span class="comment">#</span></span><br></pre></td></tr></tbody></table></figure>
 
-<p><strong>构建成功:</strong></p>
-<p>Successfully built e68ad8caa2a4</p>
-<p>Successfully tagged diytomcat:latest</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e96716f2c2beb17b0059.jpg"></p>
-<h3 id="4、启动容器"><a href="#4、启动容器" class="headerlink" title="4、启动容器"></a>4、启动容器</h3><p><code>/webapps/test</code>  部署的项目路径，浏览器访问<code>ip:port/test</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it -p 9090:8080 --name xiaoTomcat -v /home/xiao/build/tomcat/test:/usr/local/apache-tomcat-7.0.107/webapps/test -v /home/xiao/build/tomcat/tomcatlogs/:/usr/local/apache-tomcat-7.0.107/logs diytomcat</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="5、访问查看"><a href="#5、访问查看" class="headerlink" title="5、访问查看"></a>5、访问查看</h3><p>数据卷挂载成功</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e97c16f2c2beb17b2050.jpg"></p>
-<h3 id="6、发布项目"><a href="#6、发布项目" class="headerlink" title="6、发布项目"></a>6、发布项目</h3><p>已经挂载了数据卷，所以编写宿主机的项目文件就可以了</p>
-<p>在挂载路径 <code>/home/xiao/build/tomcat/test</code> 下</p>
+<h2 id="2、服务器上提交镜像"><a href="#2、服务器上提交镜像" class="headerlink" title="2、服务器上提交镜像"></a>2、服务器上提交镜像</h2><p><code>docker push [OPTIONS] NAME[:TAG]</code></p>
+<p><code>docker push</code> 命令推送镜像的规范是：注册用户名/镜像名。</p>
+<p>使用以下方法之一命名您的本地镜像：</p>
 <ol>
-<li>新建文件 <code>web.xml</code>，内容如下：</li>
+<li>当你构建它们时，使用如下命令</li>
 </ol>
-<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">version</span>=<span class="string">"2.4"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -t &lt;hub-user&gt;/&lt;repo-name&gt;[:&lt;tag&gt;]</span><br></pre></td></tr></tbody></table></figure>
 
 <ol start="2">
-<li>新建文件 <code>index.jsp</code>，内容如下：</li>
+<li>重命名现有的本地镜像</li>
 </ol>
-<figure class="highlight html"><table><tbody><tr><td class="code"><pre><span class="line">&lt;%@ page contentType="text/html;charset=UTF-8" language="java" %&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Hello World!<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>xiao<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">&lt;%</span><br><span class="line">System.out.println("my tomcat project logs");</span><br><span class="line">%&gt;</span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker tag &lt;existing-image&gt; &lt;hub-user&gt;/&lt;repo-name&gt;[:&lt;tag&gt;]</span><br></pre></td></tr></tbody></table></figure>
 
-<h3 id="7、浏览器访问"><a href="#7、浏览器访问" class="headerlink" title="7、浏览器访问"></a>7、浏览器访问</h3><p>url：<code>ip:port/test</code></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9ae16f2c2beb17b6a64.jpg"></p>
-<h3 id="8、查看日志卷"><a href="#8、查看日志卷" class="headerlink" title="8、查看日志卷"></a>8、查看日志卷</h3><p><code>tail -f catalina.out</code></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9bd16f2c2beb17b8250.jpg"></p>
-<h2 id="完成从构建镜像到部署项目🎈🎈"><a href="#完成从构建镜像到部署项目🎈🎈" class="headerlink" title="完成从构建镜像到部署项目🎈🎈"></a>完成从构建镜像到部署项目🎈🎈</h2><hr>
+<ol start="3">
+<li><code>docker commit</code> 提交更改</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker commit &lt;existing-container&gt; &lt;hub-user&gt;/&lt;repo-name&gt;[:&lt;tag&gt;]</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="4">
+<li>推送镜像仓库</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker push &lt;hub-user&gt;/&lt;repo-name&gt;:&lt;tag&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><code>docker push xiao/tomcat</code></li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker push xiao/tomcat</span><br><span class="line">Using default tag: latest</span><br><span class="line">The push refers to repository [docker.io/xiao/tomcat]</span><br><span class="line">69421fc728fb: Preparing</span><br><span class="line">1f6217f0c2bb: Preparing</span><br><span class="line">aa9c3f9fafec: Preparing</span><br><span class="line">7d4a4cd414a9: Preparing</span><br><span class="line">74ddd0ec08fa: Preparing</span><br><span class="line">denied: requested access to the resource is denied</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="推送失败，被拒绝"><a href="#推送失败，被拒绝" class="headerlink" title="推送失败，被拒绝"></a>推送失败，被拒绝</h3><p>推送失败的原因: <strong>name必须是注册用户名</strong></p>
+<h3 id="解决push失败问题"><a href="#解决push失败问题" class="headerlink" title="解决push失败问题"></a>解决push失败问题</h3><p>增加一个tag, 重命名镜像</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 增加tag，重命名镜像</span></span><br><span class="line">docker tag 24b3a476f143 xiaobluewhale/tomcat:1.0</span><br><span class="line">The push refers to repository [docker.io/xiaobluewhale/tomcat]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看镜像</span></span><br><span class="line">docker images</span><br><span class="line">REPOSITORY            TAG       IMAGE ID       CREATED        SIZE</span><br><span class="line">xiaobluewhale/tomcat   1.0       24b3a476f143   13 hours ago   680MB</span><br><span class="line">xiao/tomcat            1.0       24b3a476f143   13 hours ago   680MB</span><br><span class="line">xiao/tomcat            latest    24b3a476f143   13 hours ago   680MB</span><br><span class="line"></span><br><span class="line"><span class="comment"># 推送镜像</span></span><br><span class="line">docker push xiaobluewhale/tomcat:1.0</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="提交成功"><a href="#提交成功" class="headerlink" title="提交成功"></a>提交成功</h3><p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f6cc75ec18514d3ba7ff544dccf7bb0e~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>提交的时候也是按照镜像的层级提交的</p>
+<p>在个人DockerHub上查看推送成功的镜像</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cadf8b7d817040b594d74b7b2e68516b~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h1 id="发布镜像到阿里云镜像仓库"><a href="#发布镜像到阿里云镜像仓库" class="headerlink" title="发布镜像到阿里云镜像仓库"></a>发布镜像到阿里云镜像仓库</h1><h2 id="1、登陆阿里云"><a href="#1、登陆阿里云" class="headerlink" title="1、登陆阿里云"></a>1、登陆阿里云</h2><h2 id="2、找到容器镜像服务，创建实例"><a href="#2、找到容器镜像服务，创建实例" class="headerlink" title="2、找到容器镜像服务，创建实例"></a>2、找到容器镜像服务，创建实例</h2><p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0c266a6cec64416f8f1b0408760698c9~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3a155eec193c4d49a020a439fdbf8823~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>企业版需要付费购买（1个月741）</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7eb99badcdd44d56a28e78fec6d02eb4~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>我选择创建<strong>个人实例</strong></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e1f26b49df014aea9df297b01c15658c~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h2 id="3、创建命名空间（为了隔离）"><a href="#3、创建命名空间（为了隔离）" class="headerlink" title="3、创建命名空间（为了隔离）"></a>3、创建命名空间（为了隔离）</h2><p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a5ee9d6dca944b5c9fb0165facec1bf4~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h2 id="4、创建镜像仓库"><a href="#4、创建镜像仓库" class="headerlink" title="4、创建镜像仓库"></a>4、创建镜像仓库</h2><p>本地</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4758825821c34116a9db89d764fffc38~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h2 id="5、推送镜像"><a href="#5、推送镜像" class="headerlink" title="5、推送镜像"></a>5、推送镜像</h2><p>参考阿里云容器镜像指南</p>
+<ol>
+<li>登录</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker login --username=[yourname] registry.cn-hangzhou.aliyuncs.com</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>查看镜像</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker images</span><br><span class="line">REPOSITORY                      TAG       IMAGE ID       CREATED        SIZE</span><br><span class="line">xiaobluewhale/tomcat            1.0       24b3a476f143   14 hours ago   680MB</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>推送镜像</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker push xiaobluewhale/tomcat:1.0</span><br><span class="line">The push refers to repository [docker.io/xiaobluewhale/tomcat]</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bd2027687f8d42a187133e950a9de233~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h2 id="6、阿里云查看镜像"><a href="#6、阿里云查看镜像" class="headerlink" title="6、阿里云查看镜像"></a>6、阿里云查看镜像</h2><p>imageID: <code>24b3a476f143</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/469b77f60ea1437b9c82efa3a7c8eb53~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>也可以查看可视化的层信息</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/739b374050934dfe92da3502fe009a77~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<hr>
 <p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
 <p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
 <p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
@@ -562,7 +651,6 @@
       </categories>
       <tags>
         <tag>Docker</tag>
-        <tag>tomcat</tag>
       </tags>
   </entry>
   <entry>
@@ -2805,6 +2893,54 @@
       </tags>
   </entry>
   <entry>
+    <title>博客评论插件Beaudar安装使用</title>
+    <url>/posts/34114278.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="Beaudar"><a href="#Beaudar" class="headerlink" title="Beaudar"></a>Beaudar</h2><p><code>Hexo</code>主题选用的<a href="https://xaoxuu.com/wiki/stellar/"><code>Stellar</code></a></p>
+<p>基于 GitHub issue 的轻量评论插件，Utterances 的中文版本，官网在<a href="https://beaudar.lipk.org/">这里</a></p>
+<h2 id="Beaudar-是如何工作的？"><a href="#Beaudar-是如何工作的？" class="headerlink" title="Beaudar 是如何工作的？"></a>Beaudar 是如何工作的？</h2><p>Beaudar 加载时，将使用 GitHub issue 搜索 API 根据 url，“路径名”或“标题”查找与页面相关的 issue。如果找不到与页面匹配的 issue，即没有评论，当有人首次发表评论时，Beaudar-bot 会自动创建一个 issue。</p>
+<h2 id="配置使用"><a href="#配置使用" class="headerlink" title="配置使用"></a>配置使用</h2><ol>
+<li>准备</li>
+</ol>
+<p>Beaudar 的配置方法很简单，创建一个仓库<a href="https://github.com/all-smile/blog-comments"><code>blog-comments</code></a>，在仓库中创建一个域名白名单文件<code>beaudar.json</code>，然后在<a href="https://github.com/apps/beaudar">此处</a>授权安装即可。</p>
+<p><code>beaudar.json</code>文件</p>
+<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li><code>Hexo</code>配置</li>
+</ol>
+<p>在主题配置文件里<code>_config_[theme].yml</code>里面增加如下配置</p>
+<figure class="highlight yml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 评论 [beaudar](https://beaudar.lipk.org/) 插件</span></span><br><span class="line"><span class="attr">comments:</span></span><br><span class="line">  <span class="attr">service:</span> <span class="string">beaudar</span></span><br><span class="line">  <span class="attr">beaudar:</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">all-smile/blog-comments</span> <span class="comment"># 指向你自己的repo</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p>使用<code>GitHub</code>登录后评论</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b40c16f2c2beb16136d9.jpg"></p>
+<h2 id="问题处理"><a href="#问题处理" class="headerlink" title="问题处理"></a>问题处理</h2><ol>
+<li><code>blog-comments</code> 仓库默认分支为<code>main</code></li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b22716f2c2beb15ee173.jpg"></p>
+<p><strong>解决：</strong></p>
+<p>进入<code>blog-comments</code> 仓库，在 settings -&gt; branches 里面，修改 <code>Default branch</code> 为 <code>main</code></p>
+<ol start="2">
+<li><code>Hexo</code> 本地服务测试<code>Beaudar</code>，添加白名单配置</li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b2a816f2c2beb15f64b2.jpg"></p>
+<p><strong>解决：</strong></p>
+<p>修改<code>beaudar.json</code>文件</p>
+<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>多路径来源页面导航高亮以及面包屑导航修改</title>
     <url>/posts/2025032412.html</url>
     <content><![CDATA[<html><head></head><body><h2 id="问题缘由"><a href="#问题缘由" class="headerlink" title="问题缘由"></a>问题缘由</h2><p>这个问题比较普遍，原因是业务方面对产品进行多维度的划分（或者对产品进行归档、打标签、收藏等等），反应在前端方面就是同一个页面可以有不同的入口（产品目录结构划分）</p>
@@ -2857,54 +2993,6 @@
       </categories>
       <tags>
         <tag>前端</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>博客评论插件Beaudar安装使用</title>
-    <url>/posts/34114278.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="Beaudar"><a href="#Beaudar" class="headerlink" title="Beaudar"></a>Beaudar</h2><p><code>Hexo</code>主题选用的<a href="https://xaoxuu.com/wiki/stellar/"><code>Stellar</code></a></p>
-<p>基于 GitHub issue 的轻量评论插件，Utterances 的中文版本，官网在<a href="https://beaudar.lipk.org/">这里</a></p>
-<h2 id="Beaudar-是如何工作的？"><a href="#Beaudar-是如何工作的？" class="headerlink" title="Beaudar 是如何工作的？"></a>Beaudar 是如何工作的？</h2><p>Beaudar 加载时，将使用 GitHub issue 搜索 API 根据 url，“路径名”或“标题”查找与页面相关的 issue。如果找不到与页面匹配的 issue，即没有评论，当有人首次发表评论时，Beaudar-bot 会自动创建一个 issue。</p>
-<h2 id="配置使用"><a href="#配置使用" class="headerlink" title="配置使用"></a>配置使用</h2><ol>
-<li>准备</li>
-</ol>
-<p>Beaudar 的配置方法很简单，创建一个仓库<a href="https://github.com/all-smile/blog-comments"><code>blog-comments</code></a>，在仓库中创建一个域名白名单文件<code>beaudar.json</code>，然后在<a href="https://github.com/apps/beaudar">此处</a>授权安装即可。</p>
-<p><code>beaudar.json</code>文件</p>
-<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li><code>Hexo</code>配置</li>
-</ol>
-<p>在主题配置文件里<code>_config_[theme].yml</code>里面增加如下配置</p>
-<figure class="highlight yml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 评论 [beaudar](https://beaudar.lipk.org/) 插件</span></span><br><span class="line"><span class="attr">comments:</span></span><br><span class="line">  <span class="attr">service:</span> <span class="string">beaudar</span></span><br><span class="line">  <span class="attr">beaudar:</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">all-smile/blog-comments</span> <span class="comment"># 指向你自己的repo</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p>使用<code>GitHub</code>登录后评论</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b40c16f2c2beb16136d9.jpg"></p>
-<h2 id="问题处理"><a href="#问题处理" class="headerlink" title="问题处理"></a>问题处理</h2><ol>
-<li><code>blog-comments</code> 仓库默认分支为<code>main</code></li>
-</ol>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b22716f2c2beb15ee173.jpg"></p>
-<p><strong>解决：</strong></p>
-<p>进入<code>blog-comments</code> 仓库，在 settings -&gt; branches 里面，修改 <code>Default branch</code> 为 <code>main</code></p>
-<ol start="2">
-<li><code>Hexo</code> 本地服务测试<code>Beaudar</code>，添加白名单配置</li>
-</ol>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b2a816f2c2beb15f64b2.jpg"></p>
-<p><strong>解决：</strong></p>
-<p>修改<code>beaudar.json</code>文件</p>
-<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -2979,155 +3067,6 @@
       </categories>
       <tags>
         <tag>前端</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>常用的SSH，你了解多少？（长文警告）</title>
-    <url>/posts/184663689.html</url>
-    <content><![CDATA[<html><head></head><body><h1 id="1、SSH工作原理"><a href="#1、SSH工作原理" class="headerlink" title="1、SSH工作原理"></a>1、SSH工作原理</h1><p>从ssh的<strong>加密方式</strong>说开去，看下文👇</p>
-<h2 id="1-1、对称加密"><a href="#1-1、对称加密" class="headerlink" title="1.1、对称加密"></a>1.1、对称加密</h2><p>客户端和服务端采用相同的密钥进行数据的加解密，很难保证密钥不丢失，或者被截获。隐藏着<strong>中间人攻击</strong>的风险</p>
-<blockquote>
-<p>如果攻击者插在用户与远程主机之间（比如在公共的wifi区域），用伪造的公钥，获取用户的登录密码。再用这个密码登录远程主机，那么SSH的安全机制就不存在了。这种风险就是著名的”中间人攻击”（<code>Man-in-the-middle attack</code>）</p>
-</blockquote>
-<p>为了解决对称加密的漏洞，就出现了非对称加密。非对称加密有两个密钥：“公钥”和“私钥”。公钥加密后的密文，只能通过对应的私钥进行解密。想从公钥推理出私钥几乎不可能，所以非对称加密的安全性比较高。</p>
-<h2 id="1-2、非对称加密"><a href="#1-2、非对称加密" class="headerlink" title="1.2、非对称加密"></a>1.2、非对称加密</h2><p><strong>ssh连接远程git仓库时的登录验证原理</strong>：本地主机向远程主机发送登录请求，远程主机收到请求后，返回给本地主机一个随机字符串A，本地主机用私钥加密字符串A得到密文B，并把密文B发送给远程主机，远程主机用公钥解密密文A得到字符串B，并判断A是否等于B，如果相等，则认证成功，反之，则反之。<br>不在要求使用密码登录，以公私钥的方式实现免密登录</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63119b6b16f2c2beb1e029b5.png"></p>
-<h2 id="1-3、基于口令和公钥认证"><a href="#1-3、基于口令和公钥认证" class="headerlink" title="1.3、基于口令和公钥认证"></a>1.3、基于口令和公钥认证</h2><p>只有在第一次连接的时候需要，通信双方验证身份之后就可以通过在客户端的私钥和你存放在服务器的公钥进行认证。(通过服务器上的公钥加密，客户端的私钥解密来验证)</p>
-<p><strong>第一次登录：</strong></p>
-<blockquote>
-<p>如果不是第一次登录，想看一下效果的话，可以修改一下本地的 <code>~/.ssh/known_hosts</code> 文件名（<code>~/.ssh/known_hosts</code>文件中保存的是已经认证过的公钥信息），重命名该文件之后，相当于清空了认证过的公钥信息，再次连接的时候就会重新认证😁😁</p>
-</blockquote>
-<ol>
-<li>ssh连接远程主机</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> git@gitcode.net:xxx.git</span><br><span class="line">Cloning into <span class="string">'xxx'</span>...</span><br><span class="line">The authenticity of host <span class="string">'gitcode.net (119.3.229.170)'</span> can<span class="string">'t be established.</span></span><br><span class="line"><span class="string">RSA key fingerprint is SHA256:pyrMa3p0o90Qsuz2+kMX3CIBl+S1cZsdRlCoaosSg00Qs.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no/[fingerprint])?yes</span></span><br><span class="line"><span class="string">Warning: Permanently added '</span>gitcode.net,119.3.229.170<span class="string">' (RSA) to the list of known hosts.</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>查看 known_hosts 文件</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 查看known_hosts文件</span></span><br><span class="line">$ <span class="built_in">cat</span> known_hosts</span><br><span class="line">gitcode.net,119.3.229.170 ssh-rsa AAAAB3NzaC1yc2EAAAL......</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li><p>因为公钥长度较长（采用<code>RSA</code>算法），很难比对，所以对其进行<code>MD5</code>计算，将它变成一个128位的指纹，如上<code>fingerprint</code>，这样比对就容易多了。</p>
-</li>
-<li><p>当远程主机的公钥被接受以后，它就会被永久保存在文件 <code>~/.ssh/known_hosts</code> 文件之中，下次再登录就会跳过<code>Warning</code>部分</p>
-</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63119b8216f2c2beb1e035eb.png" alt="该图来源网络，侵删"><br>上图来源网络，侵删</p>
-<blockquote>
-<p>下面以多个主机配置<code>ssh</code>连接时怎么指定使用哪个公钥为切入点，讲解<code>ssh config</code>。讲透、看爽！</p>
-</blockquote>
-<h1 id="2、多个代码仓库配置ssh连接问题"><a href="#2、多个代码仓库配置ssh连接问题" class="headerlink" title="2、多个代码仓库配置ssh连接问题"></a>2、多个代码仓库配置ssh连接问题</h1><p>SSH 是连接远程主机最常用的方式，尽管连接到单个主机的基本操作非常直接，但当你开始使用大量的远程系统时（比如：配置多个代码托管平台的ssh），这就会成为笨重和复杂的任务。</p>
-<p>幸运的是，<a href="https://www.ssh.com/academy/ssh/openssh">OpenSSH</a> 允许您提供自定义的客户端连接选项。这些选项可以被存储到一个配置文件中，这个配置文件可以用来定义每个主机的配置。这有助于保持每个主机的连接选项更好的独立和组织，也你让你在需要连接时避免在命令行中写繁琐的选项。</p>
-<p>目前我使用的代码托管平台有<code>GitHub、Gitee、Gitlab、Gitcode</code>（瞎折腾👀），即使只使用一个平台，比如 gitlab，也会存在公司账号跟个人账号的ssh配置问题，下面讲解ssh连接远程主机时怎么指定使用哪个公钥</p>
-<blockquote>
-<p>下面展示都在Windows 系统下</p>
-</blockquote>
-<h1 id="3、ssh-config-自定义主机配置"><a href="#3、ssh-config-自定义主机配置" class="headerlink" title="3、ssh config 自定义主机配置"></a>3、ssh config 自定义主机配置</h1><h2 id="3-1、ssh-config-介绍"><a href="#3-1、ssh-config-介绍" class="headerlink" title="3.1、ssh config 介绍"></a>3.1、ssh config 介绍</h2><p>解决多个ssh密钥使用问题的<strong>最佳方案</strong>就是通过维护一个本地配置 <code>config</code>，指定主机使用哪个密钥。</p>
-<blockquote>
-<p>其他方案：（需要连接的主机多了同样很难管理，不建议使用，了解即可）</p>
-<ol>
-<li><p>设置环境变量<code>GIT_SSH_COMMAND</code>解决</p>
-</li>
-<li><p>指定命令行参数：<code>ssh -i ~/.ssh/xxx.pub -p 22  www.example.com</code></p>
-</li>
-</ol>
-</blockquote>
-<p>用户级设置的路径: <code>~/.ssh/config</code></p>
-<h3 id="3-1-1、文件格式"><a href="#3-1-1、文件格式" class="headerlink" title="3.1.1、文件格式"></a>3.1.1、文件格式</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">Host firsthost</span><br><span class="line">    SSH_OPTIONS_1 custom_value</span><br><span class="line">    SSH_OPTIONS_2 custom_value</span><br><span class="line">    SSH_OPTIONS_3 custom_value</span><br><span class="line"></span><br><span class="line">Host secondhost</span><br><span class="line">    ANOTHER_OPTION custom_value</span><br><span class="line"></span><br><span class="line">Host *host</span><br><span class="line">    ANOTHER_OPTION custom_value</span><br><span class="line"></span><br><span class="line"><span class="comment"># 公用配置在最下面</span></span><br><span class="line">Host *</span><br><span class="line">    CHANGE_DEFAULT custom_value</span><br></pre></td></tr></tbody></table></figure>
-<p>解释：Host：ssh连接主机的别称 alias</p>
-<h3 id="3-1-2、尝鲜一下"><a href="#3-1-2、尝鲜一下" class="headerlink" title="3.1.2、尝鲜一下"></a>3.1.2、尝鲜一下</h3><p>本地系统的每个用户都可以维护一个客户端的 SSH 配置文件，这个配置文件可以包含你在命令行中使用 ssh 时参数，也可以存储公共连接选项并在连接时自动处理。你可以在命令上中使用 ssh 来指定 flag ，以覆盖配置文件中的选项。<br>看一个例子：</p>
-<ul>
-<li>ssh命令行的方式：</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">ssh -i ~/.ssh/xxx -p 22 -l admin \ www.example.com</span><br></pre></td></tr></tbody></table></figure>
-<p>上面的命令可以转换成 <code>config</code> 的形式，如下：</p>
-<ul>
-<li><code>ssh/config</code> 定义主机连接参数配置</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">Host myserver1</span><br><span class="line">	Hostname www.example.com</span><br><span class="line">	<span class="comment"># User admin</span></span><br><span class="line">	Port 22</span><br><span class="line">	IdentityFile ~/.ssh/xxx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 公共配置， 必须在文件最下面</span></span><br><span class="line">Host *</span><br><span class="line">  User admin</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="3-2、解释算法"><a href="#3-2、解释算法" class="headerlink" title="3.2、解释算法"></a>3.2、解释算法</h2><p>它从文件顶部向下执行此操作，所以顺序非常重要，了解这个之后，方便我们写出更好的主机定义配置选项、方便运维管理。</p>
-<p>当匹配到第一个主机定义时，并不会终止，而是继续往下查找，检查是否有其他匹配的 Host 定义。如果有另一个 Host 定义匹配，SSH 将该 Host 定义下的配置选项跟前面匹配到的主机定义配置选项合并（<strong>随着继续往下读取配置，最终配置选项是叠加的</strong>）</p>
-<h2 id="3-3、ssh-config-的工作原理✨"><a href="#3-3、ssh-config-的工作原理✨" class="headerlink" title="3.3、ssh_config 的工作原理✨"></a>3.3、ssh_config 的工作原理✨</h2><h3 id="3-3-1、ssh-客户端按以下顺序从三个地方读取配置："><a href="#3-3-1、ssh-客户端按以下顺序从三个地方读取配置：" class="headerlink" title="3.3.1、ssh 客户端按以下顺序从三个地方读取配置："></a>3.3.1、ssh 客户端按以下顺序从三个地方读取配置：</h3><ol>
-<li><p>系统范围内 <code>/etc/ssh/ssh_config</code>（适用与主机下的所有用户，系统级 System）</p>
-</li>
-<li><p>用户特定的 <code>~/.ssh/config</code> （用户级）</p>
-</li>
-<li><p>ssh直接提供给的命令行标志 （命令参数可以重写已有的固定配置）</p>
-</li>
-</ol>
-<p>我通常使用的用户级的配置，下面是我个人的配置，仅供参考：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># gitcode - csdn</span></span><br><span class="line">Host gitcode.net</span><br><span class="line">  HostName gitcode.net</span><br><span class="line">  Preferredauthentications publickey</span><br><span class="line">  IdentityFile ~/.ssh/gitcode</span><br><span class="line"></span><br><span class="line"><span class="comment"># gitlab</span></span><br><span class="line">Host gitlab.com</span><br><span class="line">  HostName gitlab.com</span><br><span class="line">  IdentityFile ~/.ssh/gitlab-rsa</span><br><span class="line"></span><br><span class="line"><span class="comment"># github</span></span><br><span class="line">Host github.com</span><br><span class="line">  HostName github.com</span><br><span class="line">  IdentityFile ~/.ssh/id_rsa</span><br><span class="line"></span><br><span class="line"><span class="comment"># gitee</span></span><br><span class="line">Host gitee.com</span><br><span class="line">  HostName gitee.com</span><br><span class="line">  IdentityFile ~/.ssh/id_rsa</span><br><span class="line"></span><br><span class="line"><span class="comment"># 共享配置，文件最下面</span></span><br><span class="line">Host *</span><br><span class="line">  <span class="comment"># 认证方式首选 publickey(公钥)， 可选： publickey,gssapi-keyex,gssapi-with-mic,password</span></span><br><span class="line">  PreferredAuthentications publickey</span><br><span class="line">  User git <span class="comment"># ssh [Host] === ssh [User]@[HostName]</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>解释：</strong></p>
-<ul>
-<li><p>Host：ssh的别称</p>
-<p>比如 Host 设置成 xiao ，使用的时候 ssh xiao（注意设置User）</p>
-</li>
-<li><p>HostName： 服务器的地址</p>
-</li>
-<li><p>PreferredAuthentications : 认证方式</p>
-<p>可选： <code>publickey,gssapi-keyex,gssapi-with-mic,password</code></p>
-</li>
-<li><p>IdentityFile: 指定连接HostName的密钥文件的路径</p>
-</li>
-</ul>
-<h3 id="3-3-2、主机别名设置例子"><a href="#3-3-2、主机别名设置例子" class="headerlink" title="3.3.2、主机别名设置例子"></a>3.3.2、主机别名设置例子</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">Host dev1</span><br><span class="line">    HostName dev1.example.com</span><br><span class="line">    User jeery</span><br></pre></td></tr></tbody></table></figure>
-
-<p>现在要连接到 <code>jeery@dev1.example.com</code>，就可以通过在命令行中输入如下命令：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">ssh dev1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 相当于</span></span><br><span class="line">ssh jeery@dev1.example.com</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="3-3-3、git-仓库连接别名设置例子"><a href="#3-3-3、git-仓库连接别名设置例子" class="headerlink" title="3.3.3、git 仓库连接别名设置例子"></a>3.3.3、git 仓库连接别名设置例子</h3><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63119ba916f2c2beb1e0475e.png"></p>
-<h2 id="3-4、连接问题"><a href="#3-4、连接问题" class="headerlink" title="3.4、连接问题"></a>3.4、连接问题</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">PS C:\Users\xiao\.ssh&gt;vim .\config</span><br><span class="line">PS C:\Users\xiao\.ssh&gt;ssh -T git@gitcode.net</span><br><span class="line">Bad owner or permissions on C:\\Users\\xiao/.ssh/config</span><br><span class="line">PS C:\Users\xiao\.ssh&gt;</span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>解决：</strong></p>
-<p>修改 config 文件 权限</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/.ssh/</span><br><span class="line"><span class="built_in">chmod</span> 600 config</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="4、git仓库设置ssh连接"><a href="#4、git仓库设置ssh连接" class="headerlink" title="4、git仓库设置ssh连接"></a>4、git仓库设置ssh连接</h1><p>下面演示我的设置步骤，仅供参考</p>
-<h2 id="4-1、本地生成公私钥对"><a href="#4-1、本地生成公私钥对" class="headerlink" title="4.1、本地生成公私钥对"></a>4.1、本地生成公私钥对</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">ssh-keygen -o -t rsa -C <span class="string">"yourmail"</span> -b 4096</span><br></pre></td></tr></tbody></table></figure>
-
-<p>🔊 记得设置<code>key</code>的名字哟，默认是 <code>id_rsa</code>（如果不设置<code>key</code>，新生成的 <code>id_rsa</code> 文件会覆盖原有的<code>id_rsa</code>文件，之前添加过的就不能用啦！），参考下图👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63119bba16f2c2beb1e054d6.png"></p>
-<h2 id="4-2、配置远程主机ssh"><a href="#4-2、配置远程主机ssh" class="headerlink" title="4.2、配置远程主机ssh"></a>4.2、配置远程主机ssh</h2><p>登录要连接的远程主机，这里演示 <a href="https://gitcode.net/dashboard/projects/home">gitcode</a> 平台</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63119bc716f2c2beb1e06187.png"></p>
-<h2 id="4-3、设置-ssh-config"><a href="#4-3、设置-ssh-config" class="headerlink" title="4.3、设置 ssh_config"></a>4.3、设置 ssh_config</h2><p>这里我统一维护在 <code>~/.ssh/config</code>里面维护，增加<code>gitcode</code>主机定义配置， 如下：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># gitcode - csdn</span></span><br><span class="line">Host gitcode.net</span><br><span class="line">  HostName gitcode.net</span><br><span class="line">  IdentityFile ~/.ssh/gitcode</span><br><span class="line"></span><br><span class="line"><span class="comment"># 共用配置，文件最下面</span></span><br><span class="line">Host *</span><br><span class="line">  <span class="comment"># 认证方式首选 publickey(公钥), 可选: publickey,gssapi-keyex,gssapi-with-mic,password</span></span><br><span class="line">  PreferredAuthentications publickey</span><br><span class="line">  User git <span class="comment"># ssh [Host] === ssh [User]@[HostName]</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="4-4、测试连接"><a href="#4-4、测试连接" class="headerlink" title="4.4、测试连接"></a>4.4、测试连接</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">xiao@LAPTOP-L6TI0438 MINGW64 ~/.ssh</span><br><span class="line">ssh -T gitagitcode.net</span><br><span class="line">Welcome to GitLab,@heyYouU!</span><br><span class="line">xiao@LAPTOP-L6TI0438 MINGW64 ~/.ssh</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>相信看完上面的讲解，会对ssh理解的更清除一点。So，快来更换 ssh 试试吧</p>
-<p><strong>连接远程仓库可以选择https，也可以选择ssh</strong></p>
-<p>区别：</p>
-<ol>
-<li><p>https 连接有文件传输大小限制，ssh没有</p>
-</li>
-<li><p>ssh传输速度比https协议快</p>
-</li>
-<li><p>https 连接提交代码的时候需要输入账户密码登录，ssh则是以公私钥加解密随机数的方式免密登录</p>
-</li>
-</ol>
-<p>连接仓库的方式可以转换，如： https 转成 ssh，比较简单，不作介绍。</p>
-<p>SSH东西超多的，光 SSH 配置选项就几十个，本文抛砖引玉，大家可以继续往下探索🎉🎉</p>
-<p>参考文档：</p>
-<ul>
-<li><p><a href="https://www.digitalocean.com/community/tutorials/how-to-configure-custom-connection-options-for-your-ssh-client">https://www.digitalocean.com/community/tutorials/how-to-configure-custom-connection-options-for-your-ssh-client</a></p>
-</li>
-<li><p><a href="http://www.bjpowernode.com/hot/2664.html">http://www.bjpowernode.com/hot/2664.html</a></p>
-</li>
-</ul>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>SSH</tag>
       </tags>
   </entry>
   <entry>
@@ -3348,6 +3287,155 @@
       </tags>
   </entry>
   <entry>
+    <title>常用的SSH，你了解多少？（长文警告）</title>
+    <url>/posts/184663689.html</url>
+    <content><![CDATA[<html><head></head><body><h1 id="1、SSH工作原理"><a href="#1、SSH工作原理" class="headerlink" title="1、SSH工作原理"></a>1、SSH工作原理</h1><p>从ssh的<strong>加密方式</strong>说开去，看下文👇</p>
+<h2 id="1-1、对称加密"><a href="#1-1、对称加密" class="headerlink" title="1.1、对称加密"></a>1.1、对称加密</h2><p>客户端和服务端采用相同的密钥进行数据的加解密，很难保证密钥不丢失，或者被截获。隐藏着<strong>中间人攻击</strong>的风险</p>
+<blockquote>
+<p>如果攻击者插在用户与远程主机之间（比如在公共的wifi区域），用伪造的公钥，获取用户的登录密码。再用这个密码登录远程主机，那么SSH的安全机制就不存在了。这种风险就是著名的”中间人攻击”（<code>Man-in-the-middle attack</code>）</p>
+</blockquote>
+<p>为了解决对称加密的漏洞，就出现了非对称加密。非对称加密有两个密钥：“公钥”和“私钥”。公钥加密后的密文，只能通过对应的私钥进行解密。想从公钥推理出私钥几乎不可能，所以非对称加密的安全性比较高。</p>
+<h2 id="1-2、非对称加密"><a href="#1-2、非对称加密" class="headerlink" title="1.2、非对称加密"></a>1.2、非对称加密</h2><p><strong>ssh连接远程git仓库时的登录验证原理</strong>：本地主机向远程主机发送登录请求，远程主机收到请求后，返回给本地主机一个随机字符串A，本地主机用私钥加密字符串A得到密文B，并把密文B发送给远程主机，远程主机用公钥解密密文A得到字符串B，并判断A是否等于B，如果相等，则认证成功，反之，则反之。<br>不在要求使用密码登录，以公私钥的方式实现免密登录</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63119b6b16f2c2beb1e029b5.png"></p>
+<h2 id="1-3、基于口令和公钥认证"><a href="#1-3、基于口令和公钥认证" class="headerlink" title="1.3、基于口令和公钥认证"></a>1.3、基于口令和公钥认证</h2><p>只有在第一次连接的时候需要，通信双方验证身份之后就可以通过在客户端的私钥和你存放在服务器的公钥进行认证。(通过服务器上的公钥加密，客户端的私钥解密来验证)</p>
+<p><strong>第一次登录：</strong></p>
+<blockquote>
+<p>如果不是第一次登录，想看一下效果的话，可以修改一下本地的 <code>~/.ssh/known_hosts</code> 文件名（<code>~/.ssh/known_hosts</code>文件中保存的是已经认证过的公钥信息），重命名该文件之后，相当于清空了认证过的公钥信息，再次连接的时候就会重新认证😁😁</p>
+</blockquote>
+<ol>
+<li>ssh连接远程主机</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> git@gitcode.net:xxx.git</span><br><span class="line">Cloning into <span class="string">'xxx'</span>...</span><br><span class="line">The authenticity of host <span class="string">'gitcode.net (119.3.229.170)'</span> can<span class="string">'t be established.</span></span><br><span class="line"><span class="string">RSA key fingerprint is SHA256:pyrMa3p0o90Qsuz2+kMX3CIBl+S1cZsdRlCoaosSg00Qs.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no/[fingerprint])?yes</span></span><br><span class="line"><span class="string">Warning: Permanently added '</span>gitcode.net,119.3.229.170<span class="string">' (RSA) to the list of known hosts.</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>查看 known_hosts 文件</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 查看known_hosts文件</span></span><br><span class="line">$ <span class="built_in">cat</span> known_hosts</span><br><span class="line">gitcode.net,119.3.229.170 ssh-rsa AAAAB3NzaC1yc2EAAAL......</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><p>因为公钥长度较长（采用<code>RSA</code>算法），很难比对，所以对其进行<code>MD5</code>计算，将它变成一个128位的指纹，如上<code>fingerprint</code>，这样比对就容易多了。</p>
+</li>
+<li><p>当远程主机的公钥被接受以后，它就会被永久保存在文件 <code>~/.ssh/known_hosts</code> 文件之中，下次再登录就会跳过<code>Warning</code>部分</p>
+</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63119b8216f2c2beb1e035eb.png" alt="该图来源网络，侵删"><br>上图来源网络，侵删</p>
+<blockquote>
+<p>下面以多个主机配置<code>ssh</code>连接时怎么指定使用哪个公钥为切入点，讲解<code>ssh config</code>。讲透、看爽！</p>
+</blockquote>
+<h1 id="2、多个代码仓库配置ssh连接问题"><a href="#2、多个代码仓库配置ssh连接问题" class="headerlink" title="2、多个代码仓库配置ssh连接问题"></a>2、多个代码仓库配置ssh连接问题</h1><p>SSH 是连接远程主机最常用的方式，尽管连接到单个主机的基本操作非常直接，但当你开始使用大量的远程系统时（比如：配置多个代码托管平台的ssh），这就会成为笨重和复杂的任务。</p>
+<p>幸运的是，<a href="https://www.ssh.com/academy/ssh/openssh">OpenSSH</a> 允许您提供自定义的客户端连接选项。这些选项可以被存储到一个配置文件中，这个配置文件可以用来定义每个主机的配置。这有助于保持每个主机的连接选项更好的独立和组织，也你让你在需要连接时避免在命令行中写繁琐的选项。</p>
+<p>目前我使用的代码托管平台有<code>GitHub、Gitee、Gitlab、Gitcode</code>（瞎折腾👀），即使只使用一个平台，比如 gitlab，也会存在公司账号跟个人账号的ssh配置问题，下面讲解ssh连接远程主机时怎么指定使用哪个公钥</p>
+<blockquote>
+<p>下面展示都在Windows 系统下</p>
+</blockquote>
+<h1 id="3、ssh-config-自定义主机配置"><a href="#3、ssh-config-自定义主机配置" class="headerlink" title="3、ssh config 自定义主机配置"></a>3、ssh config 自定义主机配置</h1><h2 id="3-1、ssh-config-介绍"><a href="#3-1、ssh-config-介绍" class="headerlink" title="3.1、ssh config 介绍"></a>3.1、ssh config 介绍</h2><p>解决多个ssh密钥使用问题的<strong>最佳方案</strong>就是通过维护一个本地配置 <code>config</code>，指定主机使用哪个密钥。</p>
+<blockquote>
+<p>其他方案：（需要连接的主机多了同样很难管理，不建议使用，了解即可）</p>
+<ol>
+<li><p>设置环境变量<code>GIT_SSH_COMMAND</code>解决</p>
+</li>
+<li><p>指定命令行参数：<code>ssh -i ~/.ssh/xxx.pub -p 22  www.example.com</code></p>
+</li>
+</ol>
+</blockquote>
+<p>用户级设置的路径: <code>~/.ssh/config</code></p>
+<h3 id="3-1-1、文件格式"><a href="#3-1-1、文件格式" class="headerlink" title="3.1.1、文件格式"></a>3.1.1、文件格式</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">Host firsthost</span><br><span class="line">    SSH_OPTIONS_1 custom_value</span><br><span class="line">    SSH_OPTIONS_2 custom_value</span><br><span class="line">    SSH_OPTIONS_3 custom_value</span><br><span class="line"></span><br><span class="line">Host secondhost</span><br><span class="line">    ANOTHER_OPTION custom_value</span><br><span class="line"></span><br><span class="line">Host *host</span><br><span class="line">    ANOTHER_OPTION custom_value</span><br><span class="line"></span><br><span class="line"><span class="comment"># 公用配置在最下面</span></span><br><span class="line">Host *</span><br><span class="line">    CHANGE_DEFAULT custom_value</span><br></pre></td></tr></tbody></table></figure>
+<p>解释：Host：ssh连接主机的别称 alias</p>
+<h3 id="3-1-2、尝鲜一下"><a href="#3-1-2、尝鲜一下" class="headerlink" title="3.1.2、尝鲜一下"></a>3.1.2、尝鲜一下</h3><p>本地系统的每个用户都可以维护一个客户端的 SSH 配置文件，这个配置文件可以包含你在命令行中使用 ssh 时参数，也可以存储公共连接选项并在连接时自动处理。你可以在命令上中使用 ssh 来指定 flag ，以覆盖配置文件中的选项。<br>看一个例子：</p>
+<ul>
+<li>ssh命令行的方式：</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">ssh -i ~/.ssh/xxx -p 22 -l admin \ www.example.com</span><br></pre></td></tr></tbody></table></figure>
+<p>上面的命令可以转换成 <code>config</code> 的形式，如下：</p>
+<ul>
+<li><code>ssh/config</code> 定义主机连接参数配置</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">Host myserver1</span><br><span class="line">	Hostname www.example.com</span><br><span class="line">	<span class="comment"># User admin</span></span><br><span class="line">	Port 22</span><br><span class="line">	IdentityFile ~/.ssh/xxx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 公共配置， 必须在文件最下面</span></span><br><span class="line">Host *</span><br><span class="line">  User admin</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="3-2、解释算法"><a href="#3-2、解释算法" class="headerlink" title="3.2、解释算法"></a>3.2、解释算法</h2><p>它从文件顶部向下执行此操作，所以顺序非常重要，了解这个之后，方便我们写出更好的主机定义配置选项、方便运维管理。</p>
+<p>当匹配到第一个主机定义时，并不会终止，而是继续往下查找，检查是否有其他匹配的 Host 定义。如果有另一个 Host 定义匹配，SSH 将该 Host 定义下的配置选项跟前面匹配到的主机定义配置选项合并（<strong>随着继续往下读取配置，最终配置选项是叠加的</strong>）</p>
+<h2 id="3-3、ssh-config-的工作原理✨"><a href="#3-3、ssh-config-的工作原理✨" class="headerlink" title="3.3、ssh_config 的工作原理✨"></a>3.3、ssh_config 的工作原理✨</h2><h3 id="3-3-1、ssh-客户端按以下顺序从三个地方读取配置："><a href="#3-3-1、ssh-客户端按以下顺序从三个地方读取配置：" class="headerlink" title="3.3.1、ssh 客户端按以下顺序从三个地方读取配置："></a>3.3.1、ssh 客户端按以下顺序从三个地方读取配置：</h3><ol>
+<li><p>系统范围内 <code>/etc/ssh/ssh_config</code>（适用与主机下的所有用户，系统级 System）</p>
+</li>
+<li><p>用户特定的 <code>~/.ssh/config</code> （用户级）</p>
+</li>
+<li><p>ssh直接提供给的命令行标志 （命令参数可以重写已有的固定配置）</p>
+</li>
+</ol>
+<p>我通常使用的用户级的配置，下面是我个人的配置，仅供参考：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># gitcode - csdn</span></span><br><span class="line">Host gitcode.net</span><br><span class="line">  HostName gitcode.net</span><br><span class="line">  Preferredauthentications publickey</span><br><span class="line">  IdentityFile ~/.ssh/gitcode</span><br><span class="line"></span><br><span class="line"><span class="comment"># gitlab</span></span><br><span class="line">Host gitlab.com</span><br><span class="line">  HostName gitlab.com</span><br><span class="line">  IdentityFile ~/.ssh/gitlab-rsa</span><br><span class="line"></span><br><span class="line"><span class="comment"># github</span></span><br><span class="line">Host github.com</span><br><span class="line">  HostName github.com</span><br><span class="line">  IdentityFile ~/.ssh/id_rsa</span><br><span class="line"></span><br><span class="line"><span class="comment"># gitee</span></span><br><span class="line">Host gitee.com</span><br><span class="line">  HostName gitee.com</span><br><span class="line">  IdentityFile ~/.ssh/id_rsa</span><br><span class="line"></span><br><span class="line"><span class="comment"># 共享配置，文件最下面</span></span><br><span class="line">Host *</span><br><span class="line">  <span class="comment"># 认证方式首选 publickey(公钥)， 可选： publickey,gssapi-keyex,gssapi-with-mic,password</span></span><br><span class="line">  PreferredAuthentications publickey</span><br><span class="line">  User git <span class="comment"># ssh [Host] === ssh [User]@[HostName]</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>解释：</strong></p>
+<ul>
+<li><p>Host：ssh的别称</p>
+<p>比如 Host 设置成 xiao ，使用的时候 ssh xiao（注意设置User）</p>
+</li>
+<li><p>HostName： 服务器的地址</p>
+</li>
+<li><p>PreferredAuthentications : 认证方式</p>
+<p>可选： <code>publickey,gssapi-keyex,gssapi-with-mic,password</code></p>
+</li>
+<li><p>IdentityFile: 指定连接HostName的密钥文件的路径</p>
+</li>
+</ul>
+<h3 id="3-3-2、主机别名设置例子"><a href="#3-3-2、主机别名设置例子" class="headerlink" title="3.3.2、主机别名设置例子"></a>3.3.2、主机别名设置例子</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">Host dev1</span><br><span class="line">    HostName dev1.example.com</span><br><span class="line">    User jeery</span><br></pre></td></tr></tbody></table></figure>
+
+<p>现在要连接到 <code>jeery@dev1.example.com</code>，就可以通过在命令行中输入如下命令：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">ssh dev1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 相当于</span></span><br><span class="line">ssh jeery@dev1.example.com</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="3-3-3、git-仓库连接别名设置例子"><a href="#3-3-3、git-仓库连接别名设置例子" class="headerlink" title="3.3.3、git 仓库连接别名设置例子"></a>3.3.3、git 仓库连接别名设置例子</h3><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63119ba916f2c2beb1e0475e.png"></p>
+<h2 id="3-4、连接问题"><a href="#3-4、连接问题" class="headerlink" title="3.4、连接问题"></a>3.4、连接问题</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">PS C:\Users\xiao\.ssh&gt;vim .\config</span><br><span class="line">PS C:\Users\xiao\.ssh&gt;ssh -T git@gitcode.net</span><br><span class="line">Bad owner or permissions on C:\\Users\\xiao/.ssh/config</span><br><span class="line">PS C:\Users\xiao\.ssh&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>解决：</strong></p>
+<p>修改 config 文件 权限</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/.ssh/</span><br><span class="line"><span class="built_in">chmod</span> 600 config</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="4、git仓库设置ssh连接"><a href="#4、git仓库设置ssh连接" class="headerlink" title="4、git仓库设置ssh连接"></a>4、git仓库设置ssh连接</h1><p>下面演示我的设置步骤，仅供参考</p>
+<h2 id="4-1、本地生成公私钥对"><a href="#4-1、本地生成公私钥对" class="headerlink" title="4.1、本地生成公私钥对"></a>4.1、本地生成公私钥对</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">ssh-keygen -o -t rsa -C <span class="string">"yourmail"</span> -b 4096</span><br></pre></td></tr></tbody></table></figure>
+
+<p>🔊 记得设置<code>key</code>的名字哟，默认是 <code>id_rsa</code>（如果不设置<code>key</code>，新生成的 <code>id_rsa</code> 文件会覆盖原有的<code>id_rsa</code>文件，之前添加过的就不能用啦！），参考下图👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63119bba16f2c2beb1e054d6.png"></p>
+<h2 id="4-2、配置远程主机ssh"><a href="#4-2、配置远程主机ssh" class="headerlink" title="4.2、配置远程主机ssh"></a>4.2、配置远程主机ssh</h2><p>登录要连接的远程主机，这里演示 <a href="https://gitcode.net/dashboard/projects/home">gitcode</a> 平台</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63119bc716f2c2beb1e06187.png"></p>
+<h2 id="4-3、设置-ssh-config"><a href="#4-3、设置-ssh-config" class="headerlink" title="4.3、设置 ssh_config"></a>4.3、设置 ssh_config</h2><p>这里我统一维护在 <code>~/.ssh/config</code>里面维护，增加<code>gitcode</code>主机定义配置， 如下：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># gitcode - csdn</span></span><br><span class="line">Host gitcode.net</span><br><span class="line">  HostName gitcode.net</span><br><span class="line">  IdentityFile ~/.ssh/gitcode</span><br><span class="line"></span><br><span class="line"><span class="comment"># 共用配置，文件最下面</span></span><br><span class="line">Host *</span><br><span class="line">  <span class="comment"># 认证方式首选 publickey(公钥), 可选: publickey,gssapi-keyex,gssapi-with-mic,password</span></span><br><span class="line">  PreferredAuthentications publickey</span><br><span class="line">  User git <span class="comment"># ssh [Host] === ssh [User]@[HostName]</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="4-4、测试连接"><a href="#4-4、测试连接" class="headerlink" title="4.4、测试连接"></a>4.4、测试连接</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">xiao@LAPTOP-L6TI0438 MINGW64 ~/.ssh</span><br><span class="line">ssh -T gitagitcode.net</span><br><span class="line">Welcome to GitLab,@heyYouU!</span><br><span class="line">xiao@LAPTOP-L6TI0438 MINGW64 ~/.ssh</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>相信看完上面的讲解，会对ssh理解的更清除一点。So，快来更换 ssh 试试吧</p>
+<p><strong>连接远程仓库可以选择https，也可以选择ssh</strong></p>
+<p>区别：</p>
+<ol>
+<li><p>https 连接有文件传输大小限制，ssh没有</p>
+</li>
+<li><p>ssh传输速度比https协议快</p>
+</li>
+<li><p>https 连接提交代码的时候需要输入账户密码登录，ssh则是以公私钥加解密随机数的方式免密登录</p>
+</li>
+</ol>
+<p>连接仓库的方式可以转换，如： https 转成 ssh，比较简单，不作介绍。</p>
+<p>SSH东西超多的，光 SSH 配置选项就几十个，本文抛砖引玉，大家可以继续往下探索🎉🎉</p>
+<p>参考文档：</p>
+<ul>
+<li><p><a href="https://www.digitalocean.com/community/tutorials/how-to-configure-custom-connection-options-for-your-ssh-client">https://www.digitalocean.com/community/tutorials/how-to-configure-custom-connection-options-for-your-ssh-client</a></p>
+</li>
+<li><p><a href="http://www.bjpowernode.com/hot/2664.html">http://www.bjpowernode.com/hot/2664.html</a></p>
+</li>
+</ul>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>SSH</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>捕获404页面，并重定向页面</title>
     <url>/posts/3730822077.html</url>
     <content><![CDATA[<html><head></head><body><p>话不多说，直接上代码：</p>
@@ -3434,6 +3522,35 @@
       </tags>
   </entry>
   <entry>
+    <title>看了的，没看的书</title>
+    <url>/posts/2212813940.html</url>
+    <content><![CDATA[<html><head></head><body><p>书籍是通往智慧的阶梯。</p>
+<p>获得的宝箱就要打开，别舍不得拆，抓住重点！</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/633e989516f2c2beb1d0fe46.jpg"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/633e992616f2c2beb1d22a90.jpg"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/633e993116f2c2beb1d24935.jpg"></p>
+<p>这些书差不多全是这将近两年的时间里买的。其实从书本里得到的理论知识我现在基本上全忘了，留下来的都是实操经验。可见实操是多么的重要，而且在自己动手练习的过程中，还要不断尝试总结、记录学习历程。</p>
+<p>话说回来，卖二手书是真的便宜，大概连都废纸都不如，一本react技术栈，一毛钱一本，what fuck?!</p>
+<p>其实我想卖的是那种基本没什么太多干货的书，一看这么便宜，索性都留着吧。</p>
+<blockquote>
+<p>我说我的 HTTP权威指南 去哪了，找了好久没找到，昨天收拾电脑，忽然发现在电脑下面垫着🤣🤣</p>
+</blockquote>
+<p>喜欢读书，在上海那几年喜欢读“无用之书”（历史、文学、小说，技能相关的书籍也买了些许），到现在也基本忘了看过的书了，还是要学以致用，以用为学。</p>
+<p>不问收获，但问耕耘。自主反思，归纳总结，把知识内化。</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>书籍</category>
+      </categories>
+      <tags>
+        <tag>书籍</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>移动端touch拖动事件和click事件冲突问题解决</title>
     <url>/posts/372820594.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -3498,35 +3615,6 @@
       </categories>
       <tags>
         <tag>TouchEvent</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>看了的，没看的书</title>
-    <url>/posts/2212813940.html</url>
-    <content><![CDATA[<html><head></head><body><p>书籍是通往智慧的阶梯。</p>
-<p>获得的宝箱就要打开，别舍不得拆，抓住重点！</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/633e989516f2c2beb1d0fe46.jpg"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/633e992616f2c2beb1d22a90.jpg"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/633e993116f2c2beb1d24935.jpg"></p>
-<p>这些书差不多全是这将近两年的时间里买的。其实从书本里得到的理论知识我现在基本上全忘了，留下来的都是实操经验。可见实操是多么的重要，而且在自己动手练习的过程中，还要不断尝试总结、记录学习历程。</p>
-<p>话说回来，卖二手书是真的便宜，大概连都废纸都不如，一本react技术栈，一毛钱一本，what fuck?!</p>
-<p>其实我想卖的是那种基本没什么太多干货的书，一看这么便宜，索性都留着吧。</p>
-<blockquote>
-<p>我说我的 HTTP权威指南 去哪了，找了好久没找到，昨天收拾电脑，忽然发现在电脑下面垫着🤣🤣</p>
-</blockquote>
-<p>喜欢读书，在上海那几年喜欢读“无用之书”（历史、文学、小说，技能相关的书籍也买了些许），到现在也基本忘了看过的书了，还是要学以致用，以用为学。</p>
-<p>不问收获，但问耕耘。自主反思，归纳总结，把知识内化。</p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>书籍</category>
-      </categories>
-      <tags>
-        <tag>书籍</tag>
       </tags>
   </entry>
   <entry>
