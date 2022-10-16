@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Actions</title>
-    <url>/posts/3405105267.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>持续集成、持续部署</p>
-</body></html>]]></content>
-  </entry>
-  <entry>
     <title>2022年中秋佳节，于梦开始的地方</title>
     <url>/posts/4798453.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -43,150 +37,10 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker | Compose创建mysql容器</title>
-    <url>/posts/2048262040.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>本文通过<code>Docker Compose</code>来创建<code>mysql</code>容器</p>
-</blockquote>
-<h2 id="在linux服务器上创建文件，用于管理容器"><a href="#在linux服务器上创建文件，用于管理容器" class="headerlink" title="在linux服务器上创建文件，用于管理容器"></a>在linux服务器上创建文件，用于管理容器</h2><ul>
-<li>mkdir docker-mysql</li>
-<li>cd docker-mysql</li>
-<li>vim docker-compose.yml  #写入如下内容</li>
-</ul>
-<p><code>docker-compose.yml</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">version: <span class="string">"3"</span></span><br><span class="line">services:</span><br><span class="line">  mysqldb:</span><br><span class="line">    image: mysql:5.7</span><br><span class="line">    restart: always</span><br><span class="line">    container_name: mysql57</span><br><span class="line">    ports:</span><br><span class="line">      - 3310:3306</span><br><span class="line">    volumes:</span><br><span class="line">      - /var/vol_dockers/mysqldb/conf:/etc/mysql/conf.d</span><br><span class="line">      - /var/vol_dockers/mysqldb/data:/var/lib/mysql</span><br><span class="line">    environment:</span><br><span class="line">      MYSQL_PSAAWORD: PSAAWORD</span><br><span class="line">      MYSQL_ROOT_PASSWORD: PSAAWORD</span><br><span class="line">      MYSQL_USER: root</span><br><span class="line">      MYSQL_DATABASE: database</span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p>记得防火墙要开放3306、3310端口</p>
-</blockquote>
-<h2 id="创建启停脚本文件"><a href="#创建启停脚本文件" class="headerlink" title="创建启停脚本文件"></a>创建启停脚本文件</h2><ul>
-<li><p>vim start</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>vim restart</p>
-</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose restart</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>vim stop</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose stop</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="修改脚本文件权限"><a href="#修改脚本文件权限" class="headerlink" title="修改脚本文件权限"></a>修改脚本文件权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 777 st* restart</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450d9c16f2c2beb1fc717d.jpg"></p>
-<h2 id="启动mysql容器"><a href="#启动mysql容器" class="headerlink" title="启动mysql容器"></a>启动<code>mysql</code>容器</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./start</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>查看容器</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450e0116f2c2beb1fd0442.jpg"></p>
-<h2 id="mysql数据库基本配置"><a href="#mysql数据库基本配置" class="headerlink" title="mysql数据库基本配置"></a>mysql数据库基本配置</h2><ol>
-<li>创建MySql用户</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">CREATE USER dbadmin@localhost IDENTIFIED BY <span class="string">'pwd'</span>;</span><br></pre></td></tr></tbody></table></figure>
-
-<p><code>dbadmin@localhost</code>，表示只允许<code>localhost</code>环境的<code>dbadmin</code>用户登录</p>
-<ol start="2">
-<li>设置可访问的主机</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">update user <span class="built_in">set</span> host = <span class="string">'%'</span> <span class="built_in">where</span> user = <span class="string">'dbadmin'</span>;</span><br></pre></td></tr></tbody></table></figure>
-
-<p>% 表示接受所有主机ip访问</p>
-<ol start="3">
-<li>最后刷新生效</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">flush privileges;</span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>整体步骤：</strong></p>
-<p>1、连接服务器: mysql -u root -p</p>
-<p>2、看当前所有数据库：show databases;</p>
-<p>3、进入mysql数据库：use mysql;</p>
-<p>4、查看mysql数据库中所有的表：show tables;</p>
-<p>5、查看user表中的数据：select Host, User,Password from user;</p>
-<p>6、修改user表中的Host: update user set Host=’%’ where User=’root’;</p>
-<p>7、最后刷新一下：flush privileges;</p>
-<p><strong>客户端连接</strong></p>
-<p>这里我使用的是<code>SQLyog</code>工具连接<code>MySQL</code>数据库</p>
-<p><code>sqlyog</code>连接服务器的<code>3310</code>端口，<code>3310</code>端口映射<code>MySQL</code>容器的<code>3306</code>端口。</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450db816f2c2beb1fc98ab.jpg"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450def16f2c2beb1fce7fa.jpg"></p>
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+    <title>Actions</title>
+    <url>/posts/3405105267.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>持续集成、持续部署</p>
 </body></html>]]></content>
-      <categories>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>Docker MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Docker | dockerfile构建centos镜像，以及CMD和ENTRYPOINT的区别</title>
-    <url>/posts/1048738116.html</url>
-    <content><![CDATA[<html><head></head><body><h1 id="构建自己的centos镜像"><a href="#构建自己的centos镜像" class="headerlink" title="构建自己的centos镜像"></a>构建自己的centos镜像</h1><p><code>docker pull centos</code>下载下来的镜像都是基础版本，缺少很多常用的命令功能，比如：<code>ll</code>、<code>vim</code>等等，</p>
-<p>下面介绍制作一个功能较全的自己的centos镜像。</p>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1、编写dockerfile文件"><a href="#1、编写dockerfile文件" class="headerlink" title="1、编写dockerfile文件"></a>1、编写dockerfile文件</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER xiao&lt;example@163.com&gt;</span><br><span class="line">ENV MYPATH /usr/local</span><br><span class="line">WORKDIR <span class="variable">$MYPATH</span></span><br><span class="line"></span><br><span class="line">RUN yum -y install vim       <span class="comment"># vim命令</span></span><br><span class="line">RUN yum -y install net-tools <span class="comment"># ifconfig命令</span></span><br><span class="line"></span><br><span class="line">EXPOSE 80</span><br><span class="line">CMD <span class="built_in">echo</span> <span class="variable">$MYPATH</span></span><br><span class="line">CMD <span class="built_in">echo</span> <span class="string">"---end--"</span></span><br><span class="line">CMD /bin/bash</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="2、构建镜像"><a href="#2、构建镜像" class="headerlink" title="2、构建镜像"></a>2、构建镜像</h3><ul>
-<li><p>-f  file 指定dockerfile文件的路径</p>
-</li>
-<li><p>-t  tag  指定name:tag</p>
-</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -f ./mydockerfile -t mycentos:0.1 .</span><br><span class="line"></span><br><span class="line">Successfully built e7527f97f78a</span><br><span class="line">Successfully tagged mycentos:0.1</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="3、测试运行"><a href="#3、测试运行" class="headerlink" title="3、测试运行"></a>3、测试运行</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker images</span><br><span class="line">docker run -it mycentos:0.1</span><br></pre></td></tr></tbody></table></figure>
-
-<p>可以看到进入容器之后，直接就是在 <code>/usr/local</code> 目录下，是因为<code>dockerfile</code>配置的<code>WORKDIR</code></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92ce16f2c2beb1726bca.jpg"></p>
-<p>这时，<code>ifconfig</code>、<code>vim</code>命令都可以使用了</p>
-<h3 id="4、查看镜像构建历史记录"><a href="#4、查看镜像构建历史记录" class="headerlink" title="4、查看镜像构建历史记录"></a>4、查看镜像构建历史记录</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">history</span> imageID</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92e316f2c2beb1729aca.jpg"></p>
-<h1 id="CMD和ENTRYPOINT的区别"><a href="#CMD和ENTRYPOINT的区别" class="headerlink" title="CMD和ENTRYPOINT的区别"></a>CMD和ENTRYPOINT的区别</h1><h2 id="编写CMD测试dockerfile文件"><a href="#编写CMD测试dockerfile文件" class="headerlink" title="编写CMD测试dockerfile文件"></a>编写CMD测试dockerfile文件</h2><ol>
-<li>编写dockerfile文件</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">CMD [<span class="string">"ls"</span>, <span class="string">"-a"</span>]</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>构建镜像</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -f ./dockerfile -t cmd-test .</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="3">
-<li>启动镜像</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run imageID/iamgeName</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92fb16f2c2beb172c300.jpg"></p>
-<p>测试发现，启动镜像时追加的命令替换了<code>CMD</code>命令，如下图所示:</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a930916f2c2beb172d924.jpg"></p>
-<h2 id="编写ENTRYPOINT测试dockerfile文件"><a href="#编写ENTRYPOINT测试dockerfile文件" class="headerlink" title="编写ENTRYPOINT测试dockerfile文件"></a>编写ENTRYPOINT测试dockerfile文件</h2><p>每个<code>Dockerfile</code>只能有一个<code>ENTRYPOINT</code>，如果指定了多个，只有最后一个被执行,而且一定会被执行</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">ENTRYPOINT [<span class="string">"ls"</span>, <span class="string">"-a"</span>]</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># nginx 镜像</span></span><br><span class="line">ENTRYPOINT [ <span class="string">"/usr/sbin/nginx"</span>, <span class="string">"-g"</span>, <span class="string">"daemon off;"</span> ]</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a931916f2c2beb1731507.jpg"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
-<li><code>CMD</code>命令会被启动容器时追加的命令替换执行，</li>
-</ol>
-<p>2.<code>ENTRYPOINT</code>命令不会被启动容器时追加的命令替换，而是合并执行</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a932b16f2c2beb1736e15.jpg"></p>
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-      </tags>
   </entry>
   <entry>
     <title>D8调试工具——jsvu的使用细则</title>
@@ -407,47 +261,140 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker | 制作tomcat镜像并部署项目</title>
-    <url>/posts/2106196415.html</url>
+    <title>Docker | Compose创建mysql容器</title>
+    <url>/posts/2048262040.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
-<p>本文讲解如何制作自己的tomcat镜像，并使用tomcat部署项目</p>
+<p>本文通过<code>Docker Compose</code>来创建<code>mysql</code>容器</p>
 </blockquote>
-<h2 id="原料准备："><a href="#原料准备：" class="headerlink" title="原料准备："></a>原料准备：</h2><p>tomcat、jdk安装包，dockerfile文件</p>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1、准备压缩包"><a href="#1、准备压缩包" class="headerlink" title="1、准备压缩包"></a>1、准备压缩包</h3><p>jdk-8u301-linux-x64.tar.gz -&gt; jdk1.8.0_301</p>
-<p>apache-tomcat-7.0.107.tar.gz -&gt; apache-tomcat-7.0.107</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e93f16f2c2beb17ac00e.jpg"></p>
-<h3 id="2、编写dockerfile文件"><a href="#2、编写dockerfile文件" class="headerlink" title="2、编写dockerfile文件"></a>2、编写dockerfile文件</h3><blockquote>
-<p>官方指定命名<code>Dockerfile</code>，这样构建的时候不用加<code>-f</code>参数指定文件</p>
+<h2 id="在linux服务器上创建文件，用于管理容器"><a href="#在linux服务器上创建文件，用于管理容器" class="headerlink" title="在linux服务器上创建文件，用于管理容器"></a>在linux服务器上创建文件，用于管理容器</h2><ul>
+<li>mkdir docker-mysql</li>
+<li>cd docker-mysql</li>
+<li>vim docker-compose.yml  #写入如下内容</li>
+</ul>
+<p><code>docker-compose.yml</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">version: <span class="string">"3"</span></span><br><span class="line">services:</span><br><span class="line">  mysqldb:</span><br><span class="line">    image: mysql:5.7</span><br><span class="line">    restart: always</span><br><span class="line">    container_name: mysql57</span><br><span class="line">    ports:</span><br><span class="line">      - 3310:3306</span><br><span class="line">    volumes:</span><br><span class="line">      - /var/vol_dockers/mysqldb/conf:/etc/mysql/conf.d</span><br><span class="line">      - /var/vol_dockers/mysqldb/data:/var/lib/mysql</span><br><span class="line">    environment:</span><br><span class="line">      MYSQL_PSAAWORD: PSAAWORD</span><br><span class="line">      MYSQL_ROOT_PASSWORD: PSAAWORD</span><br><span class="line">      MYSQL_USER: root</span><br><span class="line">      MYSQL_DATABASE: database</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>记得防火墙要开放3306、3310端口</p>
 </blockquote>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER xiao&lt;find_onepiece@163.com&gt;</span><br><span class="line"></span><br><span class="line">COPY readme.txt /usr/local/readme.txt</span><br><span class="line"></span><br><span class="line">ADD jdk-8u301-linux-x64.tar.gz /usr/local</span><br><span class="line">ADD apache-tomcat-7.0.107.tar.gz /usr/local</span><br><span class="line"></span><br><span class="line">RUN yum -y install vim</span><br><span class="line"></span><br><span class="line">ENV MYPATH /usr/local</span><br><span class="line"></span><br><span class="line">WORKDIR <span class="variable">$MYPATH</span></span><br><span class="line">ENV JAVA_HOME /usr/local/jdk1.8.0_301</span><br><span class="line">ENV CLASSPATH <span class="variable">$JAVA_HOME</span>/lib/dt.jar:<span class="variable">$JAVA_HOME</span>/lib/tools.jar</span><br><span class="line">ENV CATALINA_HOME /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV CATALINE_BASH /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV PATH <span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$CATALINA_HOME</span>/lib:<span class="variable">$CATALINE_HOME</span>/bin</span><br><span class="line"></span><br><span class="line">EXPOSE 8080</span><br><span class="line"></span><br><span class="line">CMD /usr/local/apache-tomcat-7.0.107/bin/startup.sh &amp;&amp; <span class="built_in">tail</span> -f /usr/local/apache-tomcat-7.0.107/bin/logs/catalina.out</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="3、执行构建"><a href="#3、执行构建" class="headerlink" title="3、执行构建"></a>3、执行构建</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -t diytomcat . <span class="comment"># 自动寻找Dockerfile文件</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="创建启停脚本文件"><a href="#创建启停脚本文件" class="headerlink" title="创建启停脚本文件"></a>创建启停脚本文件</h2><ul>
+<li><p>vim start</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>vim restart</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose restart</span><br></pre></td></tr></tbody></table></figure>
 
-<p><strong>构建成功:</strong></p>
-<p>Successfully built e68ad8caa2a4</p>
-<p>Successfully tagged diytomcat:latest</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e96716f2c2beb17b0059.jpg"></p>
-<h3 id="4、启动容器"><a href="#4、启动容器" class="headerlink" title="4、启动容器"></a>4、启动容器</h3><p><code>/webapps/test</code>  部署的项目路径，浏览器访问<code>ip:port/test</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it -p 9090:8080 --name xiaoTomcat -v /home/xiao/build/tomcat/test:/usr/local/apache-tomcat-7.0.107/webapps/test -v /home/xiao/build/tomcat/tomcatlogs/:/usr/local/apache-tomcat-7.0.107/logs diytomcat</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li>vim stop</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose stop</span><br></pre></td></tr></tbody></table></figure>
 
-<h3 id="5、访问查看"><a href="#5、访问查看" class="headerlink" title="5、访问查看"></a>5、访问查看</h3><p>数据卷挂载成功</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e97c16f2c2beb17b2050.jpg"></p>
-<h3 id="6、发布项目"><a href="#6、发布项目" class="headerlink" title="6、发布项目"></a>6、发布项目</h3><p>已经挂载了数据卷，所以编写宿主机的项目文件就可以了</p>
-<p>在挂载路径 <code>/home/xiao/build/tomcat/test</code> 下</p>
-<ol>
-<li>新建文件 <code>web.xml</code>，内容如下：</li>
+<h2 id="修改脚本文件权限"><a href="#修改脚本文件权限" class="headerlink" title="修改脚本文件权限"></a>修改脚本文件权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 777 st* restart</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450d9c16f2c2beb1fc717d.jpg"></p>
+<h2 id="启动mysql容器"><a href="#启动mysql容器" class="headerlink" title="启动mysql容器"></a>启动<code>mysql</code>容器</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./start</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>查看容器</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450e0116f2c2beb1fd0442.jpg"></p>
+<h2 id="mysql数据库基本配置"><a href="#mysql数据库基本配置" class="headerlink" title="mysql数据库基本配置"></a>mysql数据库基本配置</h2><ol>
+<li>创建MySql用户</li>
 </ol>
-<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">version</span>=<span class="string">"2.4"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">CREATE USER dbadmin@localhost IDENTIFIED BY <span class="string">'pwd'</span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>dbadmin@localhost</code>，表示只允许<code>localhost</code>环境的<code>dbadmin</code>用户登录</p>
+<ol start="2">
+<li>设置可访问的主机</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">update user <span class="built_in">set</span> host = <span class="string">'%'</span> <span class="built_in">where</span> user = <span class="string">'dbadmin'</span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>% 表示接受所有主机ip访问</p>
+<ol start="3">
+<li>最后刷新生效</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">flush privileges;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>整体步骤：</strong></p>
+<p>1、连接服务器: mysql -u root -p</p>
+<p>2、看当前所有数据库：show databases;</p>
+<p>3、进入mysql数据库：use mysql;</p>
+<p>4、查看mysql数据库中所有的表：show tables;</p>
+<p>5、查看user表中的数据：select Host, User,Password from user;</p>
+<p>6、修改user表中的Host: update user set Host=’%’ where User=’root’;</p>
+<p>7、最后刷新一下：flush privileges;</p>
+<p><strong>客户端连接</strong></p>
+<p>这里我使用的是<code>SQLyog</code>工具连接<code>MySQL</code>数据库</p>
+<p><code>sqlyog</code>连接服务器的<code>3310</code>端口，<code>3310</code>端口映射<code>MySQL</code>容器的<code>3306</code>端口。</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450db816f2c2beb1fc98ab.jpg"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450def16f2c2beb1fce7fa.jpg"></p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker | dockerfile构建centos镜像，以及CMD和ENTRYPOINT的区别</title>
+    <url>/posts/1048738116.html</url>
+    <content><![CDATA[<html><head></head><body><h1 id="构建自己的centos镜像"><a href="#构建自己的centos镜像" class="headerlink" title="构建自己的centos镜像"></a>构建自己的centos镜像</h1><p><code>docker pull centos</code>下载下来的镜像都是基础版本，缺少很多常用的命令功能，比如：<code>ll</code>、<code>vim</code>等等，</p>
+<p>下面介绍制作一个功能较全的自己的centos镜像。</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1、编写dockerfile文件"><a href="#1、编写dockerfile文件" class="headerlink" title="1、编写dockerfile文件"></a>1、编写dockerfile文件</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER xiao&lt;example@163.com&gt;</span><br><span class="line">ENV MYPATH /usr/local</span><br><span class="line">WORKDIR <span class="variable">$MYPATH</span></span><br><span class="line"></span><br><span class="line">RUN yum -y install vim       <span class="comment"># vim命令</span></span><br><span class="line">RUN yum -y install net-tools <span class="comment"># ifconfig命令</span></span><br><span class="line"></span><br><span class="line">EXPOSE 80</span><br><span class="line">CMD <span class="built_in">echo</span> <span class="variable">$MYPATH</span></span><br><span class="line">CMD <span class="built_in">echo</span> <span class="string">"---end--"</span></span><br><span class="line">CMD /bin/bash</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="2、构建镜像"><a href="#2、构建镜像" class="headerlink" title="2、构建镜像"></a>2、构建镜像</h3><ul>
+<li><p>-f  file 指定dockerfile文件的路径</p>
+</li>
+<li><p>-t  tag  指定name:tag</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -f ./mydockerfile -t mycentos:0.1 .</span><br><span class="line"></span><br><span class="line">Successfully built e7527f97f78a</span><br><span class="line">Successfully tagged mycentos:0.1</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="3、测试运行"><a href="#3、测试运行" class="headerlink" title="3、测试运行"></a>3、测试运行</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker images</span><br><span class="line">docker run -it mycentos:0.1</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可以看到进入容器之后，直接就是在 <code>/usr/local</code> 目录下，是因为<code>dockerfile</code>配置的<code>WORKDIR</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92ce16f2c2beb1726bca.jpg"></p>
+<p>这时，<code>ifconfig</code>、<code>vim</code>命令都可以使用了</p>
+<h3 id="4、查看镜像构建历史记录"><a href="#4、查看镜像构建历史记录" class="headerlink" title="4、查看镜像构建历史记录"></a>4、查看镜像构建历史记录</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">history</span> imageID</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92e316f2c2beb1729aca.jpg"></p>
+<h1 id="CMD和ENTRYPOINT的区别"><a href="#CMD和ENTRYPOINT的区别" class="headerlink" title="CMD和ENTRYPOINT的区别"></a>CMD和ENTRYPOINT的区别</h1><h2 id="编写CMD测试dockerfile文件"><a href="#编写CMD测试dockerfile文件" class="headerlink" title="编写CMD测试dockerfile文件"></a>编写CMD测试dockerfile文件</h2><ol>
+<li>编写dockerfile文件</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">CMD [<span class="string">"ls"</span>, <span class="string">"-a"</span>]</span><br></pre></td></tr></tbody></table></figure>
 
 <ol start="2">
-<li>新建文件 <code>index.jsp</code>，内容如下：</li>
+<li>构建镜像</li>
 </ol>
-<figure class="highlight html"><table><tbody><tr><td class="code"><pre><span class="line">&lt;%@ page contentType="text/html;charset=UTF-8" language="java" %&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Hello World!<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>xiao<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">&lt;%</span><br><span class="line">System.out.println("my tomcat project logs");</span><br><span class="line">%&gt;</span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -f ./dockerfile -t cmd-test .</span><br></pre></td></tr></tbody></table></figure>
 
-<h3 id="7、浏览器访问"><a href="#7、浏览器访问" class="headerlink" title="7、浏览器访问"></a>7、浏览器访问</h3><p>url：<code>ip:port/test</code></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9ae16f2c2beb17b6a64.jpg"></p>
-<h3 id="8、查看日志卷"><a href="#8、查看日志卷" class="headerlink" title="8、查看日志卷"></a>8、查看日志卷</h3><p><code>tail -f catalina.out</code></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9bd16f2c2beb17b8250.jpg"></p>
-<h2 id="完成从构建镜像到部署项目🎈🎈"><a href="#完成从构建镜像到部署项目🎈🎈" class="headerlink" title="完成从构建镜像到部署项目🎈🎈"></a>完成从构建镜像到部署项目🎈🎈</h2><hr>
+<ol start="3">
+<li>启动镜像</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run imageID/iamgeName</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92fb16f2c2beb172c300.jpg"></p>
+<p>测试发现，启动镜像时追加的命令替换了<code>CMD</code>命令，如下图所示:</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a930916f2c2beb172d924.jpg"></p>
+<h2 id="编写ENTRYPOINT测试dockerfile文件"><a href="#编写ENTRYPOINT测试dockerfile文件" class="headerlink" title="编写ENTRYPOINT测试dockerfile文件"></a>编写ENTRYPOINT测试dockerfile文件</h2><p>每个<code>Dockerfile</code>只能有一个<code>ENTRYPOINT</code>，如果指定了多个，只有最后一个被执行,而且一定会被执行</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">ENTRYPOINT [<span class="string">"ls"</span>, <span class="string">"-a"</span>]</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># nginx 镜像</span></span><br><span class="line">ENTRYPOINT [ <span class="string">"/usr/sbin/nginx"</span>, <span class="string">"-g"</span>, <span class="string">"daemon off;"</span> ]</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a931916f2c2beb1731507.jpg"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li><code>CMD</code>命令会被启动容器时追加的命令替换执行，</li>
+</ol>
+<p>2.<code>ENTRYPOINT</code>命令不会被启动容器时追加的命令替换，而是合并执行</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a932b16f2c2beb1736e15.jpg"></p>
+<hr>
 <p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
 <p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
 <p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
@@ -457,7 +404,6 @@
       </categories>
       <tags>
         <tag>Docker</tag>
-        <tag>tomcat</tag>
       </tags>
   </entry>
   <entry>
@@ -566,6 +512,60 @@
       </tags>
   </entry>
   <entry>
+    <title>Docker | 制作tomcat镜像并部署项目</title>
+    <url>/posts/2106196415.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本文讲解如何制作自己的tomcat镜像，并使用tomcat部署项目</p>
+</blockquote>
+<h2 id="原料准备："><a href="#原料准备：" class="headerlink" title="原料准备："></a>原料准备：</h2><p>tomcat、jdk安装包，dockerfile文件</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1、准备压缩包"><a href="#1、准备压缩包" class="headerlink" title="1、准备压缩包"></a>1、准备压缩包</h3><p>jdk-8u301-linux-x64.tar.gz -&gt; jdk1.8.0_301</p>
+<p>apache-tomcat-7.0.107.tar.gz -&gt; apache-tomcat-7.0.107</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e93f16f2c2beb17ac00e.jpg"></p>
+<h3 id="2、编写dockerfile文件"><a href="#2、编写dockerfile文件" class="headerlink" title="2、编写dockerfile文件"></a>2、编写dockerfile文件</h3><blockquote>
+<p>官方指定命名<code>Dockerfile</code>，这样构建的时候不用加<code>-f</code>参数指定文件</p>
+</blockquote>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER xiao&lt;find_onepiece@163.com&gt;</span><br><span class="line"></span><br><span class="line">COPY readme.txt /usr/local/readme.txt</span><br><span class="line"></span><br><span class="line">ADD jdk-8u301-linux-x64.tar.gz /usr/local</span><br><span class="line">ADD apache-tomcat-7.0.107.tar.gz /usr/local</span><br><span class="line"></span><br><span class="line">RUN yum -y install vim</span><br><span class="line"></span><br><span class="line">ENV MYPATH /usr/local</span><br><span class="line"></span><br><span class="line">WORKDIR <span class="variable">$MYPATH</span></span><br><span class="line">ENV JAVA_HOME /usr/local/jdk1.8.0_301</span><br><span class="line">ENV CLASSPATH <span class="variable">$JAVA_HOME</span>/lib/dt.jar:<span class="variable">$JAVA_HOME</span>/lib/tools.jar</span><br><span class="line">ENV CATALINA_HOME /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV CATALINE_BASH /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV PATH <span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$CATALINA_HOME</span>/lib:<span class="variable">$CATALINE_HOME</span>/bin</span><br><span class="line"></span><br><span class="line">EXPOSE 8080</span><br><span class="line"></span><br><span class="line">CMD /usr/local/apache-tomcat-7.0.107/bin/startup.sh &amp;&amp; <span class="built_in">tail</span> -f /usr/local/apache-tomcat-7.0.107/bin/logs/catalina.out</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="3、执行构建"><a href="#3、执行构建" class="headerlink" title="3、执行构建"></a>3、执行构建</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -t diytomcat . <span class="comment"># 自动寻找Dockerfile文件</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>构建成功:</strong></p>
+<p>Successfully built e68ad8caa2a4</p>
+<p>Successfully tagged diytomcat:latest</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e96716f2c2beb17b0059.jpg"></p>
+<h3 id="4、启动容器"><a href="#4、启动容器" class="headerlink" title="4、启动容器"></a>4、启动容器</h3><p><code>/webapps/test</code>  部署的项目路径，浏览器访问<code>ip:port/test</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it -p 9090:8080 --name xiaoTomcat -v /home/xiao/build/tomcat/test:/usr/local/apache-tomcat-7.0.107/webapps/test -v /home/xiao/build/tomcat/tomcatlogs/:/usr/local/apache-tomcat-7.0.107/logs diytomcat</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="5、访问查看"><a href="#5、访问查看" class="headerlink" title="5、访问查看"></a>5、访问查看</h3><p>数据卷挂载成功</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e97c16f2c2beb17b2050.jpg"></p>
+<h3 id="6、发布项目"><a href="#6、发布项目" class="headerlink" title="6、发布项目"></a>6、发布项目</h3><p>已经挂载了数据卷，所以编写宿主机的项目文件就可以了</p>
+<p>在挂载路径 <code>/home/xiao/build/tomcat/test</code> 下</p>
+<ol>
+<li>新建文件 <code>web.xml</code>，内容如下：</li>
+</ol>
+<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">version</span>=<span class="string">"2.4"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>新建文件 <code>index.jsp</code>，内容如下：</li>
+</ol>
+<figure class="highlight html"><table><tbody><tr><td class="code"><pre><span class="line">&lt;%@ page contentType="text/html;charset=UTF-8" language="java" %&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Hello World!<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>xiao<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">&lt;%</span><br><span class="line">System.out.println("my tomcat project logs");</span><br><span class="line">%&gt;</span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="7、浏览器访问"><a href="#7、浏览器访问" class="headerlink" title="7、浏览器访问"></a>7、浏览器访问</h3><p>url：<code>ip:port/test</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9ae16f2c2beb17b6a64.jpg"></p>
+<h3 id="8、查看日志卷"><a href="#8、查看日志卷" class="headerlink" title="8、查看日志卷"></a>8、查看日志卷</h3><p><code>tail -f catalina.out</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9bd16f2c2beb17b8250.jpg"></p>
+<h2 id="完成从构建镜像到部署项目🎈🎈"><a href="#完成从构建镜像到部署项目🎈🎈" class="headerlink" title="完成从构建镜像到部署项目🎈🎈"></a>完成从构建镜像到部署项目🎈🎈</h2><hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+        <tag>tomcat</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker | 发布镜像到镜像仓库</title>
     <url>/posts/2796165889.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -607,19 +607,19 @@
 <h3 id="解决push失败问题"><a href="#解决push失败问题" class="headerlink" title="解决push失败问题"></a>解决push失败问题</h3><p>增加一个tag, 重命名镜像</p>
 <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 增加tag，重命名镜像</span></span><br><span class="line">docker tag 24b3a476f143 xiaobluewhale/tomcat:1.0</span><br><span class="line">The push refers to repository [docker.io/xiaobluewhale/tomcat]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看镜像</span></span><br><span class="line">docker images</span><br><span class="line">REPOSITORY            TAG       IMAGE ID       CREATED        SIZE</span><br><span class="line">xiaobluewhale/tomcat   1.0       24b3a476f143   13 hours ago   680MB</span><br><span class="line">xiao/tomcat            1.0       24b3a476f143   13 hours ago   680MB</span><br><span class="line">xiao/tomcat            latest    24b3a476f143   13 hours ago   680MB</span><br><span class="line"></span><br><span class="line"><span class="comment"># 推送镜像</span></span><br><span class="line">docker push xiaobluewhale/tomcat:1.0</span><br></pre></td></tr></tbody></table></figure>
 
-<h3 id="提交成功"><a href="#提交成功" class="headerlink" title="提交成功"></a>提交成功</h3><p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f6cc75ec18514d3ba7ff544dccf7bb0e~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h3 id="提交成功"><a href="#提交成功" class="headerlink" title="提交成功"></a>提交成功</h3><p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634c984c16f2c2beb145f7bc.jpg"></p>
 <p>提交的时候也是按照镜像的层级提交的</p>
 <p>在个人DockerHub上查看推送成功的镜像</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cadf8b7d817040b594d74b7b2e68516b~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<h1 id="发布镜像到阿里云镜像仓库"><a href="#发布镜像到阿里云镜像仓库" class="headerlink" title="发布镜像到阿里云镜像仓库"></a>发布镜像到阿里云镜像仓库</h1><h2 id="1、登陆阿里云"><a href="#1、登陆阿里云" class="headerlink" title="1、登陆阿里云"></a>1、登陆阿里云</h2><h2 id="2、找到容器镜像服务，创建实例"><a href="#2、找到容器镜像服务，创建实例" class="headerlink" title="2、找到容器镜像服务，创建实例"></a>2、找到容器镜像服务，创建实例</h2><p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0c266a6cec64416f8f1b0408760698c9~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3a155eec193c4d49a020a439fdbf8823~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634c985b16f2c2beb14602fd.jpg"></p>
+<h1 id="发布镜像到阿里云镜像仓库"><a href="#发布镜像到阿里云镜像仓库" class="headerlink" title="发布镜像到阿里云镜像仓库"></a>发布镜像到阿里云镜像仓库</h1><h2 id="1、登陆阿里云"><a href="#1、登陆阿里云" class="headerlink" title="1、登陆阿里云"></a>1、登陆阿里云</h2><h2 id="2、找到容器镜像服务，创建实例"><a href="#2、找到容器镜像服务，创建实例" class="headerlink" title="2、找到容器镜像服务，创建实例"></a>2、找到容器镜像服务，创建实例</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634c986916f2c2beb1460b7d.jpg"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634c987a16f2c2beb14617bb.jpg"></p>
 <p>企业版需要付费购买（1个月741）</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7eb99badcdd44d56a28e78fec6d02eb4~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634c988c16f2c2beb14623ef.jpg"></p>
 <p>我选择创建<strong>个人实例</strong></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e1f26b49df014aea9df297b01c15658c~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<h2 id="3、创建命名空间（为了隔离）"><a href="#3、创建命名空间（为了隔离）" class="headerlink" title="3、创建命名空间（为了隔离）"></a>3、创建命名空间（为了隔离）</h2><p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a5ee9d6dca944b5c9fb0165facec1bf4~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634c989c16f2c2beb14632b8.jpg"></p>
+<h2 id="3、创建命名空间（为了隔离）"><a href="#3、创建命名空间（为了隔离）" class="headerlink" title="3、创建命名空间（为了隔离）"></a>3、创建命名空间（为了隔离）</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634c98ab16f2c2beb1463e3f.jpg"></p>
 <h2 id="4、创建镜像仓库"><a href="#4、创建镜像仓库" class="headerlink" title="4、创建镜像仓库"></a>4、创建镜像仓库</h2><p>本地</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4758825821c34116a9db89d764fffc38~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634c98ba16f2c2beb1464b58.jpg"></p>
 <h2 id="5、推送镜像"><a href="#5、推送镜像" class="headerlink" title="5、推送镜像"></a>5、推送镜像</h2><p>参考阿里云容器镜像指南</p>
 <ol>
 <li>登录</li>
@@ -636,11 +636,11 @@
 </ol>
 <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker push xiaobluewhale/tomcat:1.0</span><br><span class="line">The push refers to repository [docker.io/xiaobluewhale/tomcat]</span><br></pre></td></tr></tbody></table></figure>
 
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bd2027687f8d42a187133e950a9de233~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634c98cb16f2c2beb1465751.jpg"></p>
 <h2 id="6、阿里云查看镜像"><a href="#6、阿里云查看镜像" class="headerlink" title="6、阿里云查看镜像"></a>6、阿里云查看镜像</h2><p>imageID: <code>24b3a476f143</code></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/469b77f60ea1437b9c82efa3a7c8eb53~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634c98da16f2c2beb14662d9.jpg"></p>
 <p>也可以查看可视化的层信息</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/739b374050934dfe92da3502fe009a77~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634c98e716f2c2beb1466ce7.jpg"></p>
 <hr>
 <p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
 <p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
@@ -1812,120 +1812,6 @@
       </tags>
   </entry>
   <entry>
-    <title>React Native环境配置、初始化项目、打包安装到手机，以及开发小知识</title>
-    <url>/posts/252268106.html</url>
-    <content><![CDATA[<html><head></head><body><h1 id="1、前言"><a href="#1、前言" class="headerlink" title="1、前言"></a>1、前言</h1><p>环境：Win10 + Android</p>
-<p>已经在Windows电脑上安装好 <a href="https://nodejs.org/en/">Node</a>（v14+）、Git、Yarn、<br><a href="https://www.oracle.com/java/technologies/downloads/#java11">JDK</a>(v11)</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">javac -version</span><br><span class="line">javac 11.0.15.1</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">node -v</span><br><span class="line">v16.14.1</span><br></pre></td></tr></tbody></table></figure>
-<p>👉 <a href="https://www.react-native.cn/docs/next/environment-setup">官方文档</a></p>
-<h1 id="2、Android-Studio下载安装"><a href="#2、Android-Studio下载安装" class="headerlink" title="2、Android Studio下载安装"></a>2、Android Studio下载安装</h1><ul>
-<li><a href="https://developer.android.google.cn/studio/">下载地址</a></li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631855c416f2c2beb1e9e38c.png"></p>
-<h1 id="3、Android-SDK-下载安装"><a href="#3、Android-SDK-下载安装" class="headerlink" title="3、Android SDK 下载安装"></a>3、Android SDK 下载安装</h1><ul>
-<li>安装 android sdk</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318562016f2c2beb1ea4698.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318567d16f2c2beb1eab904.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318569116f2c2beb1eacfb0.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856a016f2c2beb1eae08f.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856be16f2c2beb1eb068f.png"></p>
-<h2 id="3-1、环境变量配置"><a href="#3-1、环境变量配置" class="headerlink" title="3.1、环境变量配置"></a>3.1、环境变量配置</h2><ul>
-<li><p>配置系统变量<br><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856cf16f2c2beb1eb1c1c.png"></p>
-</li>
-<li><p>Path 配置：</p>
-</li>
-</ul>
-<figure class="highlight haml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\platform-tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\emulator</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools\bin</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="4、Scrcpy-手机模拟器下载安装使用"><a href="#4、Scrcpy-手机模拟器下载安装使用" class="headerlink" title="4、Scrcpy 手机模拟器下载安装使用"></a>4、Scrcpy 手机模拟器下载安装使用</h1><ul>
-<li><a href="https://github.com/Genymobile/scrcpy">下载地址</a></li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856e916f2c2beb1eb3879.png"></p>
-<p>下载zip文件，解压，双击运行 <code>scrcpy.exe</code> 可执行文件即可在电脑上投影手机屏幕，如下图👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856fb16f2c2beb1eb4fb0.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318571216f2c2beb1eb7443.png" alt="image.png"></p>
-<blockquote>
-<p>运行可执行文件之前，使用<strong>数据线</strong>连接Android手机，进行开发者选项设置（不同的手机进入开发者模式略有差异，自行搜索，我用的是华为手机）</p>
-</blockquote>
-<ul>
-<li>电脑端查看连接设备<br><code>adb devices</code></li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">adb devices</span><br><span class="line">List of devices attached</span><br><span class="line">8TFDU18719000649        device</span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<p>adb 命令，在下载 <code>scrcpy</code> 的时候已经内置了</p>
-</blockquote>
-<h1 id="5、安装-React-Native"><a href="#5、安装-React-Native" class="headerlink" title="5、安装 React Native"></a>5、安装 React Native</h1><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm i react-native-cli -g</span><br><span class="line"></span><br><span class="line">$ react-native -v</span><br><span class="line">react-native-cli: 2.0.1</span><br><span class="line">react-native: n/a - not inside a React Native project directory</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="6、初始化项目"><a href="#6、初始化项目" class="headerlink" title="6、初始化项目"></a>6、初始化项目</h1><p>进入到自己的工作目录，执行下面的命令创建 react native 项目</p>
-<figure class="highlight actionscript"><table><tbody><tr><td class="code"><pre><span class="line">npx react-<span class="keyword">native</span> init AwesomeProject</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="7、运行项目安装软件到安卓机"><a href="#7、运行项目安装软件到安卓机" class="headerlink" title="7、运行项目安装软件到安卓机"></a>7、运行项目安装软件到安卓机</h1><h2 id="7-1、先用数据线连接手机和电脑，运行scrcpy-软件"><a href="#7-1、先用数据线连接手机和电脑，运行scrcpy-软件" class="headerlink" title="7.1、先用数据线连接手机和电脑，运行scrcpy 软件"></a>7.1、先用数据线连接手机和电脑，运行scrcpy 软件</h2><p>开发者选项配置修改，最终实现在电脑上可以投屏手机，并可以在电脑上操控手机</p>
-<h2 id="7-2、打开-android-studio-编辑器，运行项目"><a href="#7-2、打开-android-studio-编辑器，运行项目" class="headerlink" title="7.2、打开 android studio 编辑器，运行项目"></a>7.2、打开 android studio 编辑器，运行项目</h2><figure class="highlight asciidoc"><table><tbody><tr><td class="code"><pre><span class="line">npm run android</span><br><span class="line"></span><br><span class="line"><span class="section">or</span></span><br><span class="line"><span class="section">-------------------</span></span><br><span class="line">cd AwesomeProject</span><br><span class="line">yarn android</span><br><span class="line"># 或者</span><br><span class="line">yarn react-native run-android</span><br></pre></td></tr></tbody></table></figure>
-
-<p>运行的时候会在手机上弹窗 “是否统一安装软件”之类的提示，点击同意即可</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318572616f2c2beb1eb9161.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318573616f2c2beb1eba516.png"></p>
-<h2 id="7-3、adb-reverse-命令使用"><a href="#7-3、adb-reverse-命令使用" class="headerlink" title="7.3、adb reverse  命令使用"></a>7.3、adb reverse  命令使用</h2><p><a href="https://developer.android.google.cn/studio/command-line/adb?hl=zh-cn">adb 文档</a></p>
-<h4 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h4><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318574916f2c2beb1ebbc88.png"></p>
-<p>猜测是多设备连接受影响了，可以尝试重启手机解决<br>也可以尝试如下步骤： 启停 adb 服务器</p>
-<blockquote>
-<p>在某些情况下，您可能需要终止 adb 服务器进程，然后重启以解决问题（例如，如果 adb 不响应命令）。</p>
-<p>如需停止 adb 服务器，请使用 adb kill-server 命令。然后，您可以通过发出其他任何 adb 命令来重启服务器。</p>
-</blockquote>
-<figure class="highlight pgsql"><table><tbody><tr><td class="code"><pre><span class="line">adb kill-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">start</span>-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">reverse</span> tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><figure class="highlight apache"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attribute">adb</span> reverse tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>这条命令的意思是，Android允许我们通过ADB，把Android上的某个端口映射到电脑（adb forward），或者把电脑的某个端口映射到Android系统（adb reverse），在这里假设电脑上开启的服务，监听的端口为8081。Android手机通过USB连接电脑后，在终端直接执行<code>adb reverse tcp:8081 tcp:8081</code>，然后在手机中访问<code>127.0.0.1:8081</code>，就可以访问到电脑上启动的服务了。</p>
-<p>注意：</p>
-<ol>
-<li>必须是在连接数据线usb的前提下才能使用该方案进行代码调试。</li>
-<li>(Android 5.0 及以上)使用 adb reverse 命令，这个选项只能在 5.0 以上版本(API 21+)的安卓设备上使用。</li>
-</ol>
-<h1 id="8、react-native开发小知识"><a href="#8、react-native开发小知识" class="headerlink" title="8、react-native开发小知识"></a>8、react-native开发小知识</h1><h2 id="8-1、vscode-上代码飘红"><a href="#8-1、vscode-上代码飘红" class="headerlink" title="8.1、vscode 上代码飘红"></a>8.1、vscode 上代码飘红</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318575a16f2c2beb1ebd220.png"></p>
-<ul>
-<li>问题原因：</li>
-</ul>
-<p>VScode是默认解析ts的，但是不会默认识别 <a href="https://flow.org/en/docs/react/"><code>Flow</code></a>(<strong>静态类型检测工具</strong>)的语法，所以这种的代码会被解析成ts语法。</p>
-<ul>
-<li>解决方法：<br>快捷键<code>Ctrl+Shift+P</code>，输入<code>setting.json</code>，选择 首选项:打开设置(json)。</li>
-</ul>
-<p><code>settings.json</code></p>
-<figure class="highlight awk"><table><tbody><tr><td class="code"><pre><span class="line"><span class="regexp">//</span> <span class="string">"import type"</span> 声明只能在 TypeScript 文件中使用。</span><br><span class="line"><span class="string">"javascript.validate.enable"</span>: false,</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="8-2、npm-run-android-每次都需要在手机上重新安装软件包"><a href="#8-2、npm-run-android-每次都需要在手机上重新安装软件包" class="headerlink" title="8.2、npm run android 每次都需要在手机上重新安装软件包"></a>8.2、npm run android 每次都需要在手机上重新安装软件包</h2><p>开发者模式 -&gt; USB调试 -&gt; 监控ADB安装应用 -&gt; 关闭, 即可解决。</p>
-<h2 id="8-3、本地开发启动多个项目"><a href="#8-3、本地开发启动多个项目" class="headerlink" title="8.3、本地开发启动多个项目"></a>8.3、本地开发启动多个项目</h2><p>默认端口号是8081，通过指定不同的端口号来启动。</p>
-<figure class="highlight livecodeserver"><table><tbody><tr><td class="code"><pre><span class="line">react-native <span class="built_in">start</span> <span class="comment">--port=8082</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="8-4、修改软件包名称"><a href="#8-4、修改软件包名称" class="headerlink" title="8.4、修改软件包名称"></a>8.4、修改软件包名称</h2><ol>
-<li>修改配置文件<br>Android<br>修改配置文件里的 <code>app_name</code> 即可，重新 <code>yarn android</code> ，发现手机上软件的名称已修改成功。</li>
-</ol>
-<p>文件： <code>android\app\src\main\res\values\strings.xml</code></p>
-<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">string</span> <span class="attr">name</span>=<span class="string">"app_name"</span>&gt;</span>远点<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>react-native-rename 插件修改</li>
-</ol>
-<p>通过插件修改名字，必须是 使用 <code>react-native init xxx</code> 创建的项目</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 安装</span></span><br><span class="line">npm install react-native-rename -g</span><br><span class="line">or</span><br><span class="line">yarn global add react-native-rename</span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目根目录执行命令</span></span><br><span class="line">npx react-native-rename &lt;newName&gt;</span><br></pre></td></tr></tbody></table></figure>
-
-<p>修改完成。</p>
-<p>本篇完！后面继续分享如何调试react native项目。</p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>React Native</category>
-      </categories>
-      <tags>
-        <tag>React Native</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux操作系统学习（运维必会）</title>
     <url>/posts/1915044345.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -2106,6 +1992,120 @@
       </tags>
   </entry>
   <entry>
+    <title>React Native环境配置、初始化项目、打包安装到手机，以及开发小知识</title>
+    <url>/posts/252268106.html</url>
+    <content><![CDATA[<html><head></head><body><h1 id="1、前言"><a href="#1、前言" class="headerlink" title="1、前言"></a>1、前言</h1><p>环境：Win10 + Android</p>
+<p>已经在Windows电脑上安装好 <a href="https://nodejs.org/en/">Node</a>（v14+）、Git、Yarn、<br><a href="https://www.oracle.com/java/technologies/downloads/#java11">JDK</a>(v11)</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">javac -version</span><br><span class="line">javac 11.0.15.1</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">node -v</span><br><span class="line">v16.14.1</span><br></pre></td></tr></tbody></table></figure>
+<p>👉 <a href="https://www.react-native.cn/docs/next/environment-setup">官方文档</a></p>
+<h1 id="2、Android-Studio下载安装"><a href="#2、Android-Studio下载安装" class="headerlink" title="2、Android Studio下载安装"></a>2、Android Studio下载安装</h1><ul>
+<li><a href="https://developer.android.google.cn/studio/">下载地址</a></li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631855c416f2c2beb1e9e38c.png"></p>
+<h1 id="3、Android-SDK-下载安装"><a href="#3、Android-SDK-下载安装" class="headerlink" title="3、Android SDK 下载安装"></a>3、Android SDK 下载安装</h1><ul>
+<li>安装 android sdk</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318562016f2c2beb1ea4698.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318567d16f2c2beb1eab904.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318569116f2c2beb1eacfb0.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856a016f2c2beb1eae08f.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856be16f2c2beb1eb068f.png"></p>
+<h2 id="3-1、环境变量配置"><a href="#3-1、环境变量配置" class="headerlink" title="3.1、环境变量配置"></a>3.1、环境变量配置</h2><ul>
+<li><p>配置系统变量<br><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856cf16f2c2beb1eb1c1c.png"></p>
+</li>
+<li><p>Path 配置：</p>
+</li>
+</ul>
+<figure class="highlight haml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\platform-tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\emulator</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools\bin</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="4、Scrcpy-手机模拟器下载安装使用"><a href="#4、Scrcpy-手机模拟器下载安装使用" class="headerlink" title="4、Scrcpy 手机模拟器下载安装使用"></a>4、Scrcpy 手机模拟器下载安装使用</h1><ul>
+<li><a href="https://github.com/Genymobile/scrcpy">下载地址</a></li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856e916f2c2beb1eb3879.png"></p>
+<p>下载zip文件，解压，双击运行 <code>scrcpy.exe</code> 可执行文件即可在电脑上投影手机屏幕，如下图👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856fb16f2c2beb1eb4fb0.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318571216f2c2beb1eb7443.png" alt="image.png"></p>
+<blockquote>
+<p>运行可执行文件之前，使用<strong>数据线</strong>连接Android手机，进行开发者选项设置（不同的手机进入开发者模式略有差异，自行搜索，我用的是华为手机）</p>
+</blockquote>
+<ul>
+<li>电脑端查看连接设备<br><code>adb devices</code></li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">adb devices</span><br><span class="line">List of devices attached</span><br><span class="line">8TFDU18719000649        device</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>adb 命令，在下载 <code>scrcpy</code> 的时候已经内置了</p>
+</blockquote>
+<h1 id="5、安装-React-Native"><a href="#5、安装-React-Native" class="headerlink" title="5、安装 React Native"></a>5、安装 React Native</h1><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm i react-native-cli -g</span><br><span class="line"></span><br><span class="line">$ react-native -v</span><br><span class="line">react-native-cli: 2.0.1</span><br><span class="line">react-native: n/a - not inside a React Native project directory</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="6、初始化项目"><a href="#6、初始化项目" class="headerlink" title="6、初始化项目"></a>6、初始化项目</h1><p>进入到自己的工作目录，执行下面的命令创建 react native 项目</p>
+<figure class="highlight actionscript"><table><tbody><tr><td class="code"><pre><span class="line">npx react-<span class="keyword">native</span> init AwesomeProject</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="7、运行项目安装软件到安卓机"><a href="#7、运行项目安装软件到安卓机" class="headerlink" title="7、运行项目安装软件到安卓机"></a>7、运行项目安装软件到安卓机</h1><h2 id="7-1、先用数据线连接手机和电脑，运行scrcpy-软件"><a href="#7-1、先用数据线连接手机和电脑，运行scrcpy-软件" class="headerlink" title="7.1、先用数据线连接手机和电脑，运行scrcpy 软件"></a>7.1、先用数据线连接手机和电脑，运行scrcpy 软件</h2><p>开发者选项配置修改，最终实现在电脑上可以投屏手机，并可以在电脑上操控手机</p>
+<h2 id="7-2、打开-android-studio-编辑器，运行项目"><a href="#7-2、打开-android-studio-编辑器，运行项目" class="headerlink" title="7.2、打开 android studio 编辑器，运行项目"></a>7.2、打开 android studio 编辑器，运行项目</h2><figure class="highlight asciidoc"><table><tbody><tr><td class="code"><pre><span class="line">npm run android</span><br><span class="line"></span><br><span class="line"><span class="section">or</span></span><br><span class="line"><span class="section">-------------------</span></span><br><span class="line">cd AwesomeProject</span><br><span class="line">yarn android</span><br><span class="line"># 或者</span><br><span class="line">yarn react-native run-android</span><br></pre></td></tr></tbody></table></figure>
+
+<p>运行的时候会在手机上弹窗 “是否统一安装软件”之类的提示，点击同意即可</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318572616f2c2beb1eb9161.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318573616f2c2beb1eba516.png"></p>
+<h2 id="7-3、adb-reverse-命令使用"><a href="#7-3、adb-reverse-命令使用" class="headerlink" title="7.3、adb reverse  命令使用"></a>7.3、adb reverse  命令使用</h2><p><a href="https://developer.android.google.cn/studio/command-line/adb?hl=zh-cn">adb 文档</a></p>
+<h4 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h4><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318574916f2c2beb1ebbc88.png"></p>
+<p>猜测是多设备连接受影响了，可以尝试重启手机解决<br>也可以尝试如下步骤： 启停 adb 服务器</p>
+<blockquote>
+<p>在某些情况下，您可能需要终止 adb 服务器进程，然后重启以解决问题（例如，如果 adb 不响应命令）。</p>
+<p>如需停止 adb 服务器，请使用 adb kill-server 命令。然后，您可以通过发出其他任何 adb 命令来重启服务器。</p>
+</blockquote>
+<figure class="highlight pgsql"><table><tbody><tr><td class="code"><pre><span class="line">adb kill-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">start</span>-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">reverse</span> tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><figure class="highlight apache"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attribute">adb</span> reverse tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>这条命令的意思是，Android允许我们通过ADB，把Android上的某个端口映射到电脑（adb forward），或者把电脑的某个端口映射到Android系统（adb reverse），在这里假设电脑上开启的服务，监听的端口为8081。Android手机通过USB连接电脑后，在终端直接执行<code>adb reverse tcp:8081 tcp:8081</code>，然后在手机中访问<code>127.0.0.1:8081</code>，就可以访问到电脑上启动的服务了。</p>
+<p>注意：</p>
+<ol>
+<li>必须是在连接数据线usb的前提下才能使用该方案进行代码调试。</li>
+<li>(Android 5.0 及以上)使用 adb reverse 命令，这个选项只能在 5.0 以上版本(API 21+)的安卓设备上使用。</li>
+</ol>
+<h1 id="8、react-native开发小知识"><a href="#8、react-native开发小知识" class="headerlink" title="8、react-native开发小知识"></a>8、react-native开发小知识</h1><h2 id="8-1、vscode-上代码飘红"><a href="#8-1、vscode-上代码飘红" class="headerlink" title="8.1、vscode 上代码飘红"></a>8.1、vscode 上代码飘红</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318575a16f2c2beb1ebd220.png"></p>
+<ul>
+<li>问题原因：</li>
+</ul>
+<p>VScode是默认解析ts的，但是不会默认识别 <a href="https://flow.org/en/docs/react/"><code>Flow</code></a>(<strong>静态类型检测工具</strong>)的语法，所以这种的代码会被解析成ts语法。</p>
+<ul>
+<li>解决方法：<br>快捷键<code>Ctrl+Shift+P</code>，输入<code>setting.json</code>，选择 首选项:打开设置(json)。</li>
+</ul>
+<p><code>settings.json</code></p>
+<figure class="highlight awk"><table><tbody><tr><td class="code"><pre><span class="line"><span class="regexp">//</span> <span class="string">"import type"</span> 声明只能在 TypeScript 文件中使用。</span><br><span class="line"><span class="string">"javascript.validate.enable"</span>: false,</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="8-2、npm-run-android-每次都需要在手机上重新安装软件包"><a href="#8-2、npm-run-android-每次都需要在手机上重新安装软件包" class="headerlink" title="8.2、npm run android 每次都需要在手机上重新安装软件包"></a>8.2、npm run android 每次都需要在手机上重新安装软件包</h2><p>开发者模式 -&gt; USB调试 -&gt; 监控ADB安装应用 -&gt; 关闭, 即可解决。</p>
+<h2 id="8-3、本地开发启动多个项目"><a href="#8-3、本地开发启动多个项目" class="headerlink" title="8.3、本地开发启动多个项目"></a>8.3、本地开发启动多个项目</h2><p>默认端口号是8081，通过指定不同的端口号来启动。</p>
+<figure class="highlight livecodeserver"><table><tbody><tr><td class="code"><pre><span class="line">react-native <span class="built_in">start</span> <span class="comment">--port=8082</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="8-4、修改软件包名称"><a href="#8-4、修改软件包名称" class="headerlink" title="8.4、修改软件包名称"></a>8.4、修改软件包名称</h2><ol>
+<li>修改配置文件<br>Android<br>修改配置文件里的 <code>app_name</code> 即可，重新 <code>yarn android</code> ，发现手机上软件的名称已修改成功。</li>
+</ol>
+<p>文件： <code>android\app\src\main\res\values\strings.xml</code></p>
+<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">string</span> <span class="attr">name</span>=<span class="string">"app_name"</span>&gt;</span>远点<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>react-native-rename 插件修改</li>
+</ol>
+<p>通过插件修改名字，必须是 使用 <code>react-native init xxx</code> 创建的项目</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 安装</span></span><br><span class="line">npm install react-native-rename -g</span><br><span class="line">or</span><br><span class="line">yarn global add react-native-rename</span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目根目录执行命令</span></span><br><span class="line">npx react-native-rename &lt;newName&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>修改完成。</p>
+<p>本篇完！后面继续分享如何调试react native项目。</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>React Native</category>
+      </categories>
+      <tags>
+        <tag>React Native</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>V8中的快慢数组（附源码分析、图文更易理解😃）</title>
     <url>/posts/1787681656.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -2248,56 +2248,6 @@
       </tags>
   </entry>
   <entry>
-    <title>.env.[mode]文件中如何添加注释？</title>
-    <url>/posts/2584380968.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>Vue-Cli</code> 允许我们在项目根目录创建<code>.env.[mode]</code>文件来设置一些打包编译的启动参数，通过执行脚本的时候加<code>mode</code>参数，指定不同环境需要加载的配置文件</p>
-<p>形如： <code>.env.prod</code></p>
-<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>怎么在 <code>.env.prod</code> 文件中添加注释呢？</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这要看<code>vue</code>是怎么解析 <code>.env.prod</code> 文件的</p>
-<p>通过启动脚本参数 <code>--mode prod</code>，一路找到了处理 <code>.env.prod</code> 文件的逻辑，让我们一块看下</p>
-<p><code>path：node_modules\@vue\cli-service\lib\Service.js</code></p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> dotenv = <span class="built_in">require</span>(<span class="string">'dotenv'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">loadEnv (mode) {</span><br><span class="line">    <span class="keyword">const</span> logger = <span class="title function_">debug</span>(<span class="string">'vue:env'</span>)</span><br><span class="line">    <span class="keyword">const</span> basePath = path.<span class="title function_">resolve</span>(<span class="variable language_">this</span>.<span class="property">context</span>, <span class="string">`.env<span class="subst">${mode ? <span class="string">`.<span class="subst">${mode}</span>`</span> : <span class="string">``</span>}</span>`</span>)</span><br><span class="line">    <span class="keyword">const</span> localPath = <span class="string">`<span class="subst">${basePath}</span>.local`</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="title function_">load</span> = envPath =&gt; {</span><br><span class="line">      <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">const</span> env = dotenv.<span class="title function_">config</span>({ <span class="attr">path</span>: envPath, <span class="attr">debug</span>: process.<span class="property">env</span>.<span class="property">DEBUG</span> })</span><br><span class="line">        <span class="title function_">dotenvExpand</span>(env)</span><br><span class="line">        <span class="title function_">logger</span>(envPath, env)</span><br><span class="line">      } <span class="keyword">catch</span> (err) {</span><br><span class="line">        <span class="comment">// only ignore error if file is not found</span></span><br><span class="line">        <span class="keyword">if</span> (err.<span class="title function_">toString</span>().<span class="title function_">indexOf</span>(<span class="string">'ENOENT'</span>) &lt; <span class="number">0</span>) {</span><br><span class="line">          <span class="title function_">error</span>(err)</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="title function_">load</span>(localPath)</span><br><span class="line">    <span class="title function_">load</span>(basePath)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// by default, NODE_ENV and BABEL_ENV are set to "development" unless mode</span></span><br><span class="line">    <span class="comment">// is production or test. However the value in .env files will take higher</span></span><br><span class="line">    <span class="comment">// priority.</span></span><br><span class="line">    <span class="keyword">if</span> (mode) {</span><br><span class="line">      <span class="comment">// always set NODE_ENV during tests</span></span><br><span class="line">      <span class="comment">// as that is necessary for tests to not be affected by each other</span></span><br><span class="line">      <span class="keyword">const</span> shouldForceDefaultEnv = (</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST</span> &amp;&amp;</span><br><span class="line">        !process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST_TESTING_ENV</span></span><br><span class="line">      )</span><br><span class="line">      <span class="keyword">const</span> defaultNodeEnv = (mode === <span class="string">'production'</span> || mode === <span class="string">'test'</span>)</span><br><span class="line">        ? mode</span><br><span class="line">        : <span class="string">'development'</span></span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">NODE_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">NODE_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br></pre></td></tr></tbody></table></figure>
-
-<p>从上面的代码，可以得知，<code>vue</code>使用<code>dotenv</code>解析<code> .env.prod</code> 文件，并将环境变量从 <code>.env[mode]</code> 文件中加载到 <code>process.env</code> 环境变量中</p>
-<h2 id="解决（dotenv）"><a href="#解决（dotenv）" class="headerlink" title="解决（dotenv）"></a>解决（dotenv）</h2><p><code>dotenv</code>插件已经被 <code>Vue-Cli</code> 集成了</p>
-<p><a href="https://github.com/motdotla/dotenv#rules">GitHub地址</a></p>
-<p><code>README.md</code> 中有这么一段话：</p>
-<ul>
-<li>“# marks the beginning of a comment (unless when the value is wrapped in quotes)”</li>
-</ul>
-<p>这就是我们要找的，在<code>.env.[mode]</code> 文件中，可以使用 <code>#</code> 进行注释</p>
-<h3 id="使用测试"><a href="#使用测试" class="headerlink" title="使用测试"></a>使用测试</h3><ol>
-<li><code>path: .env.prod</code> 参数配置</li>
-</ol>
-<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="comment"># VUE_APP_PATH='/pc/'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li><code>package.json</code> 文件脚本命令配置<code>--mode</code>参数</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: {</span><br><span class="line">    <span class="string">"build"</span>: <span class="string">"vue-cli-service build --mode prod"</span>,</span><br><span class="line">  },</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="3">
-<li>执行 <code>npm run build</code> 命令，输出如下：</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">NODE_ENV=== production</span><br><span class="line">VUE_APP_PATH=== ./</span><br></pre></td></tr></tbody></table></figure>
-
-<p>本文到此为止，要想了解更多<code>dotenv</code>请自行探索，感谢观看😉</p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://img-blog.csdnimg.cn/img_convert/bd14318dfe358078af5f56cdf6895446.gif"></p>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>vue</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker常用命令——排错很有帮助😏</title>
     <url>/posts/1627929391.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -2387,6 +2337,56 @@
       </categories>
       <tags>
         <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>.env.[mode]文件中如何添加注释？</title>
+    <url>/posts/2584380968.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>Vue-Cli</code> 允许我们在项目根目录创建<code>.env.[mode]</code>文件来设置一些打包编译的启动参数，通过执行脚本的时候加<code>mode</code>参数，指定不同环境需要加载的配置文件</p>
+<p>形如： <code>.env.prod</code></p>
+<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>怎么在 <code>.env.prod</code> 文件中添加注释呢？</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这要看<code>vue</code>是怎么解析 <code>.env.prod</code> 文件的</p>
+<p>通过启动脚本参数 <code>--mode prod</code>，一路找到了处理 <code>.env.prod</code> 文件的逻辑，让我们一块看下</p>
+<p><code>path：node_modules\@vue\cli-service\lib\Service.js</code></p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> dotenv = <span class="built_in">require</span>(<span class="string">'dotenv'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">loadEnv (mode) {</span><br><span class="line">    <span class="keyword">const</span> logger = <span class="title function_">debug</span>(<span class="string">'vue:env'</span>)</span><br><span class="line">    <span class="keyword">const</span> basePath = path.<span class="title function_">resolve</span>(<span class="variable language_">this</span>.<span class="property">context</span>, <span class="string">`.env<span class="subst">${mode ? <span class="string">`.<span class="subst">${mode}</span>`</span> : <span class="string">``</span>}</span>`</span>)</span><br><span class="line">    <span class="keyword">const</span> localPath = <span class="string">`<span class="subst">${basePath}</span>.local`</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="title function_">load</span> = envPath =&gt; {</span><br><span class="line">      <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">const</span> env = dotenv.<span class="title function_">config</span>({ <span class="attr">path</span>: envPath, <span class="attr">debug</span>: process.<span class="property">env</span>.<span class="property">DEBUG</span> })</span><br><span class="line">        <span class="title function_">dotenvExpand</span>(env)</span><br><span class="line">        <span class="title function_">logger</span>(envPath, env)</span><br><span class="line">      } <span class="keyword">catch</span> (err) {</span><br><span class="line">        <span class="comment">// only ignore error if file is not found</span></span><br><span class="line">        <span class="keyword">if</span> (err.<span class="title function_">toString</span>().<span class="title function_">indexOf</span>(<span class="string">'ENOENT'</span>) &lt; <span class="number">0</span>) {</span><br><span class="line">          <span class="title function_">error</span>(err)</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="title function_">load</span>(localPath)</span><br><span class="line">    <span class="title function_">load</span>(basePath)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// by default, NODE_ENV and BABEL_ENV are set to "development" unless mode</span></span><br><span class="line">    <span class="comment">// is production or test. However the value in .env files will take higher</span></span><br><span class="line">    <span class="comment">// priority.</span></span><br><span class="line">    <span class="keyword">if</span> (mode) {</span><br><span class="line">      <span class="comment">// always set NODE_ENV during tests</span></span><br><span class="line">      <span class="comment">// as that is necessary for tests to not be affected by each other</span></span><br><span class="line">      <span class="keyword">const</span> shouldForceDefaultEnv = (</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST</span> &amp;&amp;</span><br><span class="line">        !process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST_TESTING_ENV</span></span><br><span class="line">      )</span><br><span class="line">      <span class="keyword">const</span> defaultNodeEnv = (mode === <span class="string">'production'</span> || mode === <span class="string">'test'</span>)</span><br><span class="line">        ? mode</span><br><span class="line">        : <span class="string">'development'</span></span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">NODE_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">NODE_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br></pre></td></tr></tbody></table></figure>
+
+<p>从上面的代码，可以得知，<code>vue</code>使用<code>dotenv</code>解析<code> .env.prod</code> 文件，并将环境变量从 <code>.env[mode]</code> 文件中加载到 <code>process.env</code> 环境变量中</p>
+<h2 id="解决（dotenv）"><a href="#解决（dotenv）" class="headerlink" title="解决（dotenv）"></a>解决（dotenv）</h2><p><code>dotenv</code>插件已经被 <code>Vue-Cli</code> 集成了</p>
+<p><a href="https://github.com/motdotla/dotenv#rules">GitHub地址</a></p>
+<p><code>README.md</code> 中有这么一段话：</p>
+<ul>
+<li>“# marks the beginning of a comment (unless when the value is wrapped in quotes)”</li>
+</ul>
+<p>这就是我们要找的，在<code>.env.[mode]</code> 文件中，可以使用 <code>#</code> 进行注释</p>
+<h3 id="使用测试"><a href="#使用测试" class="headerlink" title="使用测试"></a>使用测试</h3><ol>
+<li><code>path: .env.prod</code> 参数配置</li>
+</ol>
+<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="comment"># VUE_APP_PATH='/pc/'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li><code>package.json</code> 文件脚本命令配置<code>--mode</code>参数</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: {</span><br><span class="line">    <span class="string">"build"</span>: <span class="string">"vue-cli-service build --mode prod"</span>,</span><br><span class="line">  },</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>执行 <code>npm run build</code> 命令，输出如下：</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">NODE_ENV=== production</span><br><span class="line">VUE_APP_PATH=== ./</span><br></pre></td></tr></tbody></table></figure>
+
+<p>本文到此为止，要想了解更多<code>dotenv</code>请自行探索，感谢观看😉</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://img-blog.csdnimg.cn/img_convert/bd14318dfe358078af5f56cdf6895446.gif"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
       </tags>
   </entry>
   <entry>
