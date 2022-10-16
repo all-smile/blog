@@ -1,9 +1,10 @@
 ---
 title: Docker | dockerfile构建centos镜像，以及CMD和ENTRYPOINT的区别
-date: 2022-10-15 18:29:38
 tags: Docker
 categories: Docker
 description: 本文记录使用dockerfile构建centos镜像，以及CMD和ENTRYPOINT命令的区别。
+abbrlink: 1048738116
+date: 2022-10-15 18:29:38
 ---
 
 # 构建自己的centos镜像

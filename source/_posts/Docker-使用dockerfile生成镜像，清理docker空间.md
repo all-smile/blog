@@ -1,9 +1,10 @@
 ---
 title: Docker | 使用dockerfile生成镜像，清理docker空间
-date: 2022-10-13 18:06:11
 tags: Docker
 categories: Docker
 description: 本篇讲解使用dockerfile来制作镜像并挂在数据卷，以及清理docker空间的经验分享。我是甜点cc，感谢阅读！
+abbrlink: 1427354585
+date: 2022-10-13 18:06:11
 ---
 
 # 用`dockerfile`生成镜像并挂载数据卷

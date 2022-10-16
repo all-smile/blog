@@ -1,11 +1,12 @@
 ---
 title: Docker | 制作tomcat镜像并部署项目
-date: 2022-10-14 12:29:08
 tags:
   - Docker
   - tomcat
 categories: Docker
 description: 本文讲解如何制作自己的tomcat镜像，并使用tomcat部署项目
+abbrlink: 2106196415
+date: 2022-10-14 12:29:08
 ---
 
 > 本文讲解如何制作自己的tomcat镜像，并使用tomcat部署项目
