@@ -3,7 +3,7 @@ title: Docker | 发布镜像到镜像仓库
 date: 2022-10-16 20:46:39
 tags: Docker
 categories: Docker
-description: 本文记录发布镜像到 `DockerHub` 和 `阿里云镜像仓库`。工作中使用的是`JFrog Artifactory` 和 `Harbor`，没有太大差别。
+description: 本文记录发布镜像到 DockerHub 和 阿里云镜像仓库。工作中使用的是JFrog Artifactory 和 Harbor，没有太大差别。
 ---
 
 > 本篇收录至[Docker专栏](https://blog.i-xiao.space/categories/Docker/)，持续更新，欢迎访问😊
@@ -110,13 +110,13 @@ docker push xiaobluewhale/tomcat:1.0
 
 ### 提交成功
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f6cc75ec18514d3ba7ff544dccf7bb0e~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic1.imgdb.cn/item/634c984c16f2c2beb145f7bc.jpg)
 
 提交的时候也是按照镜像的层级提交的
 
 在个人DockerHub上查看推送成功的镜像
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cadf8b7d817040b594d74b7b2e68516b~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic1.imgdb.cn/item/634c985b16f2c2beb14602fd.jpg)
 
 # 发布镜像到阿里云镜像仓库
 
@@ -124,27 +124,27 @@ docker push xiaobluewhale/tomcat:1.0
 
 ## 2、找到容器镜像服务，创建实例
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0c266a6cec64416f8f1b0408760698c9~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic1.imgdb.cn/item/634c986916f2c2beb1460b7d.jpg)
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3a155eec193c4d49a020a439fdbf8823~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic1.imgdb.cn/item/634c987a16f2c2beb14617bb.jpg)
 
 企业版需要付费购买（1个月741）
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7eb99badcdd44d56a28e78fec6d02eb4~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic1.imgdb.cn/item/634c988c16f2c2beb14623ef.jpg)
 
 我选择创建**个人实例**
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e1f26b49df014aea9df297b01c15658c~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic1.imgdb.cn/item/634c989c16f2c2beb14632b8.jpg)
 
 ## 3、创建命名空间（为了隔离）
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a5ee9d6dca944b5c9fb0165facec1bf4~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic1.imgdb.cn/item/634c98ab16f2c2beb1463e3f.jpg)
 
 ## 4、创建镜像仓库
 
 本地
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4758825821c34116a9db89d764fffc38~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic1.imgdb.cn/item/634c98ba16f2c2beb1464b58.jpg)
 
 ## 5、推送镜像
 
@@ -171,17 +171,17 @@ docker push xiaobluewhale/tomcat:1.0
 The push refers to repository [docker.io/xiaobluewhale/tomcat]
 ```
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bd2027687f8d42a187133e950a9de233~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic1.imgdb.cn/item/634c98cb16f2c2beb1465751.jpg)
 
 ## 6、阿里云查看镜像
 
 imageID: `24b3a476f143`
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/469b77f60ea1437b9c82efa3a7c8eb53~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic1.imgdb.cn/item/634c98da16f2c2beb14662d9.jpg)
 
 也可以查看可视化的层信息
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/739b374050934dfe92da3502fe009a77~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://pic1.imgdb.cn/item/634c98e716f2c2beb1466ce7.jpg)
 
 ---
 
