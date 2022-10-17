@@ -1,9 +1,10 @@
 ---
 title: Docker | 发布镜像到镜像仓库
-date: 2022-10-16 20:46:39
 tags: Docker
 categories: Docker
 description: 本文记录发布镜像到 DockerHub 和 阿里云镜像仓库。工作中使用的是JFrog Artifactory 和 Harbor，没有太大差别。
+abbrlink: 2796165889
+date: 2022-10-16 20:46:39
 ---
 
 > 本篇收录至[Docker专栏](https://blog.i-xiao.space/categories/Docker/)，持续更新，欢迎访问😊
