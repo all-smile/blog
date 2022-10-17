@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Actions</title>
+    <url>/posts/3405105267.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>持续集成、持续部署</p>
+</body></html>]]></content>
+  </entry>
+  <entry>
     <title>2022年中秋佳节，于梦开始的地方</title>
     <url>/posts/4798453.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -37,10 +43,86 @@
       </tags>
   </entry>
   <entry>
-    <title>Actions</title>
-    <url>/posts/3405105267.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>持续集成、持续部署</p>
+    <title>Docker | Compose创建mysql容器</title>
+    <url>/posts/2048262040.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本文通过<code>Docker Compose</code>来创建<code>mysql</code>容器</p>
+</blockquote>
+<h2 id="在linux服务器上创建文件，用于管理容器"><a href="#在linux服务器上创建文件，用于管理容器" class="headerlink" title="在linux服务器上创建文件，用于管理容器"></a>在linux服务器上创建文件，用于管理容器</h2><ul>
+<li>mkdir docker-mysql</li>
+<li>cd docker-mysql</li>
+<li>vim docker-compose.yml  #写入如下内容</li>
+</ul>
+<p><code>docker-compose.yml</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">version: <span class="string">"3"</span></span><br><span class="line">services:</span><br><span class="line">  mysqldb:</span><br><span class="line">    image: mysql:5.7</span><br><span class="line">    restart: always</span><br><span class="line">    container_name: mysql57</span><br><span class="line">    ports:</span><br><span class="line">      - 3310:3306</span><br><span class="line">    volumes:</span><br><span class="line">      - /var/vol_dockers/mysqldb/conf:/etc/mysql/conf.d</span><br><span class="line">      - /var/vol_dockers/mysqldb/data:/var/lib/mysql</span><br><span class="line">    environment:</span><br><span class="line">      MYSQL_PSAAWORD: PSAAWORD</span><br><span class="line">      MYSQL_ROOT_PASSWORD: PSAAWORD</span><br><span class="line">      MYSQL_USER: root</span><br><span class="line">      MYSQL_DATABASE: database</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>记得防火墙要开放3306、3310端口</p>
+</blockquote>
+<h2 id="创建启停脚本文件"><a href="#创建启停脚本文件" class="headerlink" title="创建启停脚本文件"></a>创建启停脚本文件</h2><ul>
+<li><p>vim start</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>vim restart</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose restart</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>vim stop</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose stop</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="修改脚本文件权限"><a href="#修改脚本文件权限" class="headerlink" title="修改脚本文件权限"></a>修改脚本文件权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 777 st* restart</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450d9c16f2c2beb1fc717d.jpg"></p>
+<h2 id="启动mysql容器"><a href="#启动mysql容器" class="headerlink" title="启动mysql容器"></a>启动<code>mysql</code>容器</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./start</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>查看容器</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450e0116f2c2beb1fd0442.jpg"></p>
+<h2 id="mysql数据库基本配置"><a href="#mysql数据库基本配置" class="headerlink" title="mysql数据库基本配置"></a>mysql数据库基本配置</h2><ol>
+<li>创建MySql用户</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">CREATE USER dbadmin@localhost IDENTIFIED BY <span class="string">'pwd'</span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>dbadmin@localhost</code>，表示只允许<code>localhost</code>环境的<code>dbadmin</code>用户登录</p>
+<ol start="2">
+<li>设置可访问的主机</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">update user <span class="built_in">set</span> host = <span class="string">'%'</span> <span class="built_in">where</span> user = <span class="string">'dbadmin'</span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>% 表示接受所有主机ip访问</p>
+<ol start="3">
+<li>最后刷新生效</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">flush privileges;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>整体步骤：</strong></p>
+<p>1、连接服务器: mysql -u root -p</p>
+<p>2、看当前所有数据库：show databases;</p>
+<p>3、进入mysql数据库：use mysql;</p>
+<p>4、查看mysql数据库中所有的表：show tables;</p>
+<p>5、查看user表中的数据：select Host, User,Password from user;</p>
+<p>6、修改user表中的Host: update user set Host=’%’ where User=’root’;</p>
+<p>7、最后刷新一下：flush privileges;</p>
+<p><strong>客户端连接</strong></p>
+<p>这里我使用的是<code>SQLyog</code>工具连接<code>MySQL</code>数据库</p>
+<p><code>sqlyog</code>连接服务器的<code>3310</code>端口，<code>3310</code>端口映射<code>MySQL</code>容器的<code>3306</code>端口。</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450db816f2c2beb1fc98ab.jpg"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450def16f2c2beb1fce7fa.jpg"></p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
 </body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker MySQL</tag>
+      </tags>
   </entry>
   <entry>
     <title>D8调试工具——jsvu的使用细则</title>
@@ -258,88 +340,6 @@
       </categories>
       <tags>
         <tag>V8</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Docker | Compose创建mysql容器</title>
-    <url>/posts/2048262040.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>本文通过<code>Docker Compose</code>来创建<code>mysql</code>容器</p>
-</blockquote>
-<h2 id="在linux服务器上创建文件，用于管理容器"><a href="#在linux服务器上创建文件，用于管理容器" class="headerlink" title="在linux服务器上创建文件，用于管理容器"></a>在linux服务器上创建文件，用于管理容器</h2><ul>
-<li>mkdir docker-mysql</li>
-<li>cd docker-mysql</li>
-<li>vim docker-compose.yml  #写入如下内容</li>
-</ul>
-<p><code>docker-compose.yml</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">version: <span class="string">"3"</span></span><br><span class="line">services:</span><br><span class="line">  mysqldb:</span><br><span class="line">    image: mysql:5.7</span><br><span class="line">    restart: always</span><br><span class="line">    container_name: mysql57</span><br><span class="line">    ports:</span><br><span class="line">      - 3310:3306</span><br><span class="line">    volumes:</span><br><span class="line">      - /var/vol_dockers/mysqldb/conf:/etc/mysql/conf.d</span><br><span class="line">      - /var/vol_dockers/mysqldb/data:/var/lib/mysql</span><br><span class="line">    environment:</span><br><span class="line">      MYSQL_PSAAWORD: PSAAWORD</span><br><span class="line">      MYSQL_ROOT_PASSWORD: PSAAWORD</span><br><span class="line">      MYSQL_USER: root</span><br><span class="line">      MYSQL_DATABASE: database</span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p>记得防火墙要开放3306、3310端口</p>
-</blockquote>
-<h2 id="创建启停脚本文件"><a href="#创建启停脚本文件" class="headerlink" title="创建启停脚本文件"></a>创建启停脚本文件</h2><ul>
-<li><p>vim start</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>vim restart</p>
-</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose restart</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>vim stop</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose stop</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="修改脚本文件权限"><a href="#修改脚本文件权限" class="headerlink" title="修改脚本文件权限"></a>修改脚本文件权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 777 st* restart</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450d9c16f2c2beb1fc717d.jpg"></p>
-<h2 id="启动mysql容器"><a href="#启动mysql容器" class="headerlink" title="启动mysql容器"></a>启动<code>mysql</code>容器</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./start</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>查看容器</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450e0116f2c2beb1fd0442.jpg"></p>
-<h2 id="mysql数据库基本配置"><a href="#mysql数据库基本配置" class="headerlink" title="mysql数据库基本配置"></a>mysql数据库基本配置</h2><ol>
-<li>创建MySql用户</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">CREATE USER dbadmin@localhost IDENTIFIED BY <span class="string">'pwd'</span>;</span><br></pre></td></tr></tbody></table></figure>
-
-<p><code>dbadmin@localhost</code>，表示只允许<code>localhost</code>环境的<code>dbadmin</code>用户登录</p>
-<ol start="2">
-<li>设置可访问的主机</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">update user <span class="built_in">set</span> host = <span class="string">'%'</span> <span class="built_in">where</span> user = <span class="string">'dbadmin'</span>;</span><br></pre></td></tr></tbody></table></figure>
-
-<p>% 表示接受所有主机ip访问</p>
-<ol start="3">
-<li>最后刷新生效</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">flush privileges;</span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>整体步骤：</strong></p>
-<p>1、连接服务器: mysql -u root -p</p>
-<p>2、看当前所有数据库：show databases;</p>
-<p>3、进入mysql数据库：use mysql;</p>
-<p>4、查看mysql数据库中所有的表：show tables;</p>
-<p>5、查看user表中的数据：select Host, User,Password from user;</p>
-<p>6、修改user表中的Host: update user set Host=’%’ where User=’root’;</p>
-<p>7、最后刷新一下：flush privileges;</p>
-<p><strong>客户端连接</strong></p>
-<p>这里我使用的是<code>SQLyog</code>工具连接<code>MySQL</code>数据库</p>
-<p><code>sqlyog</code>连接服务器的<code>3310</code>端口，<code>3310</code>端口映射<code>MySQL</code>容器的<code>3306</code>端口。</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450db816f2c2beb1fc98ab.jpg"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450def16f2c2beb1fce7fa.jpg"></p>
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>Docker MySQL</tag>
       </tags>
   </entry>
   <entry>
@@ -924,6 +924,61 @@
       </tags>
   </entry>
   <entry>
+    <title>Docker | 自定义网络（网关、子网地址）</title>
+    <url>/posts/2785354845.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
+</blockquote>
+<h2 id="了解-docker-network"><a href="#了解-docker-network" class="headerlink" title="了解 docker network"></a>了解 docker network</h2><p>通过下面的命令来获取帮助</p>
+<ol>
+<li>docker network –help</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">Commands:</span><br><span class="line">  connect     Connect a container to a network</span><br><span class="line">  create      Create a network</span><br><span class="line">  disconnect  Disconnect a container from a network</span><br><span class="line">  inspect     Display detailed information on one or more networks</span><br><span class="line">  <span class="built_in">ls</span>          List networks</span><br><span class="line">  prune       Remove all unused networks</span><br><span class="line">  <span class="built_in">rm</span>          Remove one or more networks</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>docker network create –help</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">Options:</span><br><span class="line">      --attachable           Enable manual container attachment</span><br><span class="line">      --aux-address map      Auxiliary IPv4 or IPv6 addresses used by Network driver (default map[])</span><br><span class="line">      --config-from string   The network from <span class="built_in">which</span> to copy the configuration</span><br><span class="line">      --config-only          Create a configuration only network</span><br><span class="line">  -d, --driver string        Driver to manage the Network (default <span class="string">"bridge"</span>)</span><br><span class="line">      --gateway strings      IPv4 or IPv6 Gateway <span class="keyword">for</span> the master subnet   <span class="comment"># 网关</span></span><br><span class="line">      --ingress              Create swarm routing-mesh network</span><br><span class="line">      --internal             Restrict external access to the network</span><br><span class="line">      --ip-range strings     Allocate container ip from a sub-range</span><br><span class="line">      --ipam-driver string   IP Address Management Driver (default <span class="string">"default"</span>)</span><br><span class="line">      --ipam-opt map         Set IPAM driver specific options (default map[])</span><br><span class="line">      --ipv6                 Enable IPv6 networking</span><br><span class="line">      --label list           Set metadata on a network</span><br><span class="line">  -o, --opt map              Set driver specific options (default map[])</span><br><span class="line">      --scope string         Control the network<span class="string">'s scope</span></span><br><span class="line"><span class="string">      --subnet strings       Subnet in CIDR format that represents a network segment  #子网</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="创建网络"><a href="#创建网络" class="headerlink" title="创建网络"></a>创建网络</h2><ul>
+<li>–driver bridge          网络类型，默认bridge网桥</li>
+<li>–subnet 192.168.0.0/16  子网</li>
+<li>–gateway 192.168.0.1    网关</li>
+</ul>
+<h3 id="创建-mynet-网络"><a href="#创建-mynet-网络" class="headerlink" title="创建 mynet 网络"></a>创建 <code>mynet</code> 网络</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker network create --driver bridge --subnet 192.168.0.0/16 --gateway 192.168.0.1 mynet</span><br><span class="line">0096a971fd2c66400e53cbae5e53eceedc2f90d5685917e9534640a3535c0ef1</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="查看网卡"><a href="#查看网卡" class="headerlink" title="查看网卡"></a>查看网卡</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># ip addr</span></span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:16:3e:0a:00:34 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.31.81.32/20 brd 172.31.95.255 scope global dynamic eth0</span><br><span class="line">       valid_lft 291870572sec preferred_lft 291870572sec</span><br><span class="line">3: docker0: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:a4:2f:c5:62 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">140: br-799426d70aa2: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:7f:01:1d:00 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.18.0.1/16 brd 172.18.255.255 scope global br-799426d70aa2     <span class="comment"># test-network</span></span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">176: br-0096a971fd2c: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:d9:14:c1:d3 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 192.168.0.1/16 brd 192.168.255.255 scope global br-0096a971fd2c   <span class="comment"># mynet</span></span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="查看网络"><a href="#查看网络" class="headerlink" title="查看网络"></a>查看网络</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network ls</span></span><br><span class="line">NETWORK ID     NAME           DRIVER    SCOPE</span><br><span class="line">feafa30d4051   bridge         bridge    <span class="built_in">local</span></span><br><span class="line">e8bf4fced9e2   host           host      <span class="built_in">local</span></span><br><span class="line">0096a971fd2c   mynet          bridge    <span class="built_in">local</span>  <span class="comment"># 自定义bridge网桥</span></span><br><span class="line">6263db0933b9   none           null      <span class="built_in">local</span></span><br><span class="line">799426d70aa2   test-network   bridge    <span class="built_in">local</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="查看-mynet-网络详细信息"><a href="#查看-mynet-网络详细信息" class="headerlink" title="查看 mynet 网络详细信息"></a>查看 <code>mynet</code> 网络详细信息</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network inspect 0096a971fd2c</span></span><br><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        <span class="string">"Name"</span>: <span class="string">"mynet"</span>,</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"0096a971fd2c66400e53cbae5e53eceedc2f90d5685917e9534640a3535c0ef1"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2021-10-04T10:18:09.113847736+08:00"</span>,</span><br><span class="line">        <span class="string">"Scope"</span>: <span class="string">"local"</span>,</span><br><span class="line">        <span class="string">"Driver"</span>: <span class="string">"bridge"</span>,  <span class="comment"># mynet 网络类型</span></span><br><span class="line">        <span class="string">"EnableIPv6"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"IPAM"</span>: {</span><br><span class="line">            <span class="string">"Driver"</span>: <span class="string">"default"</span>,</span><br><span class="line">            <span class="string">"Options"</span>: {},</span><br><span class="line">            <span class="string">"Config"</span>: [</span><br><span class="line">                {</span><br><span class="line">                    <span class="string">"Subnet"</span>: <span class="string">"192.168.0.0/16"</span>,   <span class="comment"># mynet 子网</span></span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"192.168.0.1"</span>      <span class="comment"># mynet 网关</span></span><br><span class="line">                }</span><br><span class="line">            ]</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Internal"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Attachable"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Ingress"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"ConfigFrom"</span>: {</span><br><span class="line">            <span class="string">"Network"</span>: <span class="string">""</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"ConfigOnly"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Containers"</span>: {},</span><br><span class="line">        <span class="string">"Options"</span>: {},</span><br><span class="line">        <span class="string">"Labels"</span>: {}</span><br><span class="line">    }</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="启动容器，并加入mynet网络"><a href="#启动容器，并加入mynet网络" class="headerlink" title="启动容器，并加入mynet网络"></a>启动容器，并加入mynet网络</h2><h3 id="启动-mynet-centos01-mynet-tomcat01-并加入mynet网络"><a href="#启动-mynet-centos01-mynet-tomcat01-并加入mynet网络" class="headerlink" title="启动 mynet-centos01 , mynet-tomcat01 并加入mynet网络"></a>启动 <code>mynet-centos01</code> , <code>mynet-tomcat01</code> 并加入mynet网络</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker run -it -P --name mynet-tomcat01 --net mynet tomcat</span></span><br><span class="line">[root@--- ~]<span class="comment"># docker run -it -P --name mynet-centos01 --net mynet centos</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="查看mynet网桥信息"><a href="#查看mynet网桥信息" class="headerlink" title="查看mynet网桥信息"></a>查看mynet网桥信息</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network inspect 0096</span></span><br><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        <span class="string">"Name"</span>: <span class="string">"mynet"</span>,</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"0096a971fd2c66400e53cbae5e53eceedc2f90d5685917e9534640a3535c0ef1"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2021-10-04T10:18:09.113847736+08:00"</span>,</span><br><span class="line">        <span class="string">"Scope"</span>: <span class="string">"local"</span>,</span><br><span class="line">        <span class="string">"Driver"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"EnableIPv6"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"IPAM"</span>: {</span><br><span class="line">            <span class="string">"Driver"</span>: <span class="string">"default"</span>,</span><br><span class="line">            <span class="string">"Options"</span>: {},</span><br><span class="line">            <span class="string">"Config"</span>: [</span><br><span class="line">                {</span><br><span class="line">                    <span class="string">"Subnet"</span>: <span class="string">"192.168.0.0/16"</span>,</span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"192.168.0.1"</span></span><br><span class="line">                }</span><br><span class="line">            ]</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Internal"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Attachable"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Ingress"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"ConfigFrom"</span>: {</span><br><span class="line">            <span class="string">"Network"</span>: <span class="string">""</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"ConfigOnly"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Containers"</span>: {</span><br><span class="line">            <span class="string">"2fac920eebd505794c4a27ef4efdf531d32805e8663bded93a473bd28236bc27"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"mynet-centos01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"3aff0752e641651a446ec490faa000812417855739086b2edb584ac2a95a26dd"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:c0:a8:00:02"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"192.168.0.2/16"</span>,</span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">"3dceda051252b6970fe2156bac7710ba6489a97aac68c49b1c85a2f130d0556f"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"mynet-tomcat01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"9f52b19493d35c48fe9b33a319de5dbe54c50de1a5d049103cb4e39bfe645f1b"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:c0:a8:00:03"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"192.168.0.3/16"</span>,</span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            }</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Options"</span>: {},</span><br><span class="line">        <span class="string">"Labels"</span>: {}</span><br><span class="line">    }</span><br><span class="line">]</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="进入-mynet-centos01-测试连接-mynet-tomcat01"><a href="#进入-mynet-centos01-测试连接-mynet-tomcat01" class="headerlink" title="进入 mynet-centos01 测试连接 mynet-tomcat01"></a>进入 <code>mynet-centos01</code> 测试连接 <code>mynet-tomcat01</code></h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 发现通过容器ip和容器名都可以连接</span></span><br><span class="line"></span><br><span class="line">[root@--- ~]<span class="comment"># docker exec -it 2fac920eebd5 /bin/sh</span></span><br><span class="line">sh-4.4<span class="comment"># ping</span></span><br><span class="line">sh-4.4<span class="comment"># ping 192.168.0.3   # 通过容器ip连接</span></span><br><span class="line">PING 192.168.0.3 (192.168.0.3) 56(84) bytes of data.</span><br><span class="line">64 bytes from 192.168.0.3: icmp_seq=1 ttl=64 time=0.140 ms</span><br><span class="line">64 bytes from 192.168.0.3: icmp_seq=2 ttl=64 time=0.110 ms</span><br><span class="line">^C</span><br><span class="line">--- 192.168.0.3 ping statistics ---</span><br><span class="line">4 packets transmitted, 4 received, 0% packet loss, time 3000ms</span><br><span class="line">rtt min/avg/max/mdev = 0.110/0.121/0.140/0.016 ms</span><br><span class="line"></span><br><span class="line">sh-4.4<span class="comment"># ping mynet-tomcat01   # 通过容器名连接</span></span><br><span class="line">PING mynet-tomcat01 (192.168.0.3) 56(84) bytes of data.</span><br><span class="line">64 bytes from mynet-tomcat01.mynet (192.168.0.3): icmp_seq=1 ttl=64 time=0.078 ms</span><br><span class="line">64 bytes from mynet-tomcat01.mynet (192.168.0.3): icmp_seq=2 ttl=64 time=0.131 ms</span><br><span class="line">^C</span><br><span class="line">--- mynet-tomcat01 ping statistics ---</span><br><span class="line">3 packets transmitted, 3 received, 0% packet loss, time 2001ms</span><br><span class="line">rtt min/avg/max/mdev = 0.078/0.110/0.131/0.026 ms</span><br><span class="line">sh-4.4<span class="comment">#</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><p>在同一网络下的容器，发现通过<code>容器ip</code>和<code>容器名</code>都可以连接</p>
+<h2 id="思考问题："><a href="#思考问题：" class="headerlink" title="思考问题："></a>思考问题：</h2><blockquote>
+<p>其它网络下的容器可以直接访问mynet网络下的容器吗？</p>
+<p>答案：不可以</p>
+<p>解决方法： 让别的网络下的容器加入到<code>mynet</code>网络下</p>
+</blockquote>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634d69ae16f2c2beb1d5df36.jpg"></p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker | 部署nginx服务</title>
     <url>/posts/1512743311.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1369,6 +1424,179 @@
       </tags>
   </entry>
   <entry>
+    <title>Hybrid app本地开发如何调用JSBridge</title>
+    <url>/posts/3740751445.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>前天同事问我公司内部的小程序怎么对接的，我回忆了一下，简单记录了一下前端同学需要注意的点。</p>
+<p>背后还有小程序架构、网络策略等等。当时恰逢小程序架构调整，（老架构的时候我就发现了有一个问题点可以优化，但是跟那边人反馈之后，人家表示不要我管😂，新架构时发现这个问题还巧妙的遗留下来了😮）我虽然不负责那块，但是本着<strong>这样不优雅</strong>的原则，还是跟新架构的对接人讲了我的优化方案，讲明白了之后，同时上报各自直系领导，并建议我领导牵头开会推动。最后，无奈存量数据太多，老架构那边权衡之后决定不改动。（多说了几句，权当记录一下）</p>
+</blockquote>
+<h1 id="1、背景"><a href="#1、背景" class="headerlink" title="1、背景"></a>1、背景</h1><p>公司研发的一款服务软件App（姑且称为“大地”），提供了包涵消息、待办、工作台、同事圈和通讯录五大功能模块，其中，工作台里集成了包括公司的移动客户端、PC端以及第三方平台的部分功能/服务（统称为“应用”）。</p>
+<p>我今天要讲的是这个集成平台以什么方式展现“应用”，答案是：借鉴了微信的架构，自研了“小程序”接入“应用”。</p>
+<p>我司小程序具有一种相对开放能力（面向全公司），赋能业务快速数字化、场景敏捷迭代，并且可在“大地”上便捷的获取和使用，同时具有完善的使用体验（这就是严格的接入审核标准带来的好处）。</p>
+<p>在“大地”开发者平台，创建小程序会自动创建配套的公众号（公众号是为了推送消息使用，可订阅）。小程序开发不限制技术选型，开发完成之后按照小程序接入规范打包上架小程序，审核发布。</p>
+<blockquote>
+<p>简单来说，可以把“大地”看成是一个“钉钉”，我现在要把我们的业务功能投放到“大地”上，就需要接入“大地”小程序，以小程序的方式在“大地”上为用户提供服务。</p>
+</blockquote>
+<p>小程序架构：<code>Cordova</code>框架做的<code>WebView</code>，运行我开发的前端程序，通过<code>Nginx</code>帮我把请求代理到微服务网关，由网关转发到目的主机处理请求。它虽然看上去是一个<code>Native App</code>，但只有一个<code>UI WebView</code>，里面访问的是一个<code>Web App</code>，对我来说就是开发一个<code>H5</code>应用调用一些所需的<code>JSBridge</code>，也就是所谓的<code>Hybrid App</code>。</p>
+<p>下面看一下本地开发中的一些问题，以及我是怎么处理的</p>
+<h1 id="2、问题"><a href="#2、问题" class="headerlink" title="2、问题"></a>2、问题</h1><p><code>Hybrid App</code>本地开发过程中没有真实的<code>Native</code>环境的，同样也无法使用<code>JSBridge</code>，这就会带来一个问题：跟原生交互的行为只能发布小程序才可以调试，本地玩不了，这…，相当fuck。</p>
+<p>目的是想让本地开发同小程序测试环境具有相同的体验，我的想法是在本地模拟<code>JSBridge</code>的方法，尽管不能带来真实的效果，至少触发了某个行为之后要有个反应，不至于让操作流程看起来像是“脱节”的（实际跟原生的交互行为并不多，比如：拍照、弹窗提示、定位等等）。</p>
+<p>因此，我要做的就是本地模拟<code>JSBridge</code>的一些方法，开发时触发了这些原生交互行为之后提示一些信息，等到上架小程序测试环境时，在手机上会用真实的<code>JSBridge</code>方法自动替换掉我模拟实现的方法。</p>
+<p>于是我就开始了下面的准备工作。</p>
+<ol>
+<li><p>搞清楚<code>JSBridge</code>运行的原理</p>
+</li>
+<li><p>本地模拟<code>JSBridge</code>的方法</p>
+</li>
+<li><p>上架小程序是自动使用真实的<code>JSBridge</code></p>
+</li>
+</ol>
+<h1 id="3、了解JSBridge"><a href="#3、了解JSBridge" class="headerlink" title="3、了解JSBridge"></a>3、了解<code>JSBridge</code></h1><p><strong>JSBridge</strong>：望文生义就是<code>js</code>和<code>Native</code>之前的桥梁，而实际上<code>JSBridge</code>确实是<code>JS</code>和<code>Native</code>之前的<strong>一种通信方式</strong>。</p>
+<p>简单的说，<code>JSBridge</code>就是定义<code>Native</code>和<code>JS</code>的通信，<code>Native</code>只通过一个固定的桥对象调用<code>JS</code>，<code>JS</code>也只通过固定的桥对象调用<code>Native</code>。<code>JSBridge</code>另一个叫法及大家熟知的<code>Hybrid app</code>技术。</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeacc16f2c2beb1834bb9.png"></p>
+<p>了解即可，更多的请参考</p>
+<ul>
+<li><p><a href="https://www.jianshu.com/p/0bd13e9059fb">Cordova浅析架构原理</a></p>
+</li>
+<li><p><a href="https://toutiao.io/posts/07qll1/preview">JSBridge 深度剖析</a></p>
+</li>
+</ul>
+<p>下图展示了<code>JSBridge</code>的工作流程👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeaee16f2c2beb18371d9.png"></p>
+<p>上图中左侧部分正式我要做的，具体请看下文</p>
+<blockquote>
+<p>看累了，三连一下，回看不迷路哟😉</p>
+</blockquote>
+<h2 id="3-1、我们的JSBridge"><a href="#3-1、我们的JSBridge" class="headerlink" title="3.1、我们的JSBridge"></a>3.1、我们的<code>JSBridge</code></h2><p>推测“大地”那边的<code>JSBridge</code>应该是自己写的，没有初始化<code>JSBridge</code>的操作</p>
+<p>当调用<code>JSBridge</code>时，必须在页面完全加载完成之后才能够拿到全局的<code>JSBridge</code>，<code>Cordova</code>框架提供<code>deviceready</code>事件，该事件触发的时候表示全局的<code>JSBridge</code>挂载成功。（注意：这就是我接下来操作的切入点，嘻嘻）</p>
+<p>简单写下如下：</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'deviceready OK!'</span>);</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">showToast</span>(<span class="number">0</span>, <span class="string">'提示信息'</span>)</span><br><span class="line">}, <span class="literal">false</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>需要注意的是，在开发环境，是没有 <code>deviceready</code> 事件的，所以上面的代码并不会执行，只有在<code>app</code>里面运行的时候才会执行。</p>
+<p><strong>思考：</strong></p>
+<p><code>JSBridge</code>必须是在<code>deviceready</code>事件触发后方能使用的，因此首先要做的就是自定义<code>deviceready</code>事件，本地环境可以手动触发自定义<code>deviceready</code>事件，生产环境下直接监听<code>deviceready</code>事件即可</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeafd16f2c2beb1838190.png"></p>
+<h1 id="4、JS发起自定义事件"><a href="#4、JS发起自定义事件" class="headerlink" title="4、JS发起自定义事件"></a>4、JS发起自定义事件</h1><p>我是用 <code>CustomEvent</code> 构造函数，继承至 <code>Event</code>，文档看<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/CustomEvent">这里</a></p>
+<ol>
+<li>用法</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="title class_">CustomEvent</span>(eventName, params);</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>示例</li>
+</ol>
+<p>创建一个自定义事件</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> event=<span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'mock-event'</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>传递参数</li>
+</ol>
+<p>这里值得注意，需要把想要传递的参数包裹在一个包含<code>detail</code>属性的对象，否则传递的参数不会被挂载</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createEvent</span>(<span class="params">params, eventName = <span class="string">'mock-event'</span></span>) {</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(eventName, { <span class="attr">detail</span>: params });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> event = <span class="title function_">createEvent</span>({ <span class="attr">id</span>: <span class="string">'0010'</span> });</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="4">
+<li>发起事件</li>
+</ol>
+<p>调用<code>dispatchEvent</code>方法发起事件，传入你刚才创建的方法</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">dispatchEvent</span>(event);</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="5">
+<li>监听事件</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'mock-event'</span>, <span class="function">(<span class="params">{ detail: { id } }</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'id'</span>,id) <span class="comment">// 会在控制台打印0010</span></span><br><span class="line">});</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="6">
+<li>示例：</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">addEventListener</span>(<span class="string">'show'</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> { <span class="variable language_">console</span>.<span class="title function_">log</span>(event.<span class="property">detail</span>); });</span><br><span class="line"><span class="comment">// 触发</span></span><br><span class="line"><span class="keyword">let</span> myEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'show'</span>, {</span><br><span class="line">    <span class="attr">detail</span>: {</span><br><span class="line">        <span class="attr">username</span>: <span class="string">'xixi'</span>,</span><br><span class="line">        <span class="attr">userid</span>: <span class="string">'2022'</span></span><br><span class="line">    }</span><br><span class="line">});</span><br><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">dispatchEvent</span>(myEvent);</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>了解了自定义事件之后，通过自定义事件模拟触发<code>deviceready</code>事件，这样上面的 <code>deviceready</code> 事件监听就可以执行了。</p>
+<p><strong>注意</strong>：这里还要确定一个问题，在什么时候触发自定义事件<code>deviceready</code>呢？</p>
+</blockquote>
+<h1 id="5、确定-deviceready-事件执行时机"><a href="#5、确定-deviceready-事件执行时机" class="headerlink" title="5、确定 deviceready 事件执行时机"></a>5、确定 <code>deviceready</code> 事件执行时机</h1><ul>
+<li>只需要编写如下代码，查看输出结果即可</li>
+</ul>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'load'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'load OK!'</span>);</span><br><span class="line">}, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'deviceready OK!'</span>);</span><br><span class="line">}, <span class="literal">false</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>结果输出</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">load OK!</span><br><span class="line">deviceready OK!</span><br></pre></td></tr></tbody></table></figure>
+
+<p>由此可知，执行顺序：<code>load</code> –&gt; <code>deviceready</code></p>
+<h1 id="6、自定义事件模拟Cordova-deviceready事件"><a href="#6、自定义事件模拟Cordova-deviceready事件" class="headerlink" title="6、自定义事件模拟Cordova deviceready事件"></a>6、自定义事件模拟<code>Cordova</code> <code>deviceready</code>事件</h1><ol>
+<li><p>自定义<code>deviceready</code>事件</p>
+</li>
+<li><p>根据上面测试执行顺序得出的结论，我在<code>load</code>事件里触发自定义事件</p>
+</li>
+<li><p>在开发环境下模拟一些用到的<code>JSBridge-API</code>，比如下面写到的 <code>JSAPI.showToast()</code> 方法</p>
+</li>
+</ol>
+<ul>
+<li>mockEvent.js<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (process.<span class="property">env</span>.<span class="property">NODE_ENV</span> === <span class="string">'development'</span>) {</span><br><span class="line">  <span class="comment">//  自定义事件</span></span><br><span class="line">  <span class="keyword">let</span> myEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'deviceready'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 模拟JSAPI事件</span></span><br><span class="line">  <span class="variable language_">window</span>[<span class="string">'JSAPI'</span>] = {</span><br><span class="line">    <span class="title function_">showToast</span>(<span class="params">type, desc</span>) {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(type, desc);</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 开发环境下，在 原生 load 方法之后 触发自定义事件</span></span><br><span class="line">  <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'load'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'load OK!'</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> {</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">dispatchEvent</span>(myEvent);</span><br><span class="line">    }, <span class="number">100</span>)</span><br><span class="line">  }, <span class="literal">false</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h1 id="7、封装deviceReady方法"><a href="#7、封装deviceReady方法" class="headerlink" title="7、封装deviceReady方法"></a>7、封装<code>deviceReady</code>方法</h1><p>实现在<code>Cordova</code>框架触发<code>deviceready</code>事件的时候感知到，以便于在<code>deviceReady</code>事件触发后执行<code>JS-API</code>。</p>
+<p><strong>可用于开发环境和非开发环境</strong></p>
+<h2 id="7-1、方式一"><a href="#7-1、方式一" class="headerlink" title="7.1、方式一"></a>7.1、方式一</h2><p>这里采用<strong>链式调用</strong>的方式，</p>
+<p>以下这种借助 <code>Promise</code> 的实现，在这种场景下其实是不合理的👀<br>只是形式上类似，其实并不是</p>
+<ol>
+<li>定义</li>
+</ol>
+<ul>
+<li>mixin.js</li>
+</ul>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">deviceReady</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">      <span class="title function_">resolve</span>(<span class="string">"ready go!"</span>);</span><br><span class="line">    }, <span class="literal">false</span>);</span><br><span class="line">  })</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>组件内使用<code>JS-API</code></li>
+</ol>
+<p>使用<code>JSAPI</code>可以如下这么写</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">deviceReady</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res); <span class="comment">// ready go!</span></span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">showToast</span>(<span class="number">0</span>, <span class="string">'提示'</span>)</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="variable language_">this</span>.<span class="title function_">deviceReady</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">getUserInfo</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">  }, <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">  });</span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>开发环境执行效果如下</li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeb0a16f2c2beb183900d.png"></p>
+<h2 id="7-2、方式二（推荐）"><a href="#7-2、方式二（推荐）" class="headerlink" title="7.2、方式二（推荐）"></a>7.2、方式二（推荐）</h2><p>改写成通用的事件监听函数，支持链式调用</p>
+<blockquote>
+<ul>
+<li><p>开发环境下，由<code>mockEvent.js</code>文件里的<code>dispatchEvent</code>触发自定义的<code>deviceready</code>事件；</p>
+</li>
+<li><p>小程序里运行，则由真实的<code>deviceready</code>事件触发</p>
+</li>
+</ul>
+</blockquote>
+<ol>
+<li>定义</li>
+</ol>
+<ul>
+<li>mixin.js</li>
+</ul>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">receiver</span>(<span class="params">type</span>) {</span><br><span class="line">  <span class="keyword">let</span> callbacks = {</span><br><span class="line">      <span class="attr">fns</span>: [],</span><br><span class="line">      <span class="attr">then</span>: <span class="keyword">function</span>(<span class="params">cb</span>){</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">fns</span>.<span class="title function_">push</span>(cb);</span><br><span class="line">          <span class="keyword">return</span> <span class="variable language_">this</span>;</span><br><span class="line">      }</span><br><span class="line">  };</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(type, <span class="keyword">function</span>(<span class="params">ev</span>) {</span><br><span class="line">    <span class="keyword">let</span> fns = callbacks.<span class="property">fns</span>.<span class="title function_">slice</span>();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>, l = fns.<span class="property">length</span>; i &lt; l; i++){</span><br><span class="line">        fns[i].<span class="title function_">call</span>(<span class="variable language_">this</span>, ev);</span><br><span class="line">    }</span><br><span class="line">  });</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> callbacks;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>使用</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">receiver</span>(<span class="string">'deviceready'</span>).<span class="title function_">then</span>(<span class="function">(<span class="params">ev</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(ev);</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">getUserInfo</span>(</span><br><span class="line">    <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">    },</span><br><span class="line">    <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">    }</span><br><span class="line">  )</span><br><span class="line">})</span><br><span class="line"><span class="variable language_">this</span>.<span class="title function_">receiver</span>(<span class="string">"click"</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"hi"</span>))</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">()=&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">22</span>));</span><br></pre></td></tr></tbody></table></figure>
+
+
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>当应用发布到<code>app</code>上，就是监听的真实的 <code>Cordova</code>框架的 <code>deviceready</code> 事件了，之后也就可以拿到真实的<code>JSAPI</code>了，以上只是为了在开发环境的时候模拟使用<code>JSAPI</code>。防止在开发环境下直接调用<code>JSAPI</code>飘红的情况，当然也是可以加<code>try catch</code>处理的，只不过个人感觉模拟事件使得代码看起来更加优雅别致一点，使用更加丝滑，酌情食用😁。</p>
+<p>软件架构非常有意思，感兴趣的可以交流探索，嘻嘻。</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>Hybrid app</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hexo+GitHub搭建个人博客</title>
     <url>/posts/3616955208.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1639,176 +1867,117 @@
       </tags>
   </entry>
   <entry>
-    <title>Hybrid app本地开发如何调用JSBridge</title>
-    <url>/posts/3740751445.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>前天同事问我公司内部的小程序怎么对接的，我回忆了一下，简单记录了一下前端同学需要注意的点。</p>
-<p>背后还有小程序架构、网络策略等等。当时恰逢小程序架构调整，（老架构的时候我就发现了有一个问题点可以优化，但是跟那边人反馈之后，人家表示不要我管😂，新架构时发现这个问题还巧妙的遗留下来了😮）我虽然不负责那块，但是本着<strong>这样不优雅</strong>的原则，还是跟新架构的对接人讲了我的优化方案，讲明白了之后，同时上报各自直系领导，并建议我领导牵头开会推动。最后，无奈存量数据太多，老架构那边权衡之后决定不改动。（多说了几句，权当记录一下）</p>
-</blockquote>
-<h1 id="1、背景"><a href="#1、背景" class="headerlink" title="1、背景"></a>1、背景</h1><p>公司研发的一款服务软件App（姑且称为“大地”），提供了包涵消息、待办、工作台、同事圈和通讯录五大功能模块，其中，工作台里集成了包括公司的移动客户端、PC端以及第三方平台的部分功能/服务（统称为“应用”）。</p>
-<p>我今天要讲的是这个集成平台以什么方式展现“应用”，答案是：借鉴了微信的架构，自研了“小程序”接入“应用”。</p>
-<p>我司小程序具有一种相对开放能力（面向全公司），赋能业务快速数字化、场景敏捷迭代，并且可在“大地”上便捷的获取和使用，同时具有完善的使用体验（这就是严格的接入审核标准带来的好处）。</p>
-<p>在“大地”开发者平台，创建小程序会自动创建配套的公众号（公众号是为了推送消息使用，可订阅）。小程序开发不限制技术选型，开发完成之后按照小程序接入规范打包上架小程序，审核发布。</p>
-<blockquote>
-<p>简单来说，可以把“大地”看成是一个“钉钉”，我现在要把我们的业务功能投放到“大地”上，就需要接入“大地”小程序，以小程序的方式在“大地”上为用户提供服务。</p>
-</blockquote>
-<p>小程序架构：<code>Cordova</code>框架做的<code>WebView</code>，运行我开发的前端程序，通过<code>Nginx</code>帮我把请求代理到微服务网关，由网关转发到目的主机处理请求。它虽然看上去是一个<code>Native App</code>，但只有一个<code>UI WebView</code>，里面访问的是一个<code>Web App</code>，对我来说就是开发一个<code>H5</code>应用调用一些所需的<code>JSBridge</code>，也就是所谓的<code>Hybrid App</code>。</p>
-<p>下面看一下本地开发中的一些问题，以及我是怎么处理的</p>
-<h1 id="2、问题"><a href="#2、问题" class="headerlink" title="2、问题"></a>2、问题</h1><p><code>Hybrid App</code>本地开发过程中没有真实的<code>Native</code>环境的，同样也无法使用<code>JSBridge</code>，这就会带来一个问题：跟原生交互的行为只能发布小程序才可以调试，本地玩不了，这…，相当fuck。</p>
-<p>目的是想让本地开发同小程序测试环境具有相同的体验，我的想法是在本地模拟<code>JSBridge</code>的方法，尽管不能带来真实的效果，至少触发了某个行为之后要有个反应，不至于让操作流程看起来像是“脱节”的（实际跟原生的交互行为并不多，比如：拍照、弹窗提示、定位等等）。</p>
-<p>因此，我要做的就是本地模拟<code>JSBridge</code>的一些方法，开发时触发了这些原生交互行为之后提示一些信息，等到上架小程序测试环境时，在手机上会用真实的<code>JSBridge</code>方法自动替换掉我模拟实现的方法。</p>
-<p>于是我就开始了下面的准备工作。</p>
-<ol>
-<li><p>搞清楚<code>JSBridge</code>运行的原理</p>
+    <title>React Native环境配置、初始化项目、打包安装到手机，以及开发小知识</title>
+    <url>/posts/252268106.html</url>
+    <content><![CDATA[<html><head></head><body><h1 id="1、前言"><a href="#1、前言" class="headerlink" title="1、前言"></a>1、前言</h1><p>环境：Win10 + Android</p>
+<p>已经在Windows电脑上安装好 <a href="https://nodejs.org/en/">Node</a>（v14+）、Git、Yarn、<br><a href="https://www.oracle.com/java/technologies/downloads/#java11">JDK</a>(v11)</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">javac -version</span><br><span class="line">javac 11.0.15.1</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">node -v</span><br><span class="line">v16.14.1</span><br></pre></td></tr></tbody></table></figure>
+<p>👉 <a href="https://www.react-native.cn/docs/next/environment-setup">官方文档</a></p>
+<h1 id="2、Android-Studio下载安装"><a href="#2、Android-Studio下载安装" class="headerlink" title="2、Android Studio下载安装"></a>2、Android Studio下载安装</h1><ul>
+<li><a href="https://developer.android.google.cn/studio/">下载地址</a></li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631855c416f2c2beb1e9e38c.png"></p>
+<h1 id="3、Android-SDK-下载安装"><a href="#3、Android-SDK-下载安装" class="headerlink" title="3、Android SDK 下载安装"></a>3、Android SDK 下载安装</h1><ul>
+<li>安装 android sdk</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318562016f2c2beb1ea4698.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318567d16f2c2beb1eab904.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318569116f2c2beb1eacfb0.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856a016f2c2beb1eae08f.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856be16f2c2beb1eb068f.png"></p>
+<h2 id="3-1、环境变量配置"><a href="#3-1、环境变量配置" class="headerlink" title="3.1、环境变量配置"></a>3.1、环境变量配置</h2><ul>
+<li><p>配置系统变量<br><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856cf16f2c2beb1eb1c1c.png"></p>
 </li>
-<li><p>本地模拟<code>JSBridge</code>的方法</p>
-</li>
-<li><p>上架小程序是自动使用真实的<code>JSBridge</code></p>
-</li>
-</ol>
-<h1 id="3、了解JSBridge"><a href="#3、了解JSBridge" class="headerlink" title="3、了解JSBridge"></a>3、了解<code>JSBridge</code></h1><p><strong>JSBridge</strong>：望文生义就是<code>js</code>和<code>Native</code>之前的桥梁，而实际上<code>JSBridge</code>确实是<code>JS</code>和<code>Native</code>之前的<strong>一种通信方式</strong>。</p>
-<p>简单的说，<code>JSBridge</code>就是定义<code>Native</code>和<code>JS</code>的通信，<code>Native</code>只通过一个固定的桥对象调用<code>JS</code>，<code>JS</code>也只通过固定的桥对象调用<code>Native</code>。<code>JSBridge</code>另一个叫法及大家熟知的<code>Hybrid app</code>技术。</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeacc16f2c2beb1834bb9.png"></p>
-<p>了解即可，更多的请参考</p>
-<ul>
-<li><p><a href="https://www.jianshu.com/p/0bd13e9059fb">Cordova浅析架构原理</a></p>
-</li>
-<li><p><a href="https://toutiao.io/posts/07qll1/preview">JSBridge 深度剖析</a></p>
+<li><p>Path 配置：</p>
 </li>
 </ul>
-<p>下图展示了<code>JSBridge</code>的工作流程👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeaee16f2c2beb18371d9.png"></p>
-<p>上图中左侧部分正式我要做的，具体请看下文</p>
-<blockquote>
-<p>看累了，三连一下，回看不迷路哟😉</p>
-</blockquote>
-<h2 id="3-1、我们的JSBridge"><a href="#3-1、我们的JSBridge" class="headerlink" title="3.1、我们的JSBridge"></a>3.1、我们的<code>JSBridge</code></h2><p>推测“大地”那边的<code>JSBridge</code>应该是自己写的，没有初始化<code>JSBridge</code>的操作</p>
-<p>当调用<code>JSBridge</code>时，必须在页面完全加载完成之后才能够拿到全局的<code>JSBridge</code>，<code>Cordova</code>框架提供<code>deviceready</code>事件，该事件触发的时候表示全局的<code>JSBridge</code>挂载成功。（注意：这就是我接下来操作的切入点，嘻嘻）</p>
-<p>简单写下如下：</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'deviceready OK!'</span>);</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">showToast</span>(<span class="number">0</span>, <span class="string">'提示信息'</span>)</span><br><span class="line">}, <span class="literal">false</span>)</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight haml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\platform-tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\emulator</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools\bin</span><br></pre></td></tr></tbody></table></figure>
 
-<p>需要注意的是，在开发环境，是没有 <code>deviceready</code> 事件的，所以上面的代码并不会执行，只有在<code>app</code>里面运行的时候才会执行。</p>
-<p><strong>思考：</strong></p>
-<p><code>JSBridge</code>必须是在<code>deviceready</code>事件触发后方能使用的，因此首先要做的就是自定义<code>deviceready</code>事件，本地环境可以手动触发自定义<code>deviceready</code>事件，生产环境下直接监听<code>deviceready</code>事件即可</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeafd16f2c2beb1838190.png"></p>
-<h1 id="4、JS发起自定义事件"><a href="#4、JS发起自定义事件" class="headerlink" title="4、JS发起自定义事件"></a>4、JS发起自定义事件</h1><p>我是用 <code>CustomEvent</code> 构造函数，继承至 <code>Event</code>，文档看<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/CustomEvent">这里</a></p>
+<h1 id="4、Scrcpy-手机模拟器下载安装使用"><a href="#4、Scrcpy-手机模拟器下载安装使用" class="headerlink" title="4、Scrcpy 手机模拟器下载安装使用"></a>4、Scrcpy 手机模拟器下载安装使用</h1><ul>
+<li><a href="https://github.com/Genymobile/scrcpy">下载地址</a></li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856e916f2c2beb1eb3879.png"></p>
+<p>下载zip文件，解压，双击运行 <code>scrcpy.exe</code> 可执行文件即可在电脑上投影手机屏幕，如下图👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856fb16f2c2beb1eb4fb0.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318571216f2c2beb1eb7443.png" alt="image.png"></p>
+<blockquote>
+<p>运行可执行文件之前，使用<strong>数据线</strong>连接Android手机，进行开发者选项设置（不同的手机进入开发者模式略有差异，自行搜索，我用的是华为手机）</p>
+</blockquote>
+<ul>
+<li>电脑端查看连接设备<br><code>adb devices</code></li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">adb devices</span><br><span class="line">List of devices attached</span><br><span class="line">8TFDU18719000649        device</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>adb 命令，在下载 <code>scrcpy</code> 的时候已经内置了</p>
+</blockquote>
+<h1 id="5、安装-React-Native"><a href="#5、安装-React-Native" class="headerlink" title="5、安装 React Native"></a>5、安装 React Native</h1><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm i react-native-cli -g</span><br><span class="line"></span><br><span class="line">$ react-native -v</span><br><span class="line">react-native-cli: 2.0.1</span><br><span class="line">react-native: n/a - not inside a React Native project directory</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="6、初始化项目"><a href="#6、初始化项目" class="headerlink" title="6、初始化项目"></a>6、初始化项目</h1><p>进入到自己的工作目录，执行下面的命令创建 react native 项目</p>
+<figure class="highlight actionscript"><table><tbody><tr><td class="code"><pre><span class="line">npx react-<span class="keyword">native</span> init AwesomeProject</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="7、运行项目安装软件到安卓机"><a href="#7、运行项目安装软件到安卓机" class="headerlink" title="7、运行项目安装软件到安卓机"></a>7、运行项目安装软件到安卓机</h1><h2 id="7-1、先用数据线连接手机和电脑，运行scrcpy-软件"><a href="#7-1、先用数据线连接手机和电脑，运行scrcpy-软件" class="headerlink" title="7.1、先用数据线连接手机和电脑，运行scrcpy 软件"></a>7.1、先用数据线连接手机和电脑，运行scrcpy 软件</h2><p>开发者选项配置修改，最终实现在电脑上可以投屏手机，并可以在电脑上操控手机</p>
+<h2 id="7-2、打开-android-studio-编辑器，运行项目"><a href="#7-2、打开-android-studio-编辑器，运行项目" class="headerlink" title="7.2、打开 android studio 编辑器，运行项目"></a>7.2、打开 android studio 编辑器，运行项目</h2><figure class="highlight asciidoc"><table><tbody><tr><td class="code"><pre><span class="line">npm run android</span><br><span class="line"></span><br><span class="line"><span class="section">or</span></span><br><span class="line"><span class="section">-------------------</span></span><br><span class="line">cd AwesomeProject</span><br><span class="line">yarn android</span><br><span class="line"># 或者</span><br><span class="line">yarn react-native run-android</span><br></pre></td></tr></tbody></table></figure>
+
+<p>运行的时候会在手机上弹窗 “是否统一安装软件”之类的提示，点击同意即可</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318572616f2c2beb1eb9161.png"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318573616f2c2beb1eba516.png"></p>
+<h2 id="7-3、adb-reverse-命令使用"><a href="#7-3、adb-reverse-命令使用" class="headerlink" title="7.3、adb reverse  命令使用"></a>7.3、adb reverse  命令使用</h2><p><a href="https://developer.android.google.cn/studio/command-line/adb?hl=zh-cn">adb 文档</a></p>
+<h4 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h4><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318574916f2c2beb1ebbc88.png"></p>
+<p>猜测是多设备连接受影响了，可以尝试重启手机解决<br>也可以尝试如下步骤： 启停 adb 服务器</p>
+<blockquote>
+<p>在某些情况下，您可能需要终止 adb 服务器进程，然后重启以解决问题（例如，如果 adb 不响应命令）。</p>
+<p>如需停止 adb 服务器，请使用 adb kill-server 命令。然后，您可以通过发出其他任何 adb 命令来重启服务器。</p>
+</blockquote>
+<figure class="highlight pgsql"><table><tbody><tr><td class="code"><pre><span class="line">adb kill-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">start</span>-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">reverse</span> tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><figure class="highlight apache"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attribute">adb</span> reverse tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>这条命令的意思是，Android允许我们通过ADB，把Android上的某个端口映射到电脑（adb forward），或者把电脑的某个端口映射到Android系统（adb reverse），在这里假设电脑上开启的服务，监听的端口为8081。Android手机通过USB连接电脑后，在终端直接执行<code>adb reverse tcp:8081 tcp:8081</code>，然后在手机中访问<code>127.0.0.1:8081</code>，就可以访问到电脑上启动的服务了。</p>
+<p>注意：</p>
 <ol>
-<li>用法</li>
+<li>必须是在连接数据线usb的前提下才能使用该方案进行代码调试。</li>
+<li>(Android 5.0 及以上)使用 adb reverse 命令，这个选项只能在 5.0 以上版本(API 21+)的安卓设备上使用。</li>
 </ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="title class_">CustomEvent</span>(eventName, params);</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="8、react-native开发小知识"><a href="#8、react-native开发小知识" class="headerlink" title="8、react-native开发小知识"></a>8、react-native开发小知识</h1><h2 id="8-1、vscode-上代码飘红"><a href="#8-1、vscode-上代码飘红" class="headerlink" title="8.1、vscode 上代码飘红"></a>8.1、vscode 上代码飘红</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318575a16f2c2beb1ebd220.png"></p>
+<ul>
+<li>问题原因：</li>
+</ul>
+<p>VScode是默认解析ts的，但是不会默认识别 <a href="https://flow.org/en/docs/react/"><code>Flow</code></a>(<strong>静态类型检测工具</strong>)的语法，所以这种的代码会被解析成ts语法。</p>
+<ul>
+<li>解决方法：<br>快捷键<code>Ctrl+Shift+P</code>，输入<code>setting.json</code>，选择 首选项:打开设置(json)。</li>
+</ul>
+<p><code>settings.json</code></p>
+<figure class="highlight awk"><table><tbody><tr><td class="code"><pre><span class="line"><span class="regexp">//</span> <span class="string">"import type"</span> 声明只能在 TypeScript 文件中使用。</span><br><span class="line"><span class="string">"javascript.validate.enable"</span>: false,</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="8-2、npm-run-android-每次都需要在手机上重新安装软件包"><a href="#8-2、npm-run-android-每次都需要在手机上重新安装软件包" class="headerlink" title="8.2、npm run android 每次都需要在手机上重新安装软件包"></a>8.2、npm run android 每次都需要在手机上重新安装软件包</h2><p>开发者模式 -&gt; USB调试 -&gt; 监控ADB安装应用 -&gt; 关闭, 即可解决。</p>
+<h2 id="8-3、本地开发启动多个项目"><a href="#8-3、本地开发启动多个项目" class="headerlink" title="8.3、本地开发启动多个项目"></a>8.3、本地开发启动多个项目</h2><p>默认端口号是8081，通过指定不同的端口号来启动。</p>
+<figure class="highlight livecodeserver"><table><tbody><tr><td class="code"><pre><span class="line">react-native <span class="built_in">start</span> <span class="comment">--port=8082</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="8-4、修改软件包名称"><a href="#8-4、修改软件包名称" class="headerlink" title="8.4、修改软件包名称"></a>8.4、修改软件包名称</h2><ol>
+<li>修改配置文件<br>Android<br>修改配置文件里的 <code>app_name</code> 即可，重新 <code>yarn android</code> ，发现手机上软件的名称已修改成功。</li>
+</ol>
+<p>文件： <code>android\app\src\main\res\values\strings.xml</code></p>
+<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">string</span> <span class="attr">name</span>=<span class="string">"app_name"</span>&gt;</span>远点<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
 
 <ol start="2">
-<li>示例</li>
+<li>react-native-rename 插件修改</li>
 </ol>
-<p>创建一个自定义事件</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> event=<span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'mock-event'</span>);</span><br></pre></td></tr></tbody></table></figure>
+<p>通过插件修改名字，必须是 使用 <code>react-native init xxx</code> 创建的项目</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 安装</span></span><br><span class="line">npm install react-native-rename -g</span><br><span class="line">or</span><br><span class="line">yarn global add react-native-rename</span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目根目录执行命令</span></span><br><span class="line">npx react-native-rename &lt;newName&gt;</span><br></pre></td></tr></tbody></table></figure>
 
-<ol start="3">
-<li>传递参数</li>
-</ol>
-<p>这里值得注意，需要把想要传递的参数包裹在一个包含<code>detail</code>属性的对象，否则传递的参数不会被挂载</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createEvent</span>(<span class="params">params, eventName = <span class="string">'mock-event'</span></span>) {</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(eventName, { <span class="attr">detail</span>: params });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> event = <span class="title function_">createEvent</span>({ <span class="attr">id</span>: <span class="string">'0010'</span> });</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="4">
-<li>发起事件</li>
-</ol>
-<p>调用<code>dispatchEvent</code>方法发起事件，传入你刚才创建的方法</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">dispatchEvent</span>(event);</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="5">
-<li>监听事件</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'mock-event'</span>, <span class="function">(<span class="params">{ detail: { id } }</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'id'</span>,id) <span class="comment">// 会在控制台打印0010</span></span><br><span class="line">});</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="6">
-<li>示例：</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">addEventListener</span>(<span class="string">'show'</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> { <span class="variable language_">console</span>.<span class="title function_">log</span>(event.<span class="property">detail</span>); });</span><br><span class="line"><span class="comment">// 触发</span></span><br><span class="line"><span class="keyword">let</span> myEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'show'</span>, {</span><br><span class="line">    <span class="attr">detail</span>: {</span><br><span class="line">        <span class="attr">username</span>: <span class="string">'xixi'</span>,</span><br><span class="line">        <span class="attr">userid</span>: <span class="string">'2022'</span></span><br><span class="line">    }</span><br><span class="line">});</span><br><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">dispatchEvent</span>(myEvent);</span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p>了解了自定义事件之后，通过自定义事件模拟触发<code>deviceready</code>事件，这样上面的 <code>deviceready</code> 事件监听就可以执行了。</p>
-<p><strong>注意</strong>：这里还要确定一个问题，在什么时候触发自定义事件<code>deviceready</code>呢？</p>
-</blockquote>
-<h1 id="5、确定-deviceready-事件执行时机"><a href="#5、确定-deviceready-事件执行时机" class="headerlink" title="5、确定 deviceready 事件执行时机"></a>5、确定 <code>deviceready</code> 事件执行时机</h1><ul>
-<li>只需要编写如下代码，查看输出结果即可</li>
-</ul>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'load'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'load OK!'</span>);</span><br><span class="line">}, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'deviceready OK!'</span>);</span><br><span class="line">}, <span class="literal">false</span>);</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>结果输出</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">load OK!</span><br><span class="line">deviceready OK!</span><br></pre></td></tr></tbody></table></figure>
-
-<p>由此可知，执行顺序：<code>load</code> –&gt; <code>deviceready</code></p>
-<h1 id="6、自定义事件模拟Cordova-deviceready事件"><a href="#6、自定义事件模拟Cordova-deviceready事件" class="headerlink" title="6、自定义事件模拟Cordova deviceready事件"></a>6、自定义事件模拟<code>Cordova</code> <code>deviceready</code>事件</h1><ol>
-<li><p>自定义<code>deviceready</code>事件</p>
-</li>
-<li><p>根据上面测试执行顺序得出的结论，我在<code>load</code>事件里触发自定义事件</p>
-</li>
-<li><p>在开发环境下模拟一些用到的<code>JSBridge-API</code>，比如下面写到的 <code>JSAPI.showToast()</code> 方法</p>
-</li>
-</ol>
-<ul>
-<li>mockEvent.js<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (process.<span class="property">env</span>.<span class="property">NODE_ENV</span> === <span class="string">'development'</span>) {</span><br><span class="line">  <span class="comment">//  自定义事件</span></span><br><span class="line">  <span class="keyword">let</span> myEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'deviceready'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 模拟JSAPI事件</span></span><br><span class="line">  <span class="variable language_">window</span>[<span class="string">'JSAPI'</span>] = {</span><br><span class="line">    <span class="title function_">showToast</span>(<span class="params">type, desc</span>) {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(type, desc);</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 开发环境下，在 原生 load 方法之后 触发自定义事件</span></span><br><span class="line">  <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'load'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'load OK!'</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> {</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">dispatchEvent</span>(myEvent);</span><br><span class="line">    }, <span class="number">100</span>)</span><br><span class="line">  }, <span class="literal">false</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h1 id="7、封装deviceReady方法"><a href="#7、封装deviceReady方法" class="headerlink" title="7、封装deviceReady方法"></a>7、封装<code>deviceReady</code>方法</h1><p>实现在<code>Cordova</code>框架触发<code>deviceready</code>事件的时候感知到，以便于在<code>deviceReady</code>事件触发后执行<code>JS-API</code>。</p>
-<p><strong>可用于开发环境和非开发环境</strong></p>
-<h2 id="7-1、方式一"><a href="#7-1、方式一" class="headerlink" title="7.1、方式一"></a>7.1、方式一</h2><p>这里采用<strong>链式调用</strong>的方式，</p>
-<p>以下这种借助 <code>Promise</code> 的实现，在这种场景下其实是不合理的👀<br>只是形式上类似，其实并不是</p>
-<ol>
-<li>定义</li>
-</ol>
-<ul>
-<li>mixin.js</li>
-</ul>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">deviceReady</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">      <span class="title function_">resolve</span>(<span class="string">"ready go!"</span>);</span><br><span class="line">    }, <span class="literal">false</span>);</span><br><span class="line">  })</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>组件内使用<code>JS-API</code></li>
-</ol>
-<p>使用<code>JSAPI</code>可以如下这么写</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">deviceReady</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res); <span class="comment">// ready go!</span></span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">showToast</span>(<span class="number">0</span>, <span class="string">'提示'</span>)</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="variable language_">this</span>.<span class="title function_">deviceReady</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">getUserInfo</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">  }, <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">  });</span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="3">
-<li>开发环境执行效果如下</li>
-</ol>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeb0a16f2c2beb183900d.png"></p>
-<h2 id="7-2、方式二（推荐）"><a href="#7-2、方式二（推荐）" class="headerlink" title="7.2、方式二（推荐）"></a>7.2、方式二（推荐）</h2><p>改写成通用的事件监听函数，支持链式调用</p>
-<blockquote>
-<ul>
-<li><p>开发环境下，由<code>mockEvent.js</code>文件里的<code>dispatchEvent</code>触发自定义的<code>deviceready</code>事件；</p>
-</li>
-<li><p>小程序里运行，则由真实的<code>deviceready</code>事件触发</p>
-</li>
-</ul>
-</blockquote>
-<ol>
-<li>定义</li>
-</ol>
-<ul>
-<li>mixin.js</li>
-</ul>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">receiver</span>(<span class="params">type</span>) {</span><br><span class="line">  <span class="keyword">let</span> callbacks = {</span><br><span class="line">      <span class="attr">fns</span>: [],</span><br><span class="line">      <span class="attr">then</span>: <span class="keyword">function</span>(<span class="params">cb</span>){</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">fns</span>.<span class="title function_">push</span>(cb);</span><br><span class="line">          <span class="keyword">return</span> <span class="variable language_">this</span>;</span><br><span class="line">      }</span><br><span class="line">  };</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(type, <span class="keyword">function</span>(<span class="params">ev</span>) {</span><br><span class="line">    <span class="keyword">let</span> fns = callbacks.<span class="property">fns</span>.<span class="title function_">slice</span>();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>, l = fns.<span class="property">length</span>; i &lt; l; i++){</span><br><span class="line">        fns[i].<span class="title function_">call</span>(<span class="variable language_">this</span>, ev);</span><br><span class="line">    }</span><br><span class="line">  });</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> callbacks;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>使用</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">receiver</span>(<span class="string">'deviceready'</span>).<span class="title function_">then</span>(<span class="function">(<span class="params">ev</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(ev);</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">getUserInfo</span>(</span><br><span class="line">    <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">    },</span><br><span class="line">    <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">    }</span><br><span class="line">  )</span><br><span class="line">})</span><br><span class="line"><span class="variable language_">this</span>.<span class="title function_">receiver</span>(<span class="string">"click"</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"hi"</span>))</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">()=&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">22</span>));</span><br></pre></td></tr></tbody></table></figure>
-
-
-<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>当应用发布到<code>app</code>上，就是监听的真实的 <code>Cordova</code>框架的 <code>deviceready</code> 事件了，之后也就可以拿到真实的<code>JSAPI</code>了，以上只是为了在开发环境的时候模拟使用<code>JSAPI</code>。防止在开发环境下直接调用<code>JSAPI</code>飘红的情况，当然也是可以加<code>try catch</code>处理的，只不过个人感觉模拟事件使得代码看起来更加优雅别致一点，使用更加丝滑，酌情食用😁。</p>
-<p>软件架构非常有意思，感兴趣的可以交流探索，嘻嘻。</p>
+<p>修改完成。</p>
+<p>本篇完！后面继续分享如何调试react native项目。</p>
 <hr>
 <p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
 </body></html>]]></content>
       <categories>
-        <category>前端</category>
+        <category>React Native</category>
       </categories>
       <tags>
-        <tag>Hybrid app</tag>
+        <tag>React Native</tag>
       </tags>
   </entry>
   <entry>
@@ -1992,120 +2161,6 @@
       </tags>
   </entry>
   <entry>
-    <title>React Native环境配置、初始化项目、打包安装到手机，以及开发小知识</title>
-    <url>/posts/252268106.html</url>
-    <content><![CDATA[<html><head></head><body><h1 id="1、前言"><a href="#1、前言" class="headerlink" title="1、前言"></a>1、前言</h1><p>环境：Win10 + Android</p>
-<p>已经在Windows电脑上安装好 <a href="https://nodejs.org/en/">Node</a>（v14+）、Git、Yarn、<br><a href="https://www.oracle.com/java/technologies/downloads/#java11">JDK</a>(v11)</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">javac -version</span><br><span class="line">javac 11.0.15.1</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">node -v</span><br><span class="line">v16.14.1</span><br></pre></td></tr></tbody></table></figure>
-<p>👉 <a href="https://www.react-native.cn/docs/next/environment-setup">官方文档</a></p>
-<h1 id="2、Android-Studio下载安装"><a href="#2、Android-Studio下载安装" class="headerlink" title="2、Android Studio下载安装"></a>2、Android Studio下载安装</h1><ul>
-<li><a href="https://developer.android.google.cn/studio/">下载地址</a></li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631855c416f2c2beb1e9e38c.png"></p>
-<h1 id="3、Android-SDK-下载安装"><a href="#3、Android-SDK-下载安装" class="headerlink" title="3、Android SDK 下载安装"></a>3、Android SDK 下载安装</h1><ul>
-<li>安装 android sdk</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318562016f2c2beb1ea4698.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318567d16f2c2beb1eab904.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318569116f2c2beb1eacfb0.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856a016f2c2beb1eae08f.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856be16f2c2beb1eb068f.png"></p>
-<h2 id="3-1、环境变量配置"><a href="#3-1、环境变量配置" class="headerlink" title="3.1、环境变量配置"></a>3.1、环境变量配置</h2><ul>
-<li><p>配置系统变量<br><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856cf16f2c2beb1eb1c1c.png"></p>
-</li>
-<li><p>Path 配置：</p>
-</li>
-</ul>
-<figure class="highlight haml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\platform-tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\emulator</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools</span><br><span class="line"><span class="tag">%<span class="selector-tag">ANDROID_SDK_ROOT</span></span>%\tools\bin</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="4、Scrcpy-手机模拟器下载安装使用"><a href="#4、Scrcpy-手机模拟器下载安装使用" class="headerlink" title="4、Scrcpy 手机模拟器下载安装使用"></a>4、Scrcpy 手机模拟器下载安装使用</h1><ul>
-<li><a href="https://github.com/Genymobile/scrcpy">下载地址</a></li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856e916f2c2beb1eb3879.png"></p>
-<p>下载zip文件，解压，双击运行 <code>scrcpy.exe</code> 可执行文件即可在电脑上投影手机屏幕，如下图👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631856fb16f2c2beb1eb4fb0.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318571216f2c2beb1eb7443.png" alt="image.png"></p>
-<blockquote>
-<p>运行可执行文件之前，使用<strong>数据线</strong>连接Android手机，进行开发者选项设置（不同的手机进入开发者模式略有差异，自行搜索，我用的是华为手机）</p>
-</blockquote>
-<ul>
-<li>电脑端查看连接设备<br><code>adb devices</code></li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">adb devices</span><br><span class="line">List of devices attached</span><br><span class="line">8TFDU18719000649        device</span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<p>adb 命令，在下载 <code>scrcpy</code> 的时候已经内置了</p>
-</blockquote>
-<h1 id="5、安装-React-Native"><a href="#5、安装-React-Native" class="headerlink" title="5、安装 React Native"></a>5、安装 React Native</h1><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm i react-native-cli -g</span><br><span class="line"></span><br><span class="line">$ react-native -v</span><br><span class="line">react-native-cli: 2.0.1</span><br><span class="line">react-native: n/a - not inside a React Native project directory</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="6、初始化项目"><a href="#6、初始化项目" class="headerlink" title="6、初始化项目"></a>6、初始化项目</h1><p>进入到自己的工作目录，执行下面的命令创建 react native 项目</p>
-<figure class="highlight actionscript"><table><tbody><tr><td class="code"><pre><span class="line">npx react-<span class="keyword">native</span> init AwesomeProject</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="7、运行项目安装软件到安卓机"><a href="#7、运行项目安装软件到安卓机" class="headerlink" title="7、运行项目安装软件到安卓机"></a>7、运行项目安装软件到安卓机</h1><h2 id="7-1、先用数据线连接手机和电脑，运行scrcpy-软件"><a href="#7-1、先用数据线连接手机和电脑，运行scrcpy-软件" class="headerlink" title="7.1、先用数据线连接手机和电脑，运行scrcpy 软件"></a>7.1、先用数据线连接手机和电脑，运行scrcpy 软件</h2><p>开发者选项配置修改，最终实现在电脑上可以投屏手机，并可以在电脑上操控手机</p>
-<h2 id="7-2、打开-android-studio-编辑器，运行项目"><a href="#7-2、打开-android-studio-编辑器，运行项目" class="headerlink" title="7.2、打开 android studio 编辑器，运行项目"></a>7.2、打开 android studio 编辑器，运行项目</h2><figure class="highlight asciidoc"><table><tbody><tr><td class="code"><pre><span class="line">npm run android</span><br><span class="line"></span><br><span class="line"><span class="section">or</span></span><br><span class="line"><span class="section">-------------------</span></span><br><span class="line">cd AwesomeProject</span><br><span class="line">yarn android</span><br><span class="line"># 或者</span><br><span class="line">yarn react-native run-android</span><br></pre></td></tr></tbody></table></figure>
-
-<p>运行的时候会在手机上弹窗 “是否统一安装软件”之类的提示，点击同意即可</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318572616f2c2beb1eb9161.png"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318573616f2c2beb1eba516.png"></p>
-<h2 id="7-3、adb-reverse-命令使用"><a href="#7-3、adb-reverse-命令使用" class="headerlink" title="7.3、adb reverse  命令使用"></a>7.3、adb reverse  命令使用</h2><p><a href="https://developer.android.google.cn/studio/command-line/adb?hl=zh-cn">adb 文档</a></p>
-<h4 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h4><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318574916f2c2beb1ebbc88.png"></p>
-<p>猜测是多设备连接受影响了，可以尝试重启手机解决<br>也可以尝试如下步骤： 启停 adb 服务器</p>
-<blockquote>
-<p>在某些情况下，您可能需要终止 adb 服务器进程，然后重启以解决问题（例如，如果 adb 不响应命令）。</p>
-<p>如需停止 adb 服务器，请使用 adb kill-server 命令。然后，您可以通过发出其他任何 adb 命令来重启服务器。</p>
-</blockquote>
-<figure class="highlight pgsql"><table><tbody><tr><td class="code"><pre><span class="line">adb kill-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">start</span>-<span class="keyword">server</span></span><br><span class="line">adb <span class="keyword">reverse</span> tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><figure class="highlight apache"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attribute">adb</span> reverse tcp:<span class="number">8081</span> tcp:<span class="number">8081</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>这条命令的意思是，Android允许我们通过ADB，把Android上的某个端口映射到电脑（adb forward），或者把电脑的某个端口映射到Android系统（adb reverse），在这里假设电脑上开启的服务，监听的端口为8081。Android手机通过USB连接电脑后，在终端直接执行<code>adb reverse tcp:8081 tcp:8081</code>，然后在手机中访问<code>127.0.0.1:8081</code>，就可以访问到电脑上启动的服务了。</p>
-<p>注意：</p>
-<ol>
-<li>必须是在连接数据线usb的前提下才能使用该方案进行代码调试。</li>
-<li>(Android 5.0 及以上)使用 adb reverse 命令，这个选项只能在 5.0 以上版本(API 21+)的安卓设备上使用。</li>
-</ol>
-<h1 id="8、react-native开发小知识"><a href="#8、react-native开发小知识" class="headerlink" title="8、react-native开发小知识"></a>8、react-native开发小知识</h1><h2 id="8-1、vscode-上代码飘红"><a href="#8-1、vscode-上代码飘红" class="headerlink" title="8.1、vscode 上代码飘红"></a>8.1、vscode 上代码飘红</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6318575a16f2c2beb1ebd220.png"></p>
-<ul>
-<li>问题原因：</li>
-</ul>
-<p>VScode是默认解析ts的，但是不会默认识别 <a href="https://flow.org/en/docs/react/"><code>Flow</code></a>(<strong>静态类型检测工具</strong>)的语法，所以这种的代码会被解析成ts语法。</p>
-<ul>
-<li>解决方法：<br>快捷键<code>Ctrl+Shift+P</code>，输入<code>setting.json</code>，选择 首选项:打开设置(json)。</li>
-</ul>
-<p><code>settings.json</code></p>
-<figure class="highlight awk"><table><tbody><tr><td class="code"><pre><span class="line"><span class="regexp">//</span> <span class="string">"import type"</span> 声明只能在 TypeScript 文件中使用。</span><br><span class="line"><span class="string">"javascript.validate.enable"</span>: false,</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="8-2、npm-run-android-每次都需要在手机上重新安装软件包"><a href="#8-2、npm-run-android-每次都需要在手机上重新安装软件包" class="headerlink" title="8.2、npm run android 每次都需要在手机上重新安装软件包"></a>8.2、npm run android 每次都需要在手机上重新安装软件包</h2><p>开发者模式 -&gt; USB调试 -&gt; 监控ADB安装应用 -&gt; 关闭, 即可解决。</p>
-<h2 id="8-3、本地开发启动多个项目"><a href="#8-3、本地开发启动多个项目" class="headerlink" title="8.3、本地开发启动多个项目"></a>8.3、本地开发启动多个项目</h2><p>默认端口号是8081，通过指定不同的端口号来启动。</p>
-<figure class="highlight livecodeserver"><table><tbody><tr><td class="code"><pre><span class="line">react-native <span class="built_in">start</span> <span class="comment">--port=8082</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="8-4、修改软件包名称"><a href="#8-4、修改软件包名称" class="headerlink" title="8.4、修改软件包名称"></a>8.4、修改软件包名称</h2><ol>
-<li>修改配置文件<br>Android<br>修改配置文件里的 <code>app_name</code> 即可，重新 <code>yarn android</code> ，发现手机上软件的名称已修改成功。</li>
-</ol>
-<p>文件： <code>android\app\src\main\res\values\strings.xml</code></p>
-<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">string</span> <span class="attr">name</span>=<span class="string">"app_name"</span>&gt;</span>远点<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>react-native-rename 插件修改</li>
-</ol>
-<p>通过插件修改名字，必须是 使用 <code>react-native init xxx</code> 创建的项目</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 安装</span></span><br><span class="line">npm install react-native-rename -g</span><br><span class="line">or</span><br><span class="line">yarn global add react-native-rename</span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目根目录执行命令</span></span><br><span class="line">npx react-native-rename &lt;newName&gt;</span><br></pre></td></tr></tbody></table></figure>
-
-<p>修改完成。</p>
-<p>本篇完！后面继续分享如何调试react native项目。</p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>React Native</category>
-      </categories>
-      <tags>
-        <tag>React Native</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>V8中的快慢数组（附源码分析、图文更易理解😃）</title>
     <url>/posts/1787681656.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -2248,6 +2303,56 @@
       </tags>
   </entry>
   <entry>
+    <title>.env.[mode]文件中如何添加注释？</title>
+    <url>/posts/2584380968.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>Vue-Cli</code> 允许我们在项目根目录创建<code>.env.[mode]</code>文件来设置一些打包编译的启动参数，通过执行脚本的时候加<code>mode</code>参数，指定不同环境需要加载的配置文件</p>
+<p>形如： <code>.env.prod</code></p>
+<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>怎么在 <code>.env.prod</code> 文件中添加注释呢？</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这要看<code>vue</code>是怎么解析 <code>.env.prod</code> 文件的</p>
+<p>通过启动脚本参数 <code>--mode prod</code>，一路找到了处理 <code>.env.prod</code> 文件的逻辑，让我们一块看下</p>
+<p><code>path：node_modules\@vue\cli-service\lib\Service.js</code></p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> dotenv = <span class="built_in">require</span>(<span class="string">'dotenv'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">loadEnv (mode) {</span><br><span class="line">    <span class="keyword">const</span> logger = <span class="title function_">debug</span>(<span class="string">'vue:env'</span>)</span><br><span class="line">    <span class="keyword">const</span> basePath = path.<span class="title function_">resolve</span>(<span class="variable language_">this</span>.<span class="property">context</span>, <span class="string">`.env<span class="subst">${mode ? <span class="string">`.<span class="subst">${mode}</span>`</span> : <span class="string">``</span>}</span>`</span>)</span><br><span class="line">    <span class="keyword">const</span> localPath = <span class="string">`<span class="subst">${basePath}</span>.local`</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="title function_">load</span> = envPath =&gt; {</span><br><span class="line">      <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">const</span> env = dotenv.<span class="title function_">config</span>({ <span class="attr">path</span>: envPath, <span class="attr">debug</span>: process.<span class="property">env</span>.<span class="property">DEBUG</span> })</span><br><span class="line">        <span class="title function_">dotenvExpand</span>(env)</span><br><span class="line">        <span class="title function_">logger</span>(envPath, env)</span><br><span class="line">      } <span class="keyword">catch</span> (err) {</span><br><span class="line">        <span class="comment">// only ignore error if file is not found</span></span><br><span class="line">        <span class="keyword">if</span> (err.<span class="title function_">toString</span>().<span class="title function_">indexOf</span>(<span class="string">'ENOENT'</span>) &lt; <span class="number">0</span>) {</span><br><span class="line">          <span class="title function_">error</span>(err)</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="title function_">load</span>(localPath)</span><br><span class="line">    <span class="title function_">load</span>(basePath)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// by default, NODE_ENV and BABEL_ENV are set to "development" unless mode</span></span><br><span class="line">    <span class="comment">// is production or test. However the value in .env files will take higher</span></span><br><span class="line">    <span class="comment">// priority.</span></span><br><span class="line">    <span class="keyword">if</span> (mode) {</span><br><span class="line">      <span class="comment">// always set NODE_ENV during tests</span></span><br><span class="line">      <span class="comment">// as that is necessary for tests to not be affected by each other</span></span><br><span class="line">      <span class="keyword">const</span> shouldForceDefaultEnv = (</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST</span> &amp;&amp;</span><br><span class="line">        !process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST_TESTING_ENV</span></span><br><span class="line">      )</span><br><span class="line">      <span class="keyword">const</span> defaultNodeEnv = (mode === <span class="string">'production'</span> || mode === <span class="string">'test'</span>)</span><br><span class="line">        ? mode</span><br><span class="line">        : <span class="string">'development'</span></span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">NODE_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">NODE_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br></pre></td></tr></tbody></table></figure>
+
+<p>从上面的代码，可以得知，<code>vue</code>使用<code>dotenv</code>解析<code> .env.prod</code> 文件，并将环境变量从 <code>.env[mode]</code> 文件中加载到 <code>process.env</code> 环境变量中</p>
+<h2 id="解决（dotenv）"><a href="#解决（dotenv）" class="headerlink" title="解决（dotenv）"></a>解决（dotenv）</h2><p><code>dotenv</code>插件已经被 <code>Vue-Cli</code> 集成了</p>
+<p><a href="https://github.com/motdotla/dotenv#rules">GitHub地址</a></p>
+<p><code>README.md</code> 中有这么一段话：</p>
+<ul>
+<li>“# marks the beginning of a comment (unless when the value is wrapped in quotes)”</li>
+</ul>
+<p>这就是我们要找的，在<code>.env.[mode]</code> 文件中，可以使用 <code>#</code> 进行注释</p>
+<h3 id="使用测试"><a href="#使用测试" class="headerlink" title="使用测试"></a>使用测试</h3><ol>
+<li><code>path: .env.prod</code> 参数配置</li>
+</ol>
+<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="comment"># VUE_APP_PATH='/pc/'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li><code>package.json</code> 文件脚本命令配置<code>--mode</code>参数</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: {</span><br><span class="line">    <span class="string">"build"</span>: <span class="string">"vue-cli-service build --mode prod"</span>,</span><br><span class="line">  },</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>执行 <code>npm run build</code> 命令，输出如下：</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">NODE_ENV=== production</span><br><span class="line">VUE_APP_PATH=== ./</span><br></pre></td></tr></tbody></table></figure>
+
+<p>本文到此为止，要想了解更多<code>dotenv</code>请自行探索，感谢观看😉</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://img-blog.csdnimg.cn/img_convert/bd14318dfe358078af5f56cdf6895446.gif"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker常用命令——排错很有帮助😏</title>
     <url>/posts/1627929391.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -2337,56 +2442,6 @@
       </categories>
       <tags>
         <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>.env.[mode]文件中如何添加注释？</title>
-    <url>/posts/2584380968.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>Vue-Cli</code> 允许我们在项目根目录创建<code>.env.[mode]</code>文件来设置一些打包编译的启动参数，通过执行脚本的时候加<code>mode</code>参数，指定不同环境需要加载的配置文件</p>
-<p>形如： <code>.env.prod</code></p>
-<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>怎么在 <code>.env.prod</code> 文件中添加注释呢？</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这要看<code>vue</code>是怎么解析 <code>.env.prod</code> 文件的</p>
-<p>通过启动脚本参数 <code>--mode prod</code>，一路找到了处理 <code>.env.prod</code> 文件的逻辑，让我们一块看下</p>
-<p><code>path：node_modules\@vue\cli-service\lib\Service.js</code></p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> dotenv = <span class="built_in">require</span>(<span class="string">'dotenv'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">loadEnv (mode) {</span><br><span class="line">    <span class="keyword">const</span> logger = <span class="title function_">debug</span>(<span class="string">'vue:env'</span>)</span><br><span class="line">    <span class="keyword">const</span> basePath = path.<span class="title function_">resolve</span>(<span class="variable language_">this</span>.<span class="property">context</span>, <span class="string">`.env<span class="subst">${mode ? <span class="string">`.<span class="subst">${mode}</span>`</span> : <span class="string">``</span>}</span>`</span>)</span><br><span class="line">    <span class="keyword">const</span> localPath = <span class="string">`<span class="subst">${basePath}</span>.local`</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="title function_">load</span> = envPath =&gt; {</span><br><span class="line">      <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">const</span> env = dotenv.<span class="title function_">config</span>({ <span class="attr">path</span>: envPath, <span class="attr">debug</span>: process.<span class="property">env</span>.<span class="property">DEBUG</span> })</span><br><span class="line">        <span class="title function_">dotenvExpand</span>(env)</span><br><span class="line">        <span class="title function_">logger</span>(envPath, env)</span><br><span class="line">      } <span class="keyword">catch</span> (err) {</span><br><span class="line">        <span class="comment">// only ignore error if file is not found</span></span><br><span class="line">        <span class="keyword">if</span> (err.<span class="title function_">toString</span>().<span class="title function_">indexOf</span>(<span class="string">'ENOENT'</span>) &lt; <span class="number">0</span>) {</span><br><span class="line">          <span class="title function_">error</span>(err)</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="title function_">load</span>(localPath)</span><br><span class="line">    <span class="title function_">load</span>(basePath)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// by default, NODE_ENV and BABEL_ENV are set to "development" unless mode</span></span><br><span class="line">    <span class="comment">// is production or test. However the value in .env files will take higher</span></span><br><span class="line">    <span class="comment">// priority.</span></span><br><span class="line">    <span class="keyword">if</span> (mode) {</span><br><span class="line">      <span class="comment">// always set NODE_ENV during tests</span></span><br><span class="line">      <span class="comment">// as that is necessary for tests to not be affected by each other</span></span><br><span class="line">      <span class="keyword">const</span> shouldForceDefaultEnv = (</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST</span> &amp;&amp;</span><br><span class="line">        !process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST_TESTING_ENV</span></span><br><span class="line">      )</span><br><span class="line">      <span class="keyword">const</span> defaultNodeEnv = (mode === <span class="string">'production'</span> || mode === <span class="string">'test'</span>)</span><br><span class="line">        ? mode</span><br><span class="line">        : <span class="string">'development'</span></span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">NODE_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">NODE_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br></pre></td></tr></tbody></table></figure>
-
-<p>从上面的代码，可以得知，<code>vue</code>使用<code>dotenv</code>解析<code> .env.prod</code> 文件，并将环境变量从 <code>.env[mode]</code> 文件中加载到 <code>process.env</code> 环境变量中</p>
-<h2 id="解决（dotenv）"><a href="#解决（dotenv）" class="headerlink" title="解决（dotenv）"></a>解决（dotenv）</h2><p><code>dotenv</code>插件已经被 <code>Vue-Cli</code> 集成了</p>
-<p><a href="https://github.com/motdotla/dotenv#rules">GitHub地址</a></p>
-<p><code>README.md</code> 中有这么一段话：</p>
-<ul>
-<li>“# marks the beginning of a comment (unless when the value is wrapped in quotes)”</li>
-</ul>
-<p>这就是我们要找的，在<code>.env.[mode]</code> 文件中，可以使用 <code>#</code> 进行注释</p>
-<h3 id="使用测试"><a href="#使用测试" class="headerlink" title="使用测试"></a>使用测试</h3><ol>
-<li><code>path: .env.prod</code> 参数配置</li>
-</ol>
-<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="comment"># VUE_APP_PATH='/pc/'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li><code>package.json</code> 文件脚本命令配置<code>--mode</code>参数</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: {</span><br><span class="line">    <span class="string">"build"</span>: <span class="string">"vue-cli-service build --mode prod"</span>,</span><br><span class="line">  },</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="3">
-<li>执行 <code>npm run build</code> 命令，输出如下：</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">NODE_ENV=== production</span><br><span class="line">VUE_APP_PATH=== ./</span><br></pre></td></tr></tbody></table></figure>
-
-<p>本文到此为止，要想了解更多<code>dotenv</code>请自行探索，感谢观看😉</p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://img-blog.csdnimg.cn/img_convert/bd14318dfe358078af5f56cdf6895446.gif"></p>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>vue</tag>
       </tags>
   </entry>
   <entry>
@@ -2941,61 +2996,6 @@
       </tags>
   </entry>
   <entry>
-    <title>多路径来源页面导航高亮以及面包屑导航修改</title>
-    <url>/posts/2025032412.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="问题缘由"><a href="#问题缘由" class="headerlink" title="问题缘由"></a>问题缘由</h2><p>这个问题比较普遍，原因是业务方面对产品进行多维度的划分（或者对产品进行归档、打标签、收藏等等），反应在前端方面就是同一个页面可以有不同的入口（产品目录结构划分）</p>
-<p>干说不如举个例子：</p>
-<ol>
-<li><p>“活期储蓄”产品属于负债类理财产品（导航菜单）</p>
-</li>
-<li><p>关注“活期储蓄”产品</p>
-</li>
-<li><p>在“我的关注”菜单里也存在“活期储蓄”产品</p>
-</li>
-</ol>
-<p>从上面的描述中不难发现，“活期储蓄”产品既可以从“负债类理财产品”菜单进入，也可以从“我的关注”菜单进入。</p>
-<p>这就带来了两个问题：</p>
-<ol>
-<li><p>当进入“活期储蓄”产品详情页面的时候，高亮哪个导航菜单</p>
-</li>
-<li><p>当进入“活期储蓄”产品详情页面的时候，面包屑导航怎么显示</p>
-</li>
-</ol>
-<p>从用户角度来说自然是我从哪里点进去的就高亮哪个菜单，面包屑也真实的反应“来源路径”</p>
-<h2 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h2><p>项目采用的技术： Vue，Element UI，vue-router</p>
-<p>采用的 element ui 的 导航组件和面包屑组件。</p>
-<p>面包屑是借助 vue-router 的 matched 方法 匹配到的路由对象数据注入ui组件实现的</p>
-<h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><ul>
-<li><p>如果可以从后端数据上进行处理当然更好，现实是没有如果。</p>
-</li>
-<li><p>前端处理，分别针对导高亮和面包屑处理</p>
-</li>
-</ul>
-<h3 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h3><ol>
-<li><p>在进入详情页面的行为中增加标记（我使用 sessionStorage 标记，标记信息包括路径path、title，path用于高亮导航，title用于面包屑展示）</p>
-</li>
-<li><p>在离开详情页的时候移除标记（通过路由守卫实现，目的是标记不会带来别的副作用）</p>
-</li>
-<li><p>根据标记修正菜单高亮、面包屑展示</p>
-</li>
-</ol>
-<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>分析完之后发现写代码就跟玩一样，没有什么技术含量，就不贴代码了</p>
-<p>有一点需要注意：</p>
-<p>在上面思路分析中，当进入详情页，刷新页面，可能会存在时序问题，具体就是面包屑组件里标记信息不能及时同步，这里我采用的是在<code>data</code>上面定义属性<code>signTitle</code>承接<code>sessionStorage</code>，然后在 <code>computed</code> 里面以<code>signTitle</code>为源数据得到最新的标记信息</p>
-<p>可以使用全局状态管理方式替代sessionStorage，状态持久化就可以了</p>
-<hr>
-<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>前端</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>多路由复用页面组件问题</title>
     <url>/posts/3277520678.html</url>
     <content><![CDATA[<html><head></head><body><hr>
@@ -3057,6 +3057,61 @@
 </li>
 </ol>
 <p>接着调用<code>created、mounted</code>等等</p>
+<hr>
+<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>前端</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>多路径来源页面导航高亮以及面包屑导航修改</title>
+    <url>/posts/2025032412.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="问题缘由"><a href="#问题缘由" class="headerlink" title="问题缘由"></a>问题缘由</h2><p>这个问题比较普遍，原因是业务方面对产品进行多维度的划分（或者对产品进行归档、打标签、收藏等等），反应在前端方面就是同一个页面可以有不同的入口（产品目录结构划分）</p>
+<p>干说不如举个例子：</p>
+<ol>
+<li><p>“活期储蓄”产品属于负债类理财产品（导航菜单）</p>
+</li>
+<li><p>关注“活期储蓄”产品</p>
+</li>
+<li><p>在“我的关注”菜单里也存在“活期储蓄”产品</p>
+</li>
+</ol>
+<p>从上面的描述中不难发现，“活期储蓄”产品既可以从“负债类理财产品”菜单进入，也可以从“我的关注”菜单进入。</p>
+<p>这就带来了两个问题：</p>
+<ol>
+<li><p>当进入“活期储蓄”产品详情页面的时候，高亮哪个导航菜单</p>
+</li>
+<li><p>当进入“活期储蓄”产品详情页面的时候，面包屑导航怎么显示</p>
+</li>
+</ol>
+<p>从用户角度来说自然是我从哪里点进去的就高亮哪个菜单，面包屑也真实的反应“来源路径”</p>
+<h2 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h2><p>项目采用的技术： Vue，Element UI，vue-router</p>
+<p>采用的 element ui 的 导航组件和面包屑组件。</p>
+<p>面包屑是借助 vue-router 的 matched 方法 匹配到的路由对象数据注入ui组件实现的</p>
+<h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><ul>
+<li><p>如果可以从后端数据上进行处理当然更好，现实是没有如果。</p>
+</li>
+<li><p>前端处理，分别针对导高亮和面包屑处理</p>
+</li>
+</ul>
+<h3 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h3><ol>
+<li><p>在进入详情页面的行为中增加标记（我使用 sessionStorage 标记，标记信息包括路径path、title，path用于高亮导航，title用于面包屑展示）</p>
+</li>
+<li><p>在离开详情页的时候移除标记（通过路由守卫实现，目的是标记不会带来别的副作用）</p>
+</li>
+<li><p>根据标记修正菜单高亮、面包屑展示</p>
+</li>
+</ol>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>分析完之后发现写代码就跟玩一样，没有什么技术含量，就不贴代码了</p>
+<p>有一点需要注意：</p>
+<p>在上面思路分析中，当进入详情页，刷新页面，可能会存在时序问题，具体就是面包屑组件里标记信息不能及时同步，这里我采用的是在<code>data</code>上面定义属性<code>signTitle</code>承接<code>sessionStorage</code>，然后在 <code>computed</code> 里面以<code>signTitle</code>为源数据得到最新的标记信息</p>
+<p>可以使用全局状态管理方式替代sessionStorage，状态持久化就可以了</p>
 <hr>
 <p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
 <p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
