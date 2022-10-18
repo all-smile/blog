@@ -7,6 +7,8 @@ categories: Docker
 description: 本文记录 Docker 系列之环境配置，讲解在centos 7 环境安装docker环境，并简单运行一个hello world，以及安装中的问题解决。
 ---
 
+> 本篇收录至[Docker专栏](https://blog.i-xiao.space/categories/Docker/)，持续更新，欢迎访问😊
+
 ## 环境准备
 
 [文档](https://docs.docker.com/get-started/overview/)非常用心🌹

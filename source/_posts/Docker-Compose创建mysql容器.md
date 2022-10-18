@@ -7,7 +7,9 @@ abbrlink: 2048262040
 date: 2022-10-11 14:10:57
 ---
 
-> 本文通过`Docker Compose`来创建`mysql`容器
+> 本篇收录至[Docker专栏](https://blog.i-xiao.space/categories/Docker/)，持续更新，欢迎访问😊
+
+本文通过`Docker Compose`来创建`mysql`容器
 
 ## 在linux服务器上创建文件，用于管理容器
 

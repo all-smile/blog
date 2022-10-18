@@ -9,7 +9,9 @@ abbrlink: 2106196415
 date: 2022-10-14 12:29:08
 ---
 
-> 本文讲解如何制作自己的tomcat镜像，并使用tomcat部署项目
+> 本篇收录至[Docker专栏](https://blog.i-xiao.space/categories/Docker/)，持续更新，欢迎访问😊
+
+本文讲解如何制作自己的tomcat镜像，并使用tomcat部署项目
 
 ## 原料准备：
 

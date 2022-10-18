@@ -4,12 +4,15 @@ tags:
   - Docker
 categories:
   - 后端运维
+  - Docker
 description: "本篇接着上篇：【Docker0网络及原理探究】，继续深入探究容器网络通信原理，通过学习Docker网路驱动模型，更好地解决容器间的通信问题\U0001F389\U0001F389"
 abbrlink: 1604561083
 date: 2022-08-29 22:16:09
 ---
 
-> 本篇接着上篇：【Docker0网络及原理探究】，继续深入探究容器网络通信原理，通过学习Docker网路驱动模型，更好地解决容器间的通信问题🎉🎉
+> 本篇收录至[Docker专栏](https://blog.i-xiao.space/categories/Docker/)，持续更新，欢迎访问😊
+
+本篇接着上篇：【Docker0网络及原理探究】，继续深入探究容器网络通信原理，通过学习Docker网路驱动模型，更好地解决容器间的通信问题🎉🎉
 
 ## 1、Docker的网络驱动模型
 ### 1.1、Docker的网络驱动模型分类：
@@ -36,7 +39,7 @@ NETWORK ID     NAME      DRIVER    SCOPE
 feafa30d4051   bridge    bridge    local
 e8bf4fced9e2   host      host      local
 6263db0933b9   none      null      local
-[root@--- ~]# 
+[root@--- ~]#
 ```
 
 Docker内置这三个网络，运行容器时，你可以使用该`--network`标志来指定容器应连接到哪些网络。
@@ -128,7 +131,7 @@ ff02::1	ip6-allnodes
 ff02::2	ip6-allrouters
 172.17.0.3	tomcat02 099602f3ff7f #✨--link命令配置生成的条目✨
 172.17.0.4	a20a10b7e728
-[root@--- ~]# 
+[root@--- ~]#
 ```
 
 ### 3.4、🧨通过 User-defined networks（推荐）
@@ -291,7 +294,7 @@ docker network inspect feafa30d4051👈
 
 ## 最后
 
-了解了Docker网络、容器通信之后，对继续学习服务网格（`Service Mesh`）与`Kubernetes`的服务发现有很大帮助。很多的项目架构也都是从网络通信角度进行的层级、模块划分（比如：网路拓扑图、终极系统架构异地多活）。关于网络，学完之后你会发现很多东西都串一块了，超级有意思😊 
+了解了Docker网络、容器通信之后，对继续学习服务网格（`Service Mesh`）与`Kubernetes`的服务发现有很大帮助。很多的项目架构也都是从网络通信角度进行的层级、模块划分（比如：网路拓扑图、终极系统架构异地多活）。关于网络，学完之后你会发现很多东西都串一块了，超级有意思😊
 
 微信公众号：【看见另一种可能】
 

@@ -7,6 +7,8 @@ categories: Docker
 description: Docker的数据持久化与数据共享怎么实现？
 ---
 
+> 本篇收录至[Docker专栏](https://blog.i-xiao.space/categories/Docker/)，持续更新，欢迎访问😊
+
 # 数据持久化（安装MySQL）
 
 参考另一篇Docker安装mysql: [https://www.yuque.com/allblue-byynd/cs239m/pct46i](https://www.yuque.com/allblue-byynd/cs239m/pct46i)

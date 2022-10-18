@@ -7,6 +7,8 @@ abbrlink: 1427354585
 date: 2022-10-13 18:06:11
 ---
 
+> 本篇收录至[Docker专栏](https://blog.i-xiao.space/categories/Docker/)，持续更新，欢迎访问😊
+
 # 用`dockerfile`生成镜像并挂载数据卷
 
 ## 编写`dockerfile`文件

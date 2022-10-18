@@ -7,6 +7,8 @@ abbrlink: 1048738116
 date: 2022-10-15 18:29:38
 ---
 
+> 本篇收录至[Docker专栏](https://blog.i-xiao.space/categories/Docker/)，持续更新，欢迎访问😊
+
 # 构建自己的centos镜像
 
 `docker pull centos`下载下来的镜像都是基础版本，缺少很多常用的命令功能，比如：`ll`、`vim`等等，

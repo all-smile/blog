@@ -11,7 +11,9 @@ abbrlink: 1512743311
 date: 2022-10-09 11:18:38
 ---
 
-> 容器时相互隔离的，`docker`启动的`nginx`是容器内的服务，不影响我原先服务器上的`nginx`服务，小伙伴们可大胆尝试😃
+> 本篇收录至[Docker专栏](https://blog.i-xiao.space/categories/Docker/)，持续更新，欢迎访问😊
+
+容器时相互隔离的，`docker`启动的`nginx`是容器内的服务，不影响我原先服务器上的`nginx`服务，小伙伴们可大胆尝试😃
 
 本篇实在linux环境下操作的，主要目的是夺人眼目，对使用Docker部署服务进行尝鲜，先体会一下Docker的便捷之处。
 

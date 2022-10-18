@@ -7,6 +7,8 @@ abbrlink: 4209609624
 date: 2022-10-10 10:29:42
 ---
 
+> 本篇收录至[Docker专栏](https://blog.i-xiao.space/categories/Docker/)，持续更新，欢迎访问😊
+
 # 什么是容器数据卷
 
 从docker的理念说起，docker将应用和环境打包成一个镜像，运行镜像（生成容器）就可以访问服务了。
