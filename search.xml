@@ -43,89 +43,6 @@
 </body></html>]]></content>
   </entry>
   <entry>
-    <title>Docker | Compose创建mysql容器</title>
-    <url>/posts/2048262040.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
-</blockquote>
-<p>本文通过<code>Docker Compose</code>来创建<code>mysql</code>容器</p>
-<h2 id="在linux服务器上创建文件，用于管理容器"><a href="#在linux服务器上创建文件，用于管理容器" class="headerlink" title="在linux服务器上创建文件，用于管理容器"></a>在linux服务器上创建文件，用于管理容器</h2><ul>
-<li>mkdir docker-mysql</li>
-<li>cd docker-mysql</li>
-<li>vim docker-compose.yml  #写入如下内容</li>
-</ul>
-<p><code>docker-compose.yml</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">version: <span class="string">"3"</span></span><br><span class="line">services:</span><br><span class="line">  mysqldb:</span><br><span class="line">    image: mysql:5.7</span><br><span class="line">    restart: always</span><br><span class="line">    container_name: mysql57</span><br><span class="line">    ports:</span><br><span class="line">      - 3310:3306</span><br><span class="line">    volumes:</span><br><span class="line">      - /var/vol_dockers/mysqldb/conf:/etc/mysql/conf.d</span><br><span class="line">      - /var/vol_dockers/mysqldb/data:/var/lib/mysql</span><br><span class="line">    environment:</span><br><span class="line">      MYSQL_PSAAWORD: PSAAWORD</span><br><span class="line">      MYSQL_ROOT_PASSWORD: PSAAWORD</span><br><span class="line">      MYSQL_USER: root</span><br><span class="line">      MYSQL_DATABASE: database</span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p>记得防火墙要开放3306、3310端口</p>
-</blockquote>
-<h2 id="创建启停脚本文件"><a href="#创建启停脚本文件" class="headerlink" title="创建启停脚本文件"></a>创建启停脚本文件</h2><ul>
-<li><p>vim start</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>vim restart</p>
-</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose restart</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>vim stop</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose stop</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="修改脚本文件权限"><a href="#修改脚本文件权限" class="headerlink" title="修改脚本文件权限"></a>修改脚本文件权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 777 st* restart</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450d9c16f2c2beb1fc717d.jpg"></p>
-<h2 id="启动mysql容器"><a href="#启动mysql容器" class="headerlink" title="启动mysql容器"></a>启动<code>mysql</code>容器</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./start</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>查看容器</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450e0116f2c2beb1fd0442.jpg"></p>
-<h2 id="mysql数据库基本配置"><a href="#mysql数据库基本配置" class="headerlink" title="mysql数据库基本配置"></a>mysql数据库基本配置</h2><ol>
-<li>创建MySql用户</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">CREATE USER dbadmin@localhost IDENTIFIED BY <span class="string">'pwd'</span>;</span><br></pre></td></tr></tbody></table></figure>
-
-<p><code>dbadmin@localhost</code>，表示只允许<code>localhost</code>环境的<code>dbadmin</code>用户登录</p>
-<ol start="2">
-<li>设置可访问的主机</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">update user <span class="built_in">set</span> host = <span class="string">'%'</span> <span class="built_in">where</span> user = <span class="string">'dbadmin'</span>;</span><br></pre></td></tr></tbody></table></figure>
-
-<p>% 表示接受所有主机ip访问</p>
-<ol start="3">
-<li>最后刷新生效</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">flush privileges;</span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>整体步骤：</strong></p>
-<p>1、连接服务器: mysql -u root -p</p>
-<p>2、看当前所有数据库：show databases;</p>
-<p>3、进入mysql数据库：use mysql;</p>
-<p>4、查看mysql数据库中所有的表：show tables;</p>
-<p>5、查看user表中的数据：select Host, User,Password from user;</p>
-<p>6、修改user表中的Host: update user set Host=’%’ where User=’root’;</p>
-<p>7、最后刷新一下：flush privileges;</p>
-<p><strong>客户端连接</strong></p>
-<p>这里我使用的是<code>SQLyog</code>工具连接<code>MySQL</code>数据库</p>
-<p><code>sqlyog</code>连接服务器的<code>3310</code>端口，<code>3310</code>端口映射<code>MySQL</code>容器的<code>3306</code>端口。</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450db816f2c2beb1fc98ab.jpg"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450def16f2c2beb1fce7fa.jpg"></p>
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>Docker MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>D8调试工具——jsvu的使用细则</title>
     <url>/posts/1327063303.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -344,6 +261,89 @@
       </tags>
   </entry>
   <entry>
+    <title>Docker | Compose创建mysql容器</title>
+    <url>/posts/2048262040.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
+</blockquote>
+<p>本文通过<code>Docker Compose</code>来创建<code>mysql</code>容器</p>
+<h2 id="在linux服务器上创建文件，用于管理容器"><a href="#在linux服务器上创建文件，用于管理容器" class="headerlink" title="在linux服务器上创建文件，用于管理容器"></a>在linux服务器上创建文件，用于管理容器</h2><ul>
+<li>mkdir docker-mysql</li>
+<li>cd docker-mysql</li>
+<li>vim docker-compose.yml  #写入如下内容</li>
+</ul>
+<p><code>docker-compose.yml</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">version: <span class="string">"3"</span></span><br><span class="line">services:</span><br><span class="line">  mysqldb:</span><br><span class="line">    image: mysql:5.7</span><br><span class="line">    restart: always</span><br><span class="line">    container_name: mysql57</span><br><span class="line">    ports:</span><br><span class="line">      - 3310:3306</span><br><span class="line">    volumes:</span><br><span class="line">      - /var/vol_dockers/mysqldb/conf:/etc/mysql/conf.d</span><br><span class="line">      - /var/vol_dockers/mysqldb/data:/var/lib/mysql</span><br><span class="line">    environment:</span><br><span class="line">      MYSQL_PSAAWORD: PSAAWORD</span><br><span class="line">      MYSQL_ROOT_PASSWORD: PSAAWORD</span><br><span class="line">      MYSQL_USER: root</span><br><span class="line">      MYSQL_DATABASE: database</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>记得防火墙要开放3306、3310端口</p>
+</blockquote>
+<h2 id="创建启停脚本文件"><a href="#创建启停脚本文件" class="headerlink" title="创建启停脚本文件"></a>创建启停脚本文件</h2><ul>
+<li><p>vim start</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>vim restart</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose restart</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>vim stop</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose stop</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="修改脚本文件权限"><a href="#修改脚本文件权限" class="headerlink" title="修改脚本文件权限"></a>修改脚本文件权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 777 st* restart</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450d9c16f2c2beb1fc717d.jpg"></p>
+<h2 id="启动mysql容器"><a href="#启动mysql容器" class="headerlink" title="启动mysql容器"></a>启动<code>mysql</code>容器</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./start</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>查看容器</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450e0116f2c2beb1fd0442.jpg"></p>
+<h2 id="mysql数据库基本配置"><a href="#mysql数据库基本配置" class="headerlink" title="mysql数据库基本配置"></a>mysql数据库基本配置</h2><ol>
+<li>创建MySql用户</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">CREATE USER dbadmin@localhost IDENTIFIED BY <span class="string">'pwd'</span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>dbadmin@localhost</code>，表示只允许<code>localhost</code>环境的<code>dbadmin</code>用户登录</p>
+<ol start="2">
+<li>设置可访问的主机</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">update user <span class="built_in">set</span> host = <span class="string">'%'</span> <span class="built_in">where</span> user = <span class="string">'dbadmin'</span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>% 表示接受所有主机ip访问</p>
+<ol start="3">
+<li>最后刷新生效</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">flush privileges;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>整体步骤：</strong></p>
+<p>1、连接服务器: mysql -u root -p</p>
+<p>2、看当前所有数据库：show databases;</p>
+<p>3、进入mysql数据库：use mysql;</p>
+<p>4、查看mysql数据库中所有的表：show tables;</p>
+<p>5、查看user表中的数据：select Host, User,Password from user;</p>
+<p>6、修改user表中的Host: update user set Host=’%’ where User=’root’;</p>
+<p>7、最后刷新一下：flush privileges;</p>
+<p><strong>客户端连接</strong></p>
+<p>这里我使用的是<code>SQLyog</code>工具连接<code>MySQL</code>数据库</p>
+<p><code>sqlyog</code>连接服务器的<code>3310</code>端口，<code>3310</code>端口映射<code>MySQL</code>容器的<code>3306</code>端口。</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450db816f2c2beb1fc98ab.jpg"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450def16f2c2beb1fce7fa.jpg"></p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker | dockerfile构建centos镜像，以及CMD和ENTRYPOINT的区别</title>
     <url>/posts/1048738116.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -456,6 +456,133 @@
 <h2 id="设置-Redis-访问密码"><a href="#设置-Redis-访问密码" class="headerlink" title="设置 Redis 访问密码"></a>设置 Redis 访问密码</h2><p>在配置文件<code>redis.conf</code>中找到 <code>requirepass</code>，去掉前面的注释，并修改后面的密码。</p>
 <h2 id="常用配置文件例子-redis-conf"><a href="#常用配置文件例子-redis-conf" class="headerlink" title="常用配置文件例子 redis.conf"></a>常用配置文件例子 redis.conf</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#默认端口6379</span></span><br><span class="line">port 6379</span><br><span class="line"></span><br><span class="line"><span class="comment">#绑定ip，如果是内网可以直接绑定 127.0.0.1, 或者忽略, 0.0.0.0是外网</span></span><br><span class="line"><span class="built_in">bind</span> 0.0.0.0</span><br><span class="line"></span><br><span class="line"><span class="comment">#守护进程启动</span></span><br><span class="line">daemonize <span class="built_in">yes</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#超时</span></span><br><span class="line"><span class="built_in">timeout</span> 300</span><br><span class="line">loglevel notice</span><br><span class="line"></span><br><span class="line"><span class="comment">#分区</span></span><br><span class="line">databases 16</span><br><span class="line">save 900 1</span><br><span class="line">save 300 10</span><br><span class="line">save 60 10000</span><br><span class="line">rdbcompression <span class="built_in">yes</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#存储文件</span></span><br><span class="line">dbfilename dump.rdb</span><br><span class="line"></span><br><span class="line"><span class="comment">#密码</span></span><br><span class="line">requirepass xxxxxxxx</span><br></pre></td></tr></tbody></table></figure>
 
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+        <category>Redis</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+        <tag>Redis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker | redis集群部署实战</title>
+    <url>/posts/2804936210.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
+</blockquote>
+<p>前面已经简单熟悉过<code>redis</code>的下载安装使用，今天接着部署<code>redis</code>集群（cluster），简单体会一下redis集群的高可用特性。</p>
+<h1 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h1><p>Redis是C语言开发，安装Redis需要先将Redis的源码进行编译，编译依赖<code>gcc</code>环境</p>
+<h2 id="安装gcc-c"><a href="#安装gcc-c" class="headerlink" title="安装gcc-c++"></a>安装<code>gcc-c++</code></h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum install gcc-c++</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="查看版本"><a href="#查看版本" class="headerlink" title="查看版本"></a>查看版本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- redis]<span class="comment"># gcc -v</span></span><br><span class="line">Using built-in specs.</span><br><span class="line">COLLECT_GCC=gcc</span><br><span class="line">COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/lto-wrapper</span><br><span class="line">Target: x86_64-redhat-linux</span><br><span class="line">Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-bootstrap --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-linker-hash-style=gnu --enable-languages=c,c++,objc,obj-c++,java,fortran,ada,go,lto --enable-plugin --enable-initfini-array --disable-libgcj --with-isl=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/isl-install --with-cloog=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/cloog-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux</span><br><span class="line">Thread model: posix</span><br><span class="line">gcc version 4.8.5 20150623 (Red Hat 4.8.5-44) (GCC)</span><br><span class="line">[root@--- redis]<span class="comment">#</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Redis的四种模式</strong></p>
+<ol>
+<li><p>单机模式</p>
+</li>
+<li><p>master+slave(主从)</p>
+</li>
+<li><p>sentinel(哨兵)</p>
+</li>
+<li><p>cluster(集群)</p>
+</li>
+</ol>
+<h1 id="创建redis网卡"><a href="#创建redis网卡" class="headerlink" title="创建redis网卡"></a>创建redis网卡</h1><figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]# docker network create redis --subnet 172.38.0.0/16</span><br><span class="line">0350d84612bef09bc32b39f15ac6b608dae17cbd75d04b282c0bd37c0283bb7c</span><br><span class="line">[root@iZm5e23n3ueobwkjtfartxZ ~]# docker network ls</span><br><span class="line">NETWORK ID     NAME           DRIVER    SCOPE</span><br><span class="line">feafa30d4051   bridge         bridge    local</span><br><span class="line">e8bf4fced9e2   host           host      local</span><br><span class="line">0096a971fd2c   mynet          bridge    local</span><br><span class="line">6263db0933b9   none           null      local</span><br><span class="line">0350d84612be   redis          bridge    local</span><br><span class="line">799426d70aa2   test-network   bridge    local</span><br><span class="line">[root@--- ~]#</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<h1 id="创建6个redis服务"><a href="#创建6个redis服务" class="headerlink" title="创建6个redis服务"></a>创建6个redis服务</h1><p>通过编写脚本创建6个redis服务</p>
+<ul>
+<li>cluster-enabled：是否启动集群，选值：yes 、no</li>
+<li>cluster-config-file 配置文件.conf ：指定节点信息，自动生成</li>
+<li>cluster-node-timeout 毫秒值： 配置节点连接超时时间</li>
+<li>appendonly：是否开启持久化，选值：yes、no</li>
+<li>daemonize: 守护进程启动(后台启动)</li>
+</ul>
+<h2 id="在-var目录下创建脚本文件create-redis-script-sh"><a href="#在-var目录下创建脚本文件create-redis-script-sh" class="headerlink" title="在/var目录下创建脚本文件create_redis_script.sh"></a>在<code>/var</code>目录下创建脚本文件<code>create_redis_script.sh</code></h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">touch</span> create_redis_script.sh</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="编写脚本内容"><a href="#编写脚本内容" class="headerlink" title="编写脚本内容"></a>编写脚本内容</h2><p><code>vim create_redis_script.sh</code>，写入下面的内容</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> port <span class="keyword">in</span> $(<span class="built_in">seq</span>	1 6); \</span><br><span class="line"><span class="keyword">do</span> \</span><br><span class="line"><span class="built_in">mkdir</span> -p /var/redisNode/node-<span class="variable">${port}</span>/conf</span><br><span class="line"><span class="built_in">touch</span> /var/redisNode/node-<span class="variable">${port}</span>/conf/redis.conf</span><br><span class="line"><span class="built_in">cat</span> &lt;&lt; <span class="string">EOF &gt;/var/redisNode/node-${port}/conf/redis.conf</span></span><br><span class="line"><span class="string">port 6379</span></span><br><span class="line"><span class="string">bind 0.0.0.0</span></span><br><span class="line"><span class="string">cluster-enabled yes</span></span><br><span class="line"><span class="string">cluster-config-file nodes.conf</span></span><br><span class="line"><span class="string">cluster-node-timeout 5000</span></span><br><span class="line"><span class="string">cluster-announce-ip 172.38.0.1${port}</span></span><br><span class="line"><span class="string">cluster-announce-port 6379</span></span><br><span class="line"><span class="string">cluster-announce-bus-port 16379</span></span><br><span class="line"><span class="string">appendonly yes</span></span><br><span class="line"><span class="string">#daemonize yes</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="查看脚本文件"><a href="#查看脚本文件" class="headerlink" title="查看脚本文件"></a>查看脚本文件</h2><p><code>cat create_redis_script.sh</code></p>
+<h2 id="赋予create-redis-script-sh文件可执行权限"><a href="#赋予create-redis-script-sh文件可执行权限" class="headerlink" title="赋予create_redis_script.sh文件可执行权限"></a>赋予<code>create_redis_script.sh</code>文件可执行权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># chmod o+x create_redis_script.sh</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="执行脚本，创建redis服务"><a href="#执行脚本，创建redis服务" class="headerlink" title="执行脚本，创建redis服务"></a>执行脚本，创建redis服务</h2><p><code>./create_redis_script.sh</code></p>
+<h2 id="查看redis节点"><a href="#查看redis节点" class="headerlink" title="查看redis节点"></a>查看redis节点</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- redisNode]<span class="comment"># pwd</span></span><br><span class="line">/var/redisNode</span><br><span class="line">[root@--- redisNode]<span class="comment"># ls</span></span><br><span class="line">node-1  node-2  node-3  node-4  node-5  node-6</span><br><span class="line">[root@--- redisNode]<span class="comment">#</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="查看redis-conf配置文件"><a href="#查看redis-conf配置文件" class="headerlink" title="查看redis.conf配置文件"></a>查看redis.conf配置文件</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63511d8816f2c2beb14ed518.jpg"></p>
+<h1 id="启动redis服务"><a href="#启动redis服务" class="headerlink" title="启动redis服务"></a>启动redis服务</h1><ul>
+<li><p>-v 挂载数据卷</p>
+</li>
+<li><p>redis:5.0.9-alpine3.11 redis镜像</p>
+</li>
+<li><p>6379 是redis端口： 映射云服务器端口6371 - 6376</p>
+</li>
+<li><p>16379 是redis集群TCP端口： 映射云服务器端口16371 - 16376</p>
+</li>
+<li><p>–net 使用自定义redis网络</p>
+</li>
+<li><p>–ip 是本容器绑定的ip： 172.38.0.11 - 16</p>
+</li>
+<li><p>–name 容器名字： redis-1 - 6</p>
+</li>
+<li><p>redis-server /etc/redis/redis.conf 追加命令，通过redis.conf启动</p>
+</li>
+</ul>
+<h2 id="启动方式一（不推荐）："><a href="#启动方式一（不推荐）：" class="headerlink" title="启动方式一（不推荐）："></a>启动方式一（不推荐）：</h2><p>一个一个启动</p>
+<p>启动第一个redis节点</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -p 6371:6379 -p 16371:16379 --name redis-1 \</span><br><span class="line">-v /var/redisNode/node-1/data:/data \</span><br><span class="line">-v /var/redisNode/node-1/conf/redis.conf:/etc/redis/redis.conf \</span><br><span class="line">-d --net redis --ip 172.38.0.11 redis:5.0.9-alpine3.11 redis-server /etc/redis/redis.conf</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如上，类似的，递增ip、port和name，启动其它五个redis节点，太麻烦了，可以通过编写脚本来一次启动6个服务</p>
+<h2 id="启动方式二（推荐）："><a href="#启动方式二（推荐）：" class="headerlink" title="启动方式二（推荐）："></a>启动方式二（推荐）：</h2><p>编写启动脚本，6个全部启动</p>
+<h3 id="创建start-redis-script-sh文件"><a href="#创建start-redis-script-sh文件" class="headerlink" title="创建start_redis_script.sh文件"></a>创建<code>start_redis_script.sh</code>文件</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">touch</span> start_redis_script.sh</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="编写脚本内容-1"><a href="#编写脚本内容-1" class="headerlink" title="编写脚本内容"></a>编写脚本内容</h3><p><code>vim start_redis_script.sh</code>，写入下面的内容</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> port <span class="keyword">in</span> $(<span class="built_in">seq</span>	1 6); \</span><br><span class="line"><span class="keyword">do</span> \</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">${port}</span></span><br><span class="line">docker run -p 637<span class="variable">${port}</span>:6379 -p 1637<span class="variable">${port}</span>:16379 --name redis-<span class="variable">${port}</span> \</span><br><span class="line">-v /var/redisNode/node-<span class="variable">${port}</span>/data:/data \</span><br><span class="line">-v /var/redisNode/node-<span class="variable">${port}</span>/conf/redis.conf:/etc/redis/redis.conf \</span><br><span class="line">-d --net redis --ip 172.38.0.1<span class="variable">${port}</span> redis:5.0.9-alpine3.11 redis-server /etc/redis/redis.conf; \</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="赋予start-redis-script-sh文件可执行权限"><a href="#赋予start-redis-script-sh文件可执行权限" class="headerlink" title="赋予start_redis_script.sh文件可执行权限"></a>赋予<code>start_redis_script.sh</code>文件可执行权限</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># chmod o+x start_redis_script.sh</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="执行脚本，启动redis容器服务"><a href="#执行脚本，启动redis容器服务" class="headerlink" title="执行脚本，启动redis容器服务"></a>执行脚本，启动redis容器服务</h3><p><code>./start_redis_script.sh</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63511da316f2c2beb14f0d6a.jpg"></p>
+<h3 id="查看redis容器"><a href="#查看redis容器" class="headerlink" title="查看redis容器"></a>查看redis容器</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- var]<span class="comment"># docker ps</span></span><br><span class="line">CONTAINER ID   IMAGE                    COMMAND                  CREATED              STATUS              PORTS                                              NAMES</span><br><span class="line">0d3c18b61098   redis:5.0.9-alpine3.11   <span class="string">"docker-entrypoint.s…"</span>   2 seconds ago        Up 1 second         0.0.0.0:6376-&gt;6379/tcp, 0.0.0.0:16376-&gt;16379/tcp   redis-6</span><br><span class="line">ee896fb093da   redis:5.0.9-alpine3.11   <span class="string">"docker-entrypoint.s…"</span>   13 seconds ago       Up 12 seconds       0.0.0.0:6375-&gt;6379/tcp, 0.0.0.0:16375-&gt;16379/tcp   redis-5</span><br><span class="line">a83bb7b16dff   redis:5.0.9-alpine3.11   <span class="string">"docker-entrypoint.s…"</span>   48 seconds ago       Up 47 seconds       0.0.0.0:6374-&gt;6379/tcp, 0.0.0.0:16374-&gt;16379/tcp   redis-4</span><br><span class="line">ffe4c9619bed   redis:5.0.9-alpine3.11   <span class="string">"docker-entrypoint.s…"</span>   58 seconds ago       Up 57 seconds       0.0.0.0:6373-&gt;6379/tcp, 0.0.0.0:16373-&gt;16379/tcp   redis-3</span><br><span class="line">a316a31e273f   redis:5.0.9-alpine3.11   <span class="string">"docker-entrypoint.s…"</span>   About a minute ago   Up About a minute   0.0.0.0:6372-&gt;6379/tcp, 0.0.0.0:16372-&gt;16379/tcp   redis-2</span><br><span class="line">71c072f57c29   redis:5.0.9-alpine3.11   <span class="string">"docker-entrypoint.s…"</span>   9 minutes ago        Up 9 minutes        0.0.0.0:6371-&gt;6379/tcp, 0.0.0.0:16371-&gt;16379/tcp   redis-1</span><br><span class="line">[root@--- var]<span class="comment">#</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="创建集群"><a href="#创建集群" class="headerlink" title="创建集群"></a>创建集群</h1><p>进入任意一个 <code>Redis</code> 实例</p>
+<h2 id="进入redis-1容器"><a href="#进入redis-1容器" class="headerlink" title="进入redis-1容器"></a>进入redis-1容器</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it redis-1 /bin/sh</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="创建集群主节点"><a href="#创建集群主节点" class="headerlink" title="创建集群主节点"></a>创建集群主节点</h2><ul>
+<li><p>Redis Cluster最低要求是3个主节点</p>
+</li>
+<li><p>–cluster-replicas 参数为数字，1表示每个主节点需要1个从节点。</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># redis-1 容器内</span></span><br><span class="line">/data <span class="comment"># redis-cli --cluster create 172.38.0.11:6379 172.38.0.12:6379 172.38.0.13:6379 172.38.0.14:6379 172.38.0.15:6379 172.38.0.16:6379 --cluster-replicas 1</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63511dbf16f2c2beb14f4751.jpg"></p>
+<h1 id="测试连接集群"><a href="#测试连接集群" class="headerlink" title="测试连接集群"></a>测试连接集群</h1><h2 id="连接集群-c"><a href="#连接集群-c" class="headerlink" title="连接集群 -c"></a>连接集群 <code>-c</code></h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># redis-1 容器内</span></span><br><span class="line">/data <span class="comment"># redis-cli -c</span></span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="查看集群信息-cluster-info"><a href="#查看集群信息-cluster-info" class="headerlink" title="查看集群信息 cluster info"></a>查看集群信息 <code>cluster info</code></h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">127.0.0.1:6379&gt; cluster info</span><br><span class="line">cluster_state:ok</span><br><span class="line">cluster_slots_assigned:16384</span><br><span class="line">cluster_slots_ok:16384</span><br><span class="line">cluster_slots_pfail:0</span><br><span class="line">cluster_slots_fail:0</span><br><span class="line">cluster_known_nodes:6</span><br><span class="line">cluster_size:3</span><br><span class="line">cluster_current_epoch:6</span><br><span class="line">cluster_my_epoch:1</span><br><span class="line">cluster_stats_messages_ping_sent:292</span><br><span class="line">cluster_stats_messages_pong_sent:307</span><br><span class="line">cluster_stats_messages_sent:599</span><br><span class="line">cluster_stats_messages_ping_received:302</span><br><span class="line">cluster_stats_messages_pong_received:292</span><br><span class="line">cluster_stats_messages_meet_received:5</span><br><span class="line">cluster_stats_messages_received:599</span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="查看节点信息-cluster-nodes"><a href="#查看节点信息-cluster-nodes" class="headerlink" title="查看节点信息 cluster nodes"></a>查看节点信息 <code>cluster nodes</code></h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">127.0.0.1:6379&gt; cluster nodes</span><br><span class="line">b3f737d0d77b823794087011f1501fd43a2ea316 172.38.0.12:6379@16379 master - 0 1633332452560 2 connected 5461-10922</span><br><span class="line">506ff2bf1020d468e7d7a81ddbfb616a7e9b7d96 172.38.0.13:6379@16379 master - 0 1633332453000 3 connected 10923-16383</span><br><span class="line">7f57f8a01493fa9e46e24ad8a9e46995634f7442 172.38.0.15:6379@16379 slave 70ebdca0264c079bb2c33452e6388d37706da282 0 1633332453000 5 connected</span><br><span class="line">70ebdca0264c079bb2c33452e6388d37706da282 172.38.0.11:6379@16379 myself,master - 0 1633332452000 1 connected 0-5460</span><br><span class="line">f839b6924977e99d3b74324f2ef70b3678e1a257 172.38.0.14:6379@16379 slave 506ff2bf1020d468e7d7a81ddbfb616a7e9b7d96 0 1633332453762 4 connected</span><br><span class="line">bbc4dd0639b90e9ddfb5cef278be04a24276cbdb 172.38.0.16:6379@16379 slave b3f737d0d77b823794087011f1501fd43a2ea316 0 1633332453000 6 connected</span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63511dd716f2c2beb14f8522.jpg"></p>
+<h1 id="测试主从节点替换"><a href="#测试主从节点替换" class="headerlink" title="测试主从节点替换"></a>测试主从节点替换</h1><p><strong>验证高可用</strong></p>
+<p>set一个值，然后停掉对应的服务，再次get，验证是否可以得到值</p>
+<h2 id="set值"><a href="#set值" class="headerlink" title="set值"></a>set值</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">127.0.0.1:6379&gt; <span class="built_in">set</span> a b</span><br><span class="line">-&gt; Redirected to slot [15495] located at 172.38.0.13:6379</span><br><span class="line">OK</span><br><span class="line">172.38.0.13:6379&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>发现a值设置在了172.38.0.13容器上，然后我们试着去停掉redis-3容器的服务，然后再次get,看一下结果</p>
+<h2 id="get值"><a href="#get值" class="headerlink" title="get值"></a>get值</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">172.38.0.13:6379&gt; get a</span><br><span class="line"><span class="string">"b"</span></span><br><span class="line">172.38.0.13:6379&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="停止redis-3容器里的redis服务"><a href="#停止redis-3容器里的redis服务" class="headerlink" title="停止redis-3容器里的redis服务"></a>停止<code>redis-3</code>容器里的redis服务</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker stop redis-3</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="再次取值"><a href="#再次取值" class="headerlink" title="再次取值"></a>再次取值</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">172.38.0.13:6379&gt; get a</span><br><span class="line">Could not connect to Redis at 172.38.0.13:6379: Host is unreachable</span><br><span class="line">(34.04s)</span><br><span class="line">not connected&gt; <span class="built_in">exit</span></span><br><span class="line"><span class="comment"># 重连集群</span></span><br><span class="line">/data <span class="comment"># redis-cli -c</span></span><br><span class="line">127.0.0.1:6379&gt; get a</span><br><span class="line">-&gt; Redirected to slot [15495] located at 172.38.0.14:6379</span><br><span class="line"><span class="string">"b"</span></span><br><span class="line">172.38.0.14:6379&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>发现<code>a</code>值被存储到了<code>172.38.0.14</code>机器上，<code>172.38.0.14</code>是<code>172.38.0.13</code>的从节点，当主节点<code>172.38.0.13</code>发生故障时，自动替换到<code>172.38.0.13</code>，这就是<strong>高可用</strong></p>
+<h2 id="查看redis节点服务信息"><a href="#查看redis节点服务信息" class="headerlink" title="查看redis节点服务信息"></a>查看redis节点服务信息</h2><p>发现<code>172.38.0.13</code>节点<code>fail</code>, <code>172.38.0.14</code>变成<code>master</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63511deb16f2c2beb14fb84f.jpg"></p>
+<p>docker搭建redis集群完成🎈🎈</p>
 <hr>
 <p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
 <p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
@@ -1057,61 +1184,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker | 部署nginx服务</title>
-    <url>/posts/1512743311.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
-</blockquote>
-<p>容器时相互隔离的，<code>docker</code>启动的<code>nginx</code>是容器内的服务，不影响我原先服务器上的<code>nginx</code>服务，小伙伴们可大胆尝试😃</p>
-<p>本篇实在linux环境下操作的，主要目的是夺人眼目，对使用Docker部署服务进行尝鲜，先体会一下Docker的便捷之处。</p>
-<h2 id="1、下载nginx镜像"><a href="#1、下载nginx镜像" class="headerlink" title="1、下载nginx镜像"></a>1、下载nginx镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker pull nginx</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="2、查看下载的镜像"><a href="#2、查看下载的镜像" class="headerlink" title="2、查看下载的镜像"></a>2、查看下载的镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="3、启动nginx镜像"><a href="#3、启动nginx镜像" class="headerlink" title="3、启动nginx镜像"></a>3、启动nginx镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -d --name nginx01 -p 3344:80 nginx（镜像名或者镜像<span class="built_in">id</span>）</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63423e4516f2c2beb109d82d.jpg"></p>
-<h2 id="4、查看启动的nginx"><a href="#4、查看启动的nginx" class="headerlink" title="4、查看启动的nginx"></a>4、查看启动的nginx</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="5、访问启动的nginx"><a href="#5、访问启动的nginx" class="headerlink" title="5、访问启动的nginx"></a>5、访问启动的nginx</h2><p>在云服务器内使用 curl 测试访问</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">curl localhost:3344</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63423e5d16f2c2beb10a0248.jpg"></p>
-<h3 id="5-1、linux开放防火墙端口"><a href="#5-1、linux开放防火墙端口" class="headerlink" title="5.1、linux开放防火墙端口"></a>5.1、linux开放防火墙端口</h3><p><code>firewall-cmd</code>位于<code>firewalld</code>包中</p>
-<p><code>systemctl</code>位于<code>systemd</code>包中</p>
-<p><strong>安装防火墙工具：</strong></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum install firewalld systemd -y</span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>常用命令：</strong></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 查看firewall(防火墙)服务状态</span></span><br><span class="line">systemctl status firewalld</span><br><span class="line"></span><br><span class="line"><span class="comment">#开启防火墙</span></span><br><span class="line">systemctl start firewalld</span><br><span class="line"></span><br><span class="line"><span class="comment">#重启防火墙</span></span><br><span class="line">service firewalld  restart</span><br><span class="line"></span><br><span class="line"><span class="comment">#关闭防火墙</span></span><br><span class="line">service firewalld  stop</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看防火墙规则</span></span><br><span class="line">firewall-cmd --list-all　　 　　<span class="comment">#查看全部信息</span></span><br><span class="line">firewall-cmd --list-ports 　　  <span class="comment">#只看端口信息</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#添加防火墙开放端口</span></span><br><span class="line">firewall-cmd --add-port=8001/tcp --permanent</span><br><span class="line">or</span><br><span class="line">firewall-cmd --zone=public --add-port=8080/tcp --permanent</span><br><span class="line">命令含义:</span><br><span class="line">　　--zone 　　　　　　　　 <span class="comment">#作用域（public标识公共的）</span></span><br><span class="line">　　--add-port=80/tcp 　　<span class="comment">#添加端口， 格式为:端口/通讯协议</span></span><br><span class="line">　　--permanent 　　　　　　<span class="comment">#永久生效，没有此参数重启后失效</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 不要忘记reload！</span></span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="5-2、阿里云服务器需要配置安全组规则"><a href="#5-2、阿里云服务器需要配置安全组规则" class="headerlink" title="5.2、阿里云服务器需要配置安全组规则"></a>5.2、阿里云服务器需要配置安全组规则</h3><p>配置完之后就可以在浏览器访问<code>公网ip+3344端口号</code>查看了</p>
-<h3 id="5-3、原理"><a href="#5-3、原理" class="headerlink" title="5.3、原理"></a>5.3、原理</h3><p>端口暴露，linux端口映射到容器端口</p>
-<p>0.0.0.0:3344-&gt;80/tcp</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63423e7416f2c2beb10a2e22.jpg"></p>
-<h2 id="6-进入nginx容器"><a href="#6-进入nginx容器" class="headerlink" title="6.进入nginx容器"></a>6.进入nginx容器</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it 0a7ebd6bc291 /bin/bash</span><br><span class="line">root@0a7ebd6bc291:/<span class="comment"># ls</span></span><br><span class="line">bin  boot  dev	docker-entrypoint.d  docker-entrypoint.sh  etc	home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var</span><br><span class="line">root@0a7ebd6bc291:/<span class="comment"># whereis nginx</span></span><br><span class="line">nginx: /usr/sbin/nginx /usr/lib/nginx /etc/nginx /usr/share/nginx</span><br><span class="line">root@0a7ebd6bc291:/<span class="comment"># cd /etc/nginx/</span></span><br><span class="line">root@0a7ebd6bc291:/etc/nginx<span class="comment"># ls</span></span><br><span class="line">conf.d	fastcgi_params	mime.types  modules  nginx.conf  scgi_params  uwsgi_params</span><br><span class="line">root@0a7ebd6bc291:/etc/nginx<span class="comment">#</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="问题探索"><a href="#问题探索" class="headerlink" title="问题探索"></a>问题探索</h2><p>每次改动<code>nginx</code>配置，都需要进入容器内部修改，十分麻烦，能否在容器外部提供一个映射路径，达到修改配置文件，容器内部就会自动修改？</p>
-<blockquote>
-<p>数据卷技术</p>
-<p><code>nginx.conf</code>配置文件，注意<code>Nginx</code>默认是后台运行的，但<code>Docker</code>需要其在前台运行，否则直接退出容器。配置文件中添加<code>daemon off;</code>关闭后台运行。可以通过<code>Dockerfile</code>配置CMD命令实现</p>
-</blockquote>
-<p>感谢阅读，本篇完，数据卷技术下文继续分享！</p>
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>Docker</category>
-        <category>Nginx</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-        <tag>Nginx</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker | 自定义网络（网关、子网地址）</title>
     <url>/posts/2785354845.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1164,6 +1236,61 @@
       </categories>
       <tags>
         <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker | 部署nginx服务</title>
+    <url>/posts/1512743311.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
+</blockquote>
+<p>容器时相互隔离的，<code>docker</code>启动的<code>nginx</code>是容器内的服务，不影响我原先服务器上的<code>nginx</code>服务，小伙伴们可大胆尝试😃</p>
+<p>本篇实在linux环境下操作的，主要目的是夺人眼目，对使用Docker部署服务进行尝鲜，先体会一下Docker的便捷之处。</p>
+<h2 id="1、下载nginx镜像"><a href="#1、下载nginx镜像" class="headerlink" title="1、下载nginx镜像"></a>1、下载nginx镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker pull nginx</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="2、查看下载的镜像"><a href="#2、查看下载的镜像" class="headerlink" title="2、查看下载的镜像"></a>2、查看下载的镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="3、启动nginx镜像"><a href="#3、启动nginx镜像" class="headerlink" title="3、启动nginx镜像"></a>3、启动nginx镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -d --name nginx01 -p 3344:80 nginx（镜像名或者镜像<span class="built_in">id</span>）</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63423e4516f2c2beb109d82d.jpg"></p>
+<h2 id="4、查看启动的nginx"><a href="#4、查看启动的nginx" class="headerlink" title="4、查看启动的nginx"></a>4、查看启动的nginx</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="5、访问启动的nginx"><a href="#5、访问启动的nginx" class="headerlink" title="5、访问启动的nginx"></a>5、访问启动的nginx</h2><p>在云服务器内使用 curl 测试访问</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">curl localhost:3344</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63423e5d16f2c2beb10a0248.jpg"></p>
+<h3 id="5-1、linux开放防火墙端口"><a href="#5-1、linux开放防火墙端口" class="headerlink" title="5.1、linux开放防火墙端口"></a>5.1、linux开放防火墙端口</h3><p><code>firewall-cmd</code>位于<code>firewalld</code>包中</p>
+<p><code>systemctl</code>位于<code>systemd</code>包中</p>
+<p><strong>安装防火墙工具：</strong></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum install firewalld systemd -y</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>常用命令：</strong></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 查看firewall(防火墙)服务状态</span></span><br><span class="line">systemctl status firewalld</span><br><span class="line"></span><br><span class="line"><span class="comment">#开启防火墙</span></span><br><span class="line">systemctl start firewalld</span><br><span class="line"></span><br><span class="line"><span class="comment">#重启防火墙</span></span><br><span class="line">service firewalld  restart</span><br><span class="line"></span><br><span class="line"><span class="comment">#关闭防火墙</span></span><br><span class="line">service firewalld  stop</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看防火墙规则</span></span><br><span class="line">firewall-cmd --list-all　　 　　<span class="comment">#查看全部信息</span></span><br><span class="line">firewall-cmd --list-ports 　　  <span class="comment">#只看端口信息</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#添加防火墙开放端口</span></span><br><span class="line">firewall-cmd --add-port=8001/tcp --permanent</span><br><span class="line">or</span><br><span class="line">firewall-cmd --zone=public --add-port=8080/tcp --permanent</span><br><span class="line">命令含义:</span><br><span class="line">　　--zone 　　　　　　　　 <span class="comment">#作用域（public标识公共的）</span></span><br><span class="line">　　--add-port=80/tcp 　　<span class="comment">#添加端口， 格式为:端口/通讯协议</span></span><br><span class="line">　　--permanent 　　　　　　<span class="comment">#永久生效，没有此参数重启后失效</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 不要忘记reload！</span></span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="5-2、阿里云服务器需要配置安全组规则"><a href="#5-2、阿里云服务器需要配置安全组规则" class="headerlink" title="5.2、阿里云服务器需要配置安全组规则"></a>5.2、阿里云服务器需要配置安全组规则</h3><p>配置完之后就可以在浏览器访问<code>公网ip+3344端口号</code>查看了</p>
+<h3 id="5-3、原理"><a href="#5-3、原理" class="headerlink" title="5.3、原理"></a>5.3、原理</h3><p>端口暴露，linux端口映射到容器端口</p>
+<p>0.0.0.0:3344-&gt;80/tcp</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63423e7416f2c2beb10a2e22.jpg"></p>
+<h2 id="6-进入nginx容器"><a href="#6-进入nginx容器" class="headerlink" title="6.进入nginx容器"></a>6.进入nginx容器</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it 0a7ebd6bc291 /bin/bash</span><br><span class="line">root@0a7ebd6bc291:/<span class="comment"># ls</span></span><br><span class="line">bin  boot  dev	docker-entrypoint.d  docker-entrypoint.sh  etc	home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var</span><br><span class="line">root@0a7ebd6bc291:/<span class="comment"># whereis nginx</span></span><br><span class="line">nginx: /usr/sbin/nginx /usr/lib/nginx /etc/nginx /usr/share/nginx</span><br><span class="line">root@0a7ebd6bc291:/<span class="comment"># cd /etc/nginx/</span></span><br><span class="line">root@0a7ebd6bc291:/etc/nginx<span class="comment"># ls</span></span><br><span class="line">conf.d	fastcgi_params	mime.types  modules  nginx.conf  scgi_params  uwsgi_params</span><br><span class="line">root@0a7ebd6bc291:/etc/nginx<span class="comment">#</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="问题探索"><a href="#问题探索" class="headerlink" title="问题探索"></a>问题探索</h2><p>每次改动<code>nginx</code>配置，都需要进入容器内部修改，十分麻烦，能否在容器外部提供一个映射路径，达到修改配置文件，容器内部就会自动修改？</p>
+<blockquote>
+<p>数据卷技术</p>
+<p><code>nginx.conf</code>配置文件，注意<code>Nginx</code>默认是后台运行的，但<code>Docker</code>需要其在前台运行，否则直接退出容器。配置文件中添加<code>daemon off;</code>关闭后台运行。可以通过<code>Dockerfile</code>配置CMD命令实现</p>
+</blockquote>
+<p>感谢阅读，本篇完，数据卷技术下文继续分享！</p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+        <category>Nginx</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -1334,90 +1461,6 @@
       </tags>
   </entry>
   <entry>
-    <title>GitHub Pages 站点建设</title>
-    <url>/posts/899051033.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h2><ul>
-<li><p>GitHub Pages 是通过 GitHub 托管和发布的公共网页，将纯文本转换为静态博客网站。</p>
-</li>
-<li><p>您可以使用 GitHub Pages 来展示一些开源项目、博客甚或分享您的简历，有内存限制，可以绑定个人域名。</p>
-</li>
-<li><p>启动和运行的最快方法是使用 <a href="https://jekyllcn.com/">Jekyll</a> 主题选择器加载预置主题。 然后，您可以修改 GitHub Pages 的内容和样式。👉 <a href="https://docs.github.com/cn/pages/getting-started-with-github-pages/about-github-pages">文档</a></p>
-</li>
-</ul>
-<h2 id="2、创建仓库"><a href="#2、创建仓库" class="headerlink" title="2、创建仓库"></a>2、创建仓库</h2><p>仓库名： <code>&lt;username&gt;.github.io</code><br><code>username</code> 是GitHub的用户名</p>
-<h2 id="3、创建站点"><a href="#3、创建站点" class="headerlink" title="3、创建站点"></a>3、创建站点</h2><p>在 <code>repo</code> 下创建 <code>index.md</code>文件，随便写点东西保存。然后，点击 <code>settings</code>选项卡，单机左侧 <code>Pages</code>进行设置，如下图：</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fae16f2c2beb1e1d288.png"></p>
-<p>🔊 此时站点已经建成，可以访问 <code>https://&lt;username&gt;.github.io/</code> 查看，如果已经有个人域名了，也可以绑定个人域名，继续往下看👇</p>
-<h2 id="4、仓库文件目录"><a href="#4、仓库文件目录" class="headerlink" title="4、仓库文件目录"></a>4、仓库文件目录</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fbe16f2c2beb1e1e89f.png"></p>
-<h2 id="5、绑定域名"><a href="#5、绑定域名" class="headerlink" title="5、绑定域名"></a>5、绑定域名</h2><p>我个人购买的一级域名是 i-xiao ，域名后缀是 space，专门给GitHub Pages 增加一个CNAME记录（blog），解析二级域名，绑定 <username>github.io 域名。</username></p>
-<h3 id="5-1、域名相关知识"><a href="#5-1、域名相关知识" class="headerlink" title="5.1、域名相关知识"></a>5.1、域名相关知识</h3><ul>
-<li>www：主机名，i-xiao : 域名主体(一级域名)，.space : 域名后缀<br>注册一级域名的时候是需要付费的</li>
-<li>二级域名，是依附一级域名的存在而存在的，也就是说要是顶级域名消失了，二级域名也也会不复存在。反而来说，二级域名的网站不做了，主域名网站是不受影响的。</li>
-<li>一级域名、二级域名区别：<br>DNS收录一级域名更快；还有就是解析速度，下一跳路由就不说了，找到目的主机之后，二级域名层级更深，需要多一层计算（其实这是我瞎写的🤣，猜测应该跟 nginx location匹配类似）</li>
-</ul>
-<h3 id="5-2、GitHub上配置自定义域名"><a href="#5-2、GitHub上配置自定义域名" class="headerlink" title="5.2、GitHub上配置自定义域名"></a>5.2、GitHub上配置自定义域名</h3><p>进入 <username>github.io 仓库，进入设置页面，点击左边 Pages 选项卡，进行下面的配置。</username></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6116f2c2beb1e1511a.png"></p>
-<h2 id="6、配置域名映射"><a href="#6、配置域名映射" class="headerlink" title="6、配置域名映射"></a>6、配置域名映射</h2><p><strong>各记录类型使用目的</strong></p>
-<table>
-<thead>
-<tr>
-<th>记录类型</th>
-<th>使用目的</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ce5/">A 记录</a></td>
-<td>将域名指向一个 IP 地址（外网地址）。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9cf9/">CNAME 记录</a></td>
-<td>将域名指向另一个域名，再由另一个域名提供 IP 地址（外网地址）。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9cff/">MX 记录</a></td>
-<td>设置邮箱，让邮箱能收到邮件。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d11/">NS 记录</a></td>
-<td>将子域名交给其他 DNS 服务商解析。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d0b/">AAAA 记录</a></td>
-<td>将域名指向一个 IPv6 地址。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d17/">SRV 记录</a></td>
-<td>用来标识某台服务器使用了某个服务，常见于微软系统的目录管理。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d05/">TXT 记录</a></td>
-<td>对域名进行标识和说明，绝大多数的 TXT 记录是用来做 SPF 记录（反垃圾邮件）。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ced/">隐、显性 URL 记录</a></td>
-<td>将一个域名指向另外一个已经存在的站点。</td>
-</tr>
-</tbody></table>
-<p><strong>如下图</strong></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6f16f2c2beb1e16954.png"></p>
-<h2 id="7、DNS检测"><a href="#7、DNS检测" class="headerlink" title="7、DNS检测"></a>7、DNS检测</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f7816f2c2beb1e1785b.png"></p>
-<h2 id="8、查看Pages"><a href="#8、查看Pages" class="headerlink" title="8、查看Pages"></a>8、查看Pages</h2><p>成功解析之后，还存在DNS缓存，一般还需要再等待一会（一般十分钟，或许更长时间）才能生效，如下图成功显示👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f8c16f2c2beb1e1a34c.png"></p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>站点绑定的域名已经更换，访问请到👉 <a href="https://home.i-xiao.space/">这里</a></p>
-<hr>
-<p>🎈🎈🎈</p>
-<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>GitHub</category>
-      </categories>
-      <tags>
-        <tag>GitHub</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker网络模型以及容器通信</title>
     <url>/posts/1604561083.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1562,6 +1605,90 @@
       </categories>
       <tags>
         <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GitHub Pages 站点建设</title>
+    <url>/posts/899051033.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h2><ul>
+<li><p>GitHub Pages 是通过 GitHub 托管和发布的公共网页，将纯文本转换为静态博客网站。</p>
+</li>
+<li><p>您可以使用 GitHub Pages 来展示一些开源项目、博客甚或分享您的简历，有内存限制，可以绑定个人域名。</p>
+</li>
+<li><p>启动和运行的最快方法是使用 <a href="https://jekyllcn.com/">Jekyll</a> 主题选择器加载预置主题。 然后，您可以修改 GitHub Pages 的内容和样式。👉 <a href="https://docs.github.com/cn/pages/getting-started-with-github-pages/about-github-pages">文档</a></p>
+</li>
+</ul>
+<h2 id="2、创建仓库"><a href="#2、创建仓库" class="headerlink" title="2、创建仓库"></a>2、创建仓库</h2><p>仓库名： <code>&lt;username&gt;.github.io</code><br><code>username</code> 是GitHub的用户名</p>
+<h2 id="3、创建站点"><a href="#3、创建站点" class="headerlink" title="3、创建站点"></a>3、创建站点</h2><p>在 <code>repo</code> 下创建 <code>index.md</code>文件，随便写点东西保存。然后，点击 <code>settings</code>选项卡，单机左侧 <code>Pages</code>进行设置，如下图：</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fae16f2c2beb1e1d288.png"></p>
+<p>🔊 此时站点已经建成，可以访问 <code>https://&lt;username&gt;.github.io/</code> 查看，如果已经有个人域名了，也可以绑定个人域名，继续往下看👇</p>
+<h2 id="4、仓库文件目录"><a href="#4、仓库文件目录" class="headerlink" title="4、仓库文件目录"></a>4、仓库文件目录</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fbe16f2c2beb1e1e89f.png"></p>
+<h2 id="5、绑定域名"><a href="#5、绑定域名" class="headerlink" title="5、绑定域名"></a>5、绑定域名</h2><p>我个人购买的一级域名是 i-xiao ，域名后缀是 space，专门给GitHub Pages 增加一个CNAME记录（blog），解析二级域名，绑定 <username>github.io 域名。</username></p>
+<h3 id="5-1、域名相关知识"><a href="#5-1、域名相关知识" class="headerlink" title="5.1、域名相关知识"></a>5.1、域名相关知识</h3><ul>
+<li>www：主机名，i-xiao : 域名主体(一级域名)，.space : 域名后缀<br>注册一级域名的时候是需要付费的</li>
+<li>二级域名，是依附一级域名的存在而存在的，也就是说要是顶级域名消失了，二级域名也也会不复存在。反而来说，二级域名的网站不做了，主域名网站是不受影响的。</li>
+<li>一级域名、二级域名区别：<br>DNS收录一级域名更快；还有就是解析速度，下一跳路由就不说了，找到目的主机之后，二级域名层级更深，需要多一层计算（其实这是我瞎写的🤣，猜测应该跟 nginx location匹配类似）</li>
+</ul>
+<h3 id="5-2、GitHub上配置自定义域名"><a href="#5-2、GitHub上配置自定义域名" class="headerlink" title="5.2、GitHub上配置自定义域名"></a>5.2、GitHub上配置自定义域名</h3><p>进入 <username>github.io 仓库，进入设置页面，点击左边 Pages 选项卡，进行下面的配置。</username></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6116f2c2beb1e1511a.png"></p>
+<h2 id="6、配置域名映射"><a href="#6、配置域名映射" class="headerlink" title="6、配置域名映射"></a>6、配置域名映射</h2><p><strong>各记录类型使用目的</strong></p>
+<table>
+<thead>
+<tr>
+<th>记录类型</th>
+<th>使用目的</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ce5/">A 记录</a></td>
+<td>将域名指向一个 IP 地址（外网地址）。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9cf9/">CNAME 记录</a></td>
+<td>将域名指向另一个域名，再由另一个域名提供 IP 地址（外网地址）。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9cff/">MX 记录</a></td>
+<td>设置邮箱，让邮箱能收到邮件。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d11/">NS 记录</a></td>
+<td>将子域名交给其他 DNS 服务商解析。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d0b/">AAAA 记录</a></td>
+<td>将域名指向一个 IPv6 地址。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d17/">SRV 记录</a></td>
+<td>用来标识某台服务器使用了某个服务，常见于微软系统的目录管理。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d05/">TXT 记录</a></td>
+<td>对域名进行标识和说明，绝大多数的 TXT 记录是用来做 SPF 记录（反垃圾邮件）。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ced/">隐、显性 URL 记录</a></td>
+<td>将一个域名指向另外一个已经存在的站点。</td>
+</tr>
+</tbody></table>
+<p><strong>如下图</strong></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6f16f2c2beb1e16954.png"></p>
+<h2 id="7、DNS检测"><a href="#7、DNS检测" class="headerlink" title="7、DNS检测"></a>7、DNS检测</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f7816f2c2beb1e1785b.png"></p>
+<h2 id="8、查看Pages"><a href="#8、查看Pages" class="headerlink" title="8、查看Pages"></a>8、查看Pages</h2><p>成功解析之后，还存在DNS缓存，一般还需要再等待一会（一般十分钟，或许更长时间）才能生效，如下图成功显示👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f8c16f2c2beb1e1a34c.png"></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>站点绑定的域名已经更换，访问请到👉 <a href="https://home.i-xiao.space/">这里</a></p>
+<hr>
+<p>🎈🎈🎈</p>
+<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
+</body></html>]]></content>
+      <categories>
+        <category>GitHub</category>
+      </categories>
+      <tags>
+        <tag>GitHub</tag>
       </tags>
   </entry>
   <entry>
@@ -2444,56 +2571,6 @@
       </tags>
   </entry>
   <entry>
-    <title>.env.[mode]文件中如何添加注释？</title>
-    <url>/posts/2584380968.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>Vue-Cli</code> 允许我们在项目根目录创建<code>.env.[mode]</code>文件来设置一些打包编译的启动参数，通过执行脚本的时候加<code>mode</code>参数，指定不同环境需要加载的配置文件</p>
-<p>形如： <code>.env.prod</code></p>
-<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>怎么在 <code>.env.prod</code> 文件中添加注释呢？</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这要看<code>vue</code>是怎么解析 <code>.env.prod</code> 文件的</p>
-<p>通过启动脚本参数 <code>--mode prod</code>，一路找到了处理 <code>.env.prod</code> 文件的逻辑，让我们一块看下</p>
-<p><code>path：node_modules\@vue\cli-service\lib\Service.js</code></p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> dotenv = <span class="built_in">require</span>(<span class="string">'dotenv'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">loadEnv (mode) {</span><br><span class="line">    <span class="keyword">const</span> logger = <span class="title function_">debug</span>(<span class="string">'vue:env'</span>)</span><br><span class="line">    <span class="keyword">const</span> basePath = path.<span class="title function_">resolve</span>(<span class="variable language_">this</span>.<span class="property">context</span>, <span class="string">`.env<span class="subst">${mode ? <span class="string">`.<span class="subst">${mode}</span>`</span> : <span class="string">``</span>}</span>`</span>)</span><br><span class="line">    <span class="keyword">const</span> localPath = <span class="string">`<span class="subst">${basePath}</span>.local`</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="title function_">load</span> = envPath =&gt; {</span><br><span class="line">      <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">const</span> env = dotenv.<span class="title function_">config</span>({ <span class="attr">path</span>: envPath, <span class="attr">debug</span>: process.<span class="property">env</span>.<span class="property">DEBUG</span> })</span><br><span class="line">        <span class="title function_">dotenvExpand</span>(env)</span><br><span class="line">        <span class="title function_">logger</span>(envPath, env)</span><br><span class="line">      } <span class="keyword">catch</span> (err) {</span><br><span class="line">        <span class="comment">// only ignore error if file is not found</span></span><br><span class="line">        <span class="keyword">if</span> (err.<span class="title function_">toString</span>().<span class="title function_">indexOf</span>(<span class="string">'ENOENT'</span>) &lt; <span class="number">0</span>) {</span><br><span class="line">          <span class="title function_">error</span>(err)</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="title function_">load</span>(localPath)</span><br><span class="line">    <span class="title function_">load</span>(basePath)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// by default, NODE_ENV and BABEL_ENV are set to "development" unless mode</span></span><br><span class="line">    <span class="comment">// is production or test. However the value in .env files will take higher</span></span><br><span class="line">    <span class="comment">// priority.</span></span><br><span class="line">    <span class="keyword">if</span> (mode) {</span><br><span class="line">      <span class="comment">// always set NODE_ENV during tests</span></span><br><span class="line">      <span class="comment">// as that is necessary for tests to not be affected by each other</span></span><br><span class="line">      <span class="keyword">const</span> shouldForceDefaultEnv = (</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST</span> &amp;&amp;</span><br><span class="line">        !process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST_TESTING_ENV</span></span><br><span class="line">      )</span><br><span class="line">      <span class="keyword">const</span> defaultNodeEnv = (mode === <span class="string">'production'</span> || mode === <span class="string">'test'</span>)</span><br><span class="line">        ? mode</span><br><span class="line">        : <span class="string">'development'</span></span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">NODE_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">NODE_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br></pre></td></tr></tbody></table></figure>
-
-<p>从上面的代码，可以得知，<code>vue</code>使用<code>dotenv</code>解析<code> .env.prod</code> 文件，并将环境变量从 <code>.env[mode]</code> 文件中加载到 <code>process.env</code> 环境变量中</p>
-<h2 id="解决（dotenv）"><a href="#解决（dotenv）" class="headerlink" title="解决（dotenv）"></a>解决（dotenv）</h2><p><code>dotenv</code>插件已经被 <code>Vue-Cli</code> 集成了</p>
-<p><a href="https://github.com/motdotla/dotenv#rules">GitHub地址</a></p>
-<p><code>README.md</code> 中有这么一段话：</p>
-<ul>
-<li>“# marks the beginning of a comment (unless when the value is wrapped in quotes)”</li>
-</ul>
-<p>这就是我们要找的，在<code>.env.[mode]</code> 文件中，可以使用 <code>#</code> 进行注释</p>
-<h3 id="使用测试"><a href="#使用测试" class="headerlink" title="使用测试"></a>使用测试</h3><ol>
-<li><code>path: .env.prod</code> 参数配置</li>
-</ol>
-<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="comment"># VUE_APP_PATH='/pc/'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li><code>package.json</code> 文件脚本命令配置<code>--mode</code>参数</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: {</span><br><span class="line">    <span class="string">"build"</span>: <span class="string">"vue-cli-service build --mode prod"</span>,</span><br><span class="line">  },</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="3">
-<li>执行 <code>npm run build</code> 命令，输出如下：</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">NODE_ENV=== production</span><br><span class="line">VUE_APP_PATH=== ./</span><br></pre></td></tr></tbody></table></figure>
-
-<p>本文到此为止，要想了解更多<code>dotenv</code>请自行探索，感谢观看😉</p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://img-blog.csdnimg.cn/img_convert/bd14318dfe358078af5f56cdf6895446.gif"></p>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>vue</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker常用命令——排错很有帮助😏</title>
     <url>/posts/1627929391.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -2584,6 +2661,56 @@
       </categories>
       <tags>
         <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>.env.[mode]文件中如何添加注释？</title>
+    <url>/posts/2584380968.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>Vue-Cli</code> 允许我们在项目根目录创建<code>.env.[mode]</code>文件来设置一些打包编译的启动参数，通过执行脚本的时候加<code>mode</code>参数，指定不同环境需要加载的配置文件</p>
+<p>形如： <code>.env.prod</code></p>
+<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>怎么在 <code>.env.prod</code> 文件中添加注释呢？</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这要看<code>vue</code>是怎么解析 <code>.env.prod</code> 文件的</p>
+<p>通过启动脚本参数 <code>--mode prod</code>，一路找到了处理 <code>.env.prod</code> 文件的逻辑，让我们一块看下</p>
+<p><code>path：node_modules\@vue\cli-service\lib\Service.js</code></p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> dotenv = <span class="built_in">require</span>(<span class="string">'dotenv'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">loadEnv (mode) {</span><br><span class="line">    <span class="keyword">const</span> logger = <span class="title function_">debug</span>(<span class="string">'vue:env'</span>)</span><br><span class="line">    <span class="keyword">const</span> basePath = path.<span class="title function_">resolve</span>(<span class="variable language_">this</span>.<span class="property">context</span>, <span class="string">`.env<span class="subst">${mode ? <span class="string">`.<span class="subst">${mode}</span>`</span> : <span class="string">``</span>}</span>`</span>)</span><br><span class="line">    <span class="keyword">const</span> localPath = <span class="string">`<span class="subst">${basePath}</span>.local`</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="title function_">load</span> = envPath =&gt; {</span><br><span class="line">      <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">const</span> env = dotenv.<span class="title function_">config</span>({ <span class="attr">path</span>: envPath, <span class="attr">debug</span>: process.<span class="property">env</span>.<span class="property">DEBUG</span> })</span><br><span class="line">        <span class="title function_">dotenvExpand</span>(env)</span><br><span class="line">        <span class="title function_">logger</span>(envPath, env)</span><br><span class="line">      } <span class="keyword">catch</span> (err) {</span><br><span class="line">        <span class="comment">// only ignore error if file is not found</span></span><br><span class="line">        <span class="keyword">if</span> (err.<span class="title function_">toString</span>().<span class="title function_">indexOf</span>(<span class="string">'ENOENT'</span>) &lt; <span class="number">0</span>) {</span><br><span class="line">          <span class="title function_">error</span>(err)</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="title function_">load</span>(localPath)</span><br><span class="line">    <span class="title function_">load</span>(basePath)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// by default, NODE_ENV and BABEL_ENV are set to "development" unless mode</span></span><br><span class="line">    <span class="comment">// is production or test. However the value in .env files will take higher</span></span><br><span class="line">    <span class="comment">// priority.</span></span><br><span class="line">    <span class="keyword">if</span> (mode) {</span><br><span class="line">      <span class="comment">// always set NODE_ENV during tests</span></span><br><span class="line">      <span class="comment">// as that is necessary for tests to not be affected by each other</span></span><br><span class="line">      <span class="keyword">const</span> shouldForceDefaultEnv = (</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST</span> &amp;&amp;</span><br><span class="line">        !process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST_TESTING_ENV</span></span><br><span class="line">      )</span><br><span class="line">      <span class="keyword">const</span> defaultNodeEnv = (mode === <span class="string">'production'</span> || mode === <span class="string">'test'</span>)</span><br><span class="line">        ? mode</span><br><span class="line">        : <span class="string">'development'</span></span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">NODE_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">NODE_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br></pre></td></tr></tbody></table></figure>
+
+<p>从上面的代码，可以得知，<code>vue</code>使用<code>dotenv</code>解析<code> .env.prod</code> 文件，并将环境变量从 <code>.env[mode]</code> 文件中加载到 <code>process.env</code> 环境变量中</p>
+<h2 id="解决（dotenv）"><a href="#解决（dotenv）" class="headerlink" title="解决（dotenv）"></a>解决（dotenv）</h2><p><code>dotenv</code>插件已经被 <code>Vue-Cli</code> 集成了</p>
+<p><a href="https://github.com/motdotla/dotenv#rules">GitHub地址</a></p>
+<p><code>README.md</code> 中有这么一段话：</p>
+<ul>
+<li>“# marks the beginning of a comment (unless when the value is wrapped in quotes)”</li>
+</ul>
+<p>这就是我们要找的，在<code>.env.[mode]</code> 文件中，可以使用 <code>#</code> 进行注释</p>
+<h3 id="使用测试"><a href="#使用测试" class="headerlink" title="使用测试"></a>使用测试</h3><ol>
+<li><code>path: .env.prod</code> 参数配置</li>
+</ol>
+<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="comment"># VUE_APP_PATH='/pc/'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li><code>package.json</code> 文件脚本命令配置<code>--mode</code>参数</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: {</span><br><span class="line">    <span class="string">"build"</span>: <span class="string">"vue-cli-service build --mode prod"</span>,</span><br><span class="line">  },</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>执行 <code>npm run build</code> 命令，输出如下：</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">NODE_ENV=== production</span><br><span class="line">VUE_APP_PATH=== ./</span><br></pre></td></tr></tbody></table></figure>
+
+<p>本文到此为止，要想了解更多<code>dotenv</code>请自行探索，感谢观看😉</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://img-blog.csdnimg.cn/img_convert/bd14318dfe358078af5f56cdf6895446.gif"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
       </tags>
   </entry>
   <entry>
@@ -3484,25 +3611,6 @@
       </tags>
   </entry>
   <entry>
-    <title>捕获404页面，并重定向页面</title>
-    <url>/posts/3730822077.html</url>
-    <content><![CDATA[<html><head></head><body><p>话不多说，直接上代码：</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 捕获404页面，并重定向</span></span><br><span class="line"><span class="keyword">const</span> isRunUrl = <span class="keyword">function</span> (<span class="params">url</span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="keyword">function</span> (<span class="params">resolve, reject</span>) {</span><br><span class="line">    <span class="comment">// 测试链接连通性, 主要检测404错误</span></span><br><span class="line">    <span class="comment">// 由于AJAX通常无法区分404和跨域问题，所以只能用script 或者 link标签，link比script更容易捕获错误</span></span><br><span class="line">    <span class="keyword">var</span> dom = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">'link'</span>);</span><br><span class="line">    dom.<span class="property">href</span> = url;</span><br><span class="line">    dom.<span class="property">rel</span> = <span class="string">'stylesheet'</span>;</span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">appendChild</span>(dom);</span><br><span class="line">    dom.<span class="property">onload</span> = <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">removeChild</span>(dom);</span><br><span class="line">      <span class="title function_">resolve</span>();</span><br><span class="line">    }</span><br><span class="line">    dom.<span class="property">onerror</span> = reject;</span><br><span class="line">  });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="title function_">isRunUrl</span>(<span class="string">"your url"</span>).<span class="title function_">then</span>(</span><br><span class="line">  <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理resolve的代码</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"ok"</span>, data);;</span><br><span class="line">  }, <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理reject的代码，重定向逻辑</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"err"</span>, err);</span><br><span class="line">  }</span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<center>欢迎微信扫码关注 "看见另一种可能"！</center>
-
-<img data-src="/images/base/loading03.svg" data-original="/images/contact/qrcode_wechat.jpg" alt="wechat：看见另一种可能"></body></html>]]></content>
-      <categories>
-        <category>Javascript</category>
-      </categories>
-      <tags>
-        <tag>404</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>常用的SSH，你了解多少？（长文警告）</title>
     <url>/posts/184663689.html</url>
     <content><![CDATA[<html><head></head><body><h1 id="1、SSH工作原理"><a href="#1、SSH工作原理" class="headerlink" title="1、SSH工作原理"></a>1、SSH工作原理</h1><p>从ssh的<strong>加密方式</strong>说开去，看下文👇</p>
@@ -3649,6 +3757,25 @@
       </categories>
       <tags>
         <tag>SSH</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>捕获404页面，并重定向页面</title>
+    <url>/posts/3730822077.html</url>
+    <content><![CDATA[<html><head></head><body><p>话不多说，直接上代码：</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 捕获404页面，并重定向</span></span><br><span class="line"><span class="keyword">const</span> isRunUrl = <span class="keyword">function</span> (<span class="params">url</span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="keyword">function</span> (<span class="params">resolve, reject</span>) {</span><br><span class="line">    <span class="comment">// 测试链接连通性, 主要检测404错误</span></span><br><span class="line">    <span class="comment">// 由于AJAX通常无法区分404和跨域问题，所以只能用script 或者 link标签，link比script更容易捕获错误</span></span><br><span class="line">    <span class="keyword">var</span> dom = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">'link'</span>);</span><br><span class="line">    dom.<span class="property">href</span> = url;</span><br><span class="line">    dom.<span class="property">rel</span> = <span class="string">'stylesheet'</span>;</span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">appendChild</span>(dom);</span><br><span class="line">    dom.<span class="property">onload</span> = <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">removeChild</span>(dom);</span><br><span class="line">      <span class="title function_">resolve</span>();</span><br><span class="line">    }</span><br><span class="line">    dom.<span class="property">onerror</span> = reject;</span><br><span class="line">  });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="title function_">isRunUrl</span>(<span class="string">"your url"</span>).<span class="title function_">then</span>(</span><br><span class="line">  <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理resolve的代码</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"ok"</span>, data);;</span><br><span class="line">  }, <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理reject的代码，重定向逻辑</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"err"</span>, err);</span><br><span class="line">  }</span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<center>欢迎微信扫码关注 "看见另一种可能"！</center>
+
+<img data-src="/images/base/loading03.svg" data-original="/images/contact/qrcode_wechat.jpg" alt="wechat：看见另一种可能"></body></html>]]></content>
+      <categories>
+        <category>Javascript</category>
+      </categories>
+      <tags>
+        <tag>404</tag>
       </tags>
   </entry>
   <entry>
