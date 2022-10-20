@@ -1,13 +1,14 @@
 ---
 title: Docker | redis安装及测试
-date: 2022-10-19 16:50:07
 tags:
-   - Docker
-   - Redis
+  - Docker
+  - Redis
 categories:
-   - Docker
-   - Redis
+  - Docker
+  - Redis
 description: 此篇文章目的是熟悉一下redis的下载安装使用，为后面部署redis集群做准备。
+abbrlink: 2424499315
+date: 2022-10-19 16:50:07
 ---
 
 > 本篇收录至[Docker专栏](https://blog.i-xiao.space/categories/Docker/)，持续更新，欢迎访问😊
