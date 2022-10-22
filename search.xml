@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Actions</title>
+    <url>/posts/3405105267.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>持续集成、持续部署</p>
+</body></html>]]></content>
+  </entry>
+  <entry>
     <title>2022年中秋佳节，于梦开始的地方</title>
     <url>/posts/4798453.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -35,12 +41,6 @@
       <tags>
         <tag>梦开始的地方</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Actions</title>
-    <url>/posts/3405105267.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>持续集成、持续部署</p>
-</body></html>]]></content>
   </entry>
   <entry>
     <title>CSS -webkit-box-orient: vertical 编译报错之autoprefixer问题</title>
@@ -84,6 +84,12 @@
 <p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
 <p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
 </body></html>]]></content>
+      <categories>
+        <category>CSS</category>
+      </categories>
+      <tags>
+        <tag>CSS</tag>
+      </tags>
   </entry>
   <entry>
     <title>D8调试工具——jsvu的使用细则</title>
@@ -749,6 +755,61 @@
       </tags>
   </entry>
   <entry>
+    <title>Docker | 制作tomcat镜像并部署项目</title>
+    <url>/posts/2106196415.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
+</blockquote>
+<p>本文讲解如何制作自己的tomcat镜像，并使用tomcat部署项目</p>
+<h2 id="原料准备："><a href="#原料准备：" class="headerlink" title="原料准备："></a>原料准备：</h2><p>tomcat、jdk安装包，dockerfile文件</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1、准备压缩包"><a href="#1、准备压缩包" class="headerlink" title="1、准备压缩包"></a>1、准备压缩包</h3><p>jdk-8u301-linux-x64.tar.gz -&gt; jdk1.8.0_301</p>
+<p>apache-tomcat-7.0.107.tar.gz -&gt; apache-tomcat-7.0.107</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e93f16f2c2beb17ac00e.jpg"></p>
+<h3 id="2、编写dockerfile文件"><a href="#2、编写dockerfile文件" class="headerlink" title="2、编写dockerfile文件"></a>2、编写dockerfile文件</h3><blockquote>
+<p>官方指定命名<code>Dockerfile</code>，这样构建的时候不用加<code>-f</code>参数指定文件</p>
+</blockquote>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER xiao&lt;find_onepiece@163.com&gt;</span><br><span class="line"></span><br><span class="line">COPY readme.txt /usr/local/readme.txt</span><br><span class="line"></span><br><span class="line">ADD jdk-8u301-linux-x64.tar.gz /usr/local</span><br><span class="line">ADD apache-tomcat-7.0.107.tar.gz /usr/local</span><br><span class="line"></span><br><span class="line">RUN yum -y install vim</span><br><span class="line"></span><br><span class="line">ENV MYPATH /usr/local</span><br><span class="line"></span><br><span class="line">WORKDIR <span class="variable">$MYPATH</span></span><br><span class="line">ENV JAVA_HOME /usr/local/jdk1.8.0_301</span><br><span class="line">ENV CLASSPATH <span class="variable">$JAVA_HOME</span>/lib/dt.jar:<span class="variable">$JAVA_HOME</span>/lib/tools.jar</span><br><span class="line">ENV CATALINA_HOME /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV CATALINE_BASH /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV PATH <span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$CATALINA_HOME</span>/lib:<span class="variable">$CATALINE_HOME</span>/bin</span><br><span class="line"></span><br><span class="line">EXPOSE 8080</span><br><span class="line"></span><br><span class="line">CMD /usr/local/apache-tomcat-7.0.107/bin/startup.sh &amp;&amp; <span class="built_in">tail</span> -f /usr/local/apache-tomcat-7.0.107/bin/logs/catalina.out</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="3、执行构建"><a href="#3、执行构建" class="headerlink" title="3、执行构建"></a>3、执行构建</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -t diytomcat . <span class="comment"># 自动寻找Dockerfile文件</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>构建成功:</strong></p>
+<p>Successfully built e68ad8caa2a4</p>
+<p>Successfully tagged diytomcat:latest</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e96716f2c2beb17b0059.jpg"></p>
+<h3 id="4、启动容器"><a href="#4、启动容器" class="headerlink" title="4、启动容器"></a>4、启动容器</h3><p><code>/webapps/test</code>  部署的项目路径，浏览器访问<code>ip:port/test</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it -p 9090:8080 --name xiaoTomcat -v /home/xiao/build/tomcat/test:/usr/local/apache-tomcat-7.0.107/webapps/test -v /home/xiao/build/tomcat/tomcatlogs/:/usr/local/apache-tomcat-7.0.107/logs diytomcat</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="5、访问查看"><a href="#5、访问查看" class="headerlink" title="5、访问查看"></a>5、访问查看</h3><p>数据卷挂载成功</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e97c16f2c2beb17b2050.jpg"></p>
+<h3 id="6、发布项目"><a href="#6、发布项目" class="headerlink" title="6、发布项目"></a>6、发布项目</h3><p>已经挂载了数据卷，所以编写宿主机的项目文件就可以了</p>
+<p>在挂载路径 <code>/home/xiao/build/tomcat/test</code> 下</p>
+<ol>
+<li>新建文件 <code>web.xml</code>，内容如下：</li>
+</ol>
+<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">version</span>=<span class="string">"2.4"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>新建文件 <code>index.jsp</code>，内容如下：</li>
+</ol>
+<figure class="highlight html"><table><tbody><tr><td class="code"><pre><span class="line">&lt;%@ page contentType="text/html;charset=UTF-8" language="java" %&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Hello World!<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>xiao<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">&lt;%</span><br><span class="line">System.out.println("my tomcat project logs");</span><br><span class="line">%&gt;</span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="7、浏览器访问"><a href="#7、浏览器访问" class="headerlink" title="7、浏览器访问"></a>7、浏览器访问</h3><p>url：<code>ip:port/test</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9ae16f2c2beb17b6a64.jpg"></p>
+<h3 id="8、查看日志卷"><a href="#8、查看日志卷" class="headerlink" title="8、查看日志卷"></a>8、查看日志卷</h3><p><code>tail -f catalina.out</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9bd16f2c2beb17b8250.jpg"></p>
+<h2 id="完成从构建镜像到部署项目🎈🎈"><a href="#完成从构建镜像到部署项目🎈🎈" class="headerlink" title="完成从构建镜像到部署项目🎈🎈"></a>完成从构建镜像到部署项目🎈🎈</h2><hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+        <tag>tomcat</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker | 发布镜像到镜像仓库</title>
     <url>/posts/2796165889.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -834,61 +895,6 @@
       </categories>
       <tags>
         <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Docker | 制作tomcat镜像并部署项目</title>
-    <url>/posts/2106196415.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
-</blockquote>
-<p>本文讲解如何制作自己的tomcat镜像，并使用tomcat部署项目</p>
-<h2 id="原料准备："><a href="#原料准备：" class="headerlink" title="原料准备："></a>原料准备：</h2><p>tomcat、jdk安装包，dockerfile文件</p>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1、准备压缩包"><a href="#1、准备压缩包" class="headerlink" title="1、准备压缩包"></a>1、准备压缩包</h3><p>jdk-8u301-linux-x64.tar.gz -&gt; jdk1.8.0_301</p>
-<p>apache-tomcat-7.0.107.tar.gz -&gt; apache-tomcat-7.0.107</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e93f16f2c2beb17ac00e.jpg"></p>
-<h3 id="2、编写dockerfile文件"><a href="#2、编写dockerfile文件" class="headerlink" title="2、编写dockerfile文件"></a>2、编写dockerfile文件</h3><blockquote>
-<p>官方指定命名<code>Dockerfile</code>，这样构建的时候不用加<code>-f</code>参数指定文件</p>
-</blockquote>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER xiao&lt;find_onepiece@163.com&gt;</span><br><span class="line"></span><br><span class="line">COPY readme.txt /usr/local/readme.txt</span><br><span class="line"></span><br><span class="line">ADD jdk-8u301-linux-x64.tar.gz /usr/local</span><br><span class="line">ADD apache-tomcat-7.0.107.tar.gz /usr/local</span><br><span class="line"></span><br><span class="line">RUN yum -y install vim</span><br><span class="line"></span><br><span class="line">ENV MYPATH /usr/local</span><br><span class="line"></span><br><span class="line">WORKDIR <span class="variable">$MYPATH</span></span><br><span class="line">ENV JAVA_HOME /usr/local/jdk1.8.0_301</span><br><span class="line">ENV CLASSPATH <span class="variable">$JAVA_HOME</span>/lib/dt.jar:<span class="variable">$JAVA_HOME</span>/lib/tools.jar</span><br><span class="line">ENV CATALINA_HOME /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV CATALINE_BASH /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV PATH <span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$CATALINA_HOME</span>/lib:<span class="variable">$CATALINE_HOME</span>/bin</span><br><span class="line"></span><br><span class="line">EXPOSE 8080</span><br><span class="line"></span><br><span class="line">CMD /usr/local/apache-tomcat-7.0.107/bin/startup.sh &amp;&amp; <span class="built_in">tail</span> -f /usr/local/apache-tomcat-7.0.107/bin/logs/catalina.out</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="3、执行构建"><a href="#3、执行构建" class="headerlink" title="3、执行构建"></a>3、执行构建</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -t diytomcat . <span class="comment"># 自动寻找Dockerfile文件</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>构建成功:</strong></p>
-<p>Successfully built e68ad8caa2a4</p>
-<p>Successfully tagged diytomcat:latest</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e96716f2c2beb17b0059.jpg"></p>
-<h3 id="4、启动容器"><a href="#4、启动容器" class="headerlink" title="4、启动容器"></a>4、启动容器</h3><p><code>/webapps/test</code>  部署的项目路径，浏览器访问<code>ip:port/test</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it -p 9090:8080 --name xiaoTomcat -v /home/xiao/build/tomcat/test:/usr/local/apache-tomcat-7.0.107/webapps/test -v /home/xiao/build/tomcat/tomcatlogs/:/usr/local/apache-tomcat-7.0.107/logs diytomcat</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="5、访问查看"><a href="#5、访问查看" class="headerlink" title="5、访问查看"></a>5、访问查看</h3><p>数据卷挂载成功</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e97c16f2c2beb17b2050.jpg"></p>
-<h3 id="6、发布项目"><a href="#6、发布项目" class="headerlink" title="6、发布项目"></a>6、发布项目</h3><p>已经挂载了数据卷，所以编写宿主机的项目文件就可以了</p>
-<p>在挂载路径 <code>/home/xiao/build/tomcat/test</code> 下</p>
-<ol>
-<li>新建文件 <code>web.xml</code>，内容如下：</li>
-</ol>
-<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">version</span>=<span class="string">"2.4"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>新建文件 <code>index.jsp</code>，内容如下：</li>
-</ol>
-<figure class="highlight html"><table><tbody><tr><td class="code"><pre><span class="line">&lt;%@ page contentType="text/html;charset=UTF-8" language="java" %&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Hello World!<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>xiao<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">&lt;%</span><br><span class="line">System.out.println("my tomcat project logs");</span><br><span class="line">%&gt;</span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="7、浏览器访问"><a href="#7、浏览器访问" class="headerlink" title="7、浏览器访问"></a>7、浏览器访问</h3><p>url：<code>ip:port/test</code></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9ae16f2c2beb17b6a64.jpg"></p>
-<h3 id="8、查看日志卷"><a href="#8、查看日志卷" class="headerlink" title="8、查看日志卷"></a>8、查看日志卷</h3><p><code>tail -f catalina.out</code></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9bd16f2c2beb17b8250.jpg"></p>
-<h2 id="完成从构建镜像到部署项目🎈🎈"><a href="#完成从构建镜像到部署项目🎈🎈" class="headerlink" title="完成从构建镜像到部署项目🎈🎈"></a>完成从构建镜像到部署项目🎈🎈</h2><hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-        <tag>tomcat</tag>
       </tags>
   </entry>
   <entry>
@@ -1735,9 +1741,111 @@
       </tags>
   </entry>
   <entry>
+    <title>Go | 基本数据类型详解</title>
+    <url>/posts/688314459.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Go/">Golang专栏</a>，持续更新，欢迎访问😊</p>
+</blockquote>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><strong>基本数据类型</strong>，变量存的就是值，也叫值类型。每一种数据都定义了明确的数据类型，在内存中分配了不同大小的内存空间。</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/635415fb16f2c2beb1362bf0.jpg"></p>
+<h1 id="Printf-和-Println-的区别"><a href="#Printf-和-Println-的区别" class="headerlink" title="Printf 和 Println 的区别"></a>Printf 和 Println 的区别</h1><ul>
+<li><p>printf 输出后不换行， println输出后自动换行；</p>
+</li>
+<li><p>printf 格式化输出，println 直接输出内容</p>
+</li>
+<li><p>Printf 根据format参数生成格式化的字符串并写入标准输出。</p>
+</li>
+</ul>
+<h1 id="判断数据类型以及查看变量使用内存空间"><a href="#判断数据类型以及查看变量使用内存空间" class="headerlink" title="判断数据类型以及查看变量使用内存空间"></a>判断数据类型以及查看变量使用内存空间</h1><figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="comment">// import "unsafe"</span></span><br><span class="line"><span class="comment">// import "fmt"</span></span><br><span class="line"><span class="comment">// 引入多个</span></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line"><span class="string">"fmt"</span></span><br><span class="line"><span class="string">"unsafe"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> {</span><br><span class="line">	<span class="keyword">var</span> i <span class="type">int8</span> = <span class="number">12</span></span><br><span class="line">	fmt.Println(<span class="string">"i= "</span>, i)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> i2 <span class="type">uint8</span> = <span class="number">129</span></span><br><span class="line">	fmt.Println(<span class="string">"i2= "</span>, i2)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> n = <span class="number">12</span></span><br><span class="line">	fmt.Printf(<span class="string">"n的类型是%T\n"</span>, n) <span class="comment">// n的类型是int</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> name = <span class="string">"xiao"</span></span><br><span class="line">	fmt.Printf(<span class="string">"name的类型是%T\n"</span>, name) <span class="comment">// name的类型是string</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 查看变量占用的字节大小和数据类型</span></span><br><span class="line">	fmt.Printf(<span class="string">"name的类型是%T"</span>, name, unsafe.Sizeof(name))</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h1><h2 id="数值型"><a href="#数值型" class="headerlink" title="数值型"></a>数值型</h2><h3 id="整数类型-默认值是0"><a href="#整数类型-默认值是0" class="headerlink" title="整数类型 (默认值是0)"></a>整数类型 (默认值是0)</h3><p>int, int8, int16, int32, int64<br>uint, uint8, uint16, uint32, uint64     无符号数（表示的范围更大）<br>byte</p>
+<ul>
+<li><p>bit: 计算机中的最小存储单位</p>
+</li>
+<li><p>byte: 计算机中基本存储单元</p>
+</li>
+<li><p>1byte = 8bit (一个字节8位)</p>
+</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6354165e16f2c2beb136bb7a.jpg"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6354166f16f2c2beb136d397.jpg"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6354167d16f2c2beb136e753.jpg"></p>
+<figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> i <span class="type">int8</span> = <span class="number">-129</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// constant -129 overflows int8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> i2 <span class="type">uint8</span> = <span class="number">-129</span></span><br><span class="line"><span class="comment">// constant -129 overflows uint8</span></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="浮点类型-默认值是0"><a href="#浮点类型-默认值是0" class="headerlink" title="浮点类型 (默认值是0)"></a>浮点类型 (默认值是0)</h3><ul>
+<li><p>float32</p>
+</li>
+<li><p>float64（默认类型）</p>
+</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6354168c16f2c2beb136fc17.jpg"></p>
+<p><strong>浮点数 = 符号位 + 指数位 + 尾数位</strong></p>
+<p>浮点数都是<strong>有符号</strong>的</p>
+<p>使用浮点类型的时候就需要注意存在<strong>丢失精度</strong>的问题</p>
+<figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> num1 <span class="type">float32</span> = <span class="number">12.556883123132</span>   <span class="comment">// 精度会丢失</span></span><br><span class="line"><span class="keyword">var</span> num2 <span class="type">float64</span> = <span class="number">12.556883123132</span>   <span class="comment">// 64位比32位精度要准确</span></span><br><span class="line">fmt.Println(<span class="string">"num1="</span>, num1, <span class="string">"num2"</span>, num2) <span class="comment">// num1= 12.556883 num2 12.556883123132</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> num = <span class="number">12.64</span></span><br><span class="line">fmt.Printf(<span class="string">"num的类型"</span>, num) <span class="comment">// num的类型%!(EXTRA float64=12.64)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> num3 = <span class="number">5.6e2</span>   <span class="comment">//  5.6 * 10^2 = 5.6 * 100 = 560</span></span><br><span class="line">fmt.Println(<span class="string">"num3="</span>, num3)</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="字符型"><a href="#字符型" class="headerlink" title="字符型"></a>字符型</h2><p>没有专门的字符型，使用<code>byte</code>来保存单个字母字符</p>
+<p><code>ASCII</code>码（128个）</p>
+<ul>
+<li><p>Go语言的字符使用UTF-8编码</p>
+</li>
+<li><p>英文字母：1个字节</p>
+</li>
+<li><p>汉字：3个字节</p>
+</li>
+<li><p>字符必须使用单引号括起来，双引号会报错</p>
+</li>
+</ul>
+<p><strong>单引号针对单个字符，字符串要使用双引号</strong></p>
+<p><strong>UTF-8是对ASCII的扩容</strong></p>
+<figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> str1 <span class="type">byte</span> = <span class="string">'a'</span></span><br><span class="line"><span class="keyword">var</span> str2 <span class="type">byte</span> = <span class="string">'0'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 当直接输出byte时，输出的使对应字符的ASCII码值(十进制)</span></span><br><span class="line">fmt.Println(<span class="string">"str1"</span>, str1, <span class="string">"str2"</span>, str2) <span class="comment">// str1 97 str2 48</span></span><br><span class="line">fmt.Printf(<span class="string">"str1=%c str2=%c"</span>, str1, str2) <span class="comment">// str1=a str2=0</span></span><br><span class="line"></span><br><span class="line">fmt.Printf(<span class="string">"str1=%c"</span>, str1) <span class="comment">// str1=a</span></span><br><span class="line">fmt.Printf(<span class="string">"str2=%c"</span>, str2) <span class="comment">// str2=0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> name <span class="type">byte</span> = <span class="string">'吖'</span></span><br><span class="line">fmt.Printf(<span class="string">"name=%c"</span>, name) <span class="comment">// overflows byte 超出byte类型的存储范围了</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 汉字更换成int类型</span></span><br><span class="line"><span class="keyword">var</span> name <span class="type">int</span> = <span class="string">'吖'</span></span><br><span class="line">fmt.Printf(<span class="string">"name=%c"</span>, name) <span class="comment">// name=吖</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> name1 <span class="type">int</span> =<span class="number">22269</span></span><br><span class="line">fmt.Printf(<span class="string">"name1=%c"</span>, name1) <span class="comment">// name1=国</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 数据类型只是为了定义存储空间的大小，对应计算机中的内存空间</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6354169e16f2c2beb137151f.jpg"></p>
+<h2 id="布尔型（bool）-默认值是false"><a href="#布尔型（bool）-默认值是false" class="headerlink" title="布尔型（bool）(默认值是false)"></a>布尔型（bool）(默认值是false)</h2><p>用于逻辑运算，流程控制。<code>bool</code>类型只占用一个字节的内存空间</p>
+<figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="literal">false</span></span><br><span class="line">fmt.Println(a)  <span class="comment">// false</span></span><br><span class="line">fmt.Println(unsafe.Sizeof(a))  <span class="comment">// 1</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="字符串（string）-默认值是””"><a href="#字符串（string）-默认值是””" class="headerlink" title="字符串（string）(默认值是””)"></a>字符串（string）(默认值是””)</h2><p><code>UTF-8</code>编码</p>
+<p><strong>字符串一经定义，则不能修改</strong></p>
+<figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> address <span class="type">string</span> = <span class="string">"北京长城"</span></span><br><span class="line">fmt.Println(address) <span class="comment">// 北京长城</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> str = <span class="string">"hello"</span></span><br><span class="line">str[<span class="number">0</span>] = <span class="string">'a'</span>     <span class="comment">// cannot assign to str[0] (strings are immutable)</span></span><br><span class="line">fmt.Println(str)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 反引号</span></span><br><span class="line"><span class="comment">// 以字符串原生形式输出，包括换行和特殊字符，可以实现防止攻击、输出源代码等效果。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 字符串拼接, + 号要放在上面，否则会报错(因为go默认在一行后面加;号)</span></span><br><span class="line"><span class="keyword">var</span> str01 = <span class="string">"hello"</span> + <span class="string">" world"</span></span><br><span class="line">str01 += <span class="string">"  haha!"</span> + <span class="string">"xixi"</span> +</span><br><span class="line"><span class="string">"heihei"</span></span><br><span class="line">fmt.Println(str01)    <span class="comment">// hello world  haha!xixiheihei</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="基本数据类型的默认值"><a href="#基本数据类型的默认值" class="headerlink" title="基本数据类型的默认值"></a>基本数据类型的默认值</h1><figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="type">int</span></span><br><span class="line"><span class="keyword">var</span> b <span class="type">float32</span></span><br><span class="line"><span class="keyword">var</span> c <span class="type">float64</span></span><br><span class="line"><span class="keyword">var</span> d <span class="type">bool</span></span><br><span class="line"><span class="keyword">var</span> e <span class="type">string</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// %v表示按照变量的值输出</span></span><br><span class="line">fmt.Printf(<span class="string">"a=%d,b=%v,c=%v,d=%v e=%v"</span>, a,b,c,d,e)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>上面输出： <code>a=0,b=0,c=0,d=false e=</code></p>
+<h1 id="派生-x2F-复杂数据类型"><a href="#派生-x2F-复杂数据类型" class="headerlink" title="派生/复杂数据类型"></a>派生/复杂数据类型</h1><ol>
+<li><p>指针（Pointer）</p>
+</li>
+<li><p>数组</p>
+</li>
+<li><p>结构体（struct）</p>
+</li>
+<li><p>管道（Channel）</p>
+</li>
+<li><p>函数</p>
+</li>
+<li><p>切片（slice）</p>
+</li>
+<li><p>接口（interface）</p>
+</li>
+<li><p>map</p>
+</li>
+</ol>
+<p>后面陆续讲解复杂数据类型。</p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Go</category>
+      </categories>
+      <tags>
+        <tag>Go</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Go | 讲解GOROOT、GOPATH、GOBIN</title>
     <url>/posts/4093397452.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Go（又称 Golang）是 Google 开发的一种静态强类型、编译型、并发型，并具有垃圾回收功能的编程语言。Go 被誉为是未来的服务器端编程语言。</p>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Go/">Golang专栏</a>，持续更新，欢迎访问😊</p>
+</blockquote>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Go（又称 Golang）是 Google 开发的一种静态强类型、编译型、并发型，并具有垃圾回收功能的编程语言。Go 被誉为是未来的服务器端编程语言。</p>
 <p>Go是一门全新的静态类型开发语言，具有自动垃圾回收，丰富的内置类型,函数多返回值，错误处理，匿名函数,并发编程，反射等特性。</p>
 <p><strong>特色：</strong></p>
 <ul>
