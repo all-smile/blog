@@ -1,10 +1,13 @@
 ---
 title: Go | 讲解GOROOT、GOPATH、GOBIN
-date: 2022-10-21 14:59:59
 tags: Go
 categories: Go
 description: 我是甜点cc，开始讲解Go专栏的学习记录分享。本篇介绍GOROOT、GOPATH、GOBIN的区别，以及go开发的准备工作。
+abbrlink: 4093397452
+date: 2022-10-21 14:59:59
 ---
+
+> 本篇收录至[Golang专栏](https://blog.i-xiao.space/categories/Go/)，持续更新，欢迎访问😊
 
 ## 前言
 

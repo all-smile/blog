@@ -1,9 +1,10 @@
 ---
 title: 'CSS -webkit-box-orient: vertical 编译报错之autoprefixer问题'
-date: 2022-10-22 13:54:30
-tags:
-categories:
+tags: CSS
+categories: CSS
 description: autoprefixer 插件问题
+abbrlink: 2720186853
+date: 2022-10-22 13:54:30
 ---
 
 由于各大浏览器的兼容问题，`autoprefixer` 插件 就可以帮我们自动补齐前缀。它和 `less`、`scss` 这样的预处理器不同，它属于**后置处理器**。所谓 预处理器 是指在打包之前进行处理，所谓 后置处理器 是在代码打包生成后再进行处理。

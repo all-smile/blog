@@ -1,11 +1,12 @@
 ---
 title: perttier+eslint+husky——代码规范以及commit扫描代码
-date: 2022-10-21 15:03:12
 tags: 代码规范
 categories:
-   - 代码规范
-   - 前端
+  - 代码规范
+  - 前端
 description: perttier、eslint在项目中的运用，以及husky插件的使用。文章所涉及的插件均是当前最新版本。制定代码编写规范以及commit的时候扫描代码。
+abbrlink: 1784044162
+date: 2022-10-21 15:03:12
 ---
 
 > 本篇是在写个人 react-native 项目中运用总结的，其他项目配置略有差异，酌情使用
