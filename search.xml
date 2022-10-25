@@ -92,6 +92,156 @@
       </tags>
   </entry>
   <entry>
+    <title>Docker | Compose创建mysql容器</title>
+    <url>/posts/2048262040.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
+</blockquote>
+<p>本文通过<code>Docker Compose</code>来创建<code>mysql</code>容器</p>
+<h2 id="在linux服务器上创建文件，用于管理容器"><a href="#在linux服务器上创建文件，用于管理容器" class="headerlink" title="在linux服务器上创建文件，用于管理容器"></a>在linux服务器上创建文件，用于管理容器</h2><ul>
+<li>mkdir docker-mysql</li>
+<li>cd docker-mysql</li>
+<li>vim docker-compose.yml  #写入如下内容</li>
+</ul>
+<p><code>docker-compose.yml</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">version: <span class="string">"3"</span></span><br><span class="line">services:</span><br><span class="line">  mysqldb:</span><br><span class="line">    image: mysql:5.7</span><br><span class="line">    restart: always</span><br><span class="line">    container_name: mysql57</span><br><span class="line">    ports:</span><br><span class="line">      - 3310:3306</span><br><span class="line">    volumes:</span><br><span class="line">      - /var/vol_dockers/mysqldb/conf:/etc/mysql/conf.d</span><br><span class="line">      - /var/vol_dockers/mysqldb/data:/var/lib/mysql</span><br><span class="line">    environment:</span><br><span class="line">      MYSQL_PSAAWORD: PSAAWORD</span><br><span class="line">      MYSQL_ROOT_PASSWORD: PSAAWORD</span><br><span class="line">      MYSQL_USER: root</span><br><span class="line">      MYSQL_DATABASE: database</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>记得防火墙要开放3306、3310端口</p>
+</blockquote>
+<h2 id="创建启停脚本文件"><a href="#创建启停脚本文件" class="headerlink" title="创建启停脚本文件"></a>创建启停脚本文件</h2><ul>
+<li><p>vim start</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>vim restart</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose restart</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>vim stop</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose stop</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="修改脚本文件权限"><a href="#修改脚本文件权限" class="headerlink" title="修改脚本文件权限"></a>修改脚本文件权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 777 st* restart</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450d9c16f2c2beb1fc717d.jpg"></p>
+<h2 id="启动mysql容器"><a href="#启动mysql容器" class="headerlink" title="启动mysql容器"></a>启动<code>mysql</code>容器</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./start</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>查看容器</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450e0116f2c2beb1fd0442.jpg"></p>
+<h2 id="mysql数据库基本配置"><a href="#mysql数据库基本配置" class="headerlink" title="mysql数据库基本配置"></a>mysql数据库基本配置</h2><ol>
+<li>创建MySql用户</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">CREATE USER dbadmin@localhost IDENTIFIED BY <span class="string">'pwd'</span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>dbadmin@localhost</code>，表示只允许<code>localhost</code>环境的<code>dbadmin</code>用户登录</p>
+<ol start="2">
+<li>设置可访问的主机</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">update user <span class="built_in">set</span> host = <span class="string">'%'</span> <span class="built_in">where</span> user = <span class="string">'dbadmin'</span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>% 表示接受所有主机ip访问</p>
+<ol start="3">
+<li>最后刷新生效</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">flush privileges;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>整体步骤：</strong></p>
+<p>1、连接服务器: mysql -u root -p</p>
+<p>2、看当前所有数据库：show databases;</p>
+<p>3、进入mysql数据库：use mysql;</p>
+<p>4、查看mysql数据库中所有的表：show tables;</p>
+<p>5、查看user表中的数据：select Host, User,Password from user;</p>
+<p>6、修改user表中的Host: update user set Host=’%’ where User=’root’;</p>
+<p>7、最后刷新一下：flush privileges;</p>
+<p><strong>客户端连接</strong></p>
+<p>这里我使用的是<code>SQLyog</code>工具连接<code>MySQL</code>数据库</p>
+<p><code>sqlyog</code>连接服务器的<code>3310</code>端口，<code>3310</code>端口映射<code>MySQL</code>容器的<code>3306</code>端口。</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450db816f2c2beb1fc98ab.jpg"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450def16f2c2beb1fce7fa.jpg"></p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker | dockerfile构建centos镜像，以及CMD和ENTRYPOINT的区别</title>
+    <url>/posts/1048738116.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
+</blockquote>
+<h1 id="构建自己的centos镜像"><a href="#构建自己的centos镜像" class="headerlink" title="构建自己的centos镜像"></a>构建自己的centos镜像</h1><p><code>docker pull centos</code>下载下来的镜像都是基础版本，缺少很多常用的命令功能，比如：<code>ll</code>、<code>vim</code>等等，</p>
+<p>下面介绍制作一个功能较全的自己的centos镜像。</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1、编写dockerfile文件"><a href="#1、编写dockerfile文件" class="headerlink" title="1、编写dockerfile文件"></a>1、编写dockerfile文件</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER xiao&lt;example@163.com&gt;</span><br><span class="line">ENV MYPATH /usr/local</span><br><span class="line">WORKDIR <span class="variable">$MYPATH</span></span><br><span class="line"></span><br><span class="line">RUN yum -y install vim       <span class="comment"># vim命令</span></span><br><span class="line">RUN yum -y install net-tools <span class="comment"># ifconfig命令</span></span><br><span class="line"></span><br><span class="line">EXPOSE 80</span><br><span class="line">CMD <span class="built_in">echo</span> <span class="variable">$MYPATH</span></span><br><span class="line">CMD <span class="built_in">echo</span> <span class="string">"---end--"</span></span><br><span class="line">CMD /bin/bash</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="2、构建镜像"><a href="#2、构建镜像" class="headerlink" title="2、构建镜像"></a>2、构建镜像</h3><ul>
+<li><p>-f  file 指定dockerfile文件的路径</p>
+</li>
+<li><p>-t  tag  指定name:tag</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -f ./mydockerfile -t mycentos:0.1 .</span><br><span class="line"></span><br><span class="line">Successfully built e7527f97f78a</span><br><span class="line">Successfully tagged mycentos:0.1</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="3、测试运行"><a href="#3、测试运行" class="headerlink" title="3、测试运行"></a>3、测试运行</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker images</span><br><span class="line">docker run -it mycentos:0.1</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可以看到进入容器之后，直接就是在 <code>/usr/local</code> 目录下，是因为<code>dockerfile</code>配置的<code>WORKDIR</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92ce16f2c2beb1726bca.jpg"></p>
+<p>这时，<code>ifconfig</code>、<code>vim</code>命令都可以使用了</p>
+<h3 id="4、查看镜像构建历史记录"><a href="#4、查看镜像构建历史记录" class="headerlink" title="4、查看镜像构建历史记录"></a>4、查看镜像构建历史记录</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">history</span> imageID</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92e316f2c2beb1729aca.jpg"></p>
+<h1 id="CMD和ENTRYPOINT的区别"><a href="#CMD和ENTRYPOINT的区别" class="headerlink" title="CMD和ENTRYPOINT的区别"></a>CMD和ENTRYPOINT的区别</h1><h2 id="编写CMD测试dockerfile文件"><a href="#编写CMD测试dockerfile文件" class="headerlink" title="编写CMD测试dockerfile文件"></a>编写CMD测试dockerfile文件</h2><ol>
+<li>编写dockerfile文件</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">CMD [<span class="string">"ls"</span>, <span class="string">"-a"</span>]</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>构建镜像</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -f ./dockerfile -t cmd-test .</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>启动镜像</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run imageID/iamgeName</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92fb16f2c2beb172c300.jpg"></p>
+<p>测试发现，启动镜像时追加的命令替换了<code>CMD</code>命令，如下图所示:</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a930916f2c2beb172d924.jpg"></p>
+<h2 id="编写ENTRYPOINT测试dockerfile文件"><a href="#编写ENTRYPOINT测试dockerfile文件" class="headerlink" title="编写ENTRYPOINT测试dockerfile文件"></a>编写ENTRYPOINT测试dockerfile文件</h2><p>每个<code>Dockerfile</code>只能有一个<code>ENTRYPOINT</code>，如果指定了多个，只有最后一个被执行,而且一定会被执行</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">ENTRYPOINT [<span class="string">"ls"</span>, <span class="string">"-a"</span>]</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># nginx 镜像</span></span><br><span class="line">ENTRYPOINT [ <span class="string">"/usr/sbin/nginx"</span>, <span class="string">"-g"</span>, <span class="string">"daemon off;"</span> ]</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a931916f2c2beb1731507.jpg"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li><code>CMD</code>命令会被启动容器时追加的命令替换执行，</li>
+</ol>
+<p>2.<code>ENTRYPOINT</code>命令不会被启动容器时追加的命令替换，而是合并执行</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a932b16f2c2beb1736e15.jpg"></p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>D8调试工具——jsvu的使用细则</title>
     <url>/posts/1327063303.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -310,156 +460,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker | Compose创建mysql容器</title>
-    <url>/posts/2048262040.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
-</blockquote>
-<p>本文通过<code>Docker Compose</code>来创建<code>mysql</code>容器</p>
-<h2 id="在linux服务器上创建文件，用于管理容器"><a href="#在linux服务器上创建文件，用于管理容器" class="headerlink" title="在linux服务器上创建文件，用于管理容器"></a>在linux服务器上创建文件，用于管理容器</h2><ul>
-<li>mkdir docker-mysql</li>
-<li>cd docker-mysql</li>
-<li>vim docker-compose.yml  #写入如下内容</li>
-</ul>
-<p><code>docker-compose.yml</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">version: <span class="string">"3"</span></span><br><span class="line">services:</span><br><span class="line">  mysqldb:</span><br><span class="line">    image: mysql:5.7</span><br><span class="line">    restart: always</span><br><span class="line">    container_name: mysql57</span><br><span class="line">    ports:</span><br><span class="line">      - 3310:3306</span><br><span class="line">    volumes:</span><br><span class="line">      - /var/vol_dockers/mysqldb/conf:/etc/mysql/conf.d</span><br><span class="line">      - /var/vol_dockers/mysqldb/data:/var/lib/mysql</span><br><span class="line">    environment:</span><br><span class="line">      MYSQL_PSAAWORD: PSAAWORD</span><br><span class="line">      MYSQL_ROOT_PASSWORD: PSAAWORD</span><br><span class="line">      MYSQL_USER: root</span><br><span class="line">      MYSQL_DATABASE: database</span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p>记得防火墙要开放3306、3310端口</p>
-</blockquote>
-<h2 id="创建启停脚本文件"><a href="#创建启停脚本文件" class="headerlink" title="创建启停脚本文件"></a>创建启停脚本文件</h2><ul>
-<li><p>vim start</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>vim restart</p>
-</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose restart</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>vim stop</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose stop</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="修改脚本文件权限"><a href="#修改脚本文件权限" class="headerlink" title="修改脚本文件权限"></a>修改脚本文件权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 777 st* restart</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450d9c16f2c2beb1fc717d.jpg"></p>
-<h2 id="启动mysql容器"><a href="#启动mysql容器" class="headerlink" title="启动mysql容器"></a>启动<code>mysql</code>容器</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./start</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>查看容器</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450e0116f2c2beb1fd0442.jpg"></p>
-<h2 id="mysql数据库基本配置"><a href="#mysql数据库基本配置" class="headerlink" title="mysql数据库基本配置"></a>mysql数据库基本配置</h2><ol>
-<li>创建MySql用户</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">CREATE USER dbadmin@localhost IDENTIFIED BY <span class="string">'pwd'</span>;</span><br></pre></td></tr></tbody></table></figure>
-
-<p><code>dbadmin@localhost</code>，表示只允许<code>localhost</code>环境的<code>dbadmin</code>用户登录</p>
-<ol start="2">
-<li>设置可访问的主机</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">update user <span class="built_in">set</span> host = <span class="string">'%'</span> <span class="built_in">where</span> user = <span class="string">'dbadmin'</span>;</span><br></pre></td></tr></tbody></table></figure>
-
-<p>% 表示接受所有主机ip访问</p>
-<ol start="3">
-<li>最后刷新生效</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">flush privileges;</span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>整体步骤：</strong></p>
-<p>1、连接服务器: mysql -u root -p</p>
-<p>2、看当前所有数据库：show databases;</p>
-<p>3、进入mysql数据库：use mysql;</p>
-<p>4、查看mysql数据库中所有的表：show tables;</p>
-<p>5、查看user表中的数据：select Host, User,Password from user;</p>
-<p>6、修改user表中的Host: update user set Host=’%’ where User=’root’;</p>
-<p>7、最后刷新一下：flush privileges;</p>
-<p><strong>客户端连接</strong></p>
-<p>这里我使用的是<code>SQLyog</code>工具连接<code>MySQL</code>数据库</p>
-<p><code>sqlyog</code>连接服务器的<code>3310</code>端口，<code>3310</code>端口映射<code>MySQL</code>容器的<code>3306</code>端口。</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450db816f2c2beb1fc98ab.jpg"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450def16f2c2beb1fce7fa.jpg"></p>
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>Docker MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Docker | dockerfile构建centos镜像，以及CMD和ENTRYPOINT的区别</title>
-    <url>/posts/1048738116.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
-</blockquote>
-<h1 id="构建自己的centos镜像"><a href="#构建自己的centos镜像" class="headerlink" title="构建自己的centos镜像"></a>构建自己的centos镜像</h1><p><code>docker pull centos</code>下载下来的镜像都是基础版本，缺少很多常用的命令功能，比如：<code>ll</code>、<code>vim</code>等等，</p>
-<p>下面介绍制作一个功能较全的自己的centos镜像。</p>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1、编写dockerfile文件"><a href="#1、编写dockerfile文件" class="headerlink" title="1、编写dockerfile文件"></a>1、编写dockerfile文件</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER xiao&lt;example@163.com&gt;</span><br><span class="line">ENV MYPATH /usr/local</span><br><span class="line">WORKDIR <span class="variable">$MYPATH</span></span><br><span class="line"></span><br><span class="line">RUN yum -y install vim       <span class="comment"># vim命令</span></span><br><span class="line">RUN yum -y install net-tools <span class="comment"># ifconfig命令</span></span><br><span class="line"></span><br><span class="line">EXPOSE 80</span><br><span class="line">CMD <span class="built_in">echo</span> <span class="variable">$MYPATH</span></span><br><span class="line">CMD <span class="built_in">echo</span> <span class="string">"---end--"</span></span><br><span class="line">CMD /bin/bash</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="2、构建镜像"><a href="#2、构建镜像" class="headerlink" title="2、构建镜像"></a>2、构建镜像</h3><ul>
-<li><p>-f  file 指定dockerfile文件的路径</p>
-</li>
-<li><p>-t  tag  指定name:tag</p>
-</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -f ./mydockerfile -t mycentos:0.1 .</span><br><span class="line"></span><br><span class="line">Successfully built e7527f97f78a</span><br><span class="line">Successfully tagged mycentos:0.1</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="3、测试运行"><a href="#3、测试运行" class="headerlink" title="3、测试运行"></a>3、测试运行</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker images</span><br><span class="line">docker run -it mycentos:0.1</span><br></pre></td></tr></tbody></table></figure>
-
-<p>可以看到进入容器之后，直接就是在 <code>/usr/local</code> 目录下，是因为<code>dockerfile</code>配置的<code>WORKDIR</code></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92ce16f2c2beb1726bca.jpg"></p>
-<p>这时，<code>ifconfig</code>、<code>vim</code>命令都可以使用了</p>
-<h3 id="4、查看镜像构建历史记录"><a href="#4、查看镜像构建历史记录" class="headerlink" title="4、查看镜像构建历史记录"></a>4、查看镜像构建历史记录</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">history</span> imageID</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92e316f2c2beb1729aca.jpg"></p>
-<h1 id="CMD和ENTRYPOINT的区别"><a href="#CMD和ENTRYPOINT的区别" class="headerlink" title="CMD和ENTRYPOINT的区别"></a>CMD和ENTRYPOINT的区别</h1><h2 id="编写CMD测试dockerfile文件"><a href="#编写CMD测试dockerfile文件" class="headerlink" title="编写CMD测试dockerfile文件"></a>编写CMD测试dockerfile文件</h2><ol>
-<li>编写dockerfile文件</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">CMD [<span class="string">"ls"</span>, <span class="string">"-a"</span>]</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>构建镜像</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -f ./dockerfile -t cmd-test .</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="3">
-<li>启动镜像</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run imageID/iamgeName</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92fb16f2c2beb172c300.jpg"></p>
-<p>测试发现，启动镜像时追加的命令替换了<code>CMD</code>命令，如下图所示:</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a930916f2c2beb172d924.jpg"></p>
-<h2 id="编写ENTRYPOINT测试dockerfile文件"><a href="#编写ENTRYPOINT测试dockerfile文件" class="headerlink" title="编写ENTRYPOINT测试dockerfile文件"></a>编写ENTRYPOINT测试dockerfile文件</h2><p>每个<code>Dockerfile</code>只能有一个<code>ENTRYPOINT</code>，如果指定了多个，只有最后一个被执行,而且一定会被执行</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">ENTRYPOINT [<span class="string">"ls"</span>, <span class="string">"-a"</span>]</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># nginx 镜像</span></span><br><span class="line">ENTRYPOINT [ <span class="string">"/usr/sbin/nginx"</span>, <span class="string">"-g"</span>, <span class="string">"daemon off;"</span> ]</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a931916f2c2beb1731507.jpg"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
-<li><code>CMD</code>命令会被启动容器时追加的命令替换执行，</li>
-</ol>
-<p>2.<code>ENTRYPOINT</code>命令不会被启动容器时追加的命令替换，而是合并执行</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a932b16f2c2beb1736e15.jpg"></p>
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker | redis安装及测试</title>
     <url>/posts/2424499315.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -647,6 +647,61 @@
       </tags>
   </entry>
   <entry>
+    <title>Docker | 制作tomcat镜像并部署项目</title>
+    <url>/posts/2106196415.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
+</blockquote>
+<p>本文讲解如何制作自己的tomcat镜像，并使用tomcat部署项目</p>
+<h2 id="原料准备："><a href="#原料准备：" class="headerlink" title="原料准备："></a>原料准备：</h2><p>tomcat、jdk安装包，dockerfile文件</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1、准备压缩包"><a href="#1、准备压缩包" class="headerlink" title="1、准备压缩包"></a>1、准备压缩包</h3><p>jdk-8u301-linux-x64.tar.gz -&gt; jdk1.8.0_301</p>
+<p>apache-tomcat-7.0.107.tar.gz -&gt; apache-tomcat-7.0.107</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e93f16f2c2beb17ac00e.jpg"></p>
+<h3 id="2、编写dockerfile文件"><a href="#2、编写dockerfile文件" class="headerlink" title="2、编写dockerfile文件"></a>2、编写dockerfile文件</h3><blockquote>
+<p>官方指定命名<code>Dockerfile</code>，这样构建的时候不用加<code>-f</code>参数指定文件</p>
+</blockquote>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER xiao&lt;find_onepiece@163.com&gt;</span><br><span class="line"></span><br><span class="line">COPY readme.txt /usr/local/readme.txt</span><br><span class="line"></span><br><span class="line">ADD jdk-8u301-linux-x64.tar.gz /usr/local</span><br><span class="line">ADD apache-tomcat-7.0.107.tar.gz /usr/local</span><br><span class="line"></span><br><span class="line">RUN yum -y install vim</span><br><span class="line"></span><br><span class="line">ENV MYPATH /usr/local</span><br><span class="line"></span><br><span class="line">WORKDIR <span class="variable">$MYPATH</span></span><br><span class="line">ENV JAVA_HOME /usr/local/jdk1.8.0_301</span><br><span class="line">ENV CLASSPATH <span class="variable">$JAVA_HOME</span>/lib/dt.jar:<span class="variable">$JAVA_HOME</span>/lib/tools.jar</span><br><span class="line">ENV CATALINA_HOME /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV CATALINE_BASH /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV PATH <span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$CATALINA_HOME</span>/lib:<span class="variable">$CATALINE_HOME</span>/bin</span><br><span class="line"></span><br><span class="line">EXPOSE 8080</span><br><span class="line"></span><br><span class="line">CMD /usr/local/apache-tomcat-7.0.107/bin/startup.sh &amp;&amp; <span class="built_in">tail</span> -f /usr/local/apache-tomcat-7.0.107/bin/logs/catalina.out</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="3、执行构建"><a href="#3、执行构建" class="headerlink" title="3、执行构建"></a>3、执行构建</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -t diytomcat . <span class="comment"># 自动寻找Dockerfile文件</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>构建成功:</strong></p>
+<p>Successfully built e68ad8caa2a4</p>
+<p>Successfully tagged diytomcat:latest</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e96716f2c2beb17b0059.jpg"></p>
+<h3 id="4、启动容器"><a href="#4、启动容器" class="headerlink" title="4、启动容器"></a>4、启动容器</h3><p><code>/webapps/test</code>  部署的项目路径，浏览器访问<code>ip:port/test</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it -p 9090:8080 --name xiaoTomcat -v /home/xiao/build/tomcat/test:/usr/local/apache-tomcat-7.0.107/webapps/test -v /home/xiao/build/tomcat/tomcatlogs/:/usr/local/apache-tomcat-7.0.107/logs diytomcat</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="5、访问查看"><a href="#5、访问查看" class="headerlink" title="5、访问查看"></a>5、访问查看</h3><p>数据卷挂载成功</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e97c16f2c2beb17b2050.jpg"></p>
+<h3 id="6、发布项目"><a href="#6、发布项目" class="headerlink" title="6、发布项目"></a>6、发布项目</h3><p>已经挂载了数据卷，所以编写宿主机的项目文件就可以了</p>
+<p>在挂载路径 <code>/home/xiao/build/tomcat/test</code> 下</p>
+<ol>
+<li>新建文件 <code>web.xml</code>，内容如下：</li>
+</ol>
+<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">version</span>=<span class="string">"2.4"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>新建文件 <code>index.jsp</code>，内容如下：</li>
+</ol>
+<figure class="highlight html"><table><tbody><tr><td class="code"><pre><span class="line">&lt;%@ page contentType="text/html;charset=UTF-8" language="java" %&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Hello World!<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>xiao<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">&lt;%</span><br><span class="line">System.out.println("my tomcat project logs");</span><br><span class="line">%&gt;</span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="7、浏览器访问"><a href="#7、浏览器访问" class="headerlink" title="7、浏览器访问"></a>7、浏览器访问</h3><p>url：<code>ip:port/test</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9ae16f2c2beb17b6a64.jpg"></p>
+<h3 id="8、查看日志卷"><a href="#8、查看日志卷" class="headerlink" title="8、查看日志卷"></a>8、查看日志卷</h3><p><code>tail -f catalina.out</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9bd16f2c2beb17b8250.jpg"></p>
+<h2 id="完成从构建镜像到部署项目🎈🎈"><a href="#完成从构建镜像到部署项目🎈🎈" class="headerlink" title="完成从构建镜像到部署项目🎈🎈"></a>完成从构建镜像到部署项目🎈🎈</h2><hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+        <tag>tomcat</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker | 使用dockerfile生成镜像，清理docker空间</title>
     <url>/posts/1427354585.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -752,61 +807,6 @@
       </categories>
       <tags>
         <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Docker | 制作tomcat镜像并部署项目</title>
-    <url>/posts/2106196415.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
-</blockquote>
-<p>本文讲解如何制作自己的tomcat镜像，并使用tomcat部署项目</p>
-<h2 id="原料准备："><a href="#原料准备：" class="headerlink" title="原料准备："></a>原料准备：</h2><p>tomcat、jdk安装包，dockerfile文件</p>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1、准备压缩包"><a href="#1、准备压缩包" class="headerlink" title="1、准备压缩包"></a>1、准备压缩包</h3><p>jdk-8u301-linux-x64.tar.gz -&gt; jdk1.8.0_301</p>
-<p>apache-tomcat-7.0.107.tar.gz -&gt; apache-tomcat-7.0.107</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e93f16f2c2beb17ac00e.jpg"></p>
-<h3 id="2、编写dockerfile文件"><a href="#2、编写dockerfile文件" class="headerlink" title="2、编写dockerfile文件"></a>2、编写dockerfile文件</h3><blockquote>
-<p>官方指定命名<code>Dockerfile</code>，这样构建的时候不用加<code>-f</code>参数指定文件</p>
-</blockquote>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER xiao&lt;find_onepiece@163.com&gt;</span><br><span class="line"></span><br><span class="line">COPY readme.txt /usr/local/readme.txt</span><br><span class="line"></span><br><span class="line">ADD jdk-8u301-linux-x64.tar.gz /usr/local</span><br><span class="line">ADD apache-tomcat-7.0.107.tar.gz /usr/local</span><br><span class="line"></span><br><span class="line">RUN yum -y install vim</span><br><span class="line"></span><br><span class="line">ENV MYPATH /usr/local</span><br><span class="line"></span><br><span class="line">WORKDIR <span class="variable">$MYPATH</span></span><br><span class="line">ENV JAVA_HOME /usr/local/jdk1.8.0_301</span><br><span class="line">ENV CLASSPATH <span class="variable">$JAVA_HOME</span>/lib/dt.jar:<span class="variable">$JAVA_HOME</span>/lib/tools.jar</span><br><span class="line">ENV CATALINA_HOME /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV CATALINE_BASH /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV PATH <span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$CATALINA_HOME</span>/lib:<span class="variable">$CATALINE_HOME</span>/bin</span><br><span class="line"></span><br><span class="line">EXPOSE 8080</span><br><span class="line"></span><br><span class="line">CMD /usr/local/apache-tomcat-7.0.107/bin/startup.sh &amp;&amp; <span class="built_in">tail</span> -f /usr/local/apache-tomcat-7.0.107/bin/logs/catalina.out</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="3、执行构建"><a href="#3、执行构建" class="headerlink" title="3、执行构建"></a>3、执行构建</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -t diytomcat . <span class="comment"># 自动寻找Dockerfile文件</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>构建成功:</strong></p>
-<p>Successfully built e68ad8caa2a4</p>
-<p>Successfully tagged diytomcat:latest</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e96716f2c2beb17b0059.jpg"></p>
-<h3 id="4、启动容器"><a href="#4、启动容器" class="headerlink" title="4、启动容器"></a>4、启动容器</h3><p><code>/webapps/test</code>  部署的项目路径，浏览器访问<code>ip:port/test</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it -p 9090:8080 --name xiaoTomcat -v /home/xiao/build/tomcat/test:/usr/local/apache-tomcat-7.0.107/webapps/test -v /home/xiao/build/tomcat/tomcatlogs/:/usr/local/apache-tomcat-7.0.107/logs diytomcat</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="5、访问查看"><a href="#5、访问查看" class="headerlink" title="5、访问查看"></a>5、访问查看</h3><p>数据卷挂载成功</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e97c16f2c2beb17b2050.jpg"></p>
-<h3 id="6、发布项目"><a href="#6、发布项目" class="headerlink" title="6、发布项目"></a>6、发布项目</h3><p>已经挂载了数据卷，所以编写宿主机的项目文件就可以了</p>
-<p>在挂载路径 <code>/home/xiao/build/tomcat/test</code> 下</p>
-<ol>
-<li>新建文件 <code>web.xml</code>，内容如下：</li>
-</ol>
-<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">version</span>=<span class="string">"2.4"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>新建文件 <code>index.jsp</code>，内容如下：</li>
-</ol>
-<figure class="highlight html"><table><tbody><tr><td class="code"><pre><span class="line">&lt;%@ page contentType="text/html;charset=UTF-8" language="java" %&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Hello World!<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>xiao<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">&lt;%</span><br><span class="line">System.out.println("my tomcat project logs");</span><br><span class="line">%&gt;</span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="7、浏览器访问"><a href="#7、浏览器访问" class="headerlink" title="7、浏览器访问"></a>7、浏览器访问</h3><p>url：<code>ip:port/test</code></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9ae16f2c2beb17b6a64.jpg"></p>
-<h3 id="8、查看日志卷"><a href="#8、查看日志卷" class="headerlink" title="8、查看日志卷"></a>8、查看日志卷</h3><p><code>tail -f catalina.out</code></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9bd16f2c2beb17b8250.jpg"></p>
-<h2 id="完成从构建镜像到部署项目🎈🎈"><a href="#完成从构建镜像到部署项目🎈🎈" class="headerlink" title="完成从构建镜像到部署项目🎈🎈"></a>完成从构建镜像到部署项目🎈🎈</h2><hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-        <tag>tomcat</tag>
       </tags>
   </entry>
   <entry>
@@ -1741,6 +1741,64 @@
       </tags>
   </entry>
   <entry>
+    <title>Go | 讲解GOROOT、GOPATH、GOBIN</title>
+    <url>/posts/4093397452.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Go/">Golang专栏</a>，持续更新，欢迎访问😊</p>
+</blockquote>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Go（又称 Golang）是 Google 开发的一种静态强类型、编译型、并发型，并具有垃圾回收功能的编程语言。Go 被誉为是未来的服务器端编程语言。</p>
+<p>Go是一门全新的静态类型开发语言，具有自动垃圾回收，丰富的内置类型,函数多返回值，错误处理，匿名函数,并发编程，反射等特性。</p>
+<p><strong>特色：</strong></p>
+<ul>
+<li><p>简洁、快速、安全</p>
+</li>
+<li><p>并行、有趣、开源</p>
+</li>
+<li><p>内存管理、数组安全、编译迅速</p>
+</li>
+</ul>
+<h2 id="GOROOT"><a href="#GOROOT" class="headerlink" title="GOROOT"></a>GOROOT</h2><p>其实就是<code>golang</code> 的安装路径</p>
+<p>当你安装好<code>golang</code>之后其实这个就已经有了</p>
+<h2 id="GOPATH"><a href="#GOPATH" class="headerlink" title="GOPATH"></a>GOPATH</h2><p><code>go</code>命令依赖一个重要的环境变量：<code>GOPATH</code></p>
+<p><code>GOPATH</code>允许多个目录，当有多个目录时，请注意分隔符，多个目录的时候<code>Windows</code>是分号<code>;</code></p>
+<p>当有多个<code>GOPATH</code>时默认将<code>go get</code>获取的包存放在第一个目录下</p>
+<h2 id="GOBIN"><a href="#GOBIN" class="headerlink" title="GOBIN"></a>GOBIN</h2><p><code>go install</code>编译存放路径。不允许设置多个路径。可以为空。为空时则遵循“约定优于配置”原则，可执行文件放在各自<code>GOPATH</code>目录的<code>bin</code>文件夹中（前提是：package main的main函数文件不能直接放到<code>GOPATH</code>的<code>src</code>下面。</p>
+<h2 id="GOPATH目录约定有三个子目录"><a href="#GOPATH目录约定有三个子目录" class="headerlink" title="GOPATH目录约定有三个子目录"></a>GOPATH目录约定有三个子目录</h2><ol>
+<li><p><strong>src：</strong>存放源代码(比如：.go .c .h .s等)   按照golang默认约定，<code>go run</code>，<code>go install</code>等命令的当前工作路径（即在此路径下执行上述命令）。</p>
+</li>
+<li><p><strong>pkg：</strong>编译时生成的中间文件（比如：.a）　 <code>golang</code>编译包时</p>
+</li>
+<li><p><strong>bin：</strong>编译后生成的可执行文件（为了方便，可以把此目录加入到 $PATH 变量中，如果有多个gopath，那么使用${GOPATH//://bin:}/bin添加所有的bin目录）</p>
+</li>
+</ol>
+<h2 id="目录结构规划"><a href="#目录结构规划" class="headerlink" title="目录结构规划"></a>目录结构规划</h2><p><code>GOPATH</code>下的<code>src</code>目录就是接下来开发程序的主要目录，所有的源码都是放在这个目录下面，那么一般我们的做法就是一个目录一个项目，</p>
+<p>例如:</p>
+<p><code>$GOPATH/src/myproject</code> 表示<code>myproject</code>这个应用包或者可执行应用，这个根据package是main还是其他来决定，main的话就是可执行应用，其他的话就是应用包，这个会在后续详细介绍package。</p>
+<h2 id="go-get-和go-install"><a href="#go-get-和go-install" class="headerlink" title="go get 和go install"></a>go get 和go install</h2><p><code>go get</code>会做两件事：</p>
+<ol>
+<li><p>从远程下载需要用到的包</p>
+</li>
+<li><p>执行go install</p>
+</li>
+</ol>
+<p><code>go install</code> 会生成可执行文件直接放到<code>bin</code>目录下，当然这是有前提的</p>
+<p>你编译的是可执行文件，如果是一个普通的包，会被编译生成到<code>pkg</code>目录下该文件是.a结尾</p>
+<h2 id="go-整体开发目录"><a href="#go-整体开发目录" class="headerlink" title="go 整体开发目录"></a>go 整体开发目录</h2><p><strong>不使用 <code>go mod</code> 的方式，项目全在 <code>$GOPATH/src</code> 下</strong></p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line">go_project     <span class="comment">// go_project为GOPATH目录</span></span><br><span class="line">  -- bin</span><br><span class="line">     -- myApp1  <span class="comment">// 编译生成</span></span><br><span class="line">     -- myApp2  <span class="comment">// 编译生成</span></span><br><span class="line">     -- myApp3  <span class="comment">// 编译生成</span></span><br><span class="line">  -- pkg</span><br><span class="line">  -- src</span><br><span class="line">     -- myApp1     <span class="comment">// project1</span></span><br><span class="line">        -- models</span><br><span class="line">        -- controllers</span><br><span class="line">        -- others</span><br><span class="line">        -- main.<span class="property">go</span></span><br><span class="line">     -- myApp2     <span class="comment">// project2</span></span><br><span class="line">        -- models</span><br><span class="line">        -- controllers</span><br><span class="line">        -- others</span><br><span class="line">        -- main.<span class="property">go</span></span><br><span class="line">     -- myApp3     <span class="comment">// project3</span></span><br><span class="line">        -- models</span><br><span class="line">        -- controllers</span><br><span class="line">        -- others</span><br><span class="line">        -- main.<span class="property">go</span></span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Go</category>
+      </categories>
+      <tags>
+        <tag>Go</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Go | 基本数据类型详解</title>
     <url>/posts/688314459.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1827,64 +1885,6 @@
 </li>
 </ol>
 <p>后面陆续讲解复杂数据类型。</p>
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>Go</category>
-      </categories>
-      <tags>
-        <tag>Go</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Go | 讲解GOROOT、GOPATH、GOBIN</title>
-    <url>/posts/4093397452.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Go/">Golang专栏</a>，持续更新，欢迎访问😊</p>
-</blockquote>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Go（又称 Golang）是 Google 开发的一种静态强类型、编译型、并发型，并具有垃圾回收功能的编程语言。Go 被誉为是未来的服务器端编程语言。</p>
-<p>Go是一门全新的静态类型开发语言，具有自动垃圾回收，丰富的内置类型,函数多返回值，错误处理，匿名函数,并发编程，反射等特性。</p>
-<p><strong>特色：</strong></p>
-<ul>
-<li><p>简洁、快速、安全</p>
-</li>
-<li><p>并行、有趣、开源</p>
-</li>
-<li><p>内存管理、数组安全、编译迅速</p>
-</li>
-</ul>
-<h2 id="GOROOT"><a href="#GOROOT" class="headerlink" title="GOROOT"></a>GOROOT</h2><p>其实就是<code>golang</code> 的安装路径</p>
-<p>当你安装好<code>golang</code>之后其实这个就已经有了</p>
-<h2 id="GOPATH"><a href="#GOPATH" class="headerlink" title="GOPATH"></a>GOPATH</h2><p><code>go</code>命令依赖一个重要的环境变量：<code>GOPATH</code></p>
-<p><code>GOPATH</code>允许多个目录，当有多个目录时，请注意分隔符，多个目录的时候<code>Windows</code>是分号<code>;</code></p>
-<p>当有多个<code>GOPATH</code>时默认将<code>go get</code>获取的包存放在第一个目录下</p>
-<h2 id="GOBIN"><a href="#GOBIN" class="headerlink" title="GOBIN"></a>GOBIN</h2><p><code>go install</code>编译存放路径。不允许设置多个路径。可以为空。为空时则遵循“约定优于配置”原则，可执行文件放在各自<code>GOPATH</code>目录的<code>bin</code>文件夹中（前提是：package main的main函数文件不能直接放到<code>GOPATH</code>的<code>src</code>下面。</p>
-<h2 id="GOPATH目录约定有三个子目录"><a href="#GOPATH目录约定有三个子目录" class="headerlink" title="GOPATH目录约定有三个子目录"></a>GOPATH目录约定有三个子目录</h2><ol>
-<li><p><strong>src：</strong>存放源代码(比如：.go .c .h .s等)   按照golang默认约定，<code>go run</code>，<code>go install</code>等命令的当前工作路径（即在此路径下执行上述命令）。</p>
-</li>
-<li><p><strong>pkg：</strong>编译时生成的中间文件（比如：.a）　 <code>golang</code>编译包时</p>
-</li>
-<li><p><strong>bin：</strong>编译后生成的可执行文件（为了方便，可以把此目录加入到 $PATH 变量中，如果有多个gopath，那么使用${GOPATH//://bin:}/bin添加所有的bin目录）</p>
-</li>
-</ol>
-<h2 id="目录结构规划"><a href="#目录结构规划" class="headerlink" title="目录结构规划"></a>目录结构规划</h2><p><code>GOPATH</code>下的<code>src</code>目录就是接下来开发程序的主要目录，所有的源码都是放在这个目录下面，那么一般我们的做法就是一个目录一个项目，</p>
-<p>例如:</p>
-<p><code>$GOPATH/src/myproject</code> 表示<code>myproject</code>这个应用包或者可执行应用，这个根据package是main还是其他来决定，main的话就是可执行应用，其他的话就是应用包，这个会在后续详细介绍package。</p>
-<h2 id="go-get-和go-install"><a href="#go-get-和go-install" class="headerlink" title="go get 和go install"></a>go get 和go install</h2><p><code>go get</code>会做两件事：</p>
-<ol>
-<li><p>从远程下载需要用到的包</p>
-</li>
-<li><p>执行go install</p>
-</li>
-</ol>
-<p><code>go install</code> 会生成可执行文件直接放到<code>bin</code>目录下，当然这是有前提的</p>
-<p>你编译的是可执行文件，如果是一个普通的包，会被编译生成到<code>pkg</code>目录下该文件是.a结尾</p>
-<h2 id="go-整体开发目录"><a href="#go-整体开发目录" class="headerlink" title="go 整体开发目录"></a>go 整体开发目录</h2><p><strong>不使用 <code>go mod</code> 的方式，项目全在 <code>$GOPATH/src</code> 下</strong></p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line">go_project     <span class="comment">// go_project为GOPATH目录</span></span><br><span class="line">  -- bin</span><br><span class="line">     -- myApp1  <span class="comment">// 编译生成</span></span><br><span class="line">     -- myApp2  <span class="comment">// 编译生成</span></span><br><span class="line">     -- myApp3  <span class="comment">// 编译生成</span></span><br><span class="line">  -- pkg</span><br><span class="line">  -- src</span><br><span class="line">     -- myApp1     <span class="comment">// project1</span></span><br><span class="line">        -- models</span><br><span class="line">        -- controllers</span><br><span class="line">        -- others</span><br><span class="line">        -- main.<span class="property">go</span></span><br><span class="line">     -- myApp2     <span class="comment">// project2</span></span><br><span class="line">        -- models</span><br><span class="line">        -- controllers</span><br><span class="line">        -- others</span><br><span class="line">        -- main.<span class="property">go</span></span><br><span class="line">     -- myApp3     <span class="comment">// project3</span></span><br><span class="line">        -- models</span><br><span class="line">        -- controllers</span><br><span class="line">        -- others</span><br><span class="line">        -- main.<span class="property">go</span></span><br></pre></td></tr></tbody></table></figure>
-
 <hr>
 <p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
 <p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
@@ -3049,63 +3049,6 @@
       </tags>
   </entry>
   <entry>
-    <title>perttier+eslint+husky——代码规范以及commit扫描代码</title>
-    <url>/posts/1784044162.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>本篇是在写个人 react-native 项目中运用总结的，其他项目配置略有差异，酌情使用</p>
-</blockquote>
-<h2 id="1、perttier"><a href="#1、perttier" class="headerlink" title="1、perttier"></a>1、perttier</h2><p>👉 <a href="https://www.prettier.cn/docs/install.html">官方文档</a></p>
-<h3 id="1-1、步骤"><a href="#1-1、步骤" class="headerlink" title="1.1、步骤"></a>1.1、步骤</h3><h4 id="1-安装-prettier-并check-项目代码"><a href="#1-安装-prettier-并check-项目代码" class="headerlink" title="(1) 安装 prettier 并check 项目代码"></a>(1) 安装 prettier 并check 项目代码</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 安装依赖</span></span><br><span class="line">yarn add --dev --exact prettier</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加prettier的配置文件</span></span><br><span class="line"><span class="built_in">echo</span> module.exports = {}&gt; prettier.config.js</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行检查</span></span><br><span class="line">npx prettier --check .</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="2-配合使用-Git-hooks-（husky）"><a href="#2-配合使用-Git-hooks-（husky）" class="headerlink" title="(2) 配合使用 Git hooks （husky）"></a>(2) 配合使用 Git hooks （husky）</h4><p>👉 文档 <a href="https://www.npmjs.com/package/husky">husky</a></p>
-<h5 id="说明："><a href="#说明：" class="headerlink" title="说明："></a>说明：</h5><p>husky插件非常强大，代码开发周期的本地开发、代码格式检查、提交远程仓库等阶段关联起来，应用于整个开发流程管理里。如果有需要，也可以配置使用系统变更号、jire工单号等使用。</p>
-<p>下图中的 以 <strong>.sample</strong> 结尾的钩子文件并不会在进行git操作的时候触发，只有这样的文件【pre-commit】的文件才会执行。如果只是单纯的手动修改文件名，确实可以在自己本地运行，但是，并不能同步到远程代码仓库，所以在协同开发下手动修改文件名还是会引发一些别的问题。然后 husky 就是用来解决这个问题的插件。</p>
-<ul>
-<li><p><strong>老版本的husky</strong>（之前用过4.2.5版本）是通过修改 .git/hooks 里面的钩子函数文件（去掉 .sample 扩展名），来达到拦截处理功能的</p>
-</li>
-<li><p><strong>新版本的husky</strong>（我用的最新的 8.0.1）支持在项目根目录下创建 .husky 目录，在里面编写需要用到的git hooks（如下图）。通过在 npm scripts 中增加脚本命令 “prepare”:”husky install”的方式，来使得协同开发人员拉取仓库代码并安装node_modules的时候，执行 husky install 命令【感兴趣请看<a href="https://juejin.cn/post/7124240474692386847">npm脚本命令解析</a>】 ，<strong>开启husky</strong>。</p>
-</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6352451e16f2c2beb1db37d8.jpg"><br><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6352454a16f2c2beb1db7bc6.jpg"><br><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6352455516f2c2beb1db8cc4.jpg"></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 安装依赖</span></span><br><span class="line">yarn add --dev husky lint-staged</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启用 husky, 执行命令后可在项目目录查看效果 .git/config [core] hooksPath = .husky</span></span><br><span class="line"><span class="comment"># 混入 项目根目录下的 .husky 文件夹，以达到使用 git hooks 的目的</span></span><br><span class="line">npx husky install</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在package.json 中写入 脚本</span></span><br><span class="line"><span class="comment"># 如果执行失败或者没有成功写入脚本，可选择升级npm版本的方式处理 npm install -g npm 继续执行命令</span></span><br><span class="line"><span class="comment"># 或者使用 该命令： npm pkg set scripts.prepare "husky install"</span></span><br><span class="line">npm set-script prepare <span class="string">"husky install"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 hook, 在根目录生成 .husky/pre-commit 文件</span></span><br><span class="line">npx husky add .husky/pre-commit <span class="string">"npx lint-staged"</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6352456416f2c2beb1dba3da.jpg"><br><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6352457516f2c2beb1dbb808.jpg"><br><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6352458a16f2c2beb1dbcfe2.jpg"></p>
-<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">"prettier"</span><span class="punctuation">:</span> <span class="string">"2.7.0"</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">"husky"</span><span class="punctuation">:</span> <span class="string">"^8.0.1"</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">"lint-staged"</span><span class="punctuation">:</span> <span class="string">"^13.0.1"</span><span class="punctuation">,</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="1-2、-配置-prettier-config-js"><a href="#1-2、-配置-prettier-config-js" class="headerlink" title="1.2、 配置 prettier.config.js"></a>1.2、 配置 prettier.config.js</h3><figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = {</span><br><span class="line">  <span class="string">"arrowParens"</span>: <span class="string">"always"</span>,</span><br><span class="line">  <span class="string">"bracketSpacing"</span>: <span class="literal">true</span>, <span class="comment">// 在对象，数组括号与文字之间加空格 "{ foo: bar }"</span></span><br><span class="line">  <span class="string">"endOfLine"</span>: <span class="string">"auto"</span>, <span class="comment">// 结尾是 \n \r \n\r auto</span></span><br><span class="line">  <span class="string">"htmlWhitespaceSensitivity"</span>: <span class="string">"css"</span>,</span><br><span class="line">  <span class="string">"insertPragma"</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="string">"requirePragma"</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="string">"bracketSameLine"</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="string">"printWidth"</span>: <span class="number">120</span>, <span class="comment">// 超过最大值换行</span></span><br><span class="line">  <span class="string">"singleQuote"</span>: <span class="literal">true</span>, <span class="comment">// 使用单引号代替双引号</span></span><br><span class="line">  <span class="string">"useTabs"</span>: <span class="literal">false</span>, <span class="comment">// 缩进不使用tab，使用空格</span></span><br><span class="line">  <span class="string">"semi"</span>: <span class="literal">true</span>, <span class="comment">// 句尾添加分号</span></span><br><span class="line">  <span class="string">"tabWidth"</span>: <span class="number">2</span>, <span class="comment">// 缩进字节数</span></span><br><span class="line">  <span class="string">"trailingComma"</span>: <span class="string">"es5"</span>, <span class="comment">// 在对象或数组最后一个元素后面是否加逗号（在ES5中加尾逗号）</span></span><br><span class="line">  <span class="string">"jsxSingleQuote"</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="string">"quoteProps"</span>: <span class="string">"as-needed"</span>,</span><br><span class="line">  <span class="string">"proseWrap"</span>: <span class="string">"preserve"</span> <span class="comment">// 默认值。因为使用了一些折行敏感型的渲染器（如GitHub comment）而按照markdown文本样式进行折行</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="2、配合使用ESLint"><a href="#2、配合使用ESLint" class="headerlink" title="2、配合使用ESLint"></a>2、配合使用ESLint</h2><h3 id="2-1、步骤"><a href="#2-1、步骤" class="headerlink" title="2.1、步骤"></a>2.1、步骤</h3><p>官网文档： <a href="http://eslint.cn/docs/user-guide/configuring">http://eslint.cn/docs/user-guide/configuring</a></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 项目中安装包</span></span><br><span class="line">yarn add eslint</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置 ESlint</span></span><br><span class="line">npx eslint --init</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6352459b16f2c2beb1dbe702.jpg"></p>
-<h3 id="2-2、配置-eslintrc-js"><a href="#2-2、配置-eslintrc-js" class="headerlink" title="2.2、配置 .eslintrc.js"></a>2.2、配置 .eslintrc.js</h3><figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = {</span><br><span class="line">  <span class="comment">// 解析器</span></span><br><span class="line">  <span class="string">"parser"</span>: <span class="string">'babel-eslint'</span>,</span><br><span class="line">  <span class="string">"env"</span>: {</span><br><span class="line">    <span class="string">"browser"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"es6"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"node"</span>: <span class="literal">true</span></span><br><span class="line">  },</span><br><span class="line">  <span class="string">"extends"</span>: [</span><br><span class="line">    <span class="string">"eslint:recommended"</span>,</span><br><span class="line">    <span class="string">"plugin:react/recommended"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="string">"settings"</span>: {</span><br><span class="line">    <span class="string">"react"</span>: {</span><br><span class="line">      <span class="comment">// Warning: React version not specified in eslint-plugin-react settings.</span></span><br><span class="line">      <span class="string">"version"</span>: <span class="string">'detect'</span></span><br><span class="line">    }</span><br><span class="line">  },</span><br><span class="line">  <span class="string">"parserOptions"</span>: {</span><br><span class="line">    <span class="string">"ecmaFeatures"</span>: {</span><br><span class="line">      <span class="string">"jsx"</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="comment">// 支持装饰器 否则报 '@' 错误</span></span><br><span class="line">      <span class="string">"legacyDecorators"</span>: <span class="literal">true</span>,</span><br><span class="line">    },</span><br><span class="line">    <span class="string">"ecmaVersion"</span>: <span class="number">12</span>,</span><br><span class="line">    <span class="string">"sourceType"</span>: <span class="string">"module"</span></span><br><span class="line">  },</span><br><span class="line">  <span class="string">"plugins"</span>: [</span><br><span class="line">    <span class="string">"react"</span>,</span><br><span class="line">    <span class="string">"react-native"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="string">"rules"</span>: {</span><br><span class="line">    <span class="string">"eqeqeq"</span>: <span class="number">2</span>, <span class="comment">// 必须使用 === 和 !==</span></span><br><span class="line">    <span class="string">"no-empty-function"</span>: <span class="number">2</span>, <span class="comment">// 禁止空函数</span></span><br><span class="line">    <span class="string">"no-multi-spaces"</span>: <span class="number">2</span>, <span class="comment">// 禁止使用多个空格</span></span><br><span class="line">    <span class="string">"no-trailing-spaces"</span>: <span class="number">2</span>, <span class="comment">// 禁止禁用行尾空格</span></span><br><span class="line">    <span class="string">"space-infix-ops"</span>: <span class="number">2</span>, <span class="comment">// 要求操作符周围有空格</span></span><br><span class="line">    <span class="string">"space-in-parens"</span>: <span class="number">2</span>, <span class="comment">// 强制在圆括号内使用一致的空格</span></span><br><span class="line">    <span class="string">"no-var"</span>: <span class="number">2</span>, <span class="comment">// 要求使用 let 或 const 而不是 var,</span></span><br><span class="line">    <span class="string">"no-unused-vars"</span>: <span class="number">2</span>, <span class="comment">// 禁止出现未使用过的变量</span></span><br><span class="line">    <span class="string">"react/prop-types"</span>: <span class="number">0</span> <span class="comment">// 防止在react组件定义中缺少props验证</span></span><br><span class="line">  }</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="3、husk-使用"><a href="#3、husk-使用" class="headerlink" title="3、husk 使用"></a>3、husk 使用</h2><p>文档：<a href="https://typicode.github.io/husky/#/?id=install">https://typicode.github.io/husky/#/?id=install</a></p>
-<h3 id="3-1、package-json中添加配置"><a href="#3-1、package-json中添加配置" class="headerlink" title="3.1、package.json中添加配置"></a>3.1、package.json中添加配置</h3><figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">"husky"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"hooks"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">      <span class="attr">"pre-commit"</span><span class="punctuation">:</span> <span class="string">"npm run format &amp;&amp; npm run lint:fix"</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">"commit-msg"</span><span class="punctuation">:</span> <span class="string">"commitlint -E HUSKY_GIT_PARAMS"</span></span><br><span class="line">    <span class="punctuation">}</span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="3-2、完整的package-json"><a href="#3-2、完整的package-json" class="headerlink" title="3.2、完整的package.json"></a>3.2、完整的package.json</h3><figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"name"</span><span class="punctuation">:</span> <span class="string">"myrnapp"</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"version"</span><span class="punctuation">:</span> <span class="string">"0.0.1"</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"private"</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"scripts"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"android"</span><span class="punctuation">:</span> <span class="string">"react-native run-android"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"ios"</span><span class="punctuation">:</span> <span class="string">"react-native run-ios"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"start"</span><span class="punctuation">:</span> <span class="string">"react-native start"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"test"</span><span class="punctuation">:</span> <span class="string">"jest"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"lint"</span><span class="punctuation">:</span> <span class="string">"npx eslint --ext .js,.jsx,.ts,.tsx ./src"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"lint:fix"</span><span class="punctuation">:</span> <span class="string">"npx eslint --fix ."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"lint-staged"</span><span class="punctuation">:</span> <span class="string">"lint-staged"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"format"</span><span class="punctuation">:</span> <span class="string">"prettier --write 'src/**/*.js'"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"prettier"</span><span class="punctuation">:</span> <span class="string">"npx prettier --write ."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"prepare"</span><span class="punctuation">:</span> <span class="string">"husky install"</span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"dependencies"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"@react-navigation/native"</span><span class="punctuation">:</span> <span class="string">"^6.0.10"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"@react-navigation/native-stack"</span><span class="punctuation">:</span> <span class="string">"^6.6.2"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"axios"</span><span class="punctuation">:</span> <span class="string">"^0.27.2"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"mobx"</span><span class="punctuation">:</span> <span class="string">"^6.6.0"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"mobx-react"</span><span class="punctuation">:</span> <span class="string">"^7.5.0"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"prop-types"</span><span class="punctuation">:</span> <span class="string">"^15.8.1"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"react"</span><span class="punctuation">:</span> <span class="string">"17.0.2"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"react-native"</span><span class="punctuation">:</span> <span class="string">"0.68.2"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"react-native-safe-area-context"</span><span class="punctuation">:</span> <span class="string">"^4.3.1"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"react-native-screens"</span><span class="punctuation">:</span> <span class="string">"^3.13.1"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"react-native-svg"</span><span class="punctuation">:</span> <span class="string">"^12.3.0"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"react-navigation"</span><span class="punctuation">:</span> <span class="string">"^4.4.4"</span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"devDependencies"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"@babel/core"</span><span class="punctuation">:</span> <span class="string">"^7.12.9"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"@babel/plugin-proposal-decorators"</span><span class="punctuation">:</span> <span class="string">"^7.18.2"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"@babel/runtime"</span><span class="punctuation">:</span> <span class="string">"^7.12.5"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"@commitlint/cli"</span><span class="punctuation">:</span> <span class="string">"^17.0.2"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"@commitlint/config-conventional"</span><span class="punctuation">:</span> <span class="string">"^17.0.2"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"@react-native-community/eslint-config"</span><span class="punctuation">:</span> <span class="string">"^2.0.0"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"babel-eslint"</span><span class="punctuation">:</span> <span class="string">"^10.1.0"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"babel-jest"</span><span class="punctuation">:</span> <span class="string">"^26.6.3"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"eslint"</span><span class="punctuation">:</span> <span class="string">"^7.32.0"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"husky"</span><span class="punctuation">:</span> <span class="string">"^8.0.1"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"jest"</span><span class="punctuation">:</span> <span class="string">"^26.6.3"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"lint-staged"</span><span class="punctuation">:</span> <span class="string">"^13.0.1"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"metro-react-native-babel-preset"</span><span class="punctuation">:</span> <span class="string">"^0.67.0"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"prettier"</span><span class="punctuation">:</span> <span class="string">"2.7.0"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"react-native-svg-transformer"</span><span class="punctuation">:</span> <span class="string">"^1.0.0"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"react-test-renderer"</span><span class="punctuation">:</span> <span class="string">"17.0.2"</span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"lint-staged"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"*.{js,jsx,ts,tsx}"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="string">"npx prettier --write"</span><span class="punctuation">,</span></span><br><span class="line">      <span class="string">"npx eslint --fix"</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"husky"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"hooks"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">      <span class="attr">"pre-commit"</span><span class="punctuation">:</span> <span class="string">"npm run format &amp;&amp; npm run lint:fix"</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">"commit-msg"</span><span class="punctuation">:</span> <span class="string">"commitlint -E HUSKY_GIT_PARAMS"</span></span><br><span class="line">    <span class="punctuation">}</span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"jest"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"preset"</span><span class="punctuation">:</span> <span class="string">"react-native"</span></span><br><span class="line">  <span class="punctuation">}</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="3-3、卸载-husky"><a href="#3-3、卸载-husky" class="headerlink" title="3.3、卸载 husky"></a>3.3、卸载 husky</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm uninstall husky &amp;&amp; git config --<span class="built_in">unset</span> core.hooksPath</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="4、整体使用效果"><a href="#4、整体使用效果" class="headerlink" title="4、整体使用效果"></a>4、整体使用效果</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">'feat: 增加 prettier, eslint 配置'</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/635245b216f2c2beb1dc03c4.jpg"></p>
-<p>下面这个图片是老版本husky的效果</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/635245d916f2c2beb1dc3d1d.jpg"></p>
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>代码规范</category>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>代码规范</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>低代码和数字化</title>
     <url>/posts/4121106976.html</url>
     <content><![CDATA[<html><head></head><body><p>读“<a href="https://mp.weixin.qq.com/s/rU0455dOafob-TPkVzaBsA">有头有脸的老板，都开始盯数字化了</a>”有感</p>
@@ -3226,6 +3169,63 @@
       </tags>
   </entry>
   <entry>
+    <title>perttier+eslint+husky——代码规范以及commit扫描代码</title>
+    <url>/posts/1784044162.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇是在写个人 react-native 项目中运用总结的，其他项目配置略有差异，酌情使用</p>
+</blockquote>
+<h2 id="1、perttier"><a href="#1、perttier" class="headerlink" title="1、perttier"></a>1、perttier</h2><p>👉 <a href="https://www.prettier.cn/docs/install.html">官方文档</a></p>
+<h3 id="1-1、步骤"><a href="#1-1、步骤" class="headerlink" title="1.1、步骤"></a>1.1、步骤</h3><h4 id="1-安装-prettier-并check-项目代码"><a href="#1-安装-prettier-并check-项目代码" class="headerlink" title="(1) 安装 prettier 并check 项目代码"></a>(1) 安装 prettier 并check 项目代码</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 安装依赖</span></span><br><span class="line">yarn add --dev --exact prettier</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加prettier的配置文件</span></span><br><span class="line"><span class="built_in">echo</span> module.exports = {}&gt; prettier.config.js</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行检查</span></span><br><span class="line">npx prettier --check .</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="2-配合使用-Git-hooks-（husky）"><a href="#2-配合使用-Git-hooks-（husky）" class="headerlink" title="(2) 配合使用 Git hooks （husky）"></a>(2) 配合使用 Git hooks （husky）</h4><p>👉 文档 <a href="https://www.npmjs.com/package/husky">husky</a></p>
+<h5 id="说明："><a href="#说明：" class="headerlink" title="说明："></a>说明：</h5><p>husky插件非常强大，代码开发周期的本地开发、代码格式检查、提交远程仓库等阶段关联起来，应用于整个开发流程管理里。如果有需要，也可以配置使用系统变更号、jire工单号等使用。</p>
+<p>下图中的 以 <strong>.sample</strong> 结尾的钩子文件并不会在进行git操作的时候触发，只有这样的文件【pre-commit】的文件才会执行。如果只是单纯的手动修改文件名，确实可以在自己本地运行，但是，并不能同步到远程代码仓库，所以在协同开发下手动修改文件名还是会引发一些别的问题。然后 husky 就是用来解决这个问题的插件。</p>
+<ul>
+<li><p><strong>老版本的husky</strong>（之前用过4.2.5版本）是通过修改 .git/hooks 里面的钩子函数文件（去掉 .sample 扩展名），来达到拦截处理功能的</p>
+</li>
+<li><p><strong>新版本的husky</strong>（我用的最新的 8.0.1）支持在项目根目录下创建 .husky 目录，在里面编写需要用到的git hooks（如下图）。通过在 npm scripts 中增加脚本命令 “prepare”:”husky install”的方式，来使得协同开发人员拉取仓库代码并安装node_modules的时候，执行 husky install 命令【感兴趣请看<a href="https://juejin.cn/post/7124240474692386847">npm脚本命令解析</a>】 ，<strong>开启husky</strong>。</p>
+</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6352451e16f2c2beb1db37d8.jpg"><br><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6352454a16f2c2beb1db7bc6.jpg"><br><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6352455516f2c2beb1db8cc4.jpg"></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 安装依赖</span></span><br><span class="line">yarn add --dev husky lint-staged</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启用 husky, 执行命令后可在项目目录查看效果 .git/config [core] hooksPath = .husky</span></span><br><span class="line"><span class="comment"># 混入 项目根目录下的 .husky 文件夹，以达到使用 git hooks 的目的</span></span><br><span class="line">npx husky install</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在package.json 中写入 脚本</span></span><br><span class="line"><span class="comment"># 如果执行失败或者没有成功写入脚本，可选择升级npm版本的方式处理 npm install -g npm 继续执行命令</span></span><br><span class="line"><span class="comment"># 或者使用 该命令： npm pkg set scripts.prepare "husky install"</span></span><br><span class="line">npm set-script prepare <span class="string">"husky install"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 hook, 在根目录生成 .husky/pre-commit 文件</span></span><br><span class="line">npx husky add .husky/pre-commit <span class="string">"npx lint-staged"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6352456416f2c2beb1dba3da.jpg"><br><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6352457516f2c2beb1dbb808.jpg"><br><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6352458a16f2c2beb1dbcfe2.jpg"></p>
+<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">"prettier"</span><span class="punctuation">:</span> <span class="string">"2.7.0"</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">"husky"</span><span class="punctuation">:</span> <span class="string">"^8.0.1"</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">"lint-staged"</span><span class="punctuation">:</span> <span class="string">"^13.0.1"</span><span class="punctuation">,</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="1-2、-配置-prettier-config-js"><a href="#1-2、-配置-prettier-config-js" class="headerlink" title="1.2、 配置 prettier.config.js"></a>1.2、 配置 prettier.config.js</h3><figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = {</span><br><span class="line">  <span class="string">"arrowParens"</span>: <span class="string">"always"</span>,</span><br><span class="line">  <span class="string">"bracketSpacing"</span>: <span class="literal">true</span>, <span class="comment">// 在对象，数组括号与文字之间加空格 "{ foo: bar }"</span></span><br><span class="line">  <span class="string">"endOfLine"</span>: <span class="string">"auto"</span>, <span class="comment">// 结尾是 \n \r \n\r auto</span></span><br><span class="line">  <span class="string">"htmlWhitespaceSensitivity"</span>: <span class="string">"css"</span>,</span><br><span class="line">  <span class="string">"insertPragma"</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="string">"requirePragma"</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="string">"bracketSameLine"</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="string">"printWidth"</span>: <span class="number">120</span>, <span class="comment">// 超过最大值换行</span></span><br><span class="line">  <span class="string">"singleQuote"</span>: <span class="literal">true</span>, <span class="comment">// 使用单引号代替双引号</span></span><br><span class="line">  <span class="string">"useTabs"</span>: <span class="literal">false</span>, <span class="comment">// 缩进不使用tab，使用空格</span></span><br><span class="line">  <span class="string">"semi"</span>: <span class="literal">true</span>, <span class="comment">// 句尾添加分号</span></span><br><span class="line">  <span class="string">"tabWidth"</span>: <span class="number">2</span>, <span class="comment">// 缩进字节数</span></span><br><span class="line">  <span class="string">"trailingComma"</span>: <span class="string">"es5"</span>, <span class="comment">// 在对象或数组最后一个元素后面是否加逗号（在ES5中加尾逗号）</span></span><br><span class="line">  <span class="string">"jsxSingleQuote"</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="string">"quoteProps"</span>: <span class="string">"as-needed"</span>,</span><br><span class="line">  <span class="string">"proseWrap"</span>: <span class="string">"preserve"</span> <span class="comment">// 默认值。因为使用了一些折行敏感型的渲染器（如GitHub comment）而按照markdown文本样式进行折行</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="2、配合使用ESLint"><a href="#2、配合使用ESLint" class="headerlink" title="2、配合使用ESLint"></a>2、配合使用ESLint</h2><h3 id="2-1、步骤"><a href="#2-1、步骤" class="headerlink" title="2.1、步骤"></a>2.1、步骤</h3><p>官网文档： <a href="http://eslint.cn/docs/user-guide/configuring">http://eslint.cn/docs/user-guide/configuring</a></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 项目中安装包</span></span><br><span class="line">yarn add eslint</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置 ESlint</span></span><br><span class="line">npx eslint --init</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6352459b16f2c2beb1dbe702.jpg"></p>
+<h3 id="2-2、配置-eslintrc-js"><a href="#2-2、配置-eslintrc-js" class="headerlink" title="2.2、配置 .eslintrc.js"></a>2.2、配置 .eslintrc.js</h3><figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = {</span><br><span class="line">  <span class="comment">// 解析器</span></span><br><span class="line">  <span class="string">"parser"</span>: <span class="string">'babel-eslint'</span>,</span><br><span class="line">  <span class="string">"env"</span>: {</span><br><span class="line">    <span class="string">"browser"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"es6"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"node"</span>: <span class="literal">true</span></span><br><span class="line">  },</span><br><span class="line">  <span class="string">"extends"</span>: [</span><br><span class="line">    <span class="string">"eslint:recommended"</span>,</span><br><span class="line">    <span class="string">"plugin:react/recommended"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="string">"settings"</span>: {</span><br><span class="line">    <span class="string">"react"</span>: {</span><br><span class="line">      <span class="comment">// Warning: React version not specified in eslint-plugin-react settings.</span></span><br><span class="line">      <span class="string">"version"</span>: <span class="string">'detect'</span></span><br><span class="line">    }</span><br><span class="line">  },</span><br><span class="line">  <span class="string">"parserOptions"</span>: {</span><br><span class="line">    <span class="string">"ecmaFeatures"</span>: {</span><br><span class="line">      <span class="string">"jsx"</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="comment">// 支持装饰器 否则报 '@' 错误</span></span><br><span class="line">      <span class="string">"legacyDecorators"</span>: <span class="literal">true</span>,</span><br><span class="line">    },</span><br><span class="line">    <span class="string">"ecmaVersion"</span>: <span class="number">12</span>,</span><br><span class="line">    <span class="string">"sourceType"</span>: <span class="string">"module"</span></span><br><span class="line">  },</span><br><span class="line">  <span class="string">"plugins"</span>: [</span><br><span class="line">    <span class="string">"react"</span>,</span><br><span class="line">    <span class="string">"react-native"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="string">"rules"</span>: {</span><br><span class="line">    <span class="string">"eqeqeq"</span>: <span class="number">2</span>, <span class="comment">// 必须使用 === 和 !==</span></span><br><span class="line">    <span class="string">"no-empty-function"</span>: <span class="number">2</span>, <span class="comment">// 禁止空函数</span></span><br><span class="line">    <span class="string">"no-multi-spaces"</span>: <span class="number">2</span>, <span class="comment">// 禁止使用多个空格</span></span><br><span class="line">    <span class="string">"no-trailing-spaces"</span>: <span class="number">2</span>, <span class="comment">// 禁止禁用行尾空格</span></span><br><span class="line">    <span class="string">"space-infix-ops"</span>: <span class="number">2</span>, <span class="comment">// 要求操作符周围有空格</span></span><br><span class="line">    <span class="string">"space-in-parens"</span>: <span class="number">2</span>, <span class="comment">// 强制在圆括号内使用一致的空格</span></span><br><span class="line">    <span class="string">"no-var"</span>: <span class="number">2</span>, <span class="comment">// 要求使用 let 或 const 而不是 var,</span></span><br><span class="line">    <span class="string">"no-unused-vars"</span>: <span class="number">2</span>, <span class="comment">// 禁止出现未使用过的变量</span></span><br><span class="line">    <span class="string">"react/prop-types"</span>: <span class="number">0</span> <span class="comment">// 防止在react组件定义中缺少props验证</span></span><br><span class="line">  }</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="3、husk-使用"><a href="#3、husk-使用" class="headerlink" title="3、husk 使用"></a>3、husk 使用</h2><p>文档：<a href="https://typicode.github.io/husky/#/?id=install">https://typicode.github.io/husky/#/?id=install</a></p>
+<h3 id="3-1、package-json中添加配置"><a href="#3-1、package-json中添加配置" class="headerlink" title="3.1、package.json中添加配置"></a>3.1、package.json中添加配置</h3><figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">"husky"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"hooks"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">      <span class="attr">"pre-commit"</span><span class="punctuation">:</span> <span class="string">"npm run format &amp;&amp; npm run lint:fix"</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">"commit-msg"</span><span class="punctuation">:</span> <span class="string">"commitlint -E HUSKY_GIT_PARAMS"</span></span><br><span class="line">    <span class="punctuation">}</span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="3-2、完整的package-json"><a href="#3-2、完整的package-json" class="headerlink" title="3.2、完整的package.json"></a>3.2、完整的package.json</h3><figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"name"</span><span class="punctuation">:</span> <span class="string">"myrnapp"</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"version"</span><span class="punctuation">:</span> <span class="string">"0.0.1"</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"private"</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"scripts"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"android"</span><span class="punctuation">:</span> <span class="string">"react-native run-android"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"ios"</span><span class="punctuation">:</span> <span class="string">"react-native run-ios"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"start"</span><span class="punctuation">:</span> <span class="string">"react-native start"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"test"</span><span class="punctuation">:</span> <span class="string">"jest"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"lint"</span><span class="punctuation">:</span> <span class="string">"npx eslint --ext .js,.jsx,.ts,.tsx ./src"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"lint:fix"</span><span class="punctuation">:</span> <span class="string">"npx eslint --fix ."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"lint-staged"</span><span class="punctuation">:</span> <span class="string">"lint-staged"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"format"</span><span class="punctuation">:</span> <span class="string">"prettier --write 'src/**/*.js'"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"prettier"</span><span class="punctuation">:</span> <span class="string">"npx prettier --write ."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"prepare"</span><span class="punctuation">:</span> <span class="string">"husky install"</span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"dependencies"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"@react-navigation/native"</span><span class="punctuation">:</span> <span class="string">"^6.0.10"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"@react-navigation/native-stack"</span><span class="punctuation">:</span> <span class="string">"^6.6.2"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"axios"</span><span class="punctuation">:</span> <span class="string">"^0.27.2"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"mobx"</span><span class="punctuation">:</span> <span class="string">"^6.6.0"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"mobx-react"</span><span class="punctuation">:</span> <span class="string">"^7.5.0"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"prop-types"</span><span class="punctuation">:</span> <span class="string">"^15.8.1"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"react"</span><span class="punctuation">:</span> <span class="string">"17.0.2"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"react-native"</span><span class="punctuation">:</span> <span class="string">"0.68.2"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"react-native-safe-area-context"</span><span class="punctuation">:</span> <span class="string">"^4.3.1"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"react-native-screens"</span><span class="punctuation">:</span> <span class="string">"^3.13.1"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"react-native-svg"</span><span class="punctuation">:</span> <span class="string">"^12.3.0"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"react-navigation"</span><span class="punctuation">:</span> <span class="string">"^4.4.4"</span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"devDependencies"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"@babel/core"</span><span class="punctuation">:</span> <span class="string">"^7.12.9"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"@babel/plugin-proposal-decorators"</span><span class="punctuation">:</span> <span class="string">"^7.18.2"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"@babel/runtime"</span><span class="punctuation">:</span> <span class="string">"^7.12.5"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"@commitlint/cli"</span><span class="punctuation">:</span> <span class="string">"^17.0.2"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"@commitlint/config-conventional"</span><span class="punctuation">:</span> <span class="string">"^17.0.2"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"@react-native-community/eslint-config"</span><span class="punctuation">:</span> <span class="string">"^2.0.0"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"babel-eslint"</span><span class="punctuation">:</span> <span class="string">"^10.1.0"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"babel-jest"</span><span class="punctuation">:</span> <span class="string">"^26.6.3"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"eslint"</span><span class="punctuation">:</span> <span class="string">"^7.32.0"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"husky"</span><span class="punctuation">:</span> <span class="string">"^8.0.1"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"jest"</span><span class="punctuation">:</span> <span class="string">"^26.6.3"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"lint-staged"</span><span class="punctuation">:</span> <span class="string">"^13.0.1"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"metro-react-native-babel-preset"</span><span class="punctuation">:</span> <span class="string">"^0.67.0"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"prettier"</span><span class="punctuation">:</span> <span class="string">"2.7.0"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"react-native-svg-transformer"</span><span class="punctuation">:</span> <span class="string">"^1.0.0"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"react-test-renderer"</span><span class="punctuation">:</span> <span class="string">"17.0.2"</span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"lint-staged"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"*.{js,jsx,ts,tsx}"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="string">"npx prettier --write"</span><span class="punctuation">,</span></span><br><span class="line">      <span class="string">"npx eslint --fix"</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"husky"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"hooks"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">      <span class="attr">"pre-commit"</span><span class="punctuation">:</span> <span class="string">"npm run format &amp;&amp; npm run lint:fix"</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">"commit-msg"</span><span class="punctuation">:</span> <span class="string">"commitlint -E HUSKY_GIT_PARAMS"</span></span><br><span class="line">    <span class="punctuation">}</span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"jest"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"preset"</span><span class="punctuation">:</span> <span class="string">"react-native"</span></span><br><span class="line">  <span class="punctuation">}</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="3-3、卸载-husky"><a href="#3-3、卸载-husky" class="headerlink" title="3.3、卸载 husky"></a>3.3、卸载 husky</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm uninstall husky &amp;&amp; git config --<span class="built_in">unset</span> core.hooksPath</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="4、整体使用效果"><a href="#4、整体使用效果" class="headerlink" title="4、整体使用效果"></a>4、整体使用效果</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">'feat: 增加 prettier, eslint 配置'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/635245b216f2c2beb1dc03c4.jpg"></p>
+<p>下面这个图片是老版本husky的效果</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/635245d916f2c2beb1dc3d1d.jpg"></p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>代码规范</category>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>代码规范</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>关于Web和App的一点点思考</title>
     <url>/posts/4136692609.html</url>
     <content><![CDATA[<html><head></head><body><h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>朋友在微信上分享给我一个“PDD”砍一刀的链接，让我帮忙砍一刀助力，我点开链接之后，让我去下载App，然后去应用商店下载一个App，注册登录完成之后，回到微信里面点击链接，就会唤醒App，接着就是在App里面一顿操作，还不能退出到首页，我呆了😮</p>
@@ -3257,6 +3257,73 @@
       </categories>
       <tags>
         <tag>Web</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>初识算法之美</title>
+    <url>/posts/2551464991.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇是学习了《趣学算法（第2版）》 第一章之后总结的，，收录至<a href="https://blog.i-xiao.space/categories/%E7%AE%97%E6%B3%95/">算法专栏</a></p>
+</blockquote>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63573f1a16f2c2beb10e3ceb.jpg"></p>
+<h2 id="对算法的理解："><a href="#对算法的理解：" class="headerlink" title="对算法的理解："></a>对算法的理解：</h2><p>计算机虽然可以高效的进行运算，但是有很多问题拼的不是算力，而是策略。如果没有策略的去计算，那再强的运算能力也只能称为“蛮力”。策略就是帮助我们如何用更少的计算步骤、更快的速度去运算出结果。换言之，策略就是你设计算法的思路，目的只有一个就是：快人一步。</p>
+<p>计算机不同于人脑，人脑面对问题可以先去“观察”、“分析”，然后把复杂转化成简单问题（跟<strong>数学</strong>题一样，算法就是简便的解题思路）。目前在绝大多数领域计算机还不具备这个功能，离开了人脑，计算机还只是一个人的使用工具罢了。</p>
+<p><strong>算法有两个衡量标准：</strong></p>
+<ul>
+<li>时间长短（时间复杂度）</li>
+<li>占用内存大小（空间复杂度）</li>
+</ul>
+<p><strong>先展望一下学习历程：</strong></p>
+<p>算法学习是一个循序渐进的过程，经常训练解题能力，逐步积累解题方法策略，最后内化成自己的知识，灵活运用去应对新的问题。</p>
+<p>“初极狭，才通人。复行数十步，豁然开朗。”，挺喜欢这句话😁</p>
+<h2 id="算法知识点"><a href="#算法知识点" class="headerlink" title="算法知识点"></a>算法知识点</h2><ol>
+<li><p>高斯算法（倒序相加）</p>
+</li>
+<li><p>数列求和</p>
+</li>
+</ol>
+<h2 id="算法题目"><a href="#算法题目" class="headerlink" title="算法题目"></a>算法题目</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63573f3716f2c2beb10e52e0.jpg"></p>
+<p>求： $S_n = 1 + 2 + 2^2 + 2^3 + … + 2^{63}=$</p>
+<p>该函数属于<strong>爆炸增量函数</strong>。</p>
+<h2 id="做题思路"><a href="#做题思路" class="headerlink" title="做题思路"></a>做题思路</h2><h3 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h3><p><strong>公式法</strong></p>
+<p>如果还记得高中数学知识，不难发现，这是一个等比数列求和问题，$a_1 = 1，公比q = 2，n = 64$</p>
+<p>等比数列求和公式：$$S_n = a_1 * \frac{1 - q^n}{1 - q} ，(q ≠ 1)$$</p>
+<p>本文暂不讲解公式推导过程</p>
+<p>代入公式，上面的式子 = $1 * \frac{1 - 2^{64}}{1 - 2} = 2^{64} - 1 = 18446744073709551615$ ，从而转化问题，解题</p>
+<h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><p>忘记方法叫什么名字了，主要原理就是<strong>销项</strong>，使问题转化成第一项和最后一项的差。</p>
+<p>根据原式，等号两边同时乘以2，得式子②$2S_n =  2 + 2^2 + 2^3 + … + 2^{63} + 2^{64}$</p>
+<p>用式子② - 原式 = $S_n = 2^{64} - 1 =18446744073709551615$</p>
+<blockquote>
+<p>据专家统计，每颗麦粒的平均重量约41.9毫克，这些麦粒的总重量为：</p>
+<p>$18446744073709551615×41.9$</p>
+<p>$=772918576688430212668.5(毫克)$</p>
+<p>$≈7729000（亿千克）$</p>
+<p>全世界人口按77亿计算，每人差不多可以分得100000千克（即100吨）！</p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>常见的算法时间复杂度有以下几类。</p>
+<ol>
+<li><p>常数阶。<br>常数阶算法的运行次数是一个常数，如5、20、100。常数阶算法的时间复杂度通常用<code>O(1)</code>表示。</p>
+</li>
+<li><p>多项式阶。<br>很多算法的时间复杂度是多项式，通常用 0(n)、$O(n^2)$、$0(n^3)$等表示。</p>
+</li>
+<li><p>指数阶。<br>指数阶算法的运行效率极差，程序员往往像躲“恶魔”一样避开这种算法。指数阶算法的时间复杂度通常用$O(2^n)$、$O(n!)$、$O(n^n)$等表示。</p>
+</li>
+<li><p>对数阶。<br>对数阶算法的运行效率较高，通常用$O(logn)$、$O(nlogn)$等表示。<br>指数阶增量随着的增加而急剧增加，而对数阶增长缓慢。它们之间的关系如下：</p>
+</li>
+</ol>
+<p>$$O(1)＜O(logn)＜O(n)＜O(nlogn)＜O(n^2)＜O(n^3)＜O(2^n)O(n!)＜O(n^n)$$</p>
+<p>在设计算法时，我们要注意算法复杂度增量的问题，尽量避免爆炸级增量。</p>
+<p>通过上面一个算法小例子，又勾起了我对数学的兴趣。算法跟数学是息息相关的，平常也要复习一下数学知识，相信也会有所帮助的。</p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。数风流人物还看中国、看今朝、看你我。</p>
+</body></html>]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -4205,6 +4272,194 @@
       </tags>
   </entry>
   <entry>
+    <title>算法 | 详解斐波那契数列问题</title>
+    <url>/posts/536639538.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇是学习了《趣学算法（第2版）》 第一章之后总结的，收录至<a href="https://blog.i-xiao.space/categories/%E7%AE%97%E6%B3%95/">算法专栏</a></p>
+</blockquote>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63573f1a16f2c2beb10e3ceb.jpg"></p>
+<p>上一篇讲到了等比数列求和问题，求$S_n = 1 + 2 + 2^2 + 2^3 + … + 2^{63}= ？$，该函数属于<strong>爆炸增量函数</strong>，如果采用常规运算，则要考虑算法的时间复杂度。</p>
+<h2 id="算法知识点"><a href="#算法知识点" class="headerlink" title="算法知识点"></a>算法知识点</h2><ul>
+<li><p>斐波那契数</p>
+</li>
+<li><p>动态规划（拆分子问题；记住过往，减少重复计算）</p>
+</li>
+</ul>
+<h2 id="算法题目"><a href="#算法题目" class="headerlink" title="算法题目"></a>算法题目</h2><p>假设第1个月有1对初生的兔子，第2个月进入成熟期，第3个月开始生育兔子，而1对成熟的兔子每月会生<br>1对兔子，兔子永不死去..…那么，由1对初生的兔子开始，12个月后会有多少对兔子呢？</p>
+<h2 id="做题思路"><a href="#做题思路" class="headerlink" title="做题思路"></a>做题思路</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63573fb116f2c2beb10ebed9.jpg"></p>
+<p>这个数列有如下十分明显的特点：从第3个月开始，$当月的兔子数=上月兔子数+当月新生兔子数$，而$当月新生兔子数=上上月的兔子数$。因此，前面相邻两项之和便构成后一项，换言之：<br>$$当月的兔子数=上月兔子数+上上月的兔子数$$</p>
+<h3 id="斐波那契数如下："><a href="#斐波那契数如下：" class="headerlink" title="斐波那契数如下："></a>斐波那契数如下：</h3><p><code> 1 ，1 ，2 ，3 ，5 ，8， 13 ，21 ，34 ......</code></p>
+<h3 id="递归表达式"><a href="#递归表达式" class="headerlink" title="递归表达式"></a>递归表达式</h3><p>$$F(n)=<br>\begin{cases}<br>1&amp;， \text{n=1}\<br>1&amp;， \text{n=2}\<br>F(n-1) + F(n-2)&amp;， \text{n&gt;2}<br>\end{cases}$$</p>
+<p>根据递归表达式，初步的算法代码如下：</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">fbn</span> = (<span class="params">n</span>) =&gt; {</span><br><span class="line">  <span class="keyword">if</span> (n == <span class="number">1</span> || n == <span class="number">2</span>) {</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">  } <span class="keyword">else</span> {</span><br><span class="line">		<span class="keyword">return</span> <span class="title function_">fbn</span>(n-<span class="number">2</span>) + <span class="title function_">fbn</span>(n-<span class="number">1</span>)</span><br><span class="line">	}</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>让我们看一下上面算法的时间复杂度，也就是计算的总次数$T(n)$</p>
+<h3 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h3><blockquote>
+<p>时间复杂度算的是最坏情况下的时间复杂度</p>
+</blockquote>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line">n=<span class="number">1</span>时，<span class="title function_">T</span>(n)=<span class="number">1</span></span><br><span class="line">n=<span class="number">2</span>时，<span class="title function_">T</span>(n)=<span class="number">1</span>；</span><br><span class="line">n=<span class="number">3</span>时，<span class="title function_">T</span>(n)=<span class="number">3</span>; <span class="comment">//调用Fib1(2)和Fib1(1)并执行一次加法运算(Fib1(2)+Fib1(1))</span></span><br></pre></td></tr></tbody></table></figure>
+<p>当n&gt;2时需要分别调用<code>fbn(n-1)</code>和<code>fbn(n-2)</code>，并执行一次加法运算，换言之：<br>$$n\gt2时，T(n)=T(n-1)+T(n-2)+1;$$</p>
+<p>所以，$T(n) &gt;= F(n)$</p>
+<blockquote>
+<p>问题来了，怎么判断<code>T(n)</code>属于算法时间复杂度的哪种类型呢？</p>
+</blockquote>
+<h4 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a><strong>方法一：</strong></h4><p>画出递归树，每个节点表示计算一次</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63573fcb16f2c2beb10ed41f.jpg"></p>
+<p>一棵<strong>满二叉树</strong>，<strong>节点总数就和树的高度呈指数关系</strong></p>
+<p>递归树 <code> F(n)</code>里面存在满二叉树，所以<strong>时间复杂度是指数阶的</strong>。</p>
+<h4 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a><strong>方法二：</strong></h4><p>使用公式进行递推</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63573fe116f2c2beb10ee553.jpg"></p>
+<p>因为时间复杂度算的是最坏情况下的时间复杂度，所以计算第一个括号内的即可</p>
+<p>即：$T(n) = O(2^n)$，时间复杂度是<strong>指数阶</strong>的</p>
+<h2 id="算法改进"><a href="#算法改进" class="headerlink" title="算法改进"></a>算法改进</h2><h3 id="降低时间复杂度"><a href="#降低时间复杂度" class="headerlink" title="降低时间复杂度"></a>降低时间复杂度</h3><p>不难发现：上面基于递归表达式的算法，存在大量的重复计算，增大了算法的时间复杂度，所以我们可以做出如下改进，以减少时间复杂度</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 利用数组记录过往的值，直接使用，避免重复计算</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">fbn2</span> = (<span class="params">n</span>) =&gt; {</span><br><span class="line">  <span class="keyword">let</span> arr = <span class="keyword">new</span> <span class="title class_">Array</span>(n + <span class="number">1</span>); <span class="comment">// 定义 n + 1 长度的数组</span></span><br><span class="line">  arr[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">  arr[<span class="number">2</span>] = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">3</span>; i &lt;= n; i++) {</span><br><span class="line">    arr[i] = arr[i - <span class="number">1</span>] + arr[i - <span class="number">2</span>]</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> arr[n]</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>很显然上面算法的时间复杂度是$O(n)$，时间复杂度从指数阶降到了多项式阶。</p>
+<p>由于上面算法使用数组记录了所有项的值，所以，算法的空间复杂度变成了$O(n)$，我们可以继续改进算法，来降低算法的空间复杂度</p>
+<h3 id="降低空间复杂度"><a href="#降低空间复杂度" class="headerlink" title="降低空间复杂度"></a>降低空间复杂度</h3><p>采用临时变量，来迭代记录上一步计算出来的值，代码如下：</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">fbn3</span> = (<span class="params">n</span>) =&gt; {</span><br><span class="line">  <span class="keyword">if</span> (n === <span class="number">1</span> || n === <span class="number">2</span>) {</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">let</span> pre1 = <span class="number">1</span> <span class="comment">// pre1，pre2记录前面两项</span></span><br><span class="line">  <span class="keyword">let</span> pre2 = <span class="number">1</span></span><br><span class="line">  <span class="keyword">let</span> tmp = <span class="string">''</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">3</span>; i &lt;= n; i++) {</span><br><span class="line">    tmp = pre1 + pre2 <span class="comment">// 2</span></span><br><span class="line">    pre1 = pre2 <span class="comment">// 1</span></span><br><span class="line">    pre2 = tmp <span class="comment">// 2</span></span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> pre2</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>使用了三个辅助变量，时间复杂度还是$O(n)$，空间复杂度降为$O(1)$</p>
+<h2 id="测试算法计算时间"><a href="#测试算法计算时间" class="headerlink" title="测试算法计算时间"></a>测试算法计算时间</h2><figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 斐波那契数列</span></span><br><span class="line"><span class="comment">// 1 ，1 ，2 ，3 ，5 ，8， 13 ，21 ，34 ......</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">fbn</span> = (<span class="params">n</span>) =&gt; {</span><br><span class="line">  <span class="keyword">if</span> (n == <span class="number">1</span> || n == <span class="number">2</span>) {</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">  } <span class="keyword">else</span> {</span><br><span class="line">		<span class="keyword">return</span> <span class="title function_">fbn</span>(n-<span class="number">2</span>) + <span class="title function_">fbn</span>(n-<span class="number">1</span>)</span><br><span class="line">	}</span><br><span class="line">}</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">time</span>(<span class="string">'fbn'</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'fbn(40)='</span>, <span class="title function_">fbn</span>(<span class="number">40</span>))</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">timeEnd</span>(<span class="string">'fbn'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 利用数组记录过往的值，直接使用，避免重复计算</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">fbn2</span> = (<span class="params">n</span>) =&gt; {</span><br><span class="line">  <span class="keyword">let</span> arr = <span class="keyword">new</span> <span class="title class_">Array</span>(n + <span class="number">1</span>); <span class="comment">// 定义 n + 1 长度的数组</span></span><br><span class="line">  arr[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">  arr[<span class="number">2</span>] = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">3</span>; i &lt;= n; i++) {</span><br><span class="line">    arr[i] = arr[i - <span class="number">1</span>] + arr[i - <span class="number">2</span>]</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> arr[n]</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">time</span>(<span class="string">'fbn2'</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'fbn2(40)='</span>, <span class="title function_">fbn2</span>(<span class="number">40</span>))</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">timeEnd</span>(<span class="string">'fbn2'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">fbn3</span> = (<span class="params">n</span>) =&gt; {</span><br><span class="line">  <span class="keyword">if</span> (n === <span class="number">1</span> || n === <span class="number">2</span>) {</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">let</span> pre1 = <span class="number">1</span> <span class="comment">// pre1，pre2记录前面两项</span></span><br><span class="line">  <span class="keyword">let</span> pre2 = <span class="number">1</span></span><br><span class="line">  <span class="keyword">let</span> tmp = <span class="string">''</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">3</span>; i &lt;= n; i++) {</span><br><span class="line">    tmp = pre1 + pre2 <span class="comment">// 2</span></span><br><span class="line">    pre1 = pre2 <span class="comment">// 1</span></span><br><span class="line">    pre2 = tmp <span class="comment">// 2</span></span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> pre2</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">time</span>(<span class="string">'fbn3'</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'fbn3(40)='</span>, <span class="title function_">fbn3</span>(<span class="number">40</span>))</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">timeEnd</span>(<span class="string">'fbn3'</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>测试结果如下：</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">fbn</span>(<span class="number">40</span>)= <span class="number">102334155</span></span><br><span class="line"><span class="attr">fbn</span>: <span class="number">667.</span>76ms</span><br><span class="line"><span class="title function_">fbn2</span>(<span class="number">40</span>)= <span class="number">102334155</span></span><br><span class="line"><span class="attr">fbn2</span>: <span class="number">0.</span>105ms</span><br><span class="line"><span class="title function_">fbn3</span>(<span class="number">40</span>)= <span class="number">102334155</span></span><br><span class="line"><span class="attr">fbn3</span>: <span class="number">0.</span>072ms</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>能不能继续降阶，使算法的时间复杂度更低呢？<br>实质上，斐波那契数列的时间复杂度还可以降到对数阶$O(logn)$，好厉害!!!后面继续探索吧</p>
+<p>算法作为一门学问，有两条几乎平行的线索：</p>
+<ol>
+<li><p>数据结构（数据对象）：数、矩阵、集合、串、排列、图、表达式、分布等。</p>
+</li>
+<li><p>算法策略：贪心策略、分治策略、动态规划策略、线性规划策略、搜索策略等。</p>
+</li>
+</ol>
+<p>这两条线索是相互独立的：</p>
+<ul>
+<li><p>对于同一个数据对象上不同的问题（如单源最短路径和多源最短路径)，就会用到不同的算法策略（如贪心策略和动态规划策略）；</p>
+</li>
+<li><p>对于完全不同的数据对象上的问题(如排序和整数乘法)，也许就会用到相同的算法策略（如分治策略）。</p>
+</li>
+</ul>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。数风流人物还看中国、看今朝、看你我。</p>
+</body></html>]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>认识HTTP缓存</title>
+    <url>/posts/2358217424.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>通常针对静态资源。内存缓存/磁盘缓存</p>
+</blockquote>
+<h2 id="1、原理："><a href="#1、原理：" class="headerlink" title="1、原理："></a>1、原理：</h2><p>在首次请求后，保存一份请求资源的响应副本，当用户再次发起相同请求后，如果判断缓存命中，则拦截请求，将之前存储的相应副本返回给用户，从而避免重新向服务器发起资源请求。</p>
+<h2 id="2、缓存的技术种类："><a href="#2、缓存的技术种类：" class="headerlink" title="2、缓存的技术种类："></a>2、缓存的技术种类：</h2><p>代理缓存，浏览器缓存，网关缓存，负载均衡器，内容分发网络</p>
+<p>它们大致可以分为两类： 共享缓存，私有缓存</p>
+<ul>
+<li><p><em>共享缓存</em>：缓存的内容可以被多个用户使用。如公司内部架设的内部Web代理</p>
+</li>
+<li><p><em>私有缓存</em>：只能单独被用户使用的缓存。如浏览器缓存</p>
+</li>
+</ul>
+<h2 id="3、禁止缓存"><a href="#3、禁止缓存" class="headerlink" title="3、禁止缓存"></a>3、禁止缓存</h2><p>发送如下响应头可以关闭缓存。此外，可以参考<code>Expires</code>和<code>Pragma</code>消息头。</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title class_">Cache</span>-<span class="title class_">Control</span>: no-store</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="4、http缓存可分为强制缓存和协商缓存"><a href="#4、http缓存可分为强制缓存和协商缓存" class="headerlink" title="4、http缓存可分为强制缓存和协商缓存"></a>4、http缓存可分为强制缓存和协商缓存</h2><ul>
+<li><p>强制缓存不用判断缓存是否过期，可以直接使用。</p>
+</li>
+<li><p>协商缓存每次都要询问一下服务器，看一下内容有没有更新，如果没有更新就使用缓存中的资源，如果更新了就继续请求</p>
+</li>
+</ul>
+<p>响应头设置：</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8eccface9efa421b8430e62444edf4b7~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h3 id="4-1、cache-control（http1-1）"><a href="#4-1、cache-control（http1-1）" class="headerlink" title="4.1、cache-control（http1.1）"></a>4.1、cache-control（http1.1）</h3><p><code>cache-control</code>属性值：</p>
+<ul>
+<li><p>no-cache  强制进行协商缓存</p>
+</li>
+<li><p>no-store 不缓存</p>
+</li>
+<li><p>max-age   表示缓存的过期时长</p>
+<figure class="highlight awk"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">'cache-control'</span>: <span class="string">'max-age=5'</span> <span class="regexp">//</span> 滑动时间，单位是秒</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>private, public： 用以明确响应资源是否可以被代理服务器缓存。</p>
+</li>
+<li><p>private  只能被浏览器缓存</p>
+</li>
+<li><p>public  响应资源既可以被浏览器私有缓存，又可以被代理服务器公共缓存</p>
+</li>
+</ul>
+<figure class="highlight lasso"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">cache</span><span class="params">-control</span>: <span class="keyword">public</span>, <span class="keyword">max</span><span class="params">-age</span>=<span class="number">10</span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4e506a323ebc49449aa316ff302b2116~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ab505a1c9bde44c2a1d3d9ae05bc2266~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/483abb75d50347a081dd4cb7562d6817~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<figure class="highlight yaml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">last-modified:</span> <span class="string">''</span></span><br><span class="line"><span class="attr">if-modified-since:</span></span><br><span class="line"><span class="attr">cache-control:</span> <span class="literal">no</span><span class="string">-cache</span></span><br></pre></td></tr></tbody></table></figure>
+<p><strong>原理</strong>:是根据资源最后的<em>修改时间</em>来判断是否需要读取缓存</p>
+<blockquote>
+<p>根据时间判断有局限性，比方说只改变文件命名，也会引起资源修改时间发生变化，但是对资源本身并没有改动</p>
+</blockquote>
+<h3 id="4-2、✨补充的方案是ETag（根据文件资源生成指纹）"><a href="#4-2、✨补充的方案是ETag（根据文件资源生成指纹）" class="headerlink" title="4.2、✨补充的方案是ETag（根据文件资源生成指纹）"></a>4.2、✨补充的方案是<strong>ETag</strong>（根据文件资源生成指纹）</h3><ul>
+<li><p>安装</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm i etag</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>使用</p>
+</li>
+</ul>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> etag = <span class="built_in">require</span>(<span class="string">'etag'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> data = fs.<span class="title function_">readFilSeync</span>(<span class="string">'./img/04.jpg'</span>)</span><br><span class="line"><span class="keyword">const</span> etagContent = <span class="title function_">etag</span>(data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ifNoneMatch = req.<span class="property">headers</span>[<span class="string">'if-none-match'</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (ifNoneMatch === etagContent) {</span><br><span class="line">  res.<span class="property">statusCode</span> = <span class="number">304</span></span><br><span class="line">  res.<span class="title function_">end</span>()</span><br><span class="line">  <span class="keyword">return</span> <span class="comment">// 直接返回，不操作服务器资源，减少带宽</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">res.<span class="title function_">setHeader</span>(<span class="string">'etag'</span>, etagContent)</span><br><span class="line">res.<span class="title function_">setHeader</span>(<span class="string">'Cache-Control'</span>,<span class="string">'no-cache'</span>)</span><br><span class="line">res.<span class="title function_">end</span>(data)</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><p>If-None-Match</p>
+</li>
+<li><p><strong>强验证Etag</strong>，资源细微的改动都会引起指纹的变化</p>
+</li>
+<li><p><strong>弱验证ETag</strong>， 相对灵活的过滤资源的某些变化</p>
+</li>
+</ul>
+<h2 id="5、强缓存"><a href="#5、强缓存" class="headerlink" title="5、强缓存"></a>5、强缓存</h2><h3 id="介绍："><a href="#介绍：" class="headerlink" title="介绍："></a>介绍：</h3><p>不会向服务器发送请求，直接从缓存中读取资源，在chrome控制台的Network选项中可以看到该请求返回200的状态码，并且Size显示<code>from disk cache</code>或<code>from memory cache</code>。</p>
+<h3 id="设置："><a href="#设置：" class="headerlink" title="设置："></a>设置：</h3><p>强缓存可以通过设置两种 <code>HTTP Header</code> 实现，分别是：<code>Expires</code> 和 <code>Cache-Control</code>。</p>
+<blockquote>
+<p>Expires 是http1.0的产物，Cache-Control是http1.1的产物，两者同时存在的话，Cache-Control优先级高于Expires；</p>
+</blockquote>
+<h2 id="6、协商缓存"><a href="#6、协商缓存" class="headerlink" title="6、协商缓存"></a>6、协商缓存</h2><h3 id="介绍：-1"><a href="#介绍：-1" class="headerlink" title="介绍："></a>介绍：</h3><p>协商缓存就是强制缓存失效后，浏览器<em>携带缓存标识</em>向服务器发起请求，由服务器根据缓存标识决定是否使用缓存的过程，主要有以下两种情况：</p>
+<ul>
+<li><p>协商缓存生效，返回<code>304</code>和<code>Not Modified</code></p>
+</li>
+<li><p>协商缓存失效，返回<code>200</code>和<code>请求结果</code></p>
+</li>
+</ul>
+<h3 id="设置：-1"><a href="#设置：-1" class="headerlink" title="设置："></a>设置：</h3><p>协商缓存可以通过设置两种 HTTP Header 实现, 分别是：<code>Last-Modified</code> 和 <code>ETag</code> 。</p>
+<h2 id="7、缓存机制🎉"><a href="#7、缓存机制🎉" class="headerlink" title="7、缓存机制🎉"></a>7、缓存机制🎉</h2><ol>
+<li><p>强制缓存优先于协商缓存进行，若强制缓存(Expires和Cache-Control)生效则直接使用缓存，若不生效则进行协商缓存(<code>Last-Modified / If-Modified-Since和Etag / If-None-Match</code>)</p>
+</li>
+<li><p>协商缓存由服务器决定是否使用缓存，若协商缓存失效，那么代表该请求的缓存失效，返回200，重新返回资源和缓存标识，再存入浏览器缓存中；生效则返回304，继续使用缓存。</p>
+</li>
+</ol>
+<h2 id="8、缓存策略树🎉"><a href="#8、缓存策略树🎉" class="headerlink" title="8、缓存策略树🎉"></a>8、缓存策略树🎉</h2><p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4b20c21694e940d5acf2b343148bfbbf~tplv-k3u1fbpfcp-zoom-1.image" alt="缓存策略树，很早很早之前画的🤣，现在看看也是醉了😂"></p>
+<p align="center">缓存策略树，很早很早之前画的🤣，现在看看也是醉了😂</p>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cc8e06075df24102b9989fc1ff0eb797~tplv-k3u1fbpfcp-zoom-1.image" alt="该图来源网络，侵删"></p>
+<p align="center">该图来源网络，侵删</p>
+
+<p>更多看<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Caching">这里</a></p>
+<hr>
+<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>HTTP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>认识Chrome扩展插件</title>
     <url>/posts/9575625.html</url>
     <content><![CDATA[<html><head></head><body><hr>
@@ -4350,101 +4605,66 @@
       </tags>
   </entry>
   <entry>
-    <title>认识HTTP缓存</title>
-    <url>/posts/2358217424.html</url>
+    <title>设计模式浅析</title>
+    <url>/posts/3163405351.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
-<p>通常针对静态资源。内存缓存/磁盘缓存</p>
+<p><strong>“单策代迭发命组，模享职中装适外”</strong></p>
 </blockquote>
-<h2 id="1、原理："><a href="#1、原理：" class="headerlink" title="1、原理："></a>1、原理：</h2><p>在首次请求后，保存一份请求资源的响应副本，当用户再次发起相同请求后，如果判断缓存命中，则拦截请求，将之前存储的相应副本返回给用户，从而避免重新向服务器发起资源请求。</p>
-<h2 id="2、缓存的技术种类："><a href="#2、缓存的技术种类：" class="headerlink" title="2、缓存的技术种类："></a>2、缓存的技术种类：</h2><p>代理缓存，浏览器缓存，网关缓存，负载均衡器，内容分发网络</p>
-<p>它们大致可以分为两类： 共享缓存，私有缓存</p>
+<h2 id="1-订阅-发布模式"><a href="#1-订阅-发布模式" class="headerlink" title="1.订阅-发布模式"></a>1.订阅-发布模式</h2><p>eventBus<br>vue的数据响应式原理就是基于发布订阅模式实现的</p>
+<h2 id="2-策略模式"><a href="#2-策略模式" class="headerlink" title="2.策略模式"></a>2.策略模式</h2><p>简单来时就是把一写具有相关性的工具方法，组合起来，以方便调用和后期增删修等维护</p>
 <ul>
-<li><p><em>共享缓存</em>：缓存的内容可以被多个用户使用。如公司内部架设的内部Web代理</p>
-</li>
-<li><p><em>私有缓存</em>：只能单独被用户使用的缓存。如浏览器缓存</p>
-</li>
+<li>eg:<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> operationType = {</span><br><span class="line"><span class="string">'add'</span>: <span class="keyword">function</span>(<span class="params"></span>){},</span><br><span class="line"><span class="string">'reduce'</span>: <span class="keyword">function</span>(<span class="params"></span>){},</span><br><span class="line">...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
 </ul>
-<h2 id="3、禁止缓存"><a href="#3、禁止缓存" class="headerlink" title="3、禁止缓存"></a>3、禁止缓存</h2><p>发送如下响应头可以关闭缓存。此外，可以参考<code>Expires</code>和<code>Pragma</code>消息头。</p>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title class_">Cache</span>-<span class="title class_">Control</span>: no-store</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="4、http缓存可分为强制缓存和协商缓存"><a href="#4、http缓存可分为强制缓存和协商缓存" class="headerlink" title="4、http缓存可分为强制缓存和协商缓存"></a>4、http缓存可分为强制缓存和协商缓存</h2><ul>
-<li><p>强制缓存不用判断缓存是否过期，可以直接使用。</p>
-</li>
-<li><p>协商缓存每次都要询问一下服务器，看一下内容有没有更新，如果没有更新就使用缓存中的资源，如果更新了就继续请求</p>
-</li>
-</ul>
-<p>响应头设置：</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8eccface9efa421b8430e62444edf4b7~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<h3 id="4-1、cache-control（http1-1）"><a href="#4-1、cache-control（http1-1）" class="headerlink" title="4.1、cache-control（http1.1）"></a>4.1、cache-control（http1.1）</h3><p><code>cache-control</code>属性值：</p>
+<h2 id="3-单例模式"><a href="#3-单例模式" class="headerlink" title="3.单例模式"></a>3.单例模式</h2><p>譬如做一个全局的弹窗原型，当需要的时候就调用生成弹窗，但是没有必要实例化多个弹窗对象，只要实例化一次然后修改里面的属性参数就可以了</p>
+<h2 id="4-装饰器模式Decorator"><a href="#4-装饰器模式Decorator" class="headerlink" title="4.装饰器模式Decorator"></a>4.装饰器模式Decorator</h2><p>原有的函数或组件不变，只是扩展、引用了一些方法<br>如：redux 中的@connect，增加了props,state… 使用就是@XX，（ng中的注解）</p>
 <ul>
-<li><p>no-cache  强制进行协商缓存</p>
+<li><p>eg: 就像是一个房子，进行装修（软装）</p>
 </li>
-<li><p>no-store 不缓存</p>
+<li><p>v-input, v-checkbox, 自定义指令</p>
 </li>
-<li><p>max-age   表示缓存的过期时长</p>
-<figure class="highlight awk"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">'cache-control'</span>: <span class="string">'max-age=5'</span> <span class="regexp">//</span> 滑动时间，单位是秒</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>private, public： 用以明确响应资源是否可以被代理服务器缓存。</p>
-</li>
-<li><p>private  只能被浏览器缓存</p>
-</li>
-<li><p>public  响应资源既可以被浏览器私有缓存，又可以被代理服务器公共缓存</p>
+<li><p>高阶组件，（相对于低阶组件来说，就是基础组件的二次封装，譬如业务组件：下拉搜索选择）</p>
 </li>
 </ul>
-<figure class="highlight lasso"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">cache</span><span class="params">-control</span>: <span class="keyword">public</span>, <span class="keyword">max</span><span class="params">-age</span>=<span class="number">10</span>;</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4e506a323ebc49449aa316ff302b2116~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ab505a1c9bde44c2a1d3d9ae05bc2266~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/483abb75d50347a081dd4cb7562d6817~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<figure class="highlight yaml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">last-modified:</span> <span class="string">''</span></span><br><span class="line"><span class="attr">if-modified-since:</span></span><br><span class="line"><span class="attr">cache-control:</span> <span class="literal">no</span><span class="string">-cache</span></span><br></pre></td></tr></tbody></table></figure>
-<p><strong>原理</strong>:是根据资源最后的<em>修改时间</em>来判断是否需要读取缓存</p>
-<blockquote>
-<p>根据时间判断有局限性，比方说只改变文件命名，也会引起资源修改时间发生变化，但是对资源本身并没有改动</p>
-</blockquote>
-<h3 id="4-2、✨补充的方案是ETag（根据文件资源生成指纹）"><a href="#4-2、✨补充的方案是ETag（根据文件资源生成指纹）" class="headerlink" title="4.2、✨补充的方案是ETag（根据文件资源生成指纹）"></a>4.2、✨补充的方案是<strong>ETag</strong>（根据文件资源生成指纹）</h3><ul>
-<li><p>安装</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm i etag</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>使用</p>
-</li>
-</ul>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> etag = <span class="built_in">require</span>(<span class="string">'etag'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> data = fs.<span class="title function_">readFilSeync</span>(<span class="string">'./img/04.jpg'</span>)</span><br><span class="line"><span class="keyword">const</span> etagContent = <span class="title function_">etag</span>(data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ifNoneMatch = req.<span class="property">headers</span>[<span class="string">'if-none-match'</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (ifNoneMatch === etagContent) {</span><br><span class="line">  res.<span class="property">statusCode</span> = <span class="number">304</span></span><br><span class="line">  res.<span class="title function_">end</span>()</span><br><span class="line">  <span class="keyword">return</span> <span class="comment">// 直接返回，不操作服务器资源，减少带宽</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">res.<span class="title function_">setHeader</span>(<span class="string">'etag'</span>, etagContent)</span><br><span class="line">res.<span class="title function_">setHeader</span>(<span class="string">'Cache-Control'</span>,<span class="string">'no-cache'</span>)</span><br><span class="line">res.<span class="title function_">end</span>(data)</span><br></pre></td></tr></tbody></table></figure>
-
+<h2 id="5-代理模式"><a href="#5-代理模式" class="headerlink" title="5.代理模式"></a>5.代理模式</h2><p>为一个对象提供一个代用品或占位符，以便控制对它的访问<br>图片懒加载：先使用一个loading图，等图片加载好了，在放到img的src属性上</p>
 <ul>
-<li><p>If-None-Match</p>
+<li><p>函数防抖节流也是代理的一种</p>
 </li>
-<li><p><strong>强验证Etag</strong>，资源细微的改动都会引起指纹的变化</p>
-</li>
-<li><p><strong>弱验证ETag</strong>， 相对灵活的过滤资源的某些变化</p>
+<li><p>事件冒泡事件捕获</p>
 </li>
 </ul>
-<h2 id="5、强缓存"><a href="#5、强缓存" class="headerlink" title="5、强缓存"></a>5、强缓存</h2><h3 id="介绍："><a href="#介绍：" class="headerlink" title="介绍："></a>介绍：</h3><p>不会向服务器发送请求，直接从缓存中读取资源，在chrome控制台的Network选项中可以看到该请求返回200的状态码，并且Size显示<code>from disk cache</code>或<code>from memory cache</code>。</p>
-<h3 id="设置："><a href="#设置：" class="headerlink" title="设置："></a>设置：</h3><p>强缓存可以通过设置两种 <code>HTTP Header</code> 实现，分别是：<code>Expires</code> 和 <code>Cache-Control</code>。</p>
-<blockquote>
-<p>Expires 是http1.0的产物，Cache-Control是http1.1的产物，两者同时存在的话，Cache-Control优先级高于Expires；</p>
-</blockquote>
-<h2 id="6、协商缓存"><a href="#6、协商缓存" class="headerlink" title="6、协商缓存"></a>6、协商缓存</h2><h3 id="介绍：-1"><a href="#介绍：-1" class="headerlink" title="介绍："></a>介绍：</h3><p>协商缓存就是强制缓存失效后，浏览器<em>携带缓存标识</em>向服务器发起请求，由服务器根据缓存标识决定是否使用缓存的过程，主要有以下两种情况：</p>
+<h2 id="6-中介者模式"><a href="#6-中介者模式" class="headerlink" title="6.中介者模式"></a>6.中介者模式</h2><p><code>redux</code>和<code>vuex</code>都是中介者模式的实际应用，把共享数据抽离成一个单独的store，每个需要用到的组件都store这个中介来操作对象。</p>
+<p>目的是减少耦合</p>
+<h2 id="7-工厂模式"><a href="#7-工厂模式" class="headerlink" title="7.工厂模式"></a>7.工厂模式</h2><p>提供创建对象的接口，把对象的创建工作转交给一个外部对象。通俗的讲就是有一个模子，批量去生产。</p>
+<p>目的是为了消除对象之间的耦合</p>
 <ul>
-<li><p>协商缓存生效，返回<code>304</code>和<code>Not Modified</code></p>
+<li>eg: 常见的弹窗，message, 对外提供调用方法，然后调用方法新建弹窗或实例化。</li>
+</ul>
+<h2 id="8-享元模式"><a href="#8-享元模式" class="headerlink" title="8.享元模式"></a>8.享元模式</h2><p>比方说一个工厂生产了50个男内衣和50个女内衣，想要找模特拍广告宣传，一般的只需要找一男一女就可以了，而而不是找50个男模特和50个女模特。用代码实现就是采用享元模式，衣服原型-实例化50个男内衣50个女内衣，人原型-实例化男人和女人，衣服和人的原型有相关关系，彼此通过对外提供接口以达到人和衣服结合，然后拍照。</p>
+<p>再比如弹窗，创建一个弹窗原型对外提供接口，需要用到的时候直接调用传入不同的参数就可以了，没有必要实例化多次。<br>其实就是抽象化提取组件</p>
+<h2 id="9-责任链模式（职责链模式）"><a href="#9-责任链模式（职责链模式）" class="headerlink" title="9.责任链模式（职责链模式）"></a>9.责任链模式（职责链模式）</h2><p>使得多个对象都有机会处理请求，从而避免了请求的发送者和接收者之间的耦合关系，将这些对象连成一条链，并沿着这条链传递该请求，直到有一个对象处理它为止，这就叫做职责链模式</p>
+<ul>
+<li><p>eg: node处理请求</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line">app.<span class="title function_">use</span>(<span class="title function_">async</span>(ctx, next) =&gt; {</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">await</span> <span class="title function_">next</span>()</span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
 </li>
-<li><p>协商缓存失效，返回<code>200</code>和<code>请求结果</code></p>
+<li><p>电商预定商品，预定额500，实付减100；预定额200，实付减50。预定500的处理函数，预定200的处理函数，</p>
 </li>
 </ul>
-<h3 id="设置：-1"><a href="#设置：-1" class="headerlink" title="设置："></a>设置：</h3><p>协商缓存可以通过设置两种 HTTP Header 实现, 分别是：<code>Last-Modified</code> 和 <code>ETag</code> 。</p>
-<h2 id="7、缓存机制🎉"><a href="#7、缓存机制🎉" class="headerlink" title="7、缓存机制🎉"></a>7、缓存机制🎉</h2><ol>
-<li><p>强制缓存优先于协商缓存进行，若强制缓存(Expires和Cache-Control)生效则直接使用缓存，若不生效则进行协商缓存(<code>Last-Modified / If-Modified-Since和Etag / If-None-Match</code>)</p>
+<p>传入参数调用，处理函数依次进行捕捉拦截，如果不满足某一个处理函数的条件则放行到下一个处理函数，这样形成一个职责链。</p>
+<p>后续若增加300的预定金额，直接编写预定额为300的处理函数，然后注册进责任链即可。</p>
+<h2 id="10-适配器模式"><a href="#10-适配器模式" class="headerlink" title="10.适配器模式"></a>10.适配器模式</h2><p>常见的，后端接口返回的数据在前端不能直接使用，需要做转化，这个时候就使用到适配器模式</p>
+<p>只关心输入输出数据，正向和反向，有点类似于webpack的loader(只关心输入输出)</p>
+<p>小程序适配多平台</p>
+<p>react-native 的 虚拟DOM转化——“桥接”</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><ul>
+<li><p>创建设计模式：工厂，单例，建造者原型</p>
 </li>
-<li><p>协商缓存由服务器决定是否使用缓存，若协商缓存失效，那么代表该请求的缓存失效，返回200，重新返回资源和缓存标识，再存入浏览器缓存中；生效则返回304，继续使用缓存。</p>
+<li><p>结构化设计模式：外观，适配器，代理，装饰器，享元桥接，组合</p>
 </li>
-</ol>
-<h2 id="8、缓存策略树🎉"><a href="#8、缓存策略树🎉" class="headerlink" title="8、缓存策略树🎉"></a>8、缓存策略树🎉</h2><p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4b20c21694e940d5acf2b343148bfbbf~tplv-k3u1fbpfcp-zoom-1.image" alt="缓存策略树，很早很早之前画的🤣，现在看看也是醉了😂"></p>
-<p align="center">缓存策略树，很早很早之前画的🤣，现在看看也是醉了😂</p>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cc8e06075df24102b9989fc1ff0eb797~tplv-k3u1fbpfcp-zoom-1.image" alt="该图来源网络，侵删"></p>
-<p align="center">该图来源网络，侵删</p>
-
-<p>更多看<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Caching">这里</a></p>
+<li><p>行为型：策略，模板方法，观察者，迭代器，责任链，命令，备忘录，状态，访问者，终结者，解释器</p>
+</li>
+</ul>
 <hr>
+<p>🎈🎈🎈</p>
 <p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
 <p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
 <p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
@@ -4453,7 +4673,7 @@
         <category>前端</category>
       </categories>
       <tags>
-        <tag>HTTP</tag>
+        <tag>设计模式</tag>
       </tags>
   </entry>
   <entry>
@@ -4525,78 +4745,6 @@
       <tags>
         <tag>vue</tag>
         <tag>element-ui</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>设计模式浅析</title>
-    <url>/posts/3163405351.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p><strong>“单策代迭发命组，模享职中装适外”</strong></p>
-</blockquote>
-<h2 id="1-订阅-发布模式"><a href="#1-订阅-发布模式" class="headerlink" title="1.订阅-发布模式"></a>1.订阅-发布模式</h2><p>eventBus<br>vue的数据响应式原理就是基于发布订阅模式实现的</p>
-<h2 id="2-策略模式"><a href="#2-策略模式" class="headerlink" title="2.策略模式"></a>2.策略模式</h2><p>简单来时就是把一写具有相关性的工具方法，组合起来，以方便调用和后期增删修等维护</p>
-<ul>
-<li>eg:<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> operationType = {</span><br><span class="line"><span class="string">'add'</span>: <span class="keyword">function</span>(<span class="params"></span>){},</span><br><span class="line"><span class="string">'reduce'</span>: <span class="keyword">function</span>(<span class="params"></span>){},</span><br><span class="line">...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h2 id="3-单例模式"><a href="#3-单例模式" class="headerlink" title="3.单例模式"></a>3.单例模式</h2><p>譬如做一个全局的弹窗原型，当需要的时候就调用生成弹窗，但是没有必要实例化多个弹窗对象，只要实例化一次然后修改里面的属性参数就可以了</p>
-<h2 id="4-装饰器模式Decorator"><a href="#4-装饰器模式Decorator" class="headerlink" title="4.装饰器模式Decorator"></a>4.装饰器模式Decorator</h2><p>原有的函数或组件不变，只是扩展、引用了一些方法<br>如：redux 中的@connect，增加了props,state… 使用就是@XX，（ng中的注解）</p>
-<ul>
-<li><p>eg: 就像是一个房子，进行装修（软装）</p>
-</li>
-<li><p>v-input, v-checkbox, 自定义指令</p>
-</li>
-<li><p>高阶组件，（相对于低阶组件来说，就是基础组件的二次封装，譬如业务组件：下拉搜索选择）</p>
-</li>
-</ul>
-<h2 id="5-代理模式"><a href="#5-代理模式" class="headerlink" title="5.代理模式"></a>5.代理模式</h2><p>为一个对象提供一个代用品或占位符，以便控制对它的访问<br>图片懒加载：先使用一个loading图，等图片加载好了，在放到img的src属性上</p>
-<ul>
-<li><p>函数防抖节流也是代理的一种</p>
-</li>
-<li><p>事件冒泡事件捕获</p>
-</li>
-</ul>
-<h2 id="6-中介者模式"><a href="#6-中介者模式" class="headerlink" title="6.中介者模式"></a>6.中介者模式</h2><p><code>redux</code>和<code>vuex</code>都是中介者模式的实际应用，把共享数据抽离成一个单独的store，每个需要用到的组件都store这个中介来操作对象。</p>
-<p>目的是减少耦合</p>
-<h2 id="7-工厂模式"><a href="#7-工厂模式" class="headerlink" title="7.工厂模式"></a>7.工厂模式</h2><p>提供创建对象的接口，把对象的创建工作转交给一个外部对象。通俗的讲就是有一个模子，批量去生产。</p>
-<p>目的是为了消除对象之间的耦合</p>
-<ul>
-<li>eg: 常见的弹窗，message, 对外提供调用方法，然后调用方法新建弹窗或实例化。</li>
-</ul>
-<h2 id="8-享元模式"><a href="#8-享元模式" class="headerlink" title="8.享元模式"></a>8.享元模式</h2><p>比方说一个工厂生产了50个男内衣和50个女内衣，想要找模特拍广告宣传，一般的只需要找一男一女就可以了，而而不是找50个男模特和50个女模特。用代码实现就是采用享元模式，衣服原型-实例化50个男内衣50个女内衣，人原型-实例化男人和女人，衣服和人的原型有相关关系，彼此通过对外提供接口以达到人和衣服结合，然后拍照。</p>
-<p>再比如弹窗，创建一个弹窗原型对外提供接口，需要用到的时候直接调用传入不同的参数就可以了，没有必要实例化多次。<br>其实就是抽象化提取组件</p>
-<h2 id="9-责任链模式（职责链模式）"><a href="#9-责任链模式（职责链模式）" class="headerlink" title="9.责任链模式（职责链模式）"></a>9.责任链模式（职责链模式）</h2><p>使得多个对象都有机会处理请求，从而避免了请求的发送者和接收者之间的耦合关系，将这些对象连成一条链，并沿着这条链传递该请求，直到有一个对象处理它为止，这就叫做职责链模式</p>
-<ul>
-<li><p>eg: node处理请求</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line">app.<span class="title function_">use</span>(<span class="title function_">async</span>(ctx, next) =&gt; {</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">await</span> <span class="title function_">next</span>()</span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>电商预定商品，预定额500，实付减100；预定额200，实付减50。预定500的处理函数，预定200的处理函数，</p>
-</li>
-</ul>
-<p>传入参数调用，处理函数依次进行捕捉拦截，如果不满足某一个处理函数的条件则放行到下一个处理函数，这样形成一个职责链。</p>
-<p>后续若增加300的预定金额，直接编写预定额为300的处理函数，然后注册进责任链即可。</p>
-<h2 id="10-适配器模式"><a href="#10-适配器模式" class="headerlink" title="10.适配器模式"></a>10.适配器模式</h2><p>常见的，后端接口返回的数据在前端不能直接使用，需要做转化，这个时候就使用到适配器模式</p>
-<p>只关心输入输出数据，正向和反向，有点类似于webpack的loader(只关心输入输出)</p>
-<p>小程序适配多平台</p>
-<p>react-native 的 虚拟DOM转化——“桥接”</p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><ul>
-<li><p>创建设计模式：工厂，单例，建造者原型</p>
-</li>
-<li><p>结构化设计模式：外观，适配器，代理，装饰器，享元桥接，组合</p>
-</li>
-<li><p>行为型：策略，模板方法，观察者，迭代器，责任链，命令，备忘录，状态，访问者，终结者，解释器</p>
-</li>
-</ul>
-<hr>
-<p>🎈🎈🎈</p>
-<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>设计模式</tag>
       </tags>
   </entry>
   <entry>
