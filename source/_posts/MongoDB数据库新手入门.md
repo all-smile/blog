@@ -1,9 +1,10 @@
 ---
 title: MongoDB数据库新手入门
-date: 2022-11-01 11:34:07
 tags: MongoDB
 categories: 数据库
 description: 目前，数据库技术已经逐步的成为了信息科技领域的重要技术，其涉及到许多领域，包括：信息、数据、数据处理、数据库管理系统等等
+abbrlink: 87748764
+date: 2022-11-01 11:34:07
 ---
 # windows安装mongodb   5.0.2
 
