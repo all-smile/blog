@@ -1943,6 +1943,143 @@
       </tags>
   </entry>
   <entry>
+    <title>Go | 浅谈包管理模式</title>
+    <url>/posts/3874691188.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Go/">Golang专栏</a>，持续更新，欢迎访问😊</p>
+</blockquote>
+<p>任何一门编程语言都离不开对各种工具包的使用，工具包的管理就显得异常重要了。Go 的包管理方式是逐渐演进的，本文介绍Go语言的两种包管理模式。</p>
+<h1 id="GOPATH模式引包（不推荐）"><a href="#GOPATH模式引包（不推荐）" class="headerlink" title="GOPATH模式引包（不推荐）"></a>GOPATH模式引包（不推荐）</h1><p>在 1.5 版本之前，所有的依赖包都是存放在 <code>GOPATH</code> 下，没有多版本控制。</p>
+<p>go的编译器会在 <code>$GOPATH/src</code> 下面寻找对应的模块，<code>src</code> 下的每一个目录都可以对应一个模块，目录中的目录也可以是一个模块</p>
+<p>下面展示如何在入口文件<code>main.go</code> 里引入非标准库<code>model</code>包中的变量</p>
+<ol>
+<li>目录层级如下</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">├───main</span><br><span class="line">│       main.go</span><br><span class="line">└───model</span><br><span class="line">        utils.go</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><p><code>main/main.go</code> 入口文件引入<code>utils</code>里面的<code>Name</code>变量</p>
+</li>
+<li><p><code>model/utils.go</code> 文件声明 <code>package model</code>，并定义变量<code>var Name string = "xiao"</code> ，变量必须是大写，否则报错name not exported by package model</p>
+</li>
+</ul>
+<ol start="2">
+<li>main.go 文件引model包</li>
+</ol>
+<figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="comment">// 引包</span></span><br><span class="line">  <span class="comment">// 省略GOPATH/src, Go编译的时候会自动在src目录下寻找</span></span><br><span class="line">	<span class="string">"go_code/pointer/model"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> {</span><br><span class="line">	fmt.Println(model.Name) <span class="comment">// xiao</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="开启GO111MODULE后非module项目产生的问题"><a href="#开启GO111MODULE后非module项目产生的问题" class="headerlink" title="开启GO111MODULE后非module项目产生的问题"></a>开启GO111MODULE后非module项目产生的问题</h2><p>在<code>GO111MODULE=on</code>，并且已经设置<code>GOPATH</code>的条件下，写的代码在<code>$GOPATH/src</code>下，我想要使用另一个<code>package</code>里面的内容，并且这个package不是标准库，或者说不在<code>GOROOT</code>里(一般我们不会修改GOROOT中的内容)，编译会报错，如下👇👇</p>
+<figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> go_code/pointer/model is not in GOROOT</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/636a062a16f2c2beb1df781f.jpg"></p>
+<h3 id="解决方法一："><a href="#解决方法一：" class="headerlink" title="解决方法一："></a>解决方法一：</h3><p>设置GO111MODULE=off</p>
+<p><code>go env -w GO111MODULE=off</code></p>
+<p>设置完之后， <code>go env</code>查看</p>
+<p>然后重新编译即可</p>
+<h3 id="解决方法二"><a href="#解决方法二" class="headerlink" title="解决方法二"></a>解决方法二</h3><p><strong>使用<code>go mod</code></strong> ， 请看下文介绍👇</p>
+<h1 id="GO-MODULE-模式引包（推荐）"><a href="#GO-MODULE-模式引包（推荐）" class="headerlink" title="GO MODULE 模式引包（推荐）"></a>GO MODULE 模式引包（推荐）</h1><h2 id="go-module-介绍"><a href="#go-module-介绍" class="headerlink" title="go module 介绍"></a>go module 介绍</h2><p>go modules 是 golang 1.11 新加的特性。</p>
+<blockquote>
+<ul>
+<li><p>模块是相关Go包的集合</p>
+</li>
+<li><p>modules是源代码交换和版本控制的单元</p>
+</li>
+</ul>
+<p>go命令直接支持使用modules，包括记录和解析对其他模块的依赖性。modules替换旧的基于GOPATH的方法来指定在给定构建中使用哪些源文件。</p>
+</blockquote>
+<p>GO111MODULE 有三个值：off, on和auto（默认值）。</p>
+<ol>
+<li><p><strong>GO111MODULE=off</strong>，go命令行将不会支持module功能，寻找依赖包的方式将会沿用旧版本那种通过vendor目录或者GOPATH模式来查找(也就是本文最开始介绍的方式)。</p>
+</li>
+<li><p><strong>GO111MODULE=on</strong>，go命令行会使用modules，不会去GOPATH目录下查找所引用的包。</p>
+</li>
+<li><p><strong>GO111MODULE=auto</strong>，默认值，go命令行将会根据当前目录来决定是否启用module功能。这种情况下可以分为两种情形：</p>
+<ul>
+<li><p>当前目录在<code>GOPATH/src</code>之外且该目录包含go.mod文件</p>
+</li>
+<li><p>当前文件在包含go.mod文件的目录下面。</p>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>当modules功能启用时，依赖包的存放位置变更为<code>$GOPATH/pkg</code>，允许同一个package多个版本并存，且多个项目可以<strong>共享缓存</strong>的 <code>module</code></p>
+</blockquote>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/636a063916f2c2beb1df997e.jpg"></p>
+<p>利用<code>GO111MODULE</code>和<code>GOPROXY</code>，可以直接将Github上的第三方库直接下载到本地使用，不需要使用go get命令。执行 go run 运行时，GOMODULES包管理工具会自动帮我们下载github上面的包</p>
+<h2 id="使用-go-mod-创建新项目"><a href="#使用-go-mod-创建新项目" class="headerlink" title="使用 go mod 创建新项目"></a>使用 go mod 创建新项目</h2><p>当开启<code>GO111MODULE</code>的时候，才可以使用<code>go mod</code></p>
+<h3 id="1、初始化项目"><a href="#1、初始化项目" class="headerlink" title="1、初始化项目"></a>1、初始化项目</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> test-mod</span><br><span class="line"><span class="built_in">cd</span> test-moe</span><br><span class="line">go mod init maze-mod</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>在项目根目录生成 <code>go.mod</code> 文件</strong></p>
+<figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line">module test-mod</span><br><span class="line"></span><br><span class="line"><span class="keyword">go</span> <span class="number">1.17</span></span><br><span class="line"></span><br><span class="line">require github.com/astaxie/beego v1<span class="number">.12</span><span class="number">.1</span></span><br><span class="line"></span><br><span class="line">require (</span><br><span class="line">	golang.org/x/net v0<span class="number">.0</span><span class="number">.0</span><span class="number">-20190620200207</span><span class="number">-3</span>b0461eec859 <span class="comment">// indirect</span></span><br><span class="line">	golang.org/x/text v0<span class="number">.3</span><span class="number">.0</span> <span class="comment">// indirect</span></span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>注意：</p>
+<ol>
+<li><p>有<code>indirect</code>注释的代表<strong>间接依赖</strong>，没有的代表<strong>直接依赖</strong>，</p>
+</li>
+<li><p>前面是<strong>版本号+时间戳+hash</strong>（如：<code>v0.0.0-20190620200207-3b0461eec859</code>）</p>
+</li>
+</ol>
+</blockquote>
+<ol>
+<li><p><code>go.mod</code>文件一旦创建后，它的内容将会被<code>go toolchain</code>全面掌控。<code>go toolchain</code>会在各类命令执行时(比如go get、go build、go mod等)，修改维护<code>go.mod</code>文件。</p>
+</li>
+<li><p><code>go.mod</code> 提供了module, require、replace和exclude 四个命令</p>
+<ul>
+<li><p>module 语句指定包的名字（路径）</p>
+</li>
+<li><p>require 语句指定的依赖项模块</p>
+</li>
+<li><p>replace 语句可以替换依赖项模块</p>
+</li>
+<li><p>exclude 语句可以忽略依赖项模块</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="2、添加依赖"><a href="#2、添加依赖" class="headerlink" title="2、添加依赖"></a>2、添加依赖</h3><ol>
+<li><p>新建<code>main.go</code>文件</p>
+</li>
+<li><p>执行 <code>go run main.go</code></p>
+<ul>
+<li><p>一般来说 <code>go mod</code> 模式下，运行 <code>go run</code> 会自动安装所有依赖，但是没有安装</p>
+</li>
+<li><p>运行 <code>go get ./ ...</code> 可以自动查找并下载安装所有的包</p>
+</li>
+<li><p>运行 <code>go get package@version</code> 安装指定版本的依赖包</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="3、查看依赖"><a href="#3、查看依赖" class="headerlink" title="3、查看依赖"></a>3、查看依赖</h3><ul>
+<li><p><code>go list -m all</code> 查看当前模块所依赖的包列表</p>
+</li>
+<li><p><code>go mod tidy</code> 从 <code>go.mod</code> 中移除不需要的依赖</p>
+</li>
+</ul>
+<h3 id="4、go-sum文件"><a href="#4、go-sum文件" class="headerlink" title="4、go.sum文件"></a>4、<code>go.sum</code>文件</h3><p>用来做包版本管理</p>
+<p><code>go.sum</code>文件与<code>go.mod</code>文件同级。<code>go.sum</code>文件是对导入的依赖包的特定版本的<code>hash</code>校验值，作用就是记录第一次下载的依赖版本号，防止有依赖版本升级带来的不兼容问题。所以，<code>go.mod</code>和<code>go.sum</code>文件都需要被加入版本管理中。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
+<li><p><code>GOPATH模式</code> 是 go在 1.5 版本之前的包管理模式，不具备版本控制功能，且所有项目的依赖都放在 GOPATH 里面，管理比较混乱</p>
+</li>
+<li><p><code>GO MODULE</code> 模式是go在1.11 版本推出的，使用git的管理方式，直接从GitHub上下载所需要的依赖，可能会存在一些安全性问题，同时国内需要设置<code>GOPROXY</code>代理服务器才可使用，相对来说好用一点。</p>
+</li>
+</ol>
+<p>包管理模式一直是各个开发语言所面临的棘手问题，比如<code>NPM</code>和<code>Yarn</code>，设计一种完美的包管理模式还需要不断探索实践。</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6368fc4816f2c2beb15b5ba6.jpg"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端开发，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。数风流人物还看中国、看今朝、看你我。</p>
+</body></html>]]></content>
+      <categories>
+        <category>Go</category>
+      </categories>
+      <tags>
+        <tag>Go</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Go | 讲解GOROOT、GOPATH、GOBIN</title>
     <url>/posts/4093397452.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1998,6 +2135,179 @@
       </categories>
       <tags>
         <tag>Go</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hybrid app本地开发如何调用JSBridge</title>
+    <url>/posts/3740751445.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>前天同事问我公司内部的小程序怎么对接的，我回忆了一下，简单记录了一下前端同学需要注意的点。</p>
+<p>背后还有小程序架构、网络策略等等。当时恰逢小程序架构调整，（老架构的时候我就发现了有一个问题点可以优化，但是跟那边人反馈之后，人家表示不要我管😂，新架构时发现这个问题还巧妙的遗留下来了😮）我虽然不负责那块，但是本着<strong>这样不优雅</strong>的原则，还是跟新架构的对接人讲了我的优化方案，讲明白了之后，同时上报各自直系领导，并建议我领导牵头开会推动。最后，无奈存量数据太多，老架构那边权衡之后决定不改动。（多说了几句，权当记录一下）</p>
+</blockquote>
+<h1 id="1、背景"><a href="#1、背景" class="headerlink" title="1、背景"></a>1、背景</h1><p>公司研发的一款服务软件App（姑且称为“大地”），提供了包涵消息、待办、工作台、同事圈和通讯录五大功能模块，其中，工作台里集成了包括公司的移动客户端、PC端以及第三方平台的部分功能/服务（统称为“应用”）。</p>
+<p>我今天要讲的是这个集成平台以什么方式展现“应用”，答案是：借鉴了微信的架构，自研了“小程序”接入“应用”。</p>
+<p>我司小程序具有一种相对开放能力（面向全公司），赋能业务快速数字化、场景敏捷迭代，并且可在“大地”上便捷的获取和使用，同时具有完善的使用体验（这就是严格的接入审核标准带来的好处）。</p>
+<p>在“大地”开发者平台，创建小程序会自动创建配套的公众号（公众号是为了推送消息使用，可订阅）。小程序开发不限制技术选型，开发完成之后按照小程序接入规范打包上架小程序，审核发布。</p>
+<blockquote>
+<p>简单来说，可以把“大地”看成是一个“钉钉”，我现在要把我们的业务功能投放到“大地”上，就需要接入“大地”小程序，以小程序的方式在“大地”上为用户提供服务。</p>
+</blockquote>
+<p>小程序架构：<code>Cordova</code>框架做的<code>WebView</code>，运行我开发的前端程序，通过<code>Nginx</code>帮我把请求代理到微服务网关，由网关转发到目的主机处理请求。它虽然看上去是一个<code>Native App</code>，但只有一个<code>UI WebView</code>，里面访问的是一个<code>Web App</code>，对我来说就是开发一个<code>H5</code>应用调用一些所需的<code>JSBridge</code>，也就是所谓的<code>Hybrid App</code>。</p>
+<p>下面看一下本地开发中的一些问题，以及我是怎么处理的</p>
+<h1 id="2、问题"><a href="#2、问题" class="headerlink" title="2、问题"></a>2、问题</h1><p><code>Hybrid App</code>本地开发过程中没有真实的<code>Native</code>环境的，同样也无法使用<code>JSBridge</code>，这就会带来一个问题：跟原生交互的行为只能发布小程序才可以调试，本地玩不了，这…，相当fuck。</p>
+<p>目的是想让本地开发同小程序测试环境具有相同的体验，我的想法是在本地模拟<code>JSBridge</code>的方法，尽管不能带来真实的效果，至少触发了某个行为之后要有个反应，不至于让操作流程看起来像是“脱节”的（实际跟原生的交互行为并不多，比如：拍照、弹窗提示、定位等等）。</p>
+<p>因此，我要做的就是本地模拟<code>JSBridge</code>的一些方法，开发时触发了这些原生交互行为之后提示一些信息，等到上架小程序测试环境时，在手机上会用真实的<code>JSBridge</code>方法自动替换掉我模拟实现的方法。</p>
+<p>于是我就开始了下面的准备工作。</p>
+<ol>
+<li><p>搞清楚<code>JSBridge</code>运行的原理</p>
+</li>
+<li><p>本地模拟<code>JSBridge</code>的方法</p>
+</li>
+<li><p>上架小程序是自动使用真实的<code>JSBridge</code></p>
+</li>
+</ol>
+<h1 id="3、了解JSBridge"><a href="#3、了解JSBridge" class="headerlink" title="3、了解JSBridge"></a>3、了解<code>JSBridge</code></h1><p><strong>JSBridge</strong>：望文生义就是<code>js</code>和<code>Native</code>之前的桥梁，而实际上<code>JSBridge</code>确实是<code>JS</code>和<code>Native</code>之前的<strong>一种通信方式</strong>。</p>
+<p>简单的说，<code>JSBridge</code>就是定义<code>Native</code>和<code>JS</code>的通信，<code>Native</code>只通过一个固定的桥对象调用<code>JS</code>，<code>JS</code>也只通过固定的桥对象调用<code>Native</code>。<code>JSBridge</code>另一个叫法及大家熟知的<code>Hybrid app</code>技术。</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeacc16f2c2beb1834bb9.png"></p>
+<p>了解即可，更多的请参考</p>
+<ul>
+<li><p><a href="https://www.jianshu.com/p/0bd13e9059fb">Cordova浅析架构原理</a></p>
+</li>
+<li><p><a href="https://toutiao.io/posts/07qll1/preview">JSBridge 深度剖析</a></p>
+</li>
+</ul>
+<p>下图展示了<code>JSBridge</code>的工作流程👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeaee16f2c2beb18371d9.png"></p>
+<p>上图中左侧部分正式我要做的，具体请看下文</p>
+<blockquote>
+<p>看累了，三连一下，回看不迷路哟😉</p>
+</blockquote>
+<h2 id="3-1、我们的JSBridge"><a href="#3-1、我们的JSBridge" class="headerlink" title="3.1、我们的JSBridge"></a>3.1、我们的<code>JSBridge</code></h2><p>推测“大地”那边的<code>JSBridge</code>应该是自己写的，没有初始化<code>JSBridge</code>的操作</p>
+<p>当调用<code>JSBridge</code>时，必须在页面完全加载完成之后才能够拿到全局的<code>JSBridge</code>，<code>Cordova</code>框架提供<code>deviceready</code>事件，该事件触发的时候表示全局的<code>JSBridge</code>挂载成功。（注意：这就是我接下来操作的切入点，嘻嘻）</p>
+<p>简单写下如下：</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'deviceready OK!'</span>);</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">showToast</span>(<span class="number">0</span>, <span class="string">'提示信息'</span>)</span><br><span class="line">}, <span class="literal">false</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>需要注意的是，在开发环境，是没有 <code>deviceready</code> 事件的，所以上面的代码并不会执行，只有在<code>app</code>里面运行的时候才会执行。</p>
+<p><strong>思考：</strong></p>
+<p><code>JSBridge</code>必须是在<code>deviceready</code>事件触发后方能使用的，因此首先要做的就是自定义<code>deviceready</code>事件，本地环境可以手动触发自定义<code>deviceready</code>事件，生产环境下直接监听<code>deviceready</code>事件即可</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeafd16f2c2beb1838190.png"></p>
+<h1 id="4、JS发起自定义事件"><a href="#4、JS发起自定义事件" class="headerlink" title="4、JS发起自定义事件"></a>4、JS发起自定义事件</h1><p>我是用 <code>CustomEvent</code> 构造函数，继承至 <code>Event</code>，文档看<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/CustomEvent">这里</a></p>
+<ol>
+<li>用法</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="title class_">CustomEvent</span>(eventName, params);</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>示例</li>
+</ol>
+<p>创建一个自定义事件</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> event=<span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'mock-event'</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>传递参数</li>
+</ol>
+<p>这里值得注意，需要把想要传递的参数包裹在一个包含<code>detail</code>属性的对象，否则传递的参数不会被挂载</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createEvent</span>(<span class="params">params, eventName = <span class="string">'mock-event'</span></span>) {</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(eventName, { <span class="attr">detail</span>: params });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> event = <span class="title function_">createEvent</span>({ <span class="attr">id</span>: <span class="string">'0010'</span> });</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="4">
+<li>发起事件</li>
+</ol>
+<p>调用<code>dispatchEvent</code>方法发起事件，传入你刚才创建的方法</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">dispatchEvent</span>(event);</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="5">
+<li>监听事件</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'mock-event'</span>, <span class="function">(<span class="params">{ detail: { id } }</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'id'</span>,id) <span class="comment">// 会在控制台打印0010</span></span><br><span class="line">});</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="6">
+<li>示例：</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">addEventListener</span>(<span class="string">'show'</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> { <span class="variable language_">console</span>.<span class="title function_">log</span>(event.<span class="property">detail</span>); });</span><br><span class="line"><span class="comment">// 触发</span></span><br><span class="line"><span class="keyword">let</span> myEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'show'</span>, {</span><br><span class="line">    <span class="attr">detail</span>: {</span><br><span class="line">        <span class="attr">username</span>: <span class="string">'xixi'</span>,</span><br><span class="line">        <span class="attr">userid</span>: <span class="string">'2022'</span></span><br><span class="line">    }</span><br><span class="line">});</span><br><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">dispatchEvent</span>(myEvent);</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>了解了自定义事件之后，通过自定义事件模拟触发<code>deviceready</code>事件，这样上面的 <code>deviceready</code> 事件监听就可以执行了。</p>
+<p><strong>注意</strong>：这里还要确定一个问题，在什么时候触发自定义事件<code>deviceready</code>呢？</p>
+</blockquote>
+<h1 id="5、确定-deviceready-事件执行时机"><a href="#5、确定-deviceready-事件执行时机" class="headerlink" title="5、确定 deviceready 事件执行时机"></a>5、确定 <code>deviceready</code> 事件执行时机</h1><ul>
+<li>只需要编写如下代码，查看输出结果即可</li>
+</ul>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'load'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'load OK!'</span>);</span><br><span class="line">}, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'deviceready OK!'</span>);</span><br><span class="line">}, <span class="literal">false</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>结果输出</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">load OK!</span><br><span class="line">deviceready OK!</span><br></pre></td></tr></tbody></table></figure>
+
+<p>由此可知，执行顺序：<code>load</code> –&gt; <code>deviceready</code></p>
+<h1 id="6、自定义事件模拟Cordova-deviceready事件"><a href="#6、自定义事件模拟Cordova-deviceready事件" class="headerlink" title="6、自定义事件模拟Cordova deviceready事件"></a>6、自定义事件模拟<code>Cordova</code> <code>deviceready</code>事件</h1><ol>
+<li><p>自定义<code>deviceready</code>事件</p>
+</li>
+<li><p>根据上面测试执行顺序得出的结论，我在<code>load</code>事件里触发自定义事件</p>
+</li>
+<li><p>在开发环境下模拟一些用到的<code>JSBridge-API</code>，比如下面写到的 <code>JSAPI.showToast()</code> 方法</p>
+</li>
+</ol>
+<ul>
+<li>mockEvent.js<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (process.<span class="property">env</span>.<span class="property">NODE_ENV</span> === <span class="string">'development'</span>) {</span><br><span class="line">  <span class="comment">//  自定义事件</span></span><br><span class="line">  <span class="keyword">let</span> myEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'deviceready'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 模拟JSAPI事件</span></span><br><span class="line">  <span class="variable language_">window</span>[<span class="string">'JSAPI'</span>] = {</span><br><span class="line">    <span class="title function_">showToast</span>(<span class="params">type, desc</span>) {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(type, desc);</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 开发环境下，在 原生 load 方法之后 触发自定义事件</span></span><br><span class="line">  <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'load'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'load OK!'</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> {</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">dispatchEvent</span>(myEvent);</span><br><span class="line">    }, <span class="number">100</span>)</span><br><span class="line">  }, <span class="literal">false</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h1 id="7、封装deviceReady方法"><a href="#7、封装deviceReady方法" class="headerlink" title="7、封装deviceReady方法"></a>7、封装<code>deviceReady</code>方法</h1><p>实现在<code>Cordova</code>框架触发<code>deviceready</code>事件的时候感知到，以便于在<code>deviceReady</code>事件触发后执行<code>JS-API</code>。</p>
+<p><strong>可用于开发环境和非开发环境</strong></p>
+<h2 id="7-1、方式一"><a href="#7-1、方式一" class="headerlink" title="7.1、方式一"></a>7.1、方式一</h2><p>这里采用<strong>链式调用</strong>的方式，</p>
+<p>以下这种借助 <code>Promise</code> 的实现，在这种场景下其实是不合理的👀<br>只是形式上类似，其实并不是</p>
+<ol>
+<li>定义</li>
+</ol>
+<ul>
+<li>mixin.js</li>
+</ul>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">deviceReady</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">      <span class="title function_">resolve</span>(<span class="string">"ready go!"</span>);</span><br><span class="line">    }, <span class="literal">false</span>);</span><br><span class="line">  })</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>组件内使用<code>JS-API</code></li>
+</ol>
+<p>使用<code>JSAPI</code>可以如下这么写</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">deviceReady</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res); <span class="comment">// ready go!</span></span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">showToast</span>(<span class="number">0</span>, <span class="string">'提示'</span>)</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="variable language_">this</span>.<span class="title function_">deviceReady</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">getUserInfo</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">  }, <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">  });</span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>开发环境执行效果如下</li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeb0a16f2c2beb183900d.png"></p>
+<h2 id="7-2、方式二（推荐）"><a href="#7-2、方式二（推荐）" class="headerlink" title="7.2、方式二（推荐）"></a>7.2、方式二（推荐）</h2><p>改写成通用的事件监听函数，支持链式调用</p>
+<blockquote>
+<ul>
+<li><p>开发环境下，由<code>mockEvent.js</code>文件里的<code>dispatchEvent</code>触发自定义的<code>deviceready</code>事件；</p>
+</li>
+<li><p>小程序里运行，则由真实的<code>deviceready</code>事件触发</p>
+</li>
+</ul>
+</blockquote>
+<ol>
+<li>定义</li>
+</ol>
+<ul>
+<li>mixin.js</li>
+</ul>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">receiver</span>(<span class="params">type</span>) {</span><br><span class="line">  <span class="keyword">let</span> callbacks = {</span><br><span class="line">      <span class="attr">fns</span>: [],</span><br><span class="line">      <span class="attr">then</span>: <span class="keyword">function</span>(<span class="params">cb</span>){</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">fns</span>.<span class="title function_">push</span>(cb);</span><br><span class="line">          <span class="keyword">return</span> <span class="variable language_">this</span>;</span><br><span class="line">      }</span><br><span class="line">  };</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(type, <span class="keyword">function</span>(<span class="params">ev</span>) {</span><br><span class="line">    <span class="keyword">let</span> fns = callbacks.<span class="property">fns</span>.<span class="title function_">slice</span>();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>, l = fns.<span class="property">length</span>; i &lt; l; i++){</span><br><span class="line">        fns[i].<span class="title function_">call</span>(<span class="variable language_">this</span>, ev);</span><br><span class="line">    }</span><br><span class="line">  });</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> callbacks;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>使用</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">receiver</span>(<span class="string">'deviceready'</span>).<span class="title function_">then</span>(<span class="function">(<span class="params">ev</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(ev);</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">getUserInfo</span>(</span><br><span class="line">    <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">    },</span><br><span class="line">    <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">    }</span><br><span class="line">  )</span><br><span class="line">})</span><br><span class="line"><span class="variable language_">this</span>.<span class="title function_">receiver</span>(<span class="string">"click"</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"hi"</span>))</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">()=&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">22</span>));</span><br></pre></td></tr></tbody></table></figure>
+
+
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>当应用发布到<code>app</code>上，就是监听的真实的 <code>Cordova</code>框架的 <code>deviceready</code> 事件了，之后也就可以拿到真实的<code>JSAPI</code>了，以上只是为了在开发环境的时候模拟使用<code>JSAPI</code>。防止在开发环境下直接调用<code>JSAPI</code>飘红的情况，当然也是可以加<code>try catch</code>处理的，只不过个人感觉模拟事件使得代码看起来更加优雅别致一点，使用更加丝滑，酌情食用😁。</p>
+<p>软件架构非常有意思，感兴趣的可以交流探索，嘻嘻。</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>Hybrid app</tag>
       </tags>
   </entry>
   <entry>
@@ -2268,179 +2578,6 @@
       <tags>
         <tag>Hexo</tag>
         <tag>GitHub Actions</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hybrid app本地开发如何调用JSBridge</title>
-    <url>/posts/3740751445.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>前天同事问我公司内部的小程序怎么对接的，我回忆了一下，简单记录了一下前端同学需要注意的点。</p>
-<p>背后还有小程序架构、网络策略等等。当时恰逢小程序架构调整，（老架构的时候我就发现了有一个问题点可以优化，但是跟那边人反馈之后，人家表示不要我管😂，新架构时发现这个问题还巧妙的遗留下来了😮）我虽然不负责那块，但是本着<strong>这样不优雅</strong>的原则，还是跟新架构的对接人讲了我的优化方案，讲明白了之后，同时上报各自直系领导，并建议我领导牵头开会推动。最后，无奈存量数据太多，老架构那边权衡之后决定不改动。（多说了几句，权当记录一下）</p>
-</blockquote>
-<h1 id="1、背景"><a href="#1、背景" class="headerlink" title="1、背景"></a>1、背景</h1><p>公司研发的一款服务软件App（姑且称为“大地”），提供了包涵消息、待办、工作台、同事圈和通讯录五大功能模块，其中，工作台里集成了包括公司的移动客户端、PC端以及第三方平台的部分功能/服务（统称为“应用”）。</p>
-<p>我今天要讲的是这个集成平台以什么方式展现“应用”，答案是：借鉴了微信的架构，自研了“小程序”接入“应用”。</p>
-<p>我司小程序具有一种相对开放能力（面向全公司），赋能业务快速数字化、场景敏捷迭代，并且可在“大地”上便捷的获取和使用，同时具有完善的使用体验（这就是严格的接入审核标准带来的好处）。</p>
-<p>在“大地”开发者平台，创建小程序会自动创建配套的公众号（公众号是为了推送消息使用，可订阅）。小程序开发不限制技术选型，开发完成之后按照小程序接入规范打包上架小程序，审核发布。</p>
-<blockquote>
-<p>简单来说，可以把“大地”看成是一个“钉钉”，我现在要把我们的业务功能投放到“大地”上，就需要接入“大地”小程序，以小程序的方式在“大地”上为用户提供服务。</p>
-</blockquote>
-<p>小程序架构：<code>Cordova</code>框架做的<code>WebView</code>，运行我开发的前端程序，通过<code>Nginx</code>帮我把请求代理到微服务网关，由网关转发到目的主机处理请求。它虽然看上去是一个<code>Native App</code>，但只有一个<code>UI WebView</code>，里面访问的是一个<code>Web App</code>，对我来说就是开发一个<code>H5</code>应用调用一些所需的<code>JSBridge</code>，也就是所谓的<code>Hybrid App</code>。</p>
-<p>下面看一下本地开发中的一些问题，以及我是怎么处理的</p>
-<h1 id="2、问题"><a href="#2、问题" class="headerlink" title="2、问题"></a>2、问题</h1><p><code>Hybrid App</code>本地开发过程中没有真实的<code>Native</code>环境的，同样也无法使用<code>JSBridge</code>，这就会带来一个问题：跟原生交互的行为只能发布小程序才可以调试，本地玩不了，这…，相当fuck。</p>
-<p>目的是想让本地开发同小程序测试环境具有相同的体验，我的想法是在本地模拟<code>JSBridge</code>的方法，尽管不能带来真实的效果，至少触发了某个行为之后要有个反应，不至于让操作流程看起来像是“脱节”的（实际跟原生的交互行为并不多，比如：拍照、弹窗提示、定位等等）。</p>
-<p>因此，我要做的就是本地模拟<code>JSBridge</code>的一些方法，开发时触发了这些原生交互行为之后提示一些信息，等到上架小程序测试环境时，在手机上会用真实的<code>JSBridge</code>方法自动替换掉我模拟实现的方法。</p>
-<p>于是我就开始了下面的准备工作。</p>
-<ol>
-<li><p>搞清楚<code>JSBridge</code>运行的原理</p>
-</li>
-<li><p>本地模拟<code>JSBridge</code>的方法</p>
-</li>
-<li><p>上架小程序是自动使用真实的<code>JSBridge</code></p>
-</li>
-</ol>
-<h1 id="3、了解JSBridge"><a href="#3、了解JSBridge" class="headerlink" title="3、了解JSBridge"></a>3、了解<code>JSBridge</code></h1><p><strong>JSBridge</strong>：望文生义就是<code>js</code>和<code>Native</code>之前的桥梁，而实际上<code>JSBridge</code>确实是<code>JS</code>和<code>Native</code>之前的<strong>一种通信方式</strong>。</p>
-<p>简单的说，<code>JSBridge</code>就是定义<code>Native</code>和<code>JS</code>的通信，<code>Native</code>只通过一个固定的桥对象调用<code>JS</code>，<code>JS</code>也只通过固定的桥对象调用<code>Native</code>。<code>JSBridge</code>另一个叫法及大家熟知的<code>Hybrid app</code>技术。</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeacc16f2c2beb1834bb9.png"></p>
-<p>了解即可，更多的请参考</p>
-<ul>
-<li><p><a href="https://www.jianshu.com/p/0bd13e9059fb">Cordova浅析架构原理</a></p>
-</li>
-<li><p><a href="https://toutiao.io/posts/07qll1/preview">JSBridge 深度剖析</a></p>
-</li>
-</ul>
-<p>下图展示了<code>JSBridge</code>的工作流程👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeaee16f2c2beb18371d9.png"></p>
-<p>上图中左侧部分正式我要做的，具体请看下文</p>
-<blockquote>
-<p>看累了，三连一下，回看不迷路哟😉</p>
-</blockquote>
-<h2 id="3-1、我们的JSBridge"><a href="#3-1、我们的JSBridge" class="headerlink" title="3.1、我们的JSBridge"></a>3.1、我们的<code>JSBridge</code></h2><p>推测“大地”那边的<code>JSBridge</code>应该是自己写的，没有初始化<code>JSBridge</code>的操作</p>
-<p>当调用<code>JSBridge</code>时，必须在页面完全加载完成之后才能够拿到全局的<code>JSBridge</code>，<code>Cordova</code>框架提供<code>deviceready</code>事件，该事件触发的时候表示全局的<code>JSBridge</code>挂载成功。（注意：这就是我接下来操作的切入点，嘻嘻）</p>
-<p>简单写下如下：</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'deviceready OK!'</span>);</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">showToast</span>(<span class="number">0</span>, <span class="string">'提示信息'</span>)</span><br><span class="line">}, <span class="literal">false</span>)</span><br></pre></td></tr></tbody></table></figure>
-
-<p>需要注意的是，在开发环境，是没有 <code>deviceready</code> 事件的，所以上面的代码并不会执行，只有在<code>app</code>里面运行的时候才会执行。</p>
-<p><strong>思考：</strong></p>
-<p><code>JSBridge</code>必须是在<code>deviceready</code>事件触发后方能使用的，因此首先要做的就是自定义<code>deviceready</code>事件，本地环境可以手动触发自定义<code>deviceready</code>事件，生产环境下直接监听<code>deviceready</code>事件即可</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeafd16f2c2beb1838190.png"></p>
-<h1 id="4、JS发起自定义事件"><a href="#4、JS发起自定义事件" class="headerlink" title="4、JS发起自定义事件"></a>4、JS发起自定义事件</h1><p>我是用 <code>CustomEvent</code> 构造函数，继承至 <code>Event</code>，文档看<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/CustomEvent">这里</a></p>
-<ol>
-<li>用法</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="title class_">CustomEvent</span>(eventName, params);</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>示例</li>
-</ol>
-<p>创建一个自定义事件</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> event=<span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'mock-event'</span>);</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="3">
-<li>传递参数</li>
-</ol>
-<p>这里值得注意，需要把想要传递的参数包裹在一个包含<code>detail</code>属性的对象，否则传递的参数不会被挂载</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createEvent</span>(<span class="params">params, eventName = <span class="string">'mock-event'</span></span>) {</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(eventName, { <span class="attr">detail</span>: params });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> event = <span class="title function_">createEvent</span>({ <span class="attr">id</span>: <span class="string">'0010'</span> });</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="4">
-<li>发起事件</li>
-</ol>
-<p>调用<code>dispatchEvent</code>方法发起事件，传入你刚才创建的方法</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">dispatchEvent</span>(event);</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="5">
-<li>监听事件</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'mock-event'</span>, <span class="function">(<span class="params">{ detail: { id } }</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'id'</span>,id) <span class="comment">// 会在控制台打印0010</span></span><br><span class="line">});</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="6">
-<li>示例：</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">addEventListener</span>(<span class="string">'show'</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> { <span class="variable language_">console</span>.<span class="title function_">log</span>(event.<span class="property">detail</span>); });</span><br><span class="line"><span class="comment">// 触发</span></span><br><span class="line"><span class="keyword">let</span> myEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'show'</span>, {</span><br><span class="line">    <span class="attr">detail</span>: {</span><br><span class="line">        <span class="attr">username</span>: <span class="string">'xixi'</span>,</span><br><span class="line">        <span class="attr">userid</span>: <span class="string">'2022'</span></span><br><span class="line">    }</span><br><span class="line">});</span><br><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">dispatchEvent</span>(myEvent);</span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p>了解了自定义事件之后，通过自定义事件模拟触发<code>deviceready</code>事件，这样上面的 <code>deviceready</code> 事件监听就可以执行了。</p>
-<p><strong>注意</strong>：这里还要确定一个问题，在什么时候触发自定义事件<code>deviceready</code>呢？</p>
-</blockquote>
-<h1 id="5、确定-deviceready-事件执行时机"><a href="#5、确定-deviceready-事件执行时机" class="headerlink" title="5、确定 deviceready 事件执行时机"></a>5、确定 <code>deviceready</code> 事件执行时机</h1><ul>
-<li>只需要编写如下代码，查看输出结果即可</li>
-</ul>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'load'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'load OK!'</span>);</span><br><span class="line">}, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'deviceready OK!'</span>);</span><br><span class="line">}, <span class="literal">false</span>);</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>结果输出</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">load OK!</span><br><span class="line">deviceready OK!</span><br></pre></td></tr></tbody></table></figure>
-
-<p>由此可知，执行顺序：<code>load</code> –&gt; <code>deviceready</code></p>
-<h1 id="6、自定义事件模拟Cordova-deviceready事件"><a href="#6、自定义事件模拟Cordova-deviceready事件" class="headerlink" title="6、自定义事件模拟Cordova deviceready事件"></a>6、自定义事件模拟<code>Cordova</code> <code>deviceready</code>事件</h1><ol>
-<li><p>自定义<code>deviceready</code>事件</p>
-</li>
-<li><p>根据上面测试执行顺序得出的结论，我在<code>load</code>事件里触发自定义事件</p>
-</li>
-<li><p>在开发环境下模拟一些用到的<code>JSBridge-API</code>，比如下面写到的 <code>JSAPI.showToast()</code> 方法</p>
-</li>
-</ol>
-<ul>
-<li>mockEvent.js<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (process.<span class="property">env</span>.<span class="property">NODE_ENV</span> === <span class="string">'development'</span>) {</span><br><span class="line">  <span class="comment">//  自定义事件</span></span><br><span class="line">  <span class="keyword">let</span> myEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'deviceready'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 模拟JSAPI事件</span></span><br><span class="line">  <span class="variable language_">window</span>[<span class="string">'JSAPI'</span>] = {</span><br><span class="line">    <span class="title function_">showToast</span>(<span class="params">type, desc</span>) {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(type, desc);</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 开发环境下，在 原生 load 方法之后 触发自定义事件</span></span><br><span class="line">  <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'load'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'load OK!'</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> {</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">dispatchEvent</span>(myEvent);</span><br><span class="line">    }, <span class="number">100</span>)</span><br><span class="line">  }, <span class="literal">false</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h1 id="7、封装deviceReady方法"><a href="#7、封装deviceReady方法" class="headerlink" title="7、封装deviceReady方法"></a>7、封装<code>deviceReady</code>方法</h1><p>实现在<code>Cordova</code>框架触发<code>deviceready</code>事件的时候感知到，以便于在<code>deviceReady</code>事件触发后执行<code>JS-API</code>。</p>
-<p><strong>可用于开发环境和非开发环境</strong></p>
-<h2 id="7-1、方式一"><a href="#7-1、方式一" class="headerlink" title="7.1、方式一"></a>7.1、方式一</h2><p>这里采用<strong>链式调用</strong>的方式，</p>
-<p>以下这种借助 <code>Promise</code> 的实现，在这种场景下其实是不合理的👀<br>只是形式上类似，其实并不是</p>
-<ol>
-<li>定义</li>
-</ol>
-<ul>
-<li>mixin.js</li>
-</ul>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">deviceReady</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">      <span class="title function_">resolve</span>(<span class="string">"ready go!"</span>);</span><br><span class="line">    }, <span class="literal">false</span>);</span><br><span class="line">  })</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>组件内使用<code>JS-API</code></li>
-</ol>
-<p>使用<code>JSAPI</code>可以如下这么写</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">deviceReady</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res); <span class="comment">// ready go!</span></span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">showToast</span>(<span class="number">0</span>, <span class="string">'提示'</span>)</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="variable language_">this</span>.<span class="title function_">deviceReady</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">getUserInfo</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">  }, <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">  });</span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="3">
-<li>开发环境执行效果如下</li>
-</ol>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeb0a16f2c2beb183900d.png"></p>
-<h2 id="7-2、方式二（推荐）"><a href="#7-2、方式二（推荐）" class="headerlink" title="7.2、方式二（推荐）"></a>7.2、方式二（推荐）</h2><p>改写成通用的事件监听函数，支持链式调用</p>
-<blockquote>
-<ul>
-<li><p>开发环境下，由<code>mockEvent.js</code>文件里的<code>dispatchEvent</code>触发自定义的<code>deviceready</code>事件；</p>
-</li>
-<li><p>小程序里运行，则由真实的<code>deviceready</code>事件触发</p>
-</li>
-</ul>
-</blockquote>
-<ol>
-<li>定义</li>
-</ol>
-<ul>
-<li>mixin.js</li>
-</ul>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">receiver</span>(<span class="params">type</span>) {</span><br><span class="line">  <span class="keyword">let</span> callbacks = {</span><br><span class="line">      <span class="attr">fns</span>: [],</span><br><span class="line">      <span class="attr">then</span>: <span class="keyword">function</span>(<span class="params">cb</span>){</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">fns</span>.<span class="title function_">push</span>(cb);</span><br><span class="line">          <span class="keyword">return</span> <span class="variable language_">this</span>;</span><br><span class="line">      }</span><br><span class="line">  };</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(type, <span class="keyword">function</span>(<span class="params">ev</span>) {</span><br><span class="line">    <span class="keyword">let</span> fns = callbacks.<span class="property">fns</span>.<span class="title function_">slice</span>();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>, l = fns.<span class="property">length</span>; i &lt; l; i++){</span><br><span class="line">        fns[i].<span class="title function_">call</span>(<span class="variable language_">this</span>, ev);</span><br><span class="line">    }</span><br><span class="line">  });</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> callbacks;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>使用</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">receiver</span>(<span class="string">'deviceready'</span>).<span class="title function_">then</span>(<span class="function">(<span class="params">ev</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(ev);</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">getUserInfo</span>(</span><br><span class="line">    <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">    },</span><br><span class="line">    <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">    }</span><br><span class="line">  )</span><br><span class="line">})</span><br><span class="line"><span class="variable language_">this</span>.<span class="title function_">receiver</span>(<span class="string">"click"</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"hi"</span>))</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">()=&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">22</span>));</span><br></pre></td></tr></tbody></table></figure>
-
-
-<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>当应用发布到<code>app</code>上，就是监听的真实的 <code>Cordova</code>框架的 <code>deviceready</code> 事件了，之后也就可以拿到真实的<code>JSAPI</code>了，以上只是为了在开发环境的时候模拟使用<code>JSAPI</code>。防止在开发环境下直接调用<code>JSAPI</code>飘红的情况，当然也是可以加<code>try catch</code>处理的，只不过个人感觉模拟事件使得代码看起来更加优雅别致一点，使用更加丝滑，酌情食用😁。</p>
-<p>软件架构非常有意思，感兴趣的可以交流探索，嘻嘻。</p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>Hybrid app</tag>
       </tags>
   </entry>
   <entry>
@@ -3282,6 +3419,28 @@
       </tags>
   </entry>
   <entry>
+    <title>低代码和数字化</title>
+    <url>/posts/4121106976.html</url>
+    <content><![CDATA[<html><head></head><body><p>读“<a href="https://mp.weixin.qq.com/s/rU0455dOafob-TPkVzaBsA">有头有脸的老板，都开始盯数字化了</a>”有感</p>
+<p>一个转身就是另一番景象。</p>
+<p>存量数据比重占大头了吗？怎么适应呢，钉钉开始收缩边界，余力转化效率。</p>
+<p>我的工作是前端开发，本能的从低代码在我所涉及的前端领域的应用上看待低代码的价值，甚至昨天还在自己的一篇文章中提了一句不看好低代码。现实情况是工作属性和接触面限制了我对低代码的猜想，当看到这篇文章时，忽然想起来前段业务同事在钉钉上使用低代码工具搭建了一个应用程序。低代码平台做出来开放之后，众多的玩家带着他们纷繁的需求往往能够挖掘出巨大的潜在价值。</p>
+<p>低代码和数字化结合才能创造更多的价值，前提是不能把低代码局限于公司内部，开放会注入更多的活力、生命力。低代码平台建设只是起步，要和PaaS关联起来，才可以发挥更大的作用</p>
+<p>生态的归生态，平台的归平台。</p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<center>欢迎微信扫码关注 "看见另一种可能"！</center>
+
+<img data-src="/images/base/loading03.svg" data-original="/images/contact/qrcode_wechat.jpg" alt="wechat：看见另一种可能"></body></html>]]></content>
+      <categories>
+        <category>数字化</category>
+      </categories>
+      <tags>
+        <tag>低代码</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>perttier+eslint+husky——代码规范以及commit扫描代码</title>
     <url>/posts/1784044162.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -3336,28 +3495,6 @@
       </categories>
       <tags>
         <tag>代码规范</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>低代码和数字化</title>
-    <url>/posts/4121106976.html</url>
-    <content><![CDATA[<html><head></head><body><p>读“<a href="https://mp.weixin.qq.com/s/rU0455dOafob-TPkVzaBsA">有头有脸的老板，都开始盯数字化了</a>”有感</p>
-<p>一个转身就是另一番景象。</p>
-<p>存量数据比重占大头了吗？怎么适应呢，钉钉开始收缩边界，余力转化效率。</p>
-<p>我的工作是前端开发，本能的从低代码在我所涉及的前端领域的应用上看待低代码的价值，甚至昨天还在自己的一篇文章中提了一句不看好低代码。现实情况是工作属性和接触面限制了我对低代码的猜想，当看到这篇文章时，忽然想起来前段业务同事在钉钉上使用低代码工具搭建了一个应用程序。低代码平台做出来开放之后，众多的玩家带着他们纷繁的需求往往能够挖掘出巨大的潜在价值。</p>
-<p>低代码和数字化结合才能创造更多的价值，前提是不能把低代码局限于公司内部，开放会注入更多的活力、生命力。低代码平台建设只是起步，要和PaaS关联起来，才可以发挥更大的作用</p>
-<p>生态的归生态，平台的归平台。</p>
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<center>欢迎微信扫码关注 "看见另一种可能"！</center>
-
-<img data-src="/images/base/loading03.svg" data-original="/images/contact/qrcode_wechat.jpg" alt="wechat：看见另一种可能"></body></html>]]></content>
-      <categories>
-        <category>数字化</category>
-      </categories>
-      <tags>
-        <tag>低代码</tag>
       </tags>
   </entry>
   <entry>
@@ -3716,54 +3853,6 @@
       </tags>
   </entry>
   <entry>
-    <title>博客评论插件Beaudar安装使用</title>
-    <url>/posts/34114278.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="Beaudar"><a href="#Beaudar" class="headerlink" title="Beaudar"></a>Beaudar</h2><p><code>Hexo</code>主题选用的<a href="https://xaoxuu.com/wiki/stellar/"><code>Stellar</code></a></p>
-<p>基于 GitHub issue 的轻量评论插件，Utterances 的中文版本，官网在<a href="https://beaudar.lipk.org/">这里</a></p>
-<h2 id="Beaudar-是如何工作的？"><a href="#Beaudar-是如何工作的？" class="headerlink" title="Beaudar 是如何工作的？"></a>Beaudar 是如何工作的？</h2><p>Beaudar 加载时，将使用 GitHub issue 搜索 API 根据 url，“路径名”或“标题”查找与页面相关的 issue。如果找不到与页面匹配的 issue，即没有评论，当有人首次发表评论时，Beaudar-bot 会自动创建一个 issue。</p>
-<h2 id="配置使用"><a href="#配置使用" class="headerlink" title="配置使用"></a>配置使用</h2><ol>
-<li>准备</li>
-</ol>
-<p>Beaudar 的配置方法很简单，创建一个仓库<a href="https://github.com/all-smile/blog-comments"><code>blog-comments</code></a>，在仓库中创建一个域名白名单文件<code>beaudar.json</code>，然后在<a href="https://github.com/apps/beaudar">此处</a>授权安装即可。</p>
-<p><code>beaudar.json</code>文件</p>
-<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li><code>Hexo</code>配置</li>
-</ol>
-<p>在主题配置文件里<code>_config_[theme].yml</code>里面增加如下配置</p>
-<figure class="highlight yml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 评论 [beaudar](https://beaudar.lipk.org/) 插件</span></span><br><span class="line"><span class="attr">comments:</span></span><br><span class="line">  <span class="attr">service:</span> <span class="string">beaudar</span></span><br><span class="line">  <span class="attr">beaudar:</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">all-smile/blog-comments</span> <span class="comment"># 指向你自己的repo</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p>使用<code>GitHub</code>登录后评论</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b40c16f2c2beb16136d9.jpg"></p>
-<h2 id="问题处理"><a href="#问题处理" class="headerlink" title="问题处理"></a>问题处理</h2><ol>
-<li><code>blog-comments</code> 仓库默认分支为<code>main</code></li>
-</ol>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b22716f2c2beb15ee173.jpg"></p>
-<p><strong>解决：</strong></p>
-<p>进入<code>blog-comments</code> 仓库，在 settings -&gt; branches 里面，修改 <code>Default branch</code> 为 <code>main</code></p>
-<ol start="2">
-<li><code>Hexo</code> 本地服务测试<code>Beaudar</code>，添加白名单配置</li>
-</ol>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b2a816f2c2beb15f64b2.jpg"></p>
-<p><strong>解决：</strong></p>
-<p>修改<code>beaudar.json</code>文件</p>
-<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>博客园美化</title>
     <url>/posts/2159164587.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -3825,6 +3914,54 @@
       </categories>
       <tags>
         <tag>前端</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客评论插件Beaudar安装使用</title>
+    <url>/posts/34114278.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="Beaudar"><a href="#Beaudar" class="headerlink" title="Beaudar"></a>Beaudar</h2><p><code>Hexo</code>主题选用的<a href="https://xaoxuu.com/wiki/stellar/"><code>Stellar</code></a></p>
+<p>基于 GitHub issue 的轻量评论插件，Utterances 的中文版本，官网在<a href="https://beaudar.lipk.org/">这里</a></p>
+<h2 id="Beaudar-是如何工作的？"><a href="#Beaudar-是如何工作的？" class="headerlink" title="Beaudar 是如何工作的？"></a>Beaudar 是如何工作的？</h2><p>Beaudar 加载时，将使用 GitHub issue 搜索 API 根据 url，“路径名”或“标题”查找与页面相关的 issue。如果找不到与页面匹配的 issue，即没有评论，当有人首次发表评论时，Beaudar-bot 会自动创建一个 issue。</p>
+<h2 id="配置使用"><a href="#配置使用" class="headerlink" title="配置使用"></a>配置使用</h2><ol>
+<li>准备</li>
+</ol>
+<p>Beaudar 的配置方法很简单，创建一个仓库<a href="https://github.com/all-smile/blog-comments"><code>blog-comments</code></a>，在仓库中创建一个域名白名单文件<code>beaudar.json</code>，然后在<a href="https://github.com/apps/beaudar">此处</a>授权安装即可。</p>
+<p><code>beaudar.json</code>文件</p>
+<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li><code>Hexo</code>配置</li>
+</ol>
+<p>在主题配置文件里<code>_config_[theme].yml</code>里面增加如下配置</p>
+<figure class="highlight yml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 评论 [beaudar](https://beaudar.lipk.org/) 插件</span></span><br><span class="line"><span class="attr">comments:</span></span><br><span class="line">  <span class="attr">service:</span> <span class="string">beaudar</span></span><br><span class="line">  <span class="attr">beaudar:</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">all-smile/blog-comments</span> <span class="comment"># 指向你自己的repo</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p>使用<code>GitHub</code>登录后评论</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b40c16f2c2beb16136d9.jpg"></p>
+<h2 id="问题处理"><a href="#问题处理" class="headerlink" title="问题处理"></a>问题处理</h2><ol>
+<li><code>blog-comments</code> 仓库默认分支为<code>main</code></li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b22716f2c2beb15ee173.jpg"></p>
+<p><strong>解决：</strong></p>
+<p>进入<code>blog-comments</code> 仓库，在 settings -&gt; branches 里面，修改 <code>Default branch</code> 为 <code>main</code></p>
+<ol start="2">
+<li><code>Hexo</code> 本地服务测试<code>Beaudar</code>，添加白名单配置</li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b2a816f2c2beb15f64b2.jpg"></p>
+<p><strong>解决：</strong></p>
+<p>修改<code>beaudar.json</code>文件</p>
+<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -4586,6 +4723,113 @@
       </tags>
   </entry>
   <entry>
+    <title>认识HTTP缓存</title>
+    <url>/posts/2358217424.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>通常针对静态资源。内存缓存/磁盘缓存</p>
+</blockquote>
+<h2 id="1、原理："><a href="#1、原理：" class="headerlink" title="1、原理："></a>1、原理：</h2><p>在首次请求后，保存一份请求资源的响应副本，当用户再次发起相同请求后，如果判断缓存命中，则拦截请求，将之前存储的相应副本返回给用户，从而避免重新向服务器发起资源请求。</p>
+<h2 id="2、缓存的技术种类："><a href="#2、缓存的技术种类：" class="headerlink" title="2、缓存的技术种类："></a>2、缓存的技术种类：</h2><p>代理缓存，浏览器缓存，网关缓存，负载均衡器，内容分发网络</p>
+<p>它们大致可以分为两类： 共享缓存，私有缓存</p>
+<ul>
+<li><p><em>共享缓存</em>：缓存的内容可以被多个用户使用。如公司内部架设的内部Web代理</p>
+</li>
+<li><p><em>私有缓存</em>：只能单独被用户使用的缓存。如浏览器缓存</p>
+</li>
+</ul>
+<h2 id="3、禁止缓存"><a href="#3、禁止缓存" class="headerlink" title="3、禁止缓存"></a>3、禁止缓存</h2><p>发送如下响应头可以关闭缓存。此外，可以参考<code>Expires</code>和<code>Pragma</code>消息头。</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title class_">Cache</span>-<span class="title class_">Control</span>: no-store</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="4、http缓存可分为强制缓存和协商缓存"><a href="#4、http缓存可分为强制缓存和协商缓存" class="headerlink" title="4、http缓存可分为强制缓存和协商缓存"></a>4、http缓存可分为强制缓存和协商缓存</h2><ul>
+<li><p>强制缓存不用判断缓存是否过期，可以直接使用。</p>
+</li>
+<li><p>协商缓存每次都要询问一下服务器，看一下内容有没有更新，如果没有更新就使用缓存中的资源，如果更新了就继续请求</p>
+</li>
+</ul>
+<p>响应头设置：</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8eccface9efa421b8430e62444edf4b7~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h3 id="4-1、cache-control（http1-1）"><a href="#4-1、cache-control（http1-1）" class="headerlink" title="4.1、cache-control（http1.1）"></a>4.1、cache-control（http1.1）</h3><p><code>cache-control</code>属性值：</p>
+<ul>
+<li><p>no-cache  强制进行协商缓存</p>
+</li>
+<li><p>no-store 不缓存</p>
+</li>
+<li><p>max-age   表示缓存的过期时长</p>
+<figure class="highlight awk"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">'cache-control'</span>: <span class="string">'max-age=5'</span> <span class="regexp">//</span> 滑动时间，单位是秒</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>private, public： 用以明确响应资源是否可以被代理服务器缓存。</p>
+</li>
+<li><p>private  只能被浏览器缓存</p>
+</li>
+<li><p>public  响应资源既可以被浏览器私有缓存，又可以被代理服务器公共缓存</p>
+</li>
+</ul>
+<figure class="highlight lasso"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">cache</span><span class="params">-control</span>: <span class="keyword">public</span>, <span class="keyword">max</span><span class="params">-age</span>=<span class="number">10</span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4e506a323ebc49449aa316ff302b2116~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ab505a1c9bde44c2a1d3d9ae05bc2266~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/483abb75d50347a081dd4cb7562d6817~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<figure class="highlight yaml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">last-modified:</span> <span class="string">''</span></span><br><span class="line"><span class="attr">if-modified-since:</span></span><br><span class="line"><span class="attr">cache-control:</span> <span class="literal">no</span><span class="string">-cache</span></span><br></pre></td></tr></tbody></table></figure>
+<p><strong>原理</strong>:是根据资源最后的<em>修改时间</em>来判断是否需要读取缓存</p>
+<blockquote>
+<p>根据时间判断有局限性，比方说只改变文件命名，也会引起资源修改时间发生变化，但是对资源本身并没有改动</p>
+</blockquote>
+<h3 id="4-2、✨补充的方案是ETag（根据文件资源生成指纹）"><a href="#4-2、✨补充的方案是ETag（根据文件资源生成指纹）" class="headerlink" title="4.2、✨补充的方案是ETag（根据文件资源生成指纹）"></a>4.2、✨补充的方案是<strong>ETag</strong>（根据文件资源生成指纹）</h3><ul>
+<li><p>安装</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm i etag</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>使用</p>
+</li>
+</ul>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> etag = <span class="built_in">require</span>(<span class="string">'etag'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> data = fs.<span class="title function_">readFilSeync</span>(<span class="string">'./img/04.jpg'</span>)</span><br><span class="line"><span class="keyword">const</span> etagContent = <span class="title function_">etag</span>(data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ifNoneMatch = req.<span class="property">headers</span>[<span class="string">'if-none-match'</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (ifNoneMatch === etagContent) {</span><br><span class="line">  res.<span class="property">statusCode</span> = <span class="number">304</span></span><br><span class="line">  res.<span class="title function_">end</span>()</span><br><span class="line">  <span class="keyword">return</span> <span class="comment">// 直接返回，不操作服务器资源，减少带宽</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">res.<span class="title function_">setHeader</span>(<span class="string">'etag'</span>, etagContent)</span><br><span class="line">res.<span class="title function_">setHeader</span>(<span class="string">'Cache-Control'</span>,<span class="string">'no-cache'</span>)</span><br><span class="line">res.<span class="title function_">end</span>(data)</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><p>If-None-Match</p>
+</li>
+<li><p><strong>强验证Etag</strong>，资源细微的改动都会引起指纹的变化</p>
+</li>
+<li><p><strong>弱验证ETag</strong>， 相对灵活的过滤资源的某些变化</p>
+</li>
+</ul>
+<h2 id="5、强缓存"><a href="#5、强缓存" class="headerlink" title="5、强缓存"></a>5、强缓存</h2><h3 id="介绍："><a href="#介绍：" class="headerlink" title="介绍："></a>介绍：</h3><p>不会向服务器发送请求，直接从缓存中读取资源，在chrome控制台的Network选项中可以看到该请求返回200的状态码，并且Size显示<code>from disk cache</code>或<code>from memory cache</code>。</p>
+<h3 id="设置："><a href="#设置：" class="headerlink" title="设置："></a>设置：</h3><p>强缓存可以通过设置两种 <code>HTTP Header</code> 实现，分别是：<code>Expires</code> 和 <code>Cache-Control</code>。</p>
+<blockquote>
+<p>Expires 是http1.0的产物，Cache-Control是http1.1的产物，两者同时存在的话，Cache-Control优先级高于Expires；</p>
+</blockquote>
+<h2 id="6、协商缓存"><a href="#6、协商缓存" class="headerlink" title="6、协商缓存"></a>6、协商缓存</h2><h3 id="介绍：-1"><a href="#介绍：-1" class="headerlink" title="介绍："></a>介绍：</h3><p>协商缓存就是强制缓存失效后，浏览器<em>携带缓存标识</em>向服务器发起请求，由服务器根据缓存标识决定是否使用缓存的过程，主要有以下两种情况：</p>
+<ul>
+<li><p>协商缓存生效，返回<code>304</code>和<code>Not Modified</code></p>
+</li>
+<li><p>协商缓存失效，返回<code>200</code>和<code>请求结果</code></p>
+</li>
+</ul>
+<h3 id="设置：-1"><a href="#设置：-1" class="headerlink" title="设置："></a>设置：</h3><p>协商缓存可以通过设置两种 HTTP Header 实现, 分别是：<code>Last-Modified</code> 和 <code>ETag</code> 。</p>
+<h2 id="7、缓存机制🎉"><a href="#7、缓存机制🎉" class="headerlink" title="7、缓存机制🎉"></a>7、缓存机制🎉</h2><ol>
+<li><p>强制缓存优先于协商缓存进行，若强制缓存(Expires和Cache-Control)生效则直接使用缓存，若不生效则进行协商缓存(<code>Last-Modified / If-Modified-Since和Etag / If-None-Match</code>)</p>
+</li>
+<li><p>协商缓存由服务器决定是否使用缓存，若协商缓存失效，那么代表该请求的缓存失效，返回200，重新返回资源和缓存标识，再存入浏览器缓存中；生效则返回304，继续使用缓存。</p>
+</li>
+</ol>
+<h2 id="8、缓存策略树🎉"><a href="#8、缓存策略树🎉" class="headerlink" title="8、缓存策略树🎉"></a>8、缓存策略树🎉</h2><p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4b20c21694e940d5acf2b343148bfbbf~tplv-k3u1fbpfcp-zoom-1.image" alt="缓存策略树，很早很早之前画的🤣，现在看看也是醉了😂"></p>
+<p align="center">缓存策略树，很早很早之前画的🤣，现在看看也是醉了😂</p>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cc8e06075df24102b9989fc1ff0eb797~tplv-k3u1fbpfcp-zoom-1.image" alt="该图来源网络，侵删"></p>
+<p align="center">该图来源网络，侵删</p>
+
+<p>更多看<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Caching">这里</a></p>
+<hr>
+<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>HTTP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>认识Chrome扩展插件</title>
     <url>/posts/9575625.html</url>
     <content><![CDATA[<html><head></head><body><hr>
@@ -4731,110 +4975,74 @@
       </tags>
   </entry>
   <entry>
-    <title>认识HTTP缓存</title>
-    <url>/posts/2358217424.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>通常针对静态资源。内存缓存/磁盘缓存</p>
-</blockquote>
-<h2 id="1、原理："><a href="#1、原理：" class="headerlink" title="1、原理："></a>1、原理：</h2><p>在首次请求后，保存一份请求资源的响应副本，当用户再次发起相同请求后，如果判断缓存命中，则拦截请求，将之前存储的相应副本返回给用户，从而避免重新向服务器发起资源请求。</p>
-<h2 id="2、缓存的技术种类："><a href="#2、缓存的技术种类：" class="headerlink" title="2、缓存的技术种类："></a>2、缓存的技术种类：</h2><p>代理缓存，浏览器缓存，网关缓存，负载均衡器，内容分发网络</p>
-<p>它们大致可以分为两类： 共享缓存，私有缓存</p>
-<ul>
-<li><p><em>共享缓存</em>：缓存的内容可以被多个用户使用。如公司内部架设的内部Web代理</p>
-</li>
-<li><p><em>私有缓存</em>：只能单独被用户使用的缓存。如浏览器缓存</p>
-</li>
-</ul>
-<h2 id="3、禁止缓存"><a href="#3、禁止缓存" class="headerlink" title="3、禁止缓存"></a>3、禁止缓存</h2><p>发送如下响应头可以关闭缓存。此外，可以参考<code>Expires</code>和<code>Pragma</code>消息头。</p>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title class_">Cache</span>-<span class="title class_">Control</span>: no-store</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="4、http缓存可分为强制缓存和协商缓存"><a href="#4、http缓存可分为强制缓存和协商缓存" class="headerlink" title="4、http缓存可分为强制缓存和协商缓存"></a>4、http缓存可分为强制缓存和协商缓存</h2><ul>
-<li><p>强制缓存不用判断缓存是否过期，可以直接使用。</p>
-</li>
-<li><p>协商缓存每次都要询问一下服务器，看一下内容有没有更新，如果没有更新就使用缓存中的资源，如果更新了就继续请求</p>
-</li>
-</ul>
-<p>响应头设置：</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8eccface9efa421b8430e62444edf4b7~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<h3 id="4-1、cache-control（http1-1）"><a href="#4-1、cache-control（http1-1）" class="headerlink" title="4.1、cache-control（http1.1）"></a>4.1、cache-control（http1.1）</h3><p><code>cache-control</code>属性值：</p>
-<ul>
-<li><p>no-cache  强制进行协商缓存</p>
-</li>
-<li><p>no-store 不缓存</p>
-</li>
-<li><p>max-age   表示缓存的过期时长</p>
-<figure class="highlight awk"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">'cache-control'</span>: <span class="string">'max-age=5'</span> <span class="regexp">//</span> 滑动时间，单位是秒</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>private, public： 用以明确响应资源是否可以被代理服务器缓存。</p>
-</li>
-<li><p>private  只能被浏览器缓存</p>
-</li>
-<li><p>public  响应资源既可以被浏览器私有缓存，又可以被代理服务器公共缓存</p>
-</li>
-</ul>
-<figure class="highlight lasso"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">cache</span><span class="params">-control</span>: <span class="keyword">public</span>, <span class="keyword">max</span><span class="params">-age</span>=<span class="number">10</span>;</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4e506a323ebc49449aa316ff302b2116~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ab505a1c9bde44c2a1d3d9ae05bc2266~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/483abb75d50347a081dd4cb7562d6817~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<figure class="highlight yaml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">last-modified:</span> <span class="string">''</span></span><br><span class="line"><span class="attr">if-modified-since:</span></span><br><span class="line"><span class="attr">cache-control:</span> <span class="literal">no</span><span class="string">-cache</span></span><br></pre></td></tr></tbody></table></figure>
-<p><strong>原理</strong>:是根据资源最后的<em>修改时间</em>来判断是否需要读取缓存</p>
+    <title>记一个 &#39;奇葩&#39; 需求的实现</title>
+    <url>/posts/2156089668.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们这边没有专门的产品经理，<code>UI</code>对产品的设计基本具有决定权，说实话，是有那么一点可怖的（前后改了很多次，差一点就改回原版了，我自己都觉得不好意思了🤣）。个人感觉我们<code>UI</code>还是体验的少，缺乏对产品以及用户行为的认识。设计出来的东西看似很华丽，其实缺失很多场景下的分析，不切合实际，大多数人说的“用户体验”或许只是主观的、想当然的（我也一样😮）。</p>
+<p>自从接触互联网开始我就在有意的学习怎么做产品，期间还考虑过转产品，永远不要拿业余的跟专业的比，没什么可比性，不成熟。继续保持思考、学习。</p>
 <blockquote>
-<p>根据时间判断有局限性，比方说只改变文件命名，也会引起资源修改时间发生变化，但是对资源本身并没有改动</p>
+<p>所用技术：<code>vue</code>、<code>vue-router</code>、<code>element-ui</code></p>
 </blockquote>
-<h3 id="4-2、✨补充的方案是ETag（根据文件资源生成指纹）"><a href="#4-2、✨补充的方案是ETag（根据文件资源生成指纹）" class="headerlink" title="4.2、✨补充的方案是ETag（根据文件资源生成指纹）"></a>4.2、✨补充的方案是<strong>ETag</strong>（根据文件资源生成指纹）</h3><ul>
-<li><p>安装</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm i etag</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>使用</p>
-</li>
-</ul>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> etag = <span class="built_in">require</span>(<span class="string">'etag'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> data = fs.<span class="title function_">readFilSeync</span>(<span class="string">'./img/04.jpg'</span>)</span><br><span class="line"><span class="keyword">const</span> etagContent = <span class="title function_">etag</span>(data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ifNoneMatch = req.<span class="property">headers</span>[<span class="string">'if-none-match'</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (ifNoneMatch === etagContent) {</span><br><span class="line">  res.<span class="property">statusCode</span> = <span class="number">304</span></span><br><span class="line">  res.<span class="title function_">end</span>()</span><br><span class="line">  <span class="keyword">return</span> <span class="comment">// 直接返回，不操作服务器资源，减少带宽</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">res.<span class="title function_">setHeader</span>(<span class="string">'etag'</span>, etagContent)</span><br><span class="line">res.<span class="title function_">setHeader</span>(<span class="string">'Cache-Control'</span>,<span class="string">'no-cache'</span>)</span><br><span class="line">res.<span class="title function_">end</span>(data)</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li><p>If-None-Match</p>
-</li>
-<li><p><strong>强验证Etag</strong>，资源细微的改动都会引起指纹的变化</p>
-</li>
-<li><p><strong>弱验证ETag</strong>， 相对灵活的过滤资源的某些变化</p>
-</li>
-</ul>
-<h2 id="5、强缓存"><a href="#5、强缓存" class="headerlink" title="5、强缓存"></a>5、强缓存</h2><h3 id="介绍："><a href="#介绍：" class="headerlink" title="介绍："></a>介绍：</h3><p>不会向服务器发送请求，直接从缓存中读取资源，在chrome控制台的Network选项中可以看到该请求返回200的状态码，并且Size显示<code>from disk cache</code>或<code>from memory cache</code>。</p>
-<h3 id="设置："><a href="#设置：" class="headerlink" title="设置："></a>设置：</h3><p>强缓存可以通过设置两种 <code>HTTP Header</code> 实现，分别是：<code>Expires</code> 和 <code>Cache-Control</code>。</p>
-<blockquote>
-<p>Expires 是http1.0的产物，Cache-Control是http1.1的产物，两者同时存在的话，Cache-Control优先级高于Expires；</p>
+<h2 id="需求："><a href="#需求：" class="headerlink" title="需求："></a>需求：</h2><blockquote>
+<p>导航菜单（<code>el-menu</code>组件）竖向展示的</p>
 </blockquote>
-<h2 id="6、协商缓存"><a href="#6、协商缓存" class="headerlink" title="6、协商缓存"></a>6、协商缓存</h2><h3 id="介绍：-1"><a href="#介绍：-1" class="headerlink" title="介绍："></a>介绍：</h3><p>协商缓存就是强制缓存失效后，浏览器<em>携带缓存标识</em>向服务器发起请求，由服务器根据缓存标识决定是否使用缓存的过程，主要有以下两种情况：</p>
-<ul>
-<li><p>协商缓存生效，返回<code>304</code>和<code>Not Modified</code></p>
+<ol>
+<li><p>鼠标移入一级菜单展示下面的子菜单，移出则收起来（手风琴模式，正常状态下只保持一个菜单处于展开状态，手动鼠标悬浮展开的不算）</p>
 </li>
-<li><p>协商缓存失效，返回<code>200</code>和<code>请求结果</code></p>
-</li>
-</ul>
-<h3 id="设置：-1"><a href="#设置：-1" class="headerlink" title="设置："></a>设置：</h3><p>协商缓存可以通过设置两种 HTTP Header 实现, 分别是：<code>Last-Modified</code> 和 <code>ETag</code> 。</p>
-<h2 id="7、缓存机制🎉"><a href="#7、缓存机制🎉" class="headerlink" title="7、缓存机制🎉"></a>7、缓存机制🎉</h2><ol>
-<li><p>强制缓存优先于协商缓存进行，若强制缓存(Expires和Cache-Control)生效则直接使用缓存，若不生效则进行协商缓存(<code>Last-Modified / If-Modified-Since和Etag / If-None-Match</code>)</p>
-</li>
-<li><p>协商缓存由服务器决定是否使用缓存，若协商缓存失效，那么代表该请求的缓存失效，返回200，重新返回资源和缓存标识，再存入浏览器缓存中；生效则返回304，继续使用缓存。</p>
+<li><p>选中某个子菜单时高亮对应的一级菜单，并且当鼠标移出高亮的这个菜单模块时不折叠，但是可以点击一级菜单进行折叠（注意：跟第一条有区别）</p>
 </li>
 </ol>
-<h2 id="8、缓存策略树🎉"><a href="#8、缓存策略树🎉" class="headerlink" title="8、缓存策略树🎉"></a>8、缓存策略树🎉</h2><p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4b20c21694e940d5acf2b343148bfbbf~tplv-k3u1fbpfcp-zoom-1.image" alt="缓存策略树，很早很早之前画的🤣，现在看看也是醉了😂"></p>
-<p align="center">缓存策略树，很早很早之前画的🤣，现在看看也是醉了😂</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
+<li><p><code>element-ui</code>的导航组件子菜单打开的触发方式可以通过 <code>menu-trigger</code> 参数控制，但是，只在菜单是水平展示（<code>horizontal</code>）的情况下生效。嘶~！我不禁暗想：垂直模式滑动展开真的会有系统这么做吗？（只能自己修改了）</p>
+</li>
+<li><p><code>unique-opened</code> 参数可以控制是否只保持一个子菜单展开，但是在没有子菜单的情况下失效（需要手动修改）</p>
+</li>
+</ol>
+<h2 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h2><p>导航菜单使用递归<code>el-submenu</code>组件实现</p>
+<ol>
+<li>鼠标滑动展开关闭需求：</li>
+</ol>
+<ul>
+<li><code>el-submenu</code> 组件编写鼠标移入移出事件（<code>mouseenter</code>、<code>mouseleave</code>），拿到<code>indexPath</code>，调用<code>open</code>和<code>close</code>方法打开或者折叠菜单（注意：没有子菜单的一级菜单鼠标移入移出不做处理）</li>
+</ul>
+<ol start="2">
+<li>只保持一个菜单出于展开状态</li>
+</ol>
+<ul>
+<li>先配置 <code>unique-opened</code> 参数为 <code>false</code> ，以保证 <code>openedMenus</code> 只有一个（ <code>openedMenus</code> 是<code>el-menu</code>内部维护的属性, 可以自行打印看一下）</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ebfb16f2c2beb1163942.jpg"></p>
+<blockquote>
+<p>一开始我想在子菜单展开折叠的回调事件（<code>open</code>、<code>close</code>）里写逻辑判断，但是不知道什么原因回调事件不触发（注意：<code>open方法</code>和<code>open事件</code>不一样，组件三大要素：<strong>属性、事件、方法</strong>），所以我就考虑在<code>select</code>回调事件里写逻辑了</p>
+</blockquote>
+<ul>
+<li>在菜单激活的<code>select</code>回调事件中，让上一个打开的菜单调用<code>close</code>方法关闭。（这里需要记录上次打开菜单的<code>index</code>，这里我使用<code>sessionStorage</code>记录）</li>
+</ul>
+<h2 id="代码展示"><a href="#代码展示" class="headerlink" title="代码展示"></a>代码展示</h2><p>只展示代码片段，仅供参考</p>
+<p><code>sessionStorage</code>使用自己封装的，之前文章有写过，感兴趣的可以看一下</p>
+<ul>
+<li><code>el-submenu</code> 组件</li>
+</ul>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">menuEnter</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// isNest 是否还有子菜单 true:没有子菜单 false:有子菜单</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; <span class="variable language_">this</span>.<span class="property">item</span>.<span class="property">alwaysShow</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleOpen'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="title function_">menuLeave</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 存在子菜单，并且不是打开状态的菜单，鼠标离开的时候需要合起来</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; !<span class="variable language_">this</span>.<span class="property">curMenuIsOpened</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleClose'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cc8e06075df24102b9989fc1ff0eb797~tplv-k3u1fbpfcp-zoom-1.image" alt="该图来源网络，侵删"></p>
-<p align="center">该图来源网络，侵删</p>
+<ul>
+<li><code>el-menu</code> 组件</li>
+</ul>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 登录系统的时候，记录展开的菜单信息，</span></span><br><span class="line"><span class="comment">// 在 mounted 里面获取 openedMenus ，并记录信息</span></span><br><span class="line"><span class="title function_">mounted</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 获取当前展开的菜单 - array</span></span><br><span class="line">  <span class="comment">// 手风琴模式，只有一个展开菜单</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// openedMenus 是内部属性</span></span><br><span class="line">  <span class="keyword">const</span> {openedMenus = []} = <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (openedMenus &amp;&amp; openedMenus.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">    <span class="comment">// 获取展开菜单的 index</span></span><br><span class="line">    <span class="keyword">const</span> index = openedMenus[<span class="number">0</span>];</span><br><span class="line">    sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, index)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="attr">methods</span>: {</span><br><span class="line">  <span class="title function_">handleOpen</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 open 方法, 打开close,</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">open</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handleClose</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 close 方法, 关闭close</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handlerSelect</span>(<span class="params">index, indexPath</span>) {</span><br><span class="line">    <span class="comment">// 1. 获取上次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">const</span> _preActiveMenu = sessionStorage.<span class="title function_">get</span>(<span class="string">'preActiveMenu'</span>) || <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">if</span> (_preActiveMenu) {</span><br><span class="line">      <span class="comment">// 如果存在，则关闭该菜单，再打开新的</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(_preActiveMenu);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 记录这次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">if</span> (indexPath.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">      sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, indexPath[<span class="number">0</span>])</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
-<p>更多看<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Caching">这里</a></p>
+<h2 id="最终效果展示"><a href="#最终效果展示" class="headerlink" title="最终效果展示"></a>最终效果展示</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ec1816f2c2beb1164933.jpg"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>用了<code>UI</code>框架之后就不可避免的会跟产品设计风格向左，这就需要在框架基础之上进行修改。框架也是一个个组件组成的，抓住组件设计的三要素：属性、事件、方法，了解框架组件的工作原理，就可以轻松的进行修改啦🎉🎉</p>
 <hr>
-<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
 </body></html>]]></content>
       <categories>
         <category>前端</category>
       </categories>
       <tags>
-        <tag>HTTP</tag>
+        <tag>vue</tag>
+        <tag>element-ui</tag>
       </tags>
   </entry>
   <entry>
@@ -4907,77 +5115,6 @@
       </categories>
       <tags>
         <tag>设计模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>记一个 &#39;奇葩&#39; 需求的实现</title>
-    <url>/posts/2156089668.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们这边没有专门的产品经理，<code>UI</code>对产品的设计基本具有决定权，说实话，是有那么一点可怖的（前后改了很多次，差一点就改回原版了，我自己都觉得不好意思了🤣）。个人感觉我们<code>UI</code>还是体验的少，缺乏对产品以及用户行为的认识。设计出来的东西看似很华丽，其实缺失很多场景下的分析，不切合实际，大多数人说的“用户体验”或许只是主观的、想当然的（我也一样😮）。</p>
-<p>自从接触互联网开始我就在有意的学习怎么做产品，期间还考虑过转产品，永远不要拿业余的跟专业的比，没什么可比性，不成熟。继续保持思考、学习。</p>
-<blockquote>
-<p>所用技术：<code>vue</code>、<code>vue-router</code>、<code>element-ui</code></p>
-</blockquote>
-<h2 id="需求："><a href="#需求：" class="headerlink" title="需求："></a>需求：</h2><blockquote>
-<p>导航菜单（<code>el-menu</code>组件）竖向展示的</p>
-</blockquote>
-<ol>
-<li><p>鼠标移入一级菜单展示下面的子菜单，移出则收起来（手风琴模式，正常状态下只保持一个菜单处于展开状态，手动鼠标悬浮展开的不算）</p>
-</li>
-<li><p>选中某个子菜单时高亮对应的一级菜单，并且当鼠标移出高亮的这个菜单模块时不折叠，但是可以点击一级菜单进行折叠（注意：跟第一条有区别）</p>
-</li>
-</ol>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
-<li><p><code>element-ui</code>的导航组件子菜单打开的触发方式可以通过 <code>menu-trigger</code> 参数控制，但是，只在菜单是水平展示（<code>horizontal</code>）的情况下生效。嘶~！我不禁暗想：垂直模式滑动展开真的会有系统这么做吗？（只能自己修改了）</p>
-</li>
-<li><p><code>unique-opened</code> 参数可以控制是否只保持一个子菜单展开，但是在没有子菜单的情况下失效（需要手动修改）</p>
-</li>
-</ol>
-<h2 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h2><p>导航菜单使用递归<code>el-submenu</code>组件实现</p>
-<ol>
-<li>鼠标滑动展开关闭需求：</li>
-</ol>
-<ul>
-<li><code>el-submenu</code> 组件编写鼠标移入移出事件（<code>mouseenter</code>、<code>mouseleave</code>），拿到<code>indexPath</code>，调用<code>open</code>和<code>close</code>方法打开或者折叠菜单（注意：没有子菜单的一级菜单鼠标移入移出不做处理）</li>
-</ul>
-<ol start="2">
-<li>只保持一个菜单出于展开状态</li>
-</ol>
-<ul>
-<li>先配置 <code>unique-opened</code> 参数为 <code>false</code> ，以保证 <code>openedMenus</code> 只有一个（ <code>openedMenus</code> 是<code>el-menu</code>内部维护的属性, 可以自行打印看一下）</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ebfb16f2c2beb1163942.jpg"></p>
-<blockquote>
-<p>一开始我想在子菜单展开折叠的回调事件（<code>open</code>、<code>close</code>）里写逻辑判断，但是不知道什么原因回调事件不触发（注意：<code>open方法</code>和<code>open事件</code>不一样，组件三大要素：<strong>属性、事件、方法</strong>），所以我就考虑在<code>select</code>回调事件里写逻辑了</p>
-</blockquote>
-<ul>
-<li>在菜单激活的<code>select</code>回调事件中，让上一个打开的菜单调用<code>close</code>方法关闭。（这里需要记录上次打开菜单的<code>index</code>，这里我使用<code>sessionStorage</code>记录）</li>
-</ul>
-<h2 id="代码展示"><a href="#代码展示" class="headerlink" title="代码展示"></a>代码展示</h2><p>只展示代码片段，仅供参考</p>
-<p><code>sessionStorage</code>使用自己封装的，之前文章有写过，感兴趣的可以看一下</p>
-<ul>
-<li><code>el-submenu</code> 组件</li>
-</ul>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">menuEnter</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// isNest 是否还有子菜单 true:没有子菜单 false:有子菜单</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; <span class="variable language_">this</span>.<span class="property">item</span>.<span class="property">alwaysShow</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleOpen'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="title function_">menuLeave</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 存在子菜单，并且不是打开状态的菜单，鼠标离开的时候需要合起来</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; !<span class="variable language_">this</span>.<span class="property">curMenuIsOpened</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleClose'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li><code>el-menu</code> 组件</li>
-</ul>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 登录系统的时候，记录展开的菜单信息，</span></span><br><span class="line"><span class="comment">// 在 mounted 里面获取 openedMenus ，并记录信息</span></span><br><span class="line"><span class="title function_">mounted</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 获取当前展开的菜单 - array</span></span><br><span class="line">  <span class="comment">// 手风琴模式，只有一个展开菜单</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// openedMenus 是内部属性</span></span><br><span class="line">  <span class="keyword">const</span> {openedMenus = []} = <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (openedMenus &amp;&amp; openedMenus.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">    <span class="comment">// 获取展开菜单的 index</span></span><br><span class="line">    <span class="keyword">const</span> index = openedMenus[<span class="number">0</span>];</span><br><span class="line">    sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, index)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="attr">methods</span>: {</span><br><span class="line">  <span class="title function_">handleOpen</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 open 方法, 打开close,</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">open</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handleClose</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 close 方法, 关闭close</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handlerSelect</span>(<span class="params">index, indexPath</span>) {</span><br><span class="line">    <span class="comment">// 1. 获取上次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">const</span> _preActiveMenu = sessionStorage.<span class="title function_">get</span>(<span class="string">'preActiveMenu'</span>) || <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">if</span> (_preActiveMenu) {</span><br><span class="line">      <span class="comment">// 如果存在，则关闭该菜单，再打开新的</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(_preActiveMenu);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 记录这次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">if</span> (indexPath.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">      sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, indexPath[<span class="number">0</span>])</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="最终效果展示"><a href="#最终效果展示" class="headerlink" title="最终效果展示"></a>最终效果展示</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ec1816f2c2beb1164933.jpg"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>用了<code>UI</code>框架之后就不可避免的会跟产品设计风格向左，这就需要在框架基础之上进行修改。框架也是一个个组件组成的，抓住组件设计的三要素：属性、事件、方法，了解框架组件的工作原理，就可以轻松的进行修改啦🎉🎉</p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>vue</tag>
-        <tag>element-ui</tag>
       </tags>
   </entry>
   <entry>
