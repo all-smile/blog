@@ -2,8 +2,10 @@
 title: 浏览器内核和JS引擎
 date: 2022-11-10 12:53:01
 tags:
-categories:
-description:
+  - 浏览器
+  - V8
+categories: 前端
+description: 页面是怎么被浏览器渲染展现出来的，JavaScript又是怎么被执行的？
 ---
 ## 浏览器内核
 浏览器内核是什么东西。英文叫做：Rendering Engine，常见的叫法如：排版引擎、解释引擎、渲染引擎，现在流行称为浏览器内核
