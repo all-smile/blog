@@ -755,61 +755,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker | 制作tomcat镜像并部署项目</title>
-    <url>/posts/2106196415.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
-</blockquote>
-<p>本文讲解如何制作自己的tomcat镜像，并使用tomcat部署项目</p>
-<h2 id="原料准备："><a href="#原料准备：" class="headerlink" title="原料准备："></a>原料准备：</h2><p>tomcat、jdk安装包，dockerfile文件</p>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1、准备压缩包"><a href="#1、准备压缩包" class="headerlink" title="1、准备压缩包"></a>1、准备压缩包</h3><p>jdk-8u301-linux-x64.tar.gz -&gt; jdk1.8.0_301</p>
-<p>apache-tomcat-7.0.107.tar.gz -&gt; apache-tomcat-7.0.107</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e93f16f2c2beb17ac00e.jpg"></p>
-<h3 id="2、编写dockerfile文件"><a href="#2、编写dockerfile文件" class="headerlink" title="2、编写dockerfile文件"></a>2、编写dockerfile文件</h3><blockquote>
-<p>官方指定命名<code>Dockerfile</code>，这样构建的时候不用加<code>-f</code>参数指定文件</p>
-</blockquote>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER xiao&lt;find_onepiece@163.com&gt;</span><br><span class="line"></span><br><span class="line">COPY readme.txt /usr/local/readme.txt</span><br><span class="line"></span><br><span class="line">ADD jdk-8u301-linux-x64.tar.gz /usr/local</span><br><span class="line">ADD apache-tomcat-7.0.107.tar.gz /usr/local</span><br><span class="line"></span><br><span class="line">RUN yum -y install vim</span><br><span class="line"></span><br><span class="line">ENV MYPATH /usr/local</span><br><span class="line"></span><br><span class="line">WORKDIR <span class="variable">$MYPATH</span></span><br><span class="line">ENV JAVA_HOME /usr/local/jdk1.8.0_301</span><br><span class="line">ENV CLASSPATH <span class="variable">$JAVA_HOME</span>/lib/dt.jar:<span class="variable">$JAVA_HOME</span>/lib/tools.jar</span><br><span class="line">ENV CATALINA_HOME /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV CATALINE_BASH /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV PATH <span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$CATALINA_HOME</span>/lib:<span class="variable">$CATALINE_HOME</span>/bin</span><br><span class="line"></span><br><span class="line">EXPOSE 8080</span><br><span class="line"></span><br><span class="line">CMD /usr/local/apache-tomcat-7.0.107/bin/startup.sh &amp;&amp; <span class="built_in">tail</span> -f /usr/local/apache-tomcat-7.0.107/bin/logs/catalina.out</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="3、执行构建"><a href="#3、执行构建" class="headerlink" title="3、执行构建"></a>3、执行构建</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -t diytomcat . <span class="comment"># 自动寻找Dockerfile文件</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>构建成功:</strong></p>
-<p>Successfully built e68ad8caa2a4</p>
-<p>Successfully tagged diytomcat:latest</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e96716f2c2beb17b0059.jpg"></p>
-<h3 id="4、启动容器"><a href="#4、启动容器" class="headerlink" title="4、启动容器"></a>4、启动容器</h3><p><code>/webapps/test</code>  部署的项目路径，浏览器访问<code>ip:port/test</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it -p 9090:8080 --name xiaoTomcat -v /home/xiao/build/tomcat/test:/usr/local/apache-tomcat-7.0.107/webapps/test -v /home/xiao/build/tomcat/tomcatlogs/:/usr/local/apache-tomcat-7.0.107/logs diytomcat</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="5、访问查看"><a href="#5、访问查看" class="headerlink" title="5、访问查看"></a>5、访问查看</h3><p>数据卷挂载成功</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e97c16f2c2beb17b2050.jpg"></p>
-<h3 id="6、发布项目"><a href="#6、发布项目" class="headerlink" title="6、发布项目"></a>6、发布项目</h3><p>已经挂载了数据卷，所以编写宿主机的项目文件就可以了</p>
-<p>在挂载路径 <code>/home/xiao/build/tomcat/test</code> 下</p>
-<ol>
-<li>新建文件 <code>web.xml</code>，内容如下：</li>
-</ol>
-<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">version</span>=<span class="string">"2.4"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>新建文件 <code>index.jsp</code>，内容如下：</li>
-</ol>
-<figure class="highlight html"><table><tbody><tr><td class="code"><pre><span class="line">&lt;%@ page contentType="text/html;charset=UTF-8" language="java" %&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Hello World!<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>xiao<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">&lt;%</span><br><span class="line">System.out.println("my tomcat project logs");</span><br><span class="line">%&gt;</span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="7、浏览器访问"><a href="#7、浏览器访问" class="headerlink" title="7、浏览器访问"></a>7、浏览器访问</h3><p>url：<code>ip:port/test</code></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9ae16f2c2beb17b6a64.jpg"></p>
-<h3 id="8、查看日志卷"><a href="#8、查看日志卷" class="headerlink" title="8、查看日志卷"></a>8、查看日志卷</h3><p><code>tail -f catalina.out</code></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9bd16f2c2beb17b8250.jpg"></p>
-<h2 id="完成从构建镜像到部署项目🎈🎈"><a href="#完成从构建镜像到部署项目🎈🎈" class="headerlink" title="完成从构建镜像到部署项目🎈🎈"></a>完成从构建镜像到部署项目🎈🎈</h2><hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-        <tag>tomcat</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker | 发布镜像到镜像仓库</title>
     <url>/posts/2796165889.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1033,60 +978,59 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker | 容器互联互通</title>
-    <url>/posts/2247720414.html</url>
+    <title>Docker | 制作tomcat镜像并部署项目</title>
+    <url>/posts/2106196415.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
 <p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
 </blockquote>
-<p>上篇讲到创建自定义网络，我创建了 <code>mynet</code> 网络，并指定了网关和子网地址。在上篇结尾呢，我抛出了一个问题：其它网络下的容器可以直接访问<code>mynet</code>网络下的容器吗？今天就让我们一块看下怎么实现容器互联。</p>
-<h2 id="其它网络下的容器加入mynet网络，实现一个容器两个ip地址"><a href="#其它网络下的容器加入mynet网络，实现一个容器两个ip地址" class="headerlink" title="其它网络下的容器加入mynet网络，实现一个容器两个ip地址"></a>其它网络下的容器加入<code>mynet</code>网络，实现一个容器两个<code>ip</code>地址</h2><p><strong>网络集群</strong></p>
-<blockquote>
-<ol>
-<li>先创建<code>test-network</code>网络：</li>
-</ol>
-<ul>
-<li><code>docker network create test-network</code></li>
-</ul>
-<ol start="2">
-<li>再运行<code>centos01</code>容器并加入到<code>test-network</code>网络下</li>
-</ol>
-<ul>
-<li><code>docker run -it -P --name centos01 --net test-network centos</code></li>
-</ul>
+<p>本文讲解如何制作自己的tomcat镜像，并使用tomcat部署项目</p>
+<h2 id="原料准备："><a href="#原料准备：" class="headerlink" title="原料准备："></a>原料准备：</h2><p>tomcat、jdk安装包，dockerfile文件</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1、准备压缩包"><a href="#1、准备压缩包" class="headerlink" title="1、准备压缩包"></a>1、准备压缩包</h3><p>jdk-8u301-linux-x64.tar.gz -&gt; jdk1.8.0_301</p>
+<p>apache-tomcat-7.0.107.tar.gz -&gt; apache-tomcat-7.0.107</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e93f16f2c2beb17ac00e.jpg"></p>
+<h3 id="2、编写dockerfile文件"><a href="#2、编写dockerfile文件" class="headerlink" title="2、编写dockerfile文件"></a>2、编写dockerfile文件</h3><blockquote>
+<p>官方指定命名<code>Dockerfile</code>，这样构建的时候不用加<code>-f</code>参数指定文件</p>
 </blockquote>
-<p><code>centos01</code>容器已经加入在<code>test-network</code>网络下了</p>
-<h3 id="centos01加入mynet网络"><a href="#centos01加入mynet网络" class="headerlink" title="centos01加入mynet网络"></a><code>centos01</code>加入<code>mynet</code>网络</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">root@--- ~]<span class="comment"># docker network connect mynet centos01</span></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER xiao&lt;find_onepiece@163.com&gt;</span><br><span class="line"></span><br><span class="line">COPY readme.txt /usr/local/readme.txt</span><br><span class="line"></span><br><span class="line">ADD jdk-8u301-linux-x64.tar.gz /usr/local</span><br><span class="line">ADD apache-tomcat-7.0.107.tar.gz /usr/local</span><br><span class="line"></span><br><span class="line">RUN yum -y install vim</span><br><span class="line"></span><br><span class="line">ENV MYPATH /usr/local</span><br><span class="line"></span><br><span class="line">WORKDIR <span class="variable">$MYPATH</span></span><br><span class="line">ENV JAVA_HOME /usr/local/jdk1.8.0_301</span><br><span class="line">ENV CLASSPATH <span class="variable">$JAVA_HOME</span>/lib/dt.jar:<span class="variable">$JAVA_HOME</span>/lib/tools.jar</span><br><span class="line">ENV CATALINA_HOME /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV CATALINE_BASH /usr/local/apache-tomcat-7.0.107</span><br><span class="line">ENV PATH <span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$CATALINA_HOME</span>/lib:<span class="variable">$CATALINE_HOME</span>/bin</span><br><span class="line"></span><br><span class="line">EXPOSE 8080</span><br><span class="line"></span><br><span class="line">CMD /usr/local/apache-tomcat-7.0.107/bin/startup.sh &amp;&amp; <span class="built_in">tail</span> -f /usr/local/apache-tomcat-7.0.107/bin/logs/catalina.out</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="3、执行构建"><a href="#3、执行构建" class="headerlink" title="3、执行构建"></a>3、执行构建</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -t diytomcat . <span class="comment"># 自动寻找Dockerfile文件</span></span><br></pre></td></tr></tbody></table></figure>
 
-<h3 id="查看mynet网络"><a href="#查看mynet网络" class="headerlink" title="查看mynet网络"></a>查看mynet网络</h3><ul>
-<li><code>docker network ls</code></li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network ls</span></span><br><span class="line">NETWORK ID     NAME           DRIVER    SCOPE</span><br><span class="line">feafa30d4051   bridge         bridge    <span class="built_in">local</span></span><br><span class="line">e8bf4fced9e2   host           host      <span class="built_in">local</span></span><br><span class="line">0096a971fd2c   mynet          bridge    <span class="built_in">local</span>  <span class="comment"># 自定义bridge网桥</span></span><br><span class="line">6263db0933b9   none           null      <span class="built_in">local</span></span><br><span class="line">799426d70aa2   test-network   bridge    <span class="built_in">local</span></span><br></pre></td></tr></tbody></table></figure>
+<p><strong>构建成功:</strong></p>
+<p>Successfully built e68ad8caa2a4</p>
+<p>Successfully tagged diytomcat:latest</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e96716f2c2beb17b0059.jpg"></p>
+<h3 id="4、启动容器"><a href="#4、启动容器" class="headerlink" title="4、启动容器"></a>4、启动容器</h3><p><code>/webapps/test</code>  部署的项目路径，浏览器访问<code>ip:port/test</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it -p 9090:8080 --name xiaoTomcat -v /home/xiao/build/tomcat/test:/usr/local/apache-tomcat-7.0.107/webapps/test -v /home/xiao/build/tomcat/tomcatlogs/:/usr/local/apache-tomcat-7.0.107/logs diytomcat</span><br></pre></td></tr></tbody></table></figure>
 
-<ul>
-<li><code>docker network inspect 0096</code></li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network inspect 0096</span></span><br><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        <span class="string">"Name"</span>: <span class="string">"mynet"</span>,</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"0096a971fd2c66400e53cbae5e53eceedc2f90d5685917e9534640a3535c0ef1"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2021-10-04T10:18:09.113847736+08:00"</span>,</span><br><span class="line">        <span class="comment"># ... 省略代码展示</span></span><br><span class="line">        <span class="string">"IPAM"</span>: {</span><br><span class="line">            <span class="string">"Driver"</span>: <span class="string">"default"</span>,</span><br><span class="line">            <span class="string">"Options"</span>: {},</span><br><span class="line">            <span class="string">"Config"</span>: [</span><br><span class="line">                {</span><br><span class="line">                    <span class="string">"Subnet"</span>: <span class="string">"192.168.0.0/16"</span>,</span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"192.168.0.1"</span></span><br><span class="line">                }</span><br><span class="line">            ]</span><br><span class="line">        },</span><br><span class="line">        <span class="comment"># ... 省略代码展示</span></span><br><span class="line">        <span class="string">"Containers"</span>: {</span><br><span class="line">            <span class="string">"2fac920eebd505794c4a27ef4efdf531d32805e8663bded93a473bd28236bc27"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"mynet-centos01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"3aff075..."</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:c0:a8:00:02"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"192.168.0.2/16"</span>,</span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">"3dceda051252b6970fe2156bac7710ba6489a97aac68c49b1c85a2f130d0556f"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"mynet-tomcat01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"9f52b19..."</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:c0:a8:00:03"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"192.168.0.3/16"</span>,</span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">"cb1922b95b9316d129b54f3545fad9729092926e10a1d5517f8928db42706151"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"centos01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"0ba2107..."</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:c0:a8:00:04"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"192.168.0.4/16"</span>,   <span class="comment"># 新加入的centos01容器</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            }</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Options"</span>: {},</span><br><span class="line">        <span class="string">"Labels"</span>: {}</span><br><span class="line">    }</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="5、访问查看"><a href="#5、访问查看" class="headerlink" title="5、访问查看"></a>5、访问查看</h3><p>数据卷挂载成功</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e97c16f2c2beb17b2050.jpg"></p>
+<h3 id="6、发布项目"><a href="#6、发布项目" class="headerlink" title="6、发布项目"></a>6、发布项目</h3><p>已经挂载了数据卷，所以编写宿主机的项目文件就可以了</p>
+<p>在挂载路径 <code>/home/xiao/build/tomcat/test</code> 下</p>
+<ol>
+<li>新建文件 <code>web.xml</code>，内容如下：</li>
+</ol>
+<figure class="highlight xml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">version</span>=<span class="string">"2.4"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
 
-<h3 id="查看centos01的容器信息"><a href="#查看centos01的容器信息" class="headerlink" title="查看centos01的容器信息"></a>查看centos01的容器信息</h3><p>可以看到<code>Networks</code>下面存在<code>mynet</code>、<code>test-network</code>两个网络连接信息</p>
-<p>一个容器两个<code>ip</code>地址</p>
-<p>无关代码已省略展示</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker inspect cb19</span></span><br><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"cb1922b95b9316d129b54f3545fad9729092926e10a1d5517f8928db42706151"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2021-10-03T13:39:00.942877668Z"</span>,</span><br><span class="line">        <span class="string">"Path"</span>: <span class="string">"/bin/bash"</span>,</span><br><span class="line">        <span class="string">"Args"</span>: [],</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ... 省略代码展示</span></span><br><span class="line"></span><br><span class="line">        <span class="string">"NetworkSettings"</span>: {</span><br><span class="line">            <span class="comment"># ... 省略代码展示</span></span><br><span class="line">            <span class="string">"Networks"</span>: {</span><br><span class="line">                <span class="comment"># 网络连接1 ： mynet</span></span><br><span class="line">                <span class="string">"mynet"</span>: {、</span><br><span class="line">                    <span class="comment"># ... 省略代码展示</span></span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"192.168.0.1"</span>,</span><br><span class="line">                    <span class="string">"IPAddress"</span>: <span class="string">"192.168.0.4"</span>,</span><br><span class="line">                    <span class="string">"MacAddress"</span>: <span class="string">"02:42:c0:a8:00:04"</span>,</span><br><span class="line">                },</span><br><span class="line">                <span class="comment"># 网络连接2 ： test-network</span></span><br><span class="line">                <span class="string">"test-network"</span>: {</span><br><span class="line">                    <span class="comment"># ... 省略代码展示</span></span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"172.18.0.1"</span>,</span><br><span class="line">                    <span class="string">"IPAddress"</span>: <span class="string">"172.18.0.3"</span>,</span><br><span class="line">                    <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:12:00:03"</span>,</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
+<ol start="2">
+<li>新建文件 <code>index.jsp</code>，内容如下：</li>
+</ol>
+<figure class="highlight html"><table><tbody><tr><td class="code"><pre><span class="line">&lt;%@ page contentType="text/html;charset=UTF-8" language="java" %&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Hello World!<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>xiao<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">&lt;%</span><br><span class="line">System.out.println("my tomcat project logs");</span><br><span class="line">%&gt;</span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
 
-<h2 id="test-network网卡下的centos01访问mynet网卡下的mynet-centos01、mynet-tomcat01"><a href="#test-network网卡下的centos01访问mynet网卡下的mynet-centos01、mynet-tomcat01" class="headerlink" title="test-network网卡下的centos01访问mynet网卡下的mynet-centos01、mynet-tomcat01"></a>test-network网卡下的centos01访问mynet网卡下的mynet-centos01、mynet-tomcat01</h2><p>容器ip和容器名都可以连接</p>
-<h3 id="进入centos01容器"><a href="#进入centos01容器" class="headerlink" title="进入centos01容器"></a>进入centos01容器</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker exec -it cb19 /bin/bash</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p><code>mynet-tomcat01</code> 容器的IP是: <code>192.168.0.3</code></p>
-<h3 id="ping-mynet-tomcat01-容器的IP"><a href="#ping-mynet-tomcat01-容器的IP" class="headerlink" title="ping mynet-tomcat01 容器的IP"></a>ping <code>mynet-tomcat01</code> 容器的IP</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@cb1922b95b93 /]<span class="comment"># ping 192.168.0.3</span></span><br><span class="line">PING 192.168.0.3 (192.168.0.3) 56(84) bytes of data.</span><br><span class="line">64 bytes from 192.168.0.3: icmp_seq=1 ttl=64 time=0.186 ms</span><br><span class="line">^C</span><br><span class="line">--- 192.168.0.3 ping statistics ---</span><br><span class="line">7 packets transmitted, 7 received, 0% packet loss, time 6000ms</span><br><span class="line">rtt min/avg/max/mdev = 0.090/0.127/0.186/0.029 ms</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="直接ping-容器名-mynet-centos01-mynet-tomcat01"><a href="#直接ping-容器名-mynet-centos01-mynet-tomcat01" class="headerlink" title="直接ping 容器名 mynet-centos01 mynet-tomcat01"></a>直接ping 容器名 <code>mynet-centos01</code> <code>mynet-tomcat01</code></h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@cb1922b95b93 /]<span class="comment"># ping mynet-centos01</span></span><br><span class="line">PING mynet-centos01 (192.168.0.2) 56(84) bytes of data.</span><br><span class="line">64 bytes from mynet-centos01.mynet (192.168.0.2): icmp_seq=1 ttl=64 time=0.105 ms</span><br><span class="line">^C</span><br><span class="line">--- mynet-centos01 ping statistics ---</span><br><span class="line">3 packets transmitted, 3 received, 0% packet loss, time 2001ms</span><br><span class="line">rtt min/avg/max/mdev = 0.105/0.116/0.130/0.013 ms</span><br><span class="line"></span><br><span class="line">[root@cb1922b95b93 /]<span class="comment"># ping mynet-tomcat01</span></span><br><span class="line">PING mynet-tomcat01 (192.168.0.3) 56(84) bytes of data.</span><br><span class="line">64 bytes from mynet-tomcat01.mynet (192.168.0.3): icmp_seq=1 ttl=64 time=0.085 ms</span><br><span class="line">^C</span><br><span class="line">--- mynet-tomcat01 ping statistics ---</span><br><span class="line">2 packets transmitted, 2 received, 0% packet loss, time 1001ms</span><br><span class="line">rtt min/avg/max/mdev = 0.085/0.093/0.102/0.012 ms</span><br><span class="line">[root@cb1922b95b93 /]<span class="comment">#</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>其它网络下的容器可以通过加入docker网络，来访问该docker网络下的容器，并且既可以通过容器ip也可以通过容器名连接，非常方便。<code>docker0</code>十分强大</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634d69ae16f2c2beb1d5df36.jpg"></p>
-<hr>
+<h3 id="7、浏览器访问"><a href="#7、浏览器访问" class="headerlink" title="7、浏览器访问"></a>7、浏览器访问</h3><p>url：<code>ip:port/test</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9ae16f2c2beb17b6a64.jpg"></p>
+<h3 id="8、查看日志卷"><a href="#8、查看日志卷" class="headerlink" title="8、查看日志卷"></a>8、查看日志卷</h3><p><code>tail -f catalina.out</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6348e9bd16f2c2beb17b8250.jpg"></p>
+<h2 id="完成从构建镜像到部署项目🎈🎈"><a href="#完成从构建镜像到部署项目🎈🎈" class="headerlink" title="完成从构建镜像到部署项目🎈🎈"></a>完成从构建镜像到部署项目🎈🎈</h2><hr>
 <p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
 <p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
 <p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
 </body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+        <tag>tomcat</tag>
+      </tags>
   </entry>
   <entry>
     <title>Docker | 容器数据卷详解</title>
@@ -1510,90 +1454,6 @@
       </tags>
   </entry>
   <entry>
-    <title>GitHub Pages 站点建设</title>
-    <url>/posts/899051033.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h2><ul>
-<li><p>GitHub Pages 是通过 GitHub 托管和发布的公共网页，将纯文本转换为静态博客网站。</p>
-</li>
-<li><p>您可以使用 GitHub Pages 来展示一些开源项目、博客甚或分享您的简历，有内存限制，可以绑定个人域名。</p>
-</li>
-<li><p>启动和运行的最快方法是使用 <a href="https://jekyllcn.com/">Jekyll</a> 主题选择器加载预置主题。 然后，您可以修改 GitHub Pages 的内容和样式。👉 <a href="https://docs.github.com/cn/pages/getting-started-with-github-pages/about-github-pages">文档</a></p>
-</li>
-</ul>
-<h2 id="2、创建仓库"><a href="#2、创建仓库" class="headerlink" title="2、创建仓库"></a>2、创建仓库</h2><p>仓库名： <code>&lt;username&gt;.github.io</code><br><code>username</code> 是GitHub的用户名</p>
-<h2 id="3、创建站点"><a href="#3、创建站点" class="headerlink" title="3、创建站点"></a>3、创建站点</h2><p>在 <code>repo</code> 下创建 <code>index.md</code>文件，随便写点东西保存。然后，点击 <code>settings</code>选项卡，单机左侧 <code>Pages</code>进行设置，如下图：</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fae16f2c2beb1e1d288.png"></p>
-<p>🔊 此时站点已经建成，可以访问 <code>https://&lt;username&gt;.github.io/</code> 查看，如果已经有个人域名了，也可以绑定个人域名，继续往下看👇</p>
-<h2 id="4、仓库文件目录"><a href="#4、仓库文件目录" class="headerlink" title="4、仓库文件目录"></a>4、仓库文件目录</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fbe16f2c2beb1e1e89f.png"></p>
-<h2 id="5、绑定域名"><a href="#5、绑定域名" class="headerlink" title="5、绑定域名"></a>5、绑定域名</h2><p>我个人购买的一级域名是 i-xiao ，域名后缀是 space，专门给GitHub Pages 增加一个CNAME记录（blog），解析二级域名，绑定 <username>github.io 域名。</username></p>
-<h3 id="5-1、域名相关知识"><a href="#5-1、域名相关知识" class="headerlink" title="5.1、域名相关知识"></a>5.1、域名相关知识</h3><ul>
-<li>www：主机名，i-xiao : 域名主体(一级域名)，.space : 域名后缀<br>注册一级域名的时候是需要付费的</li>
-<li>二级域名，是依附一级域名的存在而存在的，也就是说要是顶级域名消失了，二级域名也也会不复存在。反而来说，二级域名的网站不做了，主域名网站是不受影响的。</li>
-<li>一级域名、二级域名区别：<br>DNS收录一级域名更快；还有就是解析速度，下一跳路由就不说了，找到目的主机之后，二级域名层级更深，需要多一层计算（其实这是我瞎写的🤣，猜测应该跟 nginx location匹配类似）</li>
-</ul>
-<h3 id="5-2、GitHub上配置自定义域名"><a href="#5-2、GitHub上配置自定义域名" class="headerlink" title="5.2、GitHub上配置自定义域名"></a>5.2、GitHub上配置自定义域名</h3><p>进入 <username>github.io 仓库，进入设置页面，点击左边 Pages 选项卡，进行下面的配置。</username></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6116f2c2beb1e1511a.png"></p>
-<h2 id="6、配置域名映射"><a href="#6、配置域名映射" class="headerlink" title="6、配置域名映射"></a>6、配置域名映射</h2><p><strong>各记录类型使用目的</strong></p>
-<table>
-<thead>
-<tr>
-<th>记录类型</th>
-<th>使用目的</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ce5/">A 记录</a></td>
-<td>将域名指向一个 IP 地址（外网地址）。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9cf9/">CNAME 记录</a></td>
-<td>将域名指向另一个域名，再由另一个域名提供 IP 地址（外网地址）。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9cff/">MX 记录</a></td>
-<td>设置邮箱，让邮箱能收到邮件。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d11/">NS 记录</a></td>
-<td>将子域名交给其他 DNS 服务商解析。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d0b/">AAAA 记录</a></td>
-<td>将域名指向一个 IPv6 地址。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d17/">SRV 记录</a></td>
-<td>用来标识某台服务器使用了某个服务，常见于微软系统的目录管理。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d05/">TXT 记录</a></td>
-<td>对域名进行标识和说明，绝大多数的 TXT 记录是用来做 SPF 记录（反垃圾邮件）。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ced/">隐、显性 URL 记录</a></td>
-<td>将一个域名指向另外一个已经存在的站点。</td>
-</tr>
-</tbody></table>
-<p><strong>如下图</strong></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6f16f2c2beb1e16954.png"></p>
-<h2 id="7、DNS检测"><a href="#7、DNS检测" class="headerlink" title="7、DNS检测"></a>7、DNS检测</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f7816f2c2beb1e1785b.png"></p>
-<h2 id="8、查看Pages"><a href="#8、查看Pages" class="headerlink" title="8、查看Pages"></a>8、查看Pages</h2><p>成功解析之后，还存在DNS缓存，一般还需要再等待一会（一般十分钟，或许更长时间）才能生效，如下图成功显示👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f8c16f2c2beb1e1a34c.png"></p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>站点绑定的域名已经更换，访问请到👉 <a href="https://home.i-xiao.space/">这里</a></p>
-<hr>
-<p>🎈🎈🎈</p>
-<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>GitHub</category>
-      </categories>
-      <tags>
-        <tag>GitHub</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker网络模型以及容器通信</title>
     <url>/posts/1604561083.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1741,102 +1601,87 @@
       </tags>
   </entry>
   <entry>
-    <title>Go | 基本数据类型详解</title>
-    <url>/posts/688314459.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Go/">Golang专栏</a>，持续更新，欢迎访问😊</p>
-</blockquote>
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><strong>基本数据类型</strong>，变量存的就是值，也叫值类型。每一种数据都定义了明确的数据类型，在内存中分配了不同大小的内存空间。</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/635415fb16f2c2beb1362bf0.jpg"></p>
-<h1 id="Printf-和-Println-的区别"><a href="#Printf-和-Println-的区别" class="headerlink" title="Printf 和 Println 的区别"></a>Printf 和 Println 的区别</h1><ul>
-<li><p>printf 输出后不换行， println输出后自动换行；</p>
+    <title>GitHub Pages 站点建设</title>
+    <url>/posts/899051033.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h2><ul>
+<li><p>GitHub Pages 是通过 GitHub 托管和发布的公共网页，将纯文本转换为静态博客网站。</p>
 </li>
-<li><p>printf 格式化输出，println 直接输出内容</p>
+<li><p>您可以使用 GitHub Pages 来展示一些开源项目、博客甚或分享您的简历，有内存限制，可以绑定个人域名。</p>
 </li>
-<li><p>Printf 根据format参数生成格式化的字符串并写入标准输出。</p>
+<li><p>启动和运行的最快方法是使用 <a href="https://jekyllcn.com/">Jekyll</a> 主题选择器加载预置主题。 然后，您可以修改 GitHub Pages 的内容和样式。👉 <a href="https://docs.github.com/cn/pages/getting-started-with-github-pages/about-github-pages">文档</a></p>
 </li>
 </ul>
-<h1 id="判断数据类型以及查看变量使用内存空间"><a href="#判断数据类型以及查看变量使用内存空间" class="headerlink" title="判断数据类型以及查看变量使用内存空间"></a>判断数据类型以及查看变量使用内存空间</h1><figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="comment">// import "unsafe"</span></span><br><span class="line"><span class="comment">// import "fmt"</span></span><br><span class="line"><span class="comment">// 引入多个</span></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line"><span class="string">"fmt"</span></span><br><span class="line"><span class="string">"unsafe"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> {</span><br><span class="line">	<span class="keyword">var</span> i <span class="type">int8</span> = <span class="number">12</span></span><br><span class="line">	fmt.Println(<span class="string">"i= "</span>, i)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> i2 <span class="type">uint8</span> = <span class="number">129</span></span><br><span class="line">	fmt.Println(<span class="string">"i2= "</span>, i2)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> n = <span class="number">12</span></span><br><span class="line">	fmt.Printf(<span class="string">"n的类型是%T\n"</span>, n) <span class="comment">// n的类型是int</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> name = <span class="string">"xiao"</span></span><br><span class="line">	fmt.Printf(<span class="string">"name的类型是%T\n"</span>, name) <span class="comment">// name的类型是string</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 查看变量占用的字节大小和数据类型</span></span><br><span class="line">	fmt.Printf(<span class="string">"name的类型是%T"</span>, name, unsafe.Sizeof(name))</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h1 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h1><h2 id="数值型"><a href="#数值型" class="headerlink" title="数值型"></a>数值型</h2><h3 id="整数类型-默认值是0"><a href="#整数类型-默认值是0" class="headerlink" title="整数类型 (默认值是0)"></a>整数类型 (默认值是0)</h3><p>int, int8, int16, int32, int64<br>uint, uint8, uint16, uint32, uint64     无符号数（表示的范围更大）<br>byte</p>
-<ul>
-<li><p>bit: 计算机中的最小存储单位</p>
-</li>
-<li><p>byte: 计算机中基本存储单元</p>
-</li>
-<li><p>1byte = 8bit (一个字节8位)</p>
-</li>
+<h2 id="2、创建仓库"><a href="#2、创建仓库" class="headerlink" title="2、创建仓库"></a>2、创建仓库</h2><p>仓库名： <code>&lt;username&gt;.github.io</code><br><code>username</code> 是GitHub的用户名</p>
+<h2 id="3、创建站点"><a href="#3、创建站点" class="headerlink" title="3、创建站点"></a>3、创建站点</h2><p>在 <code>repo</code> 下创建 <code>index.md</code>文件，随便写点东西保存。然后，点击 <code>settings</code>选项卡，单机左侧 <code>Pages</code>进行设置，如下图：</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fae16f2c2beb1e1d288.png"></p>
+<p>🔊 此时站点已经建成，可以访问 <code>https://&lt;username&gt;.github.io/</code> 查看，如果已经有个人域名了，也可以绑定个人域名，继续往下看👇</p>
+<h2 id="4、仓库文件目录"><a href="#4、仓库文件目录" class="headerlink" title="4、仓库文件目录"></a>4、仓库文件目录</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fbe16f2c2beb1e1e89f.png"></p>
+<h2 id="5、绑定域名"><a href="#5、绑定域名" class="headerlink" title="5、绑定域名"></a>5、绑定域名</h2><p>我个人购买的一级域名是 i-xiao ，域名后缀是 space，专门给GitHub Pages 增加一个CNAME记录（blog），解析二级域名，绑定 <username>github.io 域名。</username></p>
+<h3 id="5-1、域名相关知识"><a href="#5-1、域名相关知识" class="headerlink" title="5.1、域名相关知识"></a>5.1、域名相关知识</h3><ul>
+<li>www：主机名，i-xiao : 域名主体(一级域名)，.space : 域名后缀<br>注册一级域名的时候是需要付费的</li>
+<li>二级域名，是依附一级域名的存在而存在的，也就是说要是顶级域名消失了，二级域名也也会不复存在。反而来说，二级域名的网站不做了，主域名网站是不受影响的。</li>
+<li>一级域名、二级域名区别：<br>DNS收录一级域名更快；还有就是解析速度，下一跳路由就不说了，找到目的主机之后，二级域名层级更深，需要多一层计算（其实这是我瞎写的🤣，猜测应该跟 nginx location匹配类似）</li>
 </ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6354165e16f2c2beb136bb7a.jpg"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6354166f16f2c2beb136d397.jpg"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6354167d16f2c2beb136e753.jpg"></p>
-<figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> i <span class="type">int8</span> = <span class="number">-129</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// constant -129 overflows int8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> i2 <span class="type">uint8</span> = <span class="number">-129</span></span><br><span class="line"><span class="comment">// constant -129 overflows uint8</span></span><br></pre></td></tr></tbody></table></figure>
-<h3 id="浮点类型-默认值是0"><a href="#浮点类型-默认值是0" class="headerlink" title="浮点类型 (默认值是0)"></a>浮点类型 (默认值是0)</h3><ul>
-<li><p>float32</p>
-</li>
-<li><p>float64（默认类型）</p>
-</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6354168c16f2c2beb136fc17.jpg"></p>
-<p><strong>浮点数 = 符号位 + 指数位 + 尾数位</strong></p>
-<p>浮点数都是<strong>有符号</strong>的</p>
-<p>使用浮点类型的时候就需要注意存在<strong>丢失精度</strong>的问题</p>
-<figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> num1 <span class="type">float32</span> = <span class="number">12.556883123132</span>   <span class="comment">// 精度会丢失</span></span><br><span class="line"><span class="keyword">var</span> num2 <span class="type">float64</span> = <span class="number">12.556883123132</span>   <span class="comment">// 64位比32位精度要准确</span></span><br><span class="line">fmt.Println(<span class="string">"num1="</span>, num1, <span class="string">"num2"</span>, num2) <span class="comment">// num1= 12.556883 num2 12.556883123132</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> num = <span class="number">12.64</span></span><br><span class="line">fmt.Printf(<span class="string">"num的类型"</span>, num) <span class="comment">// num的类型%!(EXTRA float64=12.64)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> num3 = <span class="number">5.6e2</span>   <span class="comment">//  5.6 * 10^2 = 5.6 * 100 = 560</span></span><br><span class="line">fmt.Println(<span class="string">"num3="</span>, num3)</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="字符型"><a href="#字符型" class="headerlink" title="字符型"></a>字符型</h2><p>没有专门的字符型，使用<code>byte</code>来保存单个字母字符</p>
-<p><code>ASCII</code>码（128个）</p>
-<ul>
-<li><p>Go语言的字符使用UTF-8编码</p>
-</li>
-<li><p>英文字母：1个字节</p>
-</li>
-<li><p>汉字：3个字节</p>
-</li>
-<li><p>字符必须使用单引号括起来，双引号会报错</p>
-</li>
-</ul>
-<p><strong>单引号针对单个字符，字符串要使用双引号</strong></p>
-<p><strong>UTF-8是对ASCII的扩容</strong></p>
-<figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> str1 <span class="type">byte</span> = <span class="string">'a'</span></span><br><span class="line"><span class="keyword">var</span> str2 <span class="type">byte</span> = <span class="string">'0'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 当直接输出byte时，输出的使对应字符的ASCII码值(十进制)</span></span><br><span class="line">fmt.Println(<span class="string">"str1"</span>, str1, <span class="string">"str2"</span>, str2) <span class="comment">// str1 97 str2 48</span></span><br><span class="line">fmt.Printf(<span class="string">"str1=%c str2=%c"</span>, str1, str2) <span class="comment">// str1=a str2=0</span></span><br><span class="line"></span><br><span class="line">fmt.Printf(<span class="string">"str1=%c"</span>, str1) <span class="comment">// str1=a</span></span><br><span class="line">fmt.Printf(<span class="string">"str2=%c"</span>, str2) <span class="comment">// str2=0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> name <span class="type">byte</span> = <span class="string">'吖'</span></span><br><span class="line">fmt.Printf(<span class="string">"name=%c"</span>, name) <span class="comment">// overflows byte 超出byte类型的存储范围了</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 汉字更换成int类型</span></span><br><span class="line"><span class="keyword">var</span> name <span class="type">int</span> = <span class="string">'吖'</span></span><br><span class="line">fmt.Printf(<span class="string">"name=%c"</span>, name) <span class="comment">// name=吖</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> name1 <span class="type">int</span> =<span class="number">22269</span></span><br><span class="line">fmt.Printf(<span class="string">"name1=%c"</span>, name1) <span class="comment">// name1=国</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 数据类型只是为了定义存储空间的大小，对应计算机中的内存空间</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6354169e16f2c2beb137151f.jpg"></p>
-<h2 id="布尔型（bool）-默认值是false"><a href="#布尔型（bool）-默认值是false" class="headerlink" title="布尔型（bool）(默认值是false)"></a>布尔型（bool）(默认值是false)</h2><p>用于逻辑运算，流程控制。<code>bool</code>类型只占用一个字节的内存空间</p>
-<figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="literal">false</span></span><br><span class="line">fmt.Println(a)  <span class="comment">// false</span></span><br><span class="line">fmt.Println(unsafe.Sizeof(a))  <span class="comment">// 1</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="字符串（string）-默认值是””"><a href="#字符串（string）-默认值是””" class="headerlink" title="字符串（string）(默认值是””)"></a>字符串（string）(默认值是””)</h2><p><code>UTF-8</code>编码</p>
-<p><strong>字符串一经定义，则不能修改</strong></p>
-<figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> address <span class="type">string</span> = <span class="string">"北京长城"</span></span><br><span class="line">fmt.Println(address) <span class="comment">// 北京长城</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> str = <span class="string">"hello"</span></span><br><span class="line">str[<span class="number">0</span>] = <span class="string">'a'</span>     <span class="comment">// cannot assign to str[0] (strings are immutable)</span></span><br><span class="line">fmt.Println(str)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 反引号</span></span><br><span class="line"><span class="comment">// 以字符串原生形式输出，包括换行和特殊字符，可以实现防止攻击、输出源代码等效果。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 字符串拼接, + 号要放在上面，否则会报错(因为go默认在一行后面加;号)</span></span><br><span class="line"><span class="keyword">var</span> str01 = <span class="string">"hello"</span> + <span class="string">" world"</span></span><br><span class="line">str01 += <span class="string">"  haha!"</span> + <span class="string">"xixi"</span> +</span><br><span class="line"><span class="string">"heihei"</span></span><br><span class="line">fmt.Println(str01)    <span class="comment">// hello world  haha!xixiheihei</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="基本数据类型的默认值"><a href="#基本数据类型的默认值" class="headerlink" title="基本数据类型的默认值"></a>基本数据类型的默认值</h1><figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="type">int</span></span><br><span class="line"><span class="keyword">var</span> b <span class="type">float32</span></span><br><span class="line"><span class="keyword">var</span> c <span class="type">float64</span></span><br><span class="line"><span class="keyword">var</span> d <span class="type">bool</span></span><br><span class="line"><span class="keyword">var</span> e <span class="type">string</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// %v表示按照变量的值输出</span></span><br><span class="line">fmt.Printf(<span class="string">"a=%d,b=%v,c=%v,d=%v e=%v"</span>, a,b,c,d,e)</span><br></pre></td></tr></tbody></table></figure>
-
-<p>上面输出： <code>a=0,b=0,c=0,d=false e=</code></p>
-<h1 id="派生-x2F-复杂数据类型"><a href="#派生-x2F-复杂数据类型" class="headerlink" title="派生/复杂数据类型"></a>派生/复杂数据类型</h1><ol>
-<li><p>指针（Pointer）</p>
-</li>
-<li><p>数组</p>
-</li>
-<li><p>结构体（struct）</p>
-</li>
-<li><p>管道（Channel）</p>
-</li>
-<li><p>函数</p>
-</li>
-<li><p>切片（slice）</p>
-</li>
-<li><p>接口（interface）</p>
-</li>
-<li><p>map</p>
-</li>
-</ol>
-<p>后面陆续讲解复杂数据类型。</p>
+<h3 id="5-2、GitHub上配置自定义域名"><a href="#5-2、GitHub上配置自定义域名" class="headerlink" title="5.2、GitHub上配置自定义域名"></a>5.2、GitHub上配置自定义域名</h3><p>进入 <username>github.io 仓库，进入设置页面，点击左边 Pages 选项卡，进行下面的配置。</username></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6116f2c2beb1e1511a.png"></p>
+<h2 id="6、配置域名映射"><a href="#6、配置域名映射" class="headerlink" title="6、配置域名映射"></a>6、配置域名映射</h2><p><strong>各记录类型使用目的</strong></p>
+<table>
+<thead>
+<tr>
+<th>记录类型</th>
+<th>使用目的</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ce5/">A 记录</a></td>
+<td>将域名指向一个 IP 地址（外网地址）。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9cf9/">CNAME 记录</a></td>
+<td>将域名指向另一个域名，再由另一个域名提供 IP 地址（外网地址）。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9cff/">MX 记录</a></td>
+<td>设置邮箱，让邮箱能收到邮件。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d11/">NS 记录</a></td>
+<td>将子域名交给其他 DNS 服务商解析。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d0b/">AAAA 记录</a></td>
+<td>将域名指向一个 IPv6 地址。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d17/">SRV 记录</a></td>
+<td>用来标识某台服务器使用了某个服务，常见于微软系统的目录管理。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d05/">TXT 记录</a></td>
+<td>对域名进行标识和说明，绝大多数的 TXT 记录是用来做 SPF 记录（反垃圾邮件）。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ced/">隐、显性 URL 记录</a></td>
+<td>将一个域名指向另外一个已经存在的站点。</td>
+</tr>
+</tbody></table>
+<p><strong>如下图</strong></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6f16f2c2beb1e16954.png"></p>
+<h2 id="7、DNS检测"><a href="#7、DNS检测" class="headerlink" title="7、DNS检测"></a>7、DNS检测</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f7816f2c2beb1e1785b.png"></p>
+<h2 id="8、查看Pages"><a href="#8、查看Pages" class="headerlink" title="8、查看Pages"></a>8、查看Pages</h2><p>成功解析之后，还存在DNS缓存，一般还需要再等待一会（一般十分钟，或许更长时间）才能生效，如下图成功显示👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f8c16f2c2beb1e1a34c.png"></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>站点绑定的域名已经更换，访问请到👉 <a href="https://home.i-xiao.space/">这里</a></p>
 <hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+<p>🎈🎈🎈</p>
+<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
 </body></html>]]></content>
       <categories>
-        <category>Go</category>
+        <category>GitHub</category>
       </categories>
       <tags>
-        <tag>Go</tag>
+        <tag>GitHub</tag>
       </tags>
   </entry>
   <entry>
@@ -1934,6 +1779,105 @@
 <p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
 <p>热爱前端开发，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
 <p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。数风流人物还看中国、看今朝、看你我。</p>
+</body></html>]]></content>
+      <categories>
+        <category>Go</category>
+      </categories>
+      <tags>
+        <tag>Go</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Go | 基本数据类型详解</title>
+    <url>/posts/688314459.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Go/">Golang专栏</a>，持续更新，欢迎访问😊</p>
+</blockquote>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><strong>基本数据类型</strong>，变量存的就是值，也叫值类型。每一种数据都定义了明确的数据类型，在内存中分配了不同大小的内存空间。</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/635415fb16f2c2beb1362bf0.jpg"></p>
+<h1 id="Printf-和-Println-的区别"><a href="#Printf-和-Println-的区别" class="headerlink" title="Printf 和 Println 的区别"></a>Printf 和 Println 的区别</h1><ul>
+<li><p>printf 输出后不换行， println输出后自动换行；</p>
+</li>
+<li><p>printf 格式化输出，println 直接输出内容</p>
+</li>
+<li><p>Printf 根据format参数生成格式化的字符串并写入标准输出。</p>
+</li>
+</ul>
+<h1 id="判断数据类型以及查看变量使用内存空间"><a href="#判断数据类型以及查看变量使用内存空间" class="headerlink" title="判断数据类型以及查看变量使用内存空间"></a>判断数据类型以及查看变量使用内存空间</h1><figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="comment">// import "unsafe"</span></span><br><span class="line"><span class="comment">// import "fmt"</span></span><br><span class="line"><span class="comment">// 引入多个</span></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line"><span class="string">"fmt"</span></span><br><span class="line"><span class="string">"unsafe"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> {</span><br><span class="line">	<span class="keyword">var</span> i <span class="type">int8</span> = <span class="number">12</span></span><br><span class="line">	fmt.Println(<span class="string">"i= "</span>, i)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> i2 <span class="type">uint8</span> = <span class="number">129</span></span><br><span class="line">	fmt.Println(<span class="string">"i2= "</span>, i2)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> n = <span class="number">12</span></span><br><span class="line">	fmt.Printf(<span class="string">"n的类型是%T\n"</span>, n) <span class="comment">// n的类型是int</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> name = <span class="string">"xiao"</span></span><br><span class="line">	fmt.Printf(<span class="string">"name的类型是%T\n"</span>, name) <span class="comment">// name的类型是string</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 查看变量占用的字节大小和数据类型</span></span><br><span class="line">	fmt.Printf(<span class="string">"name的类型是%T"</span>, name, unsafe.Sizeof(name))</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h1><h2 id="数值型"><a href="#数值型" class="headerlink" title="数值型"></a>数值型</h2><h3 id="整数类型-默认值是0"><a href="#整数类型-默认值是0" class="headerlink" title="整数类型 (默认值是0)"></a>整数类型 (默认值是0)</h3><p>int, int8, int16, int32, int64<br>uint, uint8, uint16, uint32, uint64     无符号数（表示的范围更大）<br>byte</p>
+<ul>
+<li><p>bit: 计算机中的最小存储单位</p>
+</li>
+<li><p>byte: 计算机中基本存储单元</p>
+</li>
+<li><p>1byte = 8bit (一个字节8位)</p>
+</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6354165e16f2c2beb136bb7a.jpg"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6354166f16f2c2beb136d397.jpg"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6354167d16f2c2beb136e753.jpg"></p>
+<figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> i <span class="type">int8</span> = <span class="number">-129</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// constant -129 overflows int8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> i2 <span class="type">uint8</span> = <span class="number">-129</span></span><br><span class="line"><span class="comment">// constant -129 overflows uint8</span></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="浮点类型-默认值是0"><a href="#浮点类型-默认值是0" class="headerlink" title="浮点类型 (默认值是0)"></a>浮点类型 (默认值是0)</h3><ul>
+<li><p>float32</p>
+</li>
+<li><p>float64（默认类型）</p>
+</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6354168c16f2c2beb136fc17.jpg"></p>
+<p><strong>浮点数 = 符号位 + 指数位 + 尾数位</strong></p>
+<p>浮点数都是<strong>有符号</strong>的</p>
+<p>使用浮点类型的时候就需要注意存在<strong>丢失精度</strong>的问题</p>
+<figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> num1 <span class="type">float32</span> = <span class="number">12.556883123132</span>   <span class="comment">// 精度会丢失</span></span><br><span class="line"><span class="keyword">var</span> num2 <span class="type">float64</span> = <span class="number">12.556883123132</span>   <span class="comment">// 64位比32位精度要准确</span></span><br><span class="line">fmt.Println(<span class="string">"num1="</span>, num1, <span class="string">"num2"</span>, num2) <span class="comment">// num1= 12.556883 num2 12.556883123132</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> num = <span class="number">12.64</span></span><br><span class="line">fmt.Printf(<span class="string">"num的类型"</span>, num) <span class="comment">// num的类型%!(EXTRA float64=12.64)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> num3 = <span class="number">5.6e2</span>   <span class="comment">//  5.6 * 10^2 = 5.6 * 100 = 560</span></span><br><span class="line">fmt.Println(<span class="string">"num3="</span>, num3)</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="字符型"><a href="#字符型" class="headerlink" title="字符型"></a>字符型</h2><p>没有专门的字符型，使用<code>byte</code>来保存单个字母字符</p>
+<p><code>ASCII</code>码（128个）</p>
+<ul>
+<li><p>Go语言的字符使用UTF-8编码</p>
+</li>
+<li><p>英文字母：1个字节</p>
+</li>
+<li><p>汉字：3个字节</p>
+</li>
+<li><p>字符必须使用单引号括起来，双引号会报错</p>
+</li>
+</ul>
+<p><strong>单引号针对单个字符，字符串要使用双引号</strong></p>
+<p><strong>UTF-8是对ASCII的扩容</strong></p>
+<figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> str1 <span class="type">byte</span> = <span class="string">'a'</span></span><br><span class="line"><span class="keyword">var</span> str2 <span class="type">byte</span> = <span class="string">'0'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 当直接输出byte时，输出的使对应字符的ASCII码值(十进制)</span></span><br><span class="line">fmt.Println(<span class="string">"str1"</span>, str1, <span class="string">"str2"</span>, str2) <span class="comment">// str1 97 str2 48</span></span><br><span class="line">fmt.Printf(<span class="string">"str1=%c str2=%c"</span>, str1, str2) <span class="comment">// str1=a str2=0</span></span><br><span class="line"></span><br><span class="line">fmt.Printf(<span class="string">"str1=%c"</span>, str1) <span class="comment">// str1=a</span></span><br><span class="line">fmt.Printf(<span class="string">"str2=%c"</span>, str2) <span class="comment">// str2=0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> name <span class="type">byte</span> = <span class="string">'吖'</span></span><br><span class="line">fmt.Printf(<span class="string">"name=%c"</span>, name) <span class="comment">// overflows byte 超出byte类型的存储范围了</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 汉字更换成int类型</span></span><br><span class="line"><span class="keyword">var</span> name <span class="type">int</span> = <span class="string">'吖'</span></span><br><span class="line">fmt.Printf(<span class="string">"name=%c"</span>, name) <span class="comment">// name=吖</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> name1 <span class="type">int</span> =<span class="number">22269</span></span><br><span class="line">fmt.Printf(<span class="string">"name1=%c"</span>, name1) <span class="comment">// name1=国</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 数据类型只是为了定义存储空间的大小，对应计算机中的内存空间</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6354169e16f2c2beb137151f.jpg"></p>
+<h2 id="布尔型（bool）-默认值是false"><a href="#布尔型（bool）-默认值是false" class="headerlink" title="布尔型（bool）(默认值是false)"></a>布尔型（bool）(默认值是false)</h2><p>用于逻辑运算，流程控制。<code>bool</code>类型只占用一个字节的内存空间</p>
+<figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="literal">false</span></span><br><span class="line">fmt.Println(a)  <span class="comment">// false</span></span><br><span class="line">fmt.Println(unsafe.Sizeof(a))  <span class="comment">// 1</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="字符串（string）-默认值是””"><a href="#字符串（string）-默认值是””" class="headerlink" title="字符串（string）(默认值是””)"></a>字符串（string）(默认值是””)</h2><p><code>UTF-8</code>编码</p>
+<p><strong>字符串一经定义，则不能修改</strong></p>
+<figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> address <span class="type">string</span> = <span class="string">"北京长城"</span></span><br><span class="line">fmt.Println(address) <span class="comment">// 北京长城</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> str = <span class="string">"hello"</span></span><br><span class="line">str[<span class="number">0</span>] = <span class="string">'a'</span>     <span class="comment">// cannot assign to str[0] (strings are immutable)</span></span><br><span class="line">fmt.Println(str)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 反引号</span></span><br><span class="line"><span class="comment">// 以字符串原生形式输出，包括换行和特殊字符，可以实现防止攻击、输出源代码等效果。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 字符串拼接, + 号要放在上面，否则会报错(因为go默认在一行后面加;号)</span></span><br><span class="line"><span class="keyword">var</span> str01 = <span class="string">"hello"</span> + <span class="string">" world"</span></span><br><span class="line">str01 += <span class="string">"  haha!"</span> + <span class="string">"xixi"</span> +</span><br><span class="line"><span class="string">"heihei"</span></span><br><span class="line">fmt.Println(str01)    <span class="comment">// hello world  haha!xixiheihei</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="基本数据类型的默认值"><a href="#基本数据类型的默认值" class="headerlink" title="基本数据类型的默认值"></a>基本数据类型的默认值</h1><figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="type">int</span></span><br><span class="line"><span class="keyword">var</span> b <span class="type">float32</span></span><br><span class="line"><span class="keyword">var</span> c <span class="type">float64</span></span><br><span class="line"><span class="keyword">var</span> d <span class="type">bool</span></span><br><span class="line"><span class="keyword">var</span> e <span class="type">string</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// %v表示按照变量的值输出</span></span><br><span class="line">fmt.Printf(<span class="string">"a=%d,b=%v,c=%v,d=%v e=%v"</span>, a,b,c,d,e)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>上面输出： <code>a=0,b=0,c=0,d=false e=</code></p>
+<h1 id="派生-x2F-复杂数据类型"><a href="#派生-x2F-复杂数据类型" class="headerlink" title="派生/复杂数据类型"></a>派生/复杂数据类型</h1><ol>
+<li><p>指针（Pointer）</p>
+</li>
+<li><p>数组</p>
+</li>
+<li><p>结构体（struct）</p>
+</li>
+<li><p>管道（Channel）</p>
+</li>
+<li><p>函数</p>
+</li>
+<li><p>切片（slice）</p>
+</li>
+<li><p>接口（interface）</p>
+</li>
+<li><p>map</p>
+</li>
+</ol>
+<p>后面陆续讲解复杂数据类型。</p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
 </body></html>]]></content>
       <categories>
         <category>Go</category>
@@ -2135,179 +2079,6 @@
       </categories>
       <tags>
         <tag>Go</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hybrid app本地开发如何调用JSBridge</title>
-    <url>/posts/3740751445.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>前天同事问我公司内部的小程序怎么对接的，我回忆了一下，简单记录了一下前端同学需要注意的点。</p>
-<p>背后还有小程序架构、网络策略等等。当时恰逢小程序架构调整，（老架构的时候我就发现了有一个问题点可以优化，但是跟那边人反馈之后，人家表示不要我管😂，新架构时发现这个问题还巧妙的遗留下来了😮）我虽然不负责那块，但是本着<strong>这样不优雅</strong>的原则，还是跟新架构的对接人讲了我的优化方案，讲明白了之后，同时上报各自直系领导，并建议我领导牵头开会推动。最后，无奈存量数据太多，老架构那边权衡之后决定不改动。（多说了几句，权当记录一下）</p>
-</blockquote>
-<h1 id="1、背景"><a href="#1、背景" class="headerlink" title="1、背景"></a>1、背景</h1><p>公司研发的一款服务软件App（姑且称为“大地”），提供了包涵消息、待办、工作台、同事圈和通讯录五大功能模块，其中，工作台里集成了包括公司的移动客户端、PC端以及第三方平台的部分功能/服务（统称为“应用”）。</p>
-<p>我今天要讲的是这个集成平台以什么方式展现“应用”，答案是：借鉴了微信的架构，自研了“小程序”接入“应用”。</p>
-<p>我司小程序具有一种相对开放能力（面向全公司），赋能业务快速数字化、场景敏捷迭代，并且可在“大地”上便捷的获取和使用，同时具有完善的使用体验（这就是严格的接入审核标准带来的好处）。</p>
-<p>在“大地”开发者平台，创建小程序会自动创建配套的公众号（公众号是为了推送消息使用，可订阅）。小程序开发不限制技术选型，开发完成之后按照小程序接入规范打包上架小程序，审核发布。</p>
-<blockquote>
-<p>简单来说，可以把“大地”看成是一个“钉钉”，我现在要把我们的业务功能投放到“大地”上，就需要接入“大地”小程序，以小程序的方式在“大地”上为用户提供服务。</p>
-</blockquote>
-<p>小程序架构：<code>Cordova</code>框架做的<code>WebView</code>，运行我开发的前端程序，通过<code>Nginx</code>帮我把请求代理到微服务网关，由网关转发到目的主机处理请求。它虽然看上去是一个<code>Native App</code>，但只有一个<code>UI WebView</code>，里面访问的是一个<code>Web App</code>，对我来说就是开发一个<code>H5</code>应用调用一些所需的<code>JSBridge</code>，也就是所谓的<code>Hybrid App</code>。</p>
-<p>下面看一下本地开发中的一些问题，以及我是怎么处理的</p>
-<h1 id="2、问题"><a href="#2、问题" class="headerlink" title="2、问题"></a>2、问题</h1><p><code>Hybrid App</code>本地开发过程中没有真实的<code>Native</code>环境的，同样也无法使用<code>JSBridge</code>，这就会带来一个问题：跟原生交互的行为只能发布小程序才可以调试，本地玩不了，这…，相当fuck。</p>
-<p>目的是想让本地开发同小程序测试环境具有相同的体验，我的想法是在本地模拟<code>JSBridge</code>的方法，尽管不能带来真实的效果，至少触发了某个行为之后要有个反应，不至于让操作流程看起来像是“脱节”的（实际跟原生的交互行为并不多，比如：拍照、弹窗提示、定位等等）。</p>
-<p>因此，我要做的就是本地模拟<code>JSBridge</code>的一些方法，开发时触发了这些原生交互行为之后提示一些信息，等到上架小程序测试环境时，在手机上会用真实的<code>JSBridge</code>方法自动替换掉我模拟实现的方法。</p>
-<p>于是我就开始了下面的准备工作。</p>
-<ol>
-<li><p>搞清楚<code>JSBridge</code>运行的原理</p>
-</li>
-<li><p>本地模拟<code>JSBridge</code>的方法</p>
-</li>
-<li><p>上架小程序是自动使用真实的<code>JSBridge</code></p>
-</li>
-</ol>
-<h1 id="3、了解JSBridge"><a href="#3、了解JSBridge" class="headerlink" title="3、了解JSBridge"></a>3、了解<code>JSBridge</code></h1><p><strong>JSBridge</strong>：望文生义就是<code>js</code>和<code>Native</code>之前的桥梁，而实际上<code>JSBridge</code>确实是<code>JS</code>和<code>Native</code>之前的<strong>一种通信方式</strong>。</p>
-<p>简单的说，<code>JSBridge</code>就是定义<code>Native</code>和<code>JS</code>的通信，<code>Native</code>只通过一个固定的桥对象调用<code>JS</code>，<code>JS</code>也只通过固定的桥对象调用<code>Native</code>。<code>JSBridge</code>另一个叫法及大家熟知的<code>Hybrid app</code>技术。</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeacc16f2c2beb1834bb9.png"></p>
-<p>了解即可，更多的请参考</p>
-<ul>
-<li><p><a href="https://www.jianshu.com/p/0bd13e9059fb">Cordova浅析架构原理</a></p>
-</li>
-<li><p><a href="https://toutiao.io/posts/07qll1/preview">JSBridge 深度剖析</a></p>
-</li>
-</ul>
-<p>下图展示了<code>JSBridge</code>的工作流程👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeaee16f2c2beb18371d9.png"></p>
-<p>上图中左侧部分正式我要做的，具体请看下文</p>
-<blockquote>
-<p>看累了，三连一下，回看不迷路哟😉</p>
-</blockquote>
-<h2 id="3-1、我们的JSBridge"><a href="#3-1、我们的JSBridge" class="headerlink" title="3.1、我们的JSBridge"></a>3.1、我们的<code>JSBridge</code></h2><p>推测“大地”那边的<code>JSBridge</code>应该是自己写的，没有初始化<code>JSBridge</code>的操作</p>
-<p>当调用<code>JSBridge</code>时，必须在页面完全加载完成之后才能够拿到全局的<code>JSBridge</code>，<code>Cordova</code>框架提供<code>deviceready</code>事件，该事件触发的时候表示全局的<code>JSBridge</code>挂载成功。（注意：这就是我接下来操作的切入点，嘻嘻）</p>
-<p>简单写下如下：</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'deviceready OK!'</span>);</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">showToast</span>(<span class="number">0</span>, <span class="string">'提示信息'</span>)</span><br><span class="line">}, <span class="literal">false</span>)</span><br></pre></td></tr></tbody></table></figure>
-
-<p>需要注意的是，在开发环境，是没有 <code>deviceready</code> 事件的，所以上面的代码并不会执行，只有在<code>app</code>里面运行的时候才会执行。</p>
-<p><strong>思考：</strong></p>
-<p><code>JSBridge</code>必须是在<code>deviceready</code>事件触发后方能使用的，因此首先要做的就是自定义<code>deviceready</code>事件，本地环境可以手动触发自定义<code>deviceready</code>事件，生产环境下直接监听<code>deviceready</code>事件即可</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeafd16f2c2beb1838190.png"></p>
-<h1 id="4、JS发起自定义事件"><a href="#4、JS发起自定义事件" class="headerlink" title="4、JS发起自定义事件"></a>4、JS发起自定义事件</h1><p>我是用 <code>CustomEvent</code> 构造函数，继承至 <code>Event</code>，文档看<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/CustomEvent">这里</a></p>
-<ol>
-<li>用法</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="title class_">CustomEvent</span>(eventName, params);</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>示例</li>
-</ol>
-<p>创建一个自定义事件</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> event=<span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'mock-event'</span>);</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="3">
-<li>传递参数</li>
-</ol>
-<p>这里值得注意，需要把想要传递的参数包裹在一个包含<code>detail</code>属性的对象，否则传递的参数不会被挂载</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createEvent</span>(<span class="params">params, eventName = <span class="string">'mock-event'</span></span>) {</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(eventName, { <span class="attr">detail</span>: params });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> event = <span class="title function_">createEvent</span>({ <span class="attr">id</span>: <span class="string">'0010'</span> });</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="4">
-<li>发起事件</li>
-</ol>
-<p>调用<code>dispatchEvent</code>方法发起事件，传入你刚才创建的方法</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">dispatchEvent</span>(event);</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="5">
-<li>监听事件</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'mock-event'</span>, <span class="function">(<span class="params">{ detail: { id } }</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'id'</span>,id) <span class="comment">// 会在控制台打印0010</span></span><br><span class="line">});</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="6">
-<li>示例：</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">addEventListener</span>(<span class="string">'show'</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> { <span class="variable language_">console</span>.<span class="title function_">log</span>(event.<span class="property">detail</span>); });</span><br><span class="line"><span class="comment">// 触发</span></span><br><span class="line"><span class="keyword">let</span> myEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'show'</span>, {</span><br><span class="line">    <span class="attr">detail</span>: {</span><br><span class="line">        <span class="attr">username</span>: <span class="string">'xixi'</span>,</span><br><span class="line">        <span class="attr">userid</span>: <span class="string">'2022'</span></span><br><span class="line">    }</span><br><span class="line">});</span><br><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">dispatchEvent</span>(myEvent);</span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p>了解了自定义事件之后，通过自定义事件模拟触发<code>deviceready</code>事件，这样上面的 <code>deviceready</code> 事件监听就可以执行了。</p>
-<p><strong>注意</strong>：这里还要确定一个问题，在什么时候触发自定义事件<code>deviceready</code>呢？</p>
-</blockquote>
-<h1 id="5、确定-deviceready-事件执行时机"><a href="#5、确定-deviceready-事件执行时机" class="headerlink" title="5、确定 deviceready 事件执行时机"></a>5、确定 <code>deviceready</code> 事件执行时机</h1><ul>
-<li>只需要编写如下代码，查看输出结果即可</li>
-</ul>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'load'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'load OK!'</span>);</span><br><span class="line">}, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'deviceready OK!'</span>);</span><br><span class="line">}, <span class="literal">false</span>);</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>结果输出</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">load OK!</span><br><span class="line">deviceready OK!</span><br></pre></td></tr></tbody></table></figure>
-
-<p>由此可知，执行顺序：<code>load</code> –&gt; <code>deviceready</code></p>
-<h1 id="6、自定义事件模拟Cordova-deviceready事件"><a href="#6、自定义事件模拟Cordova-deviceready事件" class="headerlink" title="6、自定义事件模拟Cordova deviceready事件"></a>6、自定义事件模拟<code>Cordova</code> <code>deviceready</code>事件</h1><ol>
-<li><p>自定义<code>deviceready</code>事件</p>
-</li>
-<li><p>根据上面测试执行顺序得出的结论，我在<code>load</code>事件里触发自定义事件</p>
-</li>
-<li><p>在开发环境下模拟一些用到的<code>JSBridge-API</code>，比如下面写到的 <code>JSAPI.showToast()</code> 方法</p>
-</li>
-</ol>
-<ul>
-<li>mockEvent.js<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (process.<span class="property">env</span>.<span class="property">NODE_ENV</span> === <span class="string">'development'</span>) {</span><br><span class="line">  <span class="comment">//  自定义事件</span></span><br><span class="line">  <span class="keyword">let</span> myEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'deviceready'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 模拟JSAPI事件</span></span><br><span class="line">  <span class="variable language_">window</span>[<span class="string">'JSAPI'</span>] = {</span><br><span class="line">    <span class="title function_">showToast</span>(<span class="params">type, desc</span>) {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(type, desc);</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 开发环境下，在 原生 load 方法之后 触发自定义事件</span></span><br><span class="line">  <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'load'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'load OK!'</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> {</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">dispatchEvent</span>(myEvent);</span><br><span class="line">    }, <span class="number">100</span>)</span><br><span class="line">  }, <span class="literal">false</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h1 id="7、封装deviceReady方法"><a href="#7、封装deviceReady方法" class="headerlink" title="7、封装deviceReady方法"></a>7、封装<code>deviceReady</code>方法</h1><p>实现在<code>Cordova</code>框架触发<code>deviceready</code>事件的时候感知到，以便于在<code>deviceReady</code>事件触发后执行<code>JS-API</code>。</p>
-<p><strong>可用于开发环境和非开发环境</strong></p>
-<h2 id="7-1、方式一"><a href="#7-1、方式一" class="headerlink" title="7.1、方式一"></a>7.1、方式一</h2><p>这里采用<strong>链式调用</strong>的方式，</p>
-<p>以下这种借助 <code>Promise</code> 的实现，在这种场景下其实是不合理的👀<br>只是形式上类似，其实并不是</p>
-<ol>
-<li>定义</li>
-</ol>
-<ul>
-<li>mixin.js</li>
-</ul>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">deviceReady</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">      <span class="title function_">resolve</span>(<span class="string">"ready go!"</span>);</span><br><span class="line">    }, <span class="literal">false</span>);</span><br><span class="line">  })</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>组件内使用<code>JS-API</code></li>
-</ol>
-<p>使用<code>JSAPI</code>可以如下这么写</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">deviceReady</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res); <span class="comment">// ready go!</span></span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">showToast</span>(<span class="number">0</span>, <span class="string">'提示'</span>)</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="variable language_">this</span>.<span class="title function_">deviceReady</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">getUserInfo</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">  }, <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">  });</span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="3">
-<li>开发环境执行效果如下</li>
-</ol>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeb0a16f2c2beb183900d.png"></p>
-<h2 id="7-2、方式二（推荐）"><a href="#7-2、方式二（推荐）" class="headerlink" title="7.2、方式二（推荐）"></a>7.2、方式二（推荐）</h2><p>改写成通用的事件监听函数，支持链式调用</p>
-<blockquote>
-<ul>
-<li><p>开发环境下，由<code>mockEvent.js</code>文件里的<code>dispatchEvent</code>触发自定义的<code>deviceready</code>事件；</p>
-</li>
-<li><p>小程序里运行，则由真实的<code>deviceready</code>事件触发</p>
-</li>
-</ul>
-</blockquote>
-<ol>
-<li>定义</li>
-</ol>
-<ul>
-<li>mixin.js</li>
-</ul>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">receiver</span>(<span class="params">type</span>) {</span><br><span class="line">  <span class="keyword">let</span> callbacks = {</span><br><span class="line">      <span class="attr">fns</span>: [],</span><br><span class="line">      <span class="attr">then</span>: <span class="keyword">function</span>(<span class="params">cb</span>){</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">fns</span>.<span class="title function_">push</span>(cb);</span><br><span class="line">          <span class="keyword">return</span> <span class="variable language_">this</span>;</span><br><span class="line">      }</span><br><span class="line">  };</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(type, <span class="keyword">function</span>(<span class="params">ev</span>) {</span><br><span class="line">    <span class="keyword">let</span> fns = callbacks.<span class="property">fns</span>.<span class="title function_">slice</span>();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>, l = fns.<span class="property">length</span>; i &lt; l; i++){</span><br><span class="line">        fns[i].<span class="title function_">call</span>(<span class="variable language_">this</span>, ev);</span><br><span class="line">    }</span><br><span class="line">  });</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> callbacks;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>使用</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">receiver</span>(<span class="string">'deviceready'</span>).<span class="title function_">then</span>(<span class="function">(<span class="params">ev</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(ev);</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">getUserInfo</span>(</span><br><span class="line">    <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">    },</span><br><span class="line">    <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">    }</span><br><span class="line">  )</span><br><span class="line">})</span><br><span class="line"><span class="variable language_">this</span>.<span class="title function_">receiver</span>(<span class="string">"click"</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"hi"</span>))</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">()=&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">22</span>));</span><br></pre></td></tr></tbody></table></figure>
-
-
-<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>当应用发布到<code>app</code>上，就是监听的真实的 <code>Cordova</code>框架的 <code>deviceready</code> 事件了，之后也就可以拿到真实的<code>JSAPI</code>了，以上只是为了在开发环境的时候模拟使用<code>JSAPI</code>。防止在开发环境下直接调用<code>JSAPI</code>飘红的情况，当然也是可以加<code>try catch</code>处理的，只不过个人感觉模拟事件使得代码看起来更加优雅别致一点，使用更加丝滑，酌情食用😁。</p>
-<p>软件架构非常有意思，感兴趣的可以交流探索，嘻嘻。</p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>Hybrid app</tag>
       </tags>
   </entry>
   <entry>
@@ -2578,6 +2349,179 @@
       <tags>
         <tag>Hexo</tag>
         <tag>GitHub Actions</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hybrid app本地开发如何调用JSBridge</title>
+    <url>/posts/3740751445.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>前天同事问我公司内部的小程序怎么对接的，我回忆了一下，简单记录了一下前端同学需要注意的点。</p>
+<p>背后还有小程序架构、网络策略等等。当时恰逢小程序架构调整，（老架构的时候我就发现了有一个问题点可以优化，但是跟那边人反馈之后，人家表示不要我管😂，新架构时发现这个问题还巧妙的遗留下来了😮）我虽然不负责那块，但是本着<strong>这样不优雅</strong>的原则，还是跟新架构的对接人讲了我的优化方案，讲明白了之后，同时上报各自直系领导，并建议我领导牵头开会推动。最后，无奈存量数据太多，老架构那边权衡之后决定不改动。（多说了几句，权当记录一下）</p>
+</blockquote>
+<h1 id="1、背景"><a href="#1、背景" class="headerlink" title="1、背景"></a>1、背景</h1><p>公司研发的一款服务软件App（姑且称为“大地”），提供了包涵消息、待办、工作台、同事圈和通讯录五大功能模块，其中，工作台里集成了包括公司的移动客户端、PC端以及第三方平台的部分功能/服务（统称为“应用”）。</p>
+<p>我今天要讲的是这个集成平台以什么方式展现“应用”，答案是：借鉴了微信的架构，自研了“小程序”接入“应用”。</p>
+<p>我司小程序具有一种相对开放能力（面向全公司），赋能业务快速数字化、场景敏捷迭代，并且可在“大地”上便捷的获取和使用，同时具有完善的使用体验（这就是严格的接入审核标准带来的好处）。</p>
+<p>在“大地”开发者平台，创建小程序会自动创建配套的公众号（公众号是为了推送消息使用，可订阅）。小程序开发不限制技术选型，开发完成之后按照小程序接入规范打包上架小程序，审核发布。</p>
+<blockquote>
+<p>简单来说，可以把“大地”看成是一个“钉钉”，我现在要把我们的业务功能投放到“大地”上，就需要接入“大地”小程序，以小程序的方式在“大地”上为用户提供服务。</p>
+</blockquote>
+<p>小程序架构：<code>Cordova</code>框架做的<code>WebView</code>，运行我开发的前端程序，通过<code>Nginx</code>帮我把请求代理到微服务网关，由网关转发到目的主机处理请求。它虽然看上去是一个<code>Native App</code>，但只有一个<code>UI WebView</code>，里面访问的是一个<code>Web App</code>，对我来说就是开发一个<code>H5</code>应用调用一些所需的<code>JSBridge</code>，也就是所谓的<code>Hybrid App</code>。</p>
+<p>下面看一下本地开发中的一些问题，以及我是怎么处理的</p>
+<h1 id="2、问题"><a href="#2、问题" class="headerlink" title="2、问题"></a>2、问题</h1><p><code>Hybrid App</code>本地开发过程中没有真实的<code>Native</code>环境的，同样也无法使用<code>JSBridge</code>，这就会带来一个问题：跟原生交互的行为只能发布小程序才可以调试，本地玩不了，这…，相当fuck。</p>
+<p>目的是想让本地开发同小程序测试环境具有相同的体验，我的想法是在本地模拟<code>JSBridge</code>的方法，尽管不能带来真实的效果，至少触发了某个行为之后要有个反应，不至于让操作流程看起来像是“脱节”的（实际跟原生的交互行为并不多，比如：拍照、弹窗提示、定位等等）。</p>
+<p>因此，我要做的就是本地模拟<code>JSBridge</code>的一些方法，开发时触发了这些原生交互行为之后提示一些信息，等到上架小程序测试环境时，在手机上会用真实的<code>JSBridge</code>方法自动替换掉我模拟实现的方法。</p>
+<p>于是我就开始了下面的准备工作。</p>
+<ol>
+<li><p>搞清楚<code>JSBridge</code>运行的原理</p>
+</li>
+<li><p>本地模拟<code>JSBridge</code>的方法</p>
+</li>
+<li><p>上架小程序是自动使用真实的<code>JSBridge</code></p>
+</li>
+</ol>
+<h1 id="3、了解JSBridge"><a href="#3、了解JSBridge" class="headerlink" title="3、了解JSBridge"></a>3、了解<code>JSBridge</code></h1><p><strong>JSBridge</strong>：望文生义就是<code>js</code>和<code>Native</code>之前的桥梁，而实际上<code>JSBridge</code>确实是<code>JS</code>和<code>Native</code>之前的<strong>一种通信方式</strong>。</p>
+<p>简单的说，<code>JSBridge</code>就是定义<code>Native</code>和<code>JS</code>的通信，<code>Native</code>只通过一个固定的桥对象调用<code>JS</code>，<code>JS</code>也只通过固定的桥对象调用<code>Native</code>。<code>JSBridge</code>另一个叫法及大家熟知的<code>Hybrid app</code>技术。</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeacc16f2c2beb1834bb9.png"></p>
+<p>了解即可，更多的请参考</p>
+<ul>
+<li><p><a href="https://www.jianshu.com/p/0bd13e9059fb">Cordova浅析架构原理</a></p>
+</li>
+<li><p><a href="https://toutiao.io/posts/07qll1/preview">JSBridge 深度剖析</a></p>
+</li>
+</ul>
+<p>下图展示了<code>JSBridge</code>的工作流程👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeaee16f2c2beb18371d9.png"></p>
+<p>上图中左侧部分正式我要做的，具体请看下文</p>
+<blockquote>
+<p>看累了，三连一下，回看不迷路哟😉</p>
+</blockquote>
+<h2 id="3-1、我们的JSBridge"><a href="#3-1、我们的JSBridge" class="headerlink" title="3.1、我们的JSBridge"></a>3.1、我们的<code>JSBridge</code></h2><p>推测“大地”那边的<code>JSBridge</code>应该是自己写的，没有初始化<code>JSBridge</code>的操作</p>
+<p>当调用<code>JSBridge</code>时，必须在页面完全加载完成之后才能够拿到全局的<code>JSBridge</code>，<code>Cordova</code>框架提供<code>deviceready</code>事件，该事件触发的时候表示全局的<code>JSBridge</code>挂载成功。（注意：这就是我接下来操作的切入点，嘻嘻）</p>
+<p>简单写下如下：</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'deviceready OK!'</span>);</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">showToast</span>(<span class="number">0</span>, <span class="string">'提示信息'</span>)</span><br><span class="line">}, <span class="literal">false</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>需要注意的是，在开发环境，是没有 <code>deviceready</code> 事件的，所以上面的代码并不会执行，只有在<code>app</code>里面运行的时候才会执行。</p>
+<p><strong>思考：</strong></p>
+<p><code>JSBridge</code>必须是在<code>deviceready</code>事件触发后方能使用的，因此首先要做的就是自定义<code>deviceready</code>事件，本地环境可以手动触发自定义<code>deviceready</code>事件，生产环境下直接监听<code>deviceready</code>事件即可</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeafd16f2c2beb1838190.png"></p>
+<h1 id="4、JS发起自定义事件"><a href="#4、JS发起自定义事件" class="headerlink" title="4、JS发起自定义事件"></a>4、JS发起自定义事件</h1><p>我是用 <code>CustomEvent</code> 构造函数，继承至 <code>Event</code>，文档看<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/CustomEvent">这里</a></p>
+<ol>
+<li>用法</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="title class_">CustomEvent</span>(eventName, params);</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>示例</li>
+</ol>
+<p>创建一个自定义事件</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> event=<span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'mock-event'</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>传递参数</li>
+</ol>
+<p>这里值得注意，需要把想要传递的参数包裹在一个包含<code>detail</code>属性的对象，否则传递的参数不会被挂载</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createEvent</span>(<span class="params">params, eventName = <span class="string">'mock-event'</span></span>) {</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(eventName, { <span class="attr">detail</span>: params });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> event = <span class="title function_">createEvent</span>({ <span class="attr">id</span>: <span class="string">'0010'</span> });</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="4">
+<li>发起事件</li>
+</ol>
+<p>调用<code>dispatchEvent</code>方法发起事件，传入你刚才创建的方法</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">dispatchEvent</span>(event);</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="5">
+<li>监听事件</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'mock-event'</span>, <span class="function">(<span class="params">{ detail: { id } }</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'id'</span>,id) <span class="comment">// 会在控制台打印0010</span></span><br><span class="line">});</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="6">
+<li>示例：</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">addEventListener</span>(<span class="string">'show'</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> { <span class="variable language_">console</span>.<span class="title function_">log</span>(event.<span class="property">detail</span>); });</span><br><span class="line"><span class="comment">// 触发</span></span><br><span class="line"><span class="keyword">let</span> myEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'show'</span>, {</span><br><span class="line">    <span class="attr">detail</span>: {</span><br><span class="line">        <span class="attr">username</span>: <span class="string">'xixi'</span>,</span><br><span class="line">        <span class="attr">userid</span>: <span class="string">'2022'</span></span><br><span class="line">    }</span><br><span class="line">});</span><br><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">dispatchEvent</span>(myEvent);</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>了解了自定义事件之后，通过自定义事件模拟触发<code>deviceready</code>事件，这样上面的 <code>deviceready</code> 事件监听就可以执行了。</p>
+<p><strong>注意</strong>：这里还要确定一个问题，在什么时候触发自定义事件<code>deviceready</code>呢？</p>
+</blockquote>
+<h1 id="5、确定-deviceready-事件执行时机"><a href="#5、确定-deviceready-事件执行时机" class="headerlink" title="5、确定 deviceready 事件执行时机"></a>5、确定 <code>deviceready</code> 事件执行时机</h1><ul>
+<li>只需要编写如下代码，查看输出结果即可</li>
+</ul>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'load'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'load OK!'</span>);</span><br><span class="line">}, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'deviceready OK!'</span>);</span><br><span class="line">}, <span class="literal">false</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>结果输出</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">load OK!</span><br><span class="line">deviceready OK!</span><br></pre></td></tr></tbody></table></figure>
+
+<p>由此可知，执行顺序：<code>load</code> –&gt; <code>deviceready</code></p>
+<h1 id="6、自定义事件模拟Cordova-deviceready事件"><a href="#6、自定义事件模拟Cordova-deviceready事件" class="headerlink" title="6、自定义事件模拟Cordova deviceready事件"></a>6、自定义事件模拟<code>Cordova</code> <code>deviceready</code>事件</h1><ol>
+<li><p>自定义<code>deviceready</code>事件</p>
+</li>
+<li><p>根据上面测试执行顺序得出的结论，我在<code>load</code>事件里触发自定义事件</p>
+</li>
+<li><p>在开发环境下模拟一些用到的<code>JSBridge-API</code>，比如下面写到的 <code>JSAPI.showToast()</code> 方法</p>
+</li>
+</ol>
+<ul>
+<li>mockEvent.js<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (process.<span class="property">env</span>.<span class="property">NODE_ENV</span> === <span class="string">'development'</span>) {</span><br><span class="line">  <span class="comment">//  自定义事件</span></span><br><span class="line">  <span class="keyword">let</span> myEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">'deviceready'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 模拟JSAPI事件</span></span><br><span class="line">  <span class="variable language_">window</span>[<span class="string">'JSAPI'</span>] = {</span><br><span class="line">    <span class="title function_">showToast</span>(<span class="params">type, desc</span>) {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(type, desc);</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 开发环境下，在 原生 load 方法之后 触发自定义事件</span></span><br><span class="line">  <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'load'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'load OK!'</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> {</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">dispatchEvent</span>(myEvent);</span><br><span class="line">    }, <span class="number">100</span>)</span><br><span class="line">  }, <span class="literal">false</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h1 id="7、封装deviceReady方法"><a href="#7、封装deviceReady方法" class="headerlink" title="7、封装deviceReady方法"></a>7、封装<code>deviceReady</code>方法</h1><p>实现在<code>Cordova</code>框架触发<code>deviceready</code>事件的时候感知到，以便于在<code>deviceReady</code>事件触发后执行<code>JS-API</code>。</p>
+<p><strong>可用于开发环境和非开发环境</strong></p>
+<h2 id="7-1、方式一"><a href="#7-1、方式一" class="headerlink" title="7.1、方式一"></a>7.1、方式一</h2><p>这里采用<strong>链式调用</strong>的方式，</p>
+<p>以下这种借助 <code>Promise</code> 的实现，在这种场景下其实是不合理的👀<br>只是形式上类似，其实并不是</p>
+<ol>
+<li>定义</li>
+</ol>
+<ul>
+<li>mixin.js</li>
+</ul>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">deviceReady</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">'deviceready'</span>, <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">      <span class="title function_">resolve</span>(<span class="string">"ready go!"</span>);</span><br><span class="line">    }, <span class="literal">false</span>);</span><br><span class="line">  })</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>组件内使用<code>JS-API</code></li>
+</ol>
+<p>使用<code>JSAPI</code>可以如下这么写</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">deviceReady</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res); <span class="comment">// ready go!</span></span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">showToast</span>(<span class="number">0</span>, <span class="string">'提示'</span>)</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="variable language_">this</span>.<span class="title function_">deviceReady</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">getUserInfo</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">  }, <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">  });</span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>开发环境执行效果如下</li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/631aeb0a16f2c2beb183900d.png"></p>
+<h2 id="7-2、方式二（推荐）"><a href="#7-2、方式二（推荐）" class="headerlink" title="7.2、方式二（推荐）"></a>7.2、方式二（推荐）</h2><p>改写成通用的事件监听函数，支持链式调用</p>
+<blockquote>
+<ul>
+<li><p>开发环境下，由<code>mockEvent.js</code>文件里的<code>dispatchEvent</code>触发自定义的<code>deviceready</code>事件；</p>
+</li>
+<li><p>小程序里运行，则由真实的<code>deviceready</code>事件触发</p>
+</li>
+</ul>
+</blockquote>
+<ol>
+<li>定义</li>
+</ol>
+<ul>
+<li>mixin.js</li>
+</ul>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">receiver</span>(<span class="params">type</span>) {</span><br><span class="line">  <span class="keyword">let</span> callbacks = {</span><br><span class="line">      <span class="attr">fns</span>: [],</span><br><span class="line">      <span class="attr">then</span>: <span class="keyword">function</span>(<span class="params">cb</span>){</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">fns</span>.<span class="title function_">push</span>(cb);</span><br><span class="line">          <span class="keyword">return</span> <span class="variable language_">this</span>;</span><br><span class="line">      }</span><br><span class="line">  };</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(type, <span class="keyword">function</span>(<span class="params">ev</span>) {</span><br><span class="line">    <span class="keyword">let</span> fns = callbacks.<span class="property">fns</span>.<span class="title function_">slice</span>();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>, l = fns.<span class="property">length</span>; i &lt; l; i++){</span><br><span class="line">        fns[i].<span class="title function_">call</span>(<span class="variable language_">this</span>, ev);</span><br><span class="line">    }</span><br><span class="line">  });</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> callbacks;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>使用</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">receiver</span>(<span class="string">'deviceready'</span>).<span class="title function_">then</span>(<span class="function">(<span class="params">ev</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(ev);</span><br><span class="line">  <span class="variable constant_">JSAPI</span>.<span class="title function_">getUserInfo</span>(</span><br><span class="line">    <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">    },</span><br><span class="line">    <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">    }</span><br><span class="line">  )</span><br><span class="line">})</span><br><span class="line"><span class="variable language_">this</span>.<span class="title function_">receiver</span>(<span class="string">"click"</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"hi"</span>))</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">()=&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">22</span>));</span><br></pre></td></tr></tbody></table></figure>
+
+
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>当应用发布到<code>app</code>上，就是监听的真实的 <code>Cordova</code>框架的 <code>deviceready</code> 事件了，之后也就可以拿到真实的<code>JSAPI</code>了，以上只是为了在开发环境的时候模拟使用<code>JSAPI</code>。防止在开发环境下直接调用<code>JSAPI</code>飘红的情况，当然也是可以加<code>try catch</code>处理的，只不过个人感觉模拟事件使得代码看起来更加优雅别致一点，使用更加丝滑，酌情食用😁。</p>
+<p>软件架构非常有意思，感兴趣的可以交流探索，嘻嘻。</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>Hybrid app</tag>
       </tags>
   </entry>
   <entry>
@@ -3147,124 +3091,6 @@
       </tags>
   </entry>
   <entry>
-    <title>.env.[mode]文件中如何添加注释？</title>
-    <url>/posts/2584380968.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>Vue-Cli</code> 允许我们在项目根目录创建<code>.env.[mode]</code>文件来设置一些打包编译的启动参数，通过执行脚本的时候加<code>mode</code>参数，指定不同环境需要加载的配置文件</p>
-<p>形如： <code>.env.prod</code></p>
-<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>怎么在 <code>.env.prod</code> 文件中添加注释呢？</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这要看<code>vue</code>是怎么解析 <code>.env.prod</code> 文件的</p>
-<p>通过启动脚本参数 <code>--mode prod</code>，一路找到了处理 <code>.env.prod</code> 文件的逻辑，让我们一块看下</p>
-<p><code>path：node_modules\@vue\cli-service\lib\Service.js</code></p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> dotenv = <span class="built_in">require</span>(<span class="string">'dotenv'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">loadEnv (mode) {</span><br><span class="line">    <span class="keyword">const</span> logger = <span class="title function_">debug</span>(<span class="string">'vue:env'</span>)</span><br><span class="line">    <span class="keyword">const</span> basePath = path.<span class="title function_">resolve</span>(<span class="variable language_">this</span>.<span class="property">context</span>, <span class="string">`.env<span class="subst">${mode ? <span class="string">`.<span class="subst">${mode}</span>`</span> : <span class="string">``</span>}</span>`</span>)</span><br><span class="line">    <span class="keyword">const</span> localPath = <span class="string">`<span class="subst">${basePath}</span>.local`</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="title function_">load</span> = envPath =&gt; {</span><br><span class="line">      <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">const</span> env = dotenv.<span class="title function_">config</span>({ <span class="attr">path</span>: envPath, <span class="attr">debug</span>: process.<span class="property">env</span>.<span class="property">DEBUG</span> })</span><br><span class="line">        <span class="title function_">dotenvExpand</span>(env)</span><br><span class="line">        <span class="title function_">logger</span>(envPath, env)</span><br><span class="line">      } <span class="keyword">catch</span> (err) {</span><br><span class="line">        <span class="comment">// only ignore error if file is not found</span></span><br><span class="line">        <span class="keyword">if</span> (err.<span class="title function_">toString</span>().<span class="title function_">indexOf</span>(<span class="string">'ENOENT'</span>) &lt; <span class="number">0</span>) {</span><br><span class="line">          <span class="title function_">error</span>(err)</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="title function_">load</span>(localPath)</span><br><span class="line">    <span class="title function_">load</span>(basePath)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// by default, NODE_ENV and BABEL_ENV are set to "development" unless mode</span></span><br><span class="line">    <span class="comment">// is production or test. However the value in .env files will take higher</span></span><br><span class="line">    <span class="comment">// priority.</span></span><br><span class="line">    <span class="keyword">if</span> (mode) {</span><br><span class="line">      <span class="comment">// always set NODE_ENV during tests</span></span><br><span class="line">      <span class="comment">// as that is necessary for tests to not be affected by each other</span></span><br><span class="line">      <span class="keyword">const</span> shouldForceDefaultEnv = (</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST</span> &amp;&amp;</span><br><span class="line">        !process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST_TESTING_ENV</span></span><br><span class="line">      )</span><br><span class="line">      <span class="keyword">const</span> defaultNodeEnv = (mode === <span class="string">'production'</span> || mode === <span class="string">'test'</span>)</span><br><span class="line">        ? mode</span><br><span class="line">        : <span class="string">'development'</span></span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">NODE_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">NODE_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br></pre></td></tr></tbody></table></figure>
-
-<p>从上面的代码，可以得知，<code>vue</code>使用<code>dotenv</code>解析<code> .env.prod</code> 文件，并将环境变量从 <code>.env[mode]</code> 文件中加载到 <code>process.env</code> 环境变量中</p>
-<h2 id="解决（dotenv）"><a href="#解决（dotenv）" class="headerlink" title="解决（dotenv）"></a>解决（dotenv）</h2><p><code>dotenv</code>插件已经被 <code>Vue-Cli</code> 集成了</p>
-<p><a href="https://github.com/motdotla/dotenv#rules">GitHub地址</a></p>
-<p><code>README.md</code> 中有这么一段话：</p>
-<ul>
-<li>“# marks the beginning of a comment (unless when the value is wrapped in quotes)”</li>
-</ul>
-<p>这就是我们要找的，在<code>.env.[mode]</code> 文件中，可以使用 <code>#</code> 进行注释</p>
-<h3 id="使用测试"><a href="#使用测试" class="headerlink" title="使用测试"></a>使用测试</h3><ol>
-<li><code>path: .env.prod</code> 参数配置</li>
-</ol>
-<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="comment"># VUE_APP_PATH='/pc/'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li><code>package.json</code> 文件脚本命令配置<code>--mode</code>参数</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: {</span><br><span class="line">    <span class="string">"build"</span>: <span class="string">"vue-cli-service build --mode prod"</span>,</span><br><span class="line">  },</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="3">
-<li>执行 <code>npm run build</code> 命令，输出如下：</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">NODE_ENV=== production</span><br><span class="line">VUE_APP_PATH=== ./</span><br></pre></td></tr></tbody></table></figure>
-
-<p>本文到此为止，要想了解更多<code>dotenv</code>请自行探索，感谢观看😉</p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://img-blog.csdnimg.cn/img_convert/bd14318dfe358078af5f56cdf6895446.gif"></p>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>vue</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>js获取项目git分支信息</title>
-    <url>/posts/3067788882.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="1、git-bash-获取分支信息"><a href="#1、git-bash-获取分支信息" class="headerlink" title="1、git bash 获取分支信息"></a>1、git bash 获取分支信息</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 获取当前分支名</span></span><br><span class="line">git rev-parse --abbrev-ref HEAD</span><br><span class="line">git branch --show-current</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取当前hash</span></span><br><span class="line">git rev-parse HEAD</span><br><span class="line">git rev-parse --short HEAD  <span class="comment"># 短的</span></span><br></pre></td></tr></tbody></table></figure>
-<p>上面的代码是通过git命令获取的分支信息，怎么可以在项目代码里面获取分支信息呢？请看下文👇</p>
-<h2 id="2、JavaScript-通过-execa-插件获取项目分支信息"><a href="#2、JavaScript-通过-execa-插件获取项目分支信息" class="headerlink" title="2、JavaScript 通过 execa 插件获取项目分支信息"></a>2、JavaScript 通过 <a href="https://github.com/sindresorhus/execa">execa</a> 插件获取项目分支信息</h2><p>execa具备如下特点：</p>
-<ul>
-<li><p>Promise接口</p>
-</li>
-<li><p>从输出中删除最后的换行符，这样您就不必执行stdout.trim()</p>
-</li>
-<li><p>支持<strong>跨平台</strong>的shebang二进制文件</p>
-</li>
-<li><p>改进Windows支持。</p>
-</li>
-<li><p>更高的最大缓冲区。100mb而不是200kb。</p>
-</li>
-<li><p>按名称执行本地安装的二进制文件。</p>
-</li>
-<li><p>在父进程终止时清除派生的进程。</p>
-</li>
-<li><p>从 stdout和stderr获得交错输出，类似于在终端上打印的输出。(<strong>异步</strong>)</p>
-</li>
-<li><p>可以指定文件和参数作为一个单一的字符串没有外壳</p>
-</li>
-<li><p>更具描述性的错误。</p>
-</li>
-</ul>
-<ol>
-<li><p>安装 execa</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm install execa -S</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>简单使用 execa</p>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line">(<span class="keyword">async</span> () =&gt; {</span><br><span class="line">    <span class="keyword">const</span> {stdout} = <span class="keyword">await</span> <span class="title function_">execa</span>(<span class="string">'echo'</span>, [<span class="string">'unicorns'</span>]);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(stdout);</span><br><span class="line">    <span class="comment">//=&gt; 'unicorns'</span></span><br><span class="line">})();</span><br><span class="line"></span><br><span class="line"><span class="comment">// stdout 表示执行命令的输出结果</span></span><br><span class="line"><span class="comment">/*{</span></span><br><span class="line"><span class="comment">  command: 'echo unicorns',</span></span><br><span class="line"><span class="comment">  escapedCommand: 'echo unicorns',</span></span><br><span class="line"><span class="comment">  exitCode: 0,</span></span><br><span class="line"><span class="comment">  stdout: '"unicorns"',</span></span><br><span class="line"><span class="comment">  stderr: '',</span></span><br><span class="line"><span class="comment">  all: undefined,</span></span><br><span class="line"><span class="comment">  failed: false,</span></span><br><span class="line"><span class="comment">  timedOut: false,</span></span><br><span class="line"><span class="comment">  isCanceled: false,</span></span><br><span class="line"><span class="comment">  killed: false</span></span><br><span class="line"><span class="comment">}*/</span></span><br></pre></td></tr></tbody></table></figure>
-<p>execa还可以执行脚本命令，并输出结果，下面看一下如何在代码里面获取当前操作的分支👇</p>
-</li>
-<li><p>实际项目中的代码</p>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getGitBranch</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">const</span> res = execa.<span class="title function_">commandSync</span>(<span class="string">'git rev-parse --abbrev-ref HEAD'</span>);</span><br><span class="line">  <span class="keyword">return</span> res.<span class="property">stdout</span>;</span><br><span class="line">}</span><br><span class="line"><span class="keyword">const</span> curbranch = <span class="title function_">getGitBranch</span>()</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'curbranch=='</span>, curbranch); <span class="comment">// master</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 以下是res输出</span></span><br><span class="line">curbranch== master</span><br><span class="line">{</span><br><span class="line">  <span class="attr">command</span>: <span class="string">'git rev-parse --abbrev-ref HEAD'</span>,</span><br><span class="line">  <span class="attr">escapedCommand</span>: <span class="string">'git rev-parse --abbrev-ref HEAD'</span>,</span><br><span class="line">  <span class="attr">exitCode</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="attr">stdout</span>: <span class="string">'master'</span>, # 命令执行结果输出</span><br><span class="line">  <span class="attr">stderr</span>: <span class="string">''</span>,</span><br><span class="line">  <span class="attr">failed</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">timedOut</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">isCanceled</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">killed</span>: <span class="literal">false</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>下面说一下脚本获取方式</p>
-</li>
-</ol>
-<h2 id="3、脚本获取"><a href="#3、脚本获取" class="headerlink" title="3、脚本获取"></a>3、脚本获取</h2><blockquote>
-<p>我在掘金 <a href="https://juejin.cn/post/7113502858481254413">git编写脚本 组合 commit-msg</a> 一文中使用脚本获取分支信息，感兴趣可以看一下。</p>
-</blockquote>
-<ol>
-<li><p>可以看一下项目中 <code>.git/HEAD</code> 文件中的内容</p>
-<p> HEAD指向最新放入仓库的版本</p>
-</li>
-</ol>
-<figure class="highlight angelscript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">ref</span>: <span class="built_in">ref</span>s/heads/dev_0922</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>编写脚本</li>
-</ol>
-<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取当前分支</span></span><br><span class="line">line=$(<span class="built_in">head</span> -n +1 .git/HEAD)</span><br><span class="line">branch=<span class="variable">${line##*/}</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$branch</span> <span class="comment"># dev_0922</span></span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker常用命令——排错很有帮助😏</title>
     <url>/posts/1627929391.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -3358,6 +3184,56 @@
       </tags>
   </entry>
   <entry>
+    <title>.env.[mode]文件中如何添加注释？</title>
+    <url>/posts/2584380968.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>Vue-Cli</code> 允许我们在项目根目录创建<code>.env.[mode]</code>文件来设置一些打包编译的启动参数，通过执行脚本的时候加<code>mode</code>参数，指定不同环境需要加载的配置文件</p>
+<p>形如： <code>.env.prod</code></p>
+<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>怎么在 <code>.env.prod</code> 文件中添加注释呢？</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这要看<code>vue</code>是怎么解析 <code>.env.prod</code> 文件的</p>
+<p>通过启动脚本参数 <code>--mode prod</code>，一路找到了处理 <code>.env.prod</code> 文件的逻辑，让我们一块看下</p>
+<p><code>path：node_modules\@vue\cli-service\lib\Service.js</code></p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> dotenv = <span class="built_in">require</span>(<span class="string">'dotenv'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">loadEnv (mode) {</span><br><span class="line">    <span class="keyword">const</span> logger = <span class="title function_">debug</span>(<span class="string">'vue:env'</span>)</span><br><span class="line">    <span class="keyword">const</span> basePath = path.<span class="title function_">resolve</span>(<span class="variable language_">this</span>.<span class="property">context</span>, <span class="string">`.env<span class="subst">${mode ? <span class="string">`.<span class="subst">${mode}</span>`</span> : <span class="string">``</span>}</span>`</span>)</span><br><span class="line">    <span class="keyword">const</span> localPath = <span class="string">`<span class="subst">${basePath}</span>.local`</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="title function_">load</span> = envPath =&gt; {</span><br><span class="line">      <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">const</span> env = dotenv.<span class="title function_">config</span>({ <span class="attr">path</span>: envPath, <span class="attr">debug</span>: process.<span class="property">env</span>.<span class="property">DEBUG</span> })</span><br><span class="line">        <span class="title function_">dotenvExpand</span>(env)</span><br><span class="line">        <span class="title function_">logger</span>(envPath, env)</span><br><span class="line">      } <span class="keyword">catch</span> (err) {</span><br><span class="line">        <span class="comment">// only ignore error if file is not found</span></span><br><span class="line">        <span class="keyword">if</span> (err.<span class="title function_">toString</span>().<span class="title function_">indexOf</span>(<span class="string">'ENOENT'</span>) &lt; <span class="number">0</span>) {</span><br><span class="line">          <span class="title function_">error</span>(err)</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="title function_">load</span>(localPath)</span><br><span class="line">    <span class="title function_">load</span>(basePath)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// by default, NODE_ENV and BABEL_ENV are set to "development" unless mode</span></span><br><span class="line">    <span class="comment">// is production or test. However the value in .env files will take higher</span></span><br><span class="line">    <span class="comment">// priority.</span></span><br><span class="line">    <span class="keyword">if</span> (mode) {</span><br><span class="line">      <span class="comment">// always set NODE_ENV during tests</span></span><br><span class="line">      <span class="comment">// as that is necessary for tests to not be affected by each other</span></span><br><span class="line">      <span class="keyword">const</span> shouldForceDefaultEnv = (</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST</span> &amp;&amp;</span><br><span class="line">        !process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST_TESTING_ENV</span></span><br><span class="line">      )</span><br><span class="line">      <span class="keyword">const</span> defaultNodeEnv = (mode === <span class="string">'production'</span> || mode === <span class="string">'test'</span>)</span><br><span class="line">        ? mode</span><br><span class="line">        : <span class="string">'development'</span></span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">NODE_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">NODE_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br></pre></td></tr></tbody></table></figure>
+
+<p>从上面的代码，可以得知，<code>vue</code>使用<code>dotenv</code>解析<code> .env.prod</code> 文件，并将环境变量从 <code>.env[mode]</code> 文件中加载到 <code>process.env</code> 环境变量中</p>
+<h2 id="解决（dotenv）"><a href="#解决（dotenv）" class="headerlink" title="解决（dotenv）"></a>解决（dotenv）</h2><p><code>dotenv</code>插件已经被 <code>Vue-Cli</code> 集成了</p>
+<p><a href="https://github.com/motdotla/dotenv#rules">GitHub地址</a></p>
+<p><code>README.md</code> 中有这么一段话：</p>
+<ul>
+<li>“# marks the beginning of a comment (unless when the value is wrapped in quotes)”</li>
+</ul>
+<p>这就是我们要找的，在<code>.env.[mode]</code> 文件中，可以使用 <code>#</code> 进行注释</p>
+<h3 id="使用测试"><a href="#使用测试" class="headerlink" title="使用测试"></a>使用测试</h3><ol>
+<li><code>path: .env.prod</code> 参数配置</li>
+</ol>
+<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="comment"># VUE_APP_PATH='/pc/'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li><code>package.json</code> 文件脚本命令配置<code>--mode</code>参数</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: {</span><br><span class="line">    <span class="string">"build"</span>: <span class="string">"vue-cli-service build --mode prod"</span>,</span><br><span class="line">  },</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>执行 <code>npm run build</code> 命令，输出如下：</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">NODE_ENV=== production</span><br><span class="line">VUE_APP_PATH=== ./</span><br></pre></td></tr></tbody></table></figure>
+
+<p>本文到此为止，要想了解更多<code>dotenv</code>请自行探索，感谢观看😉</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://img-blog.csdnimg.cn/img_convert/bd14318dfe358078af5f56cdf6895446.gif"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>npm 脚本命令使用解析</title>
     <url>/posts/2334529800.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -3419,28 +3295,6 @@
       </tags>
   </entry>
   <entry>
-    <title>低代码和数字化</title>
-    <url>/posts/4121106976.html</url>
-    <content><![CDATA[<html><head></head><body><p>读“<a href="https://mp.weixin.qq.com/s/rU0455dOafob-TPkVzaBsA">有头有脸的老板，都开始盯数字化了</a>”有感</p>
-<p>一个转身就是另一番景象。</p>
-<p>存量数据比重占大头了吗？怎么适应呢，钉钉开始收缩边界，余力转化效率。</p>
-<p>我的工作是前端开发，本能的从低代码在我所涉及的前端领域的应用上看待低代码的价值，甚至昨天还在自己的一篇文章中提了一句不看好低代码。现实情况是工作属性和接触面限制了我对低代码的猜想，当看到这篇文章时，忽然想起来前段业务同事在钉钉上使用低代码工具搭建了一个应用程序。低代码平台做出来开放之后，众多的玩家带着他们纷繁的需求往往能够挖掘出巨大的潜在价值。</p>
-<p>低代码和数字化结合才能创造更多的价值，前提是不能把低代码局限于公司内部，开放会注入更多的活力、生命力。低代码平台建设只是起步，要和PaaS关联起来，才可以发挥更大的作用</p>
-<p>生态的归生态，平台的归平台。</p>
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<center>欢迎微信扫码关注 "看见另一种可能"！</center>
-
-<img data-src="/images/base/loading03.svg" data-original="/images/contact/qrcode_wechat.jpg" alt="wechat：看见另一种可能"></body></html>]]></content>
-      <categories>
-        <category>数字化</category>
-      </categories>
-      <tags>
-        <tag>低代码</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>perttier+eslint+husky——代码规范以及commit扫描代码</title>
     <url>/posts/1784044162.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -3495,6 +3349,28 @@
       </categories>
       <tags>
         <tag>代码规范</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>低代码和数字化</title>
+    <url>/posts/4121106976.html</url>
+    <content><![CDATA[<html><head></head><body><p>读“<a href="https://mp.weixin.qq.com/s/rU0455dOafob-TPkVzaBsA">有头有脸的老板，都开始盯数字化了</a>”有感</p>
+<p>一个转身就是另一番景象。</p>
+<p>存量数据比重占大头了吗？怎么适应呢，钉钉开始收缩边界，余力转化效率。</p>
+<p>我的工作是前端开发，本能的从低代码在我所涉及的前端领域的应用上看待低代码的价值，甚至昨天还在自己的一篇文章中提了一句不看好低代码。现实情况是工作属性和接触面限制了我对低代码的猜想，当看到这篇文章时，忽然想起来前段业务同事在钉钉上使用低代码工具搭建了一个应用程序。低代码平台做出来开放之后，众多的玩家带着他们纷繁的需求往往能够挖掘出巨大的潜在价值。</p>
+<p>低代码和数字化结合才能创造更多的价值，前提是不能把低代码局限于公司内部，开放会注入更多的活力、生命力。低代码平台建设只是起步，要和PaaS关联起来，才可以发挥更大的作用</p>
+<p>生态的归生态，平台的归平台。</p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<center>欢迎微信扫码关注 "看见另一种可能"！</center>
+
+<img data-src="/images/base/loading03.svg" data-original="/images/contact/qrcode_wechat.jpg" alt="wechat：看见另一种可能"></body></html>]]></content>
+      <categories>
+        <category>数字化</category>
+      </categories>
+      <tags>
+        <tag>低代码</tag>
       </tags>
   </entry>
   <entry>
@@ -3694,6 +3570,74 @@
       </categories>
       <tags>
         <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>js获取项目git分支信息</title>
+    <url>/posts/3067788882.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="1、git-bash-获取分支信息"><a href="#1、git-bash-获取分支信息" class="headerlink" title="1、git bash 获取分支信息"></a>1、git bash 获取分支信息</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 获取当前分支名</span></span><br><span class="line">git rev-parse --abbrev-ref HEAD</span><br><span class="line">git branch --show-current</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取当前hash</span></span><br><span class="line">git rev-parse HEAD</span><br><span class="line">git rev-parse --short HEAD  <span class="comment"># 短的</span></span><br></pre></td></tr></tbody></table></figure>
+<p>上面的代码是通过git命令获取的分支信息，怎么可以在项目代码里面获取分支信息呢？请看下文👇</p>
+<h2 id="2、JavaScript-通过-execa-插件获取项目分支信息"><a href="#2、JavaScript-通过-execa-插件获取项目分支信息" class="headerlink" title="2、JavaScript 通过 execa 插件获取项目分支信息"></a>2、JavaScript 通过 <a href="https://github.com/sindresorhus/execa">execa</a> 插件获取项目分支信息</h2><p>execa具备如下特点：</p>
+<ul>
+<li><p>Promise接口</p>
+</li>
+<li><p>从输出中删除最后的换行符，这样您就不必执行stdout.trim()</p>
+</li>
+<li><p>支持<strong>跨平台</strong>的shebang二进制文件</p>
+</li>
+<li><p>改进Windows支持。</p>
+</li>
+<li><p>更高的最大缓冲区。100mb而不是200kb。</p>
+</li>
+<li><p>按名称执行本地安装的二进制文件。</p>
+</li>
+<li><p>在父进程终止时清除派生的进程。</p>
+</li>
+<li><p>从 stdout和stderr获得交错输出，类似于在终端上打印的输出。(<strong>异步</strong>)</p>
+</li>
+<li><p>可以指定文件和参数作为一个单一的字符串没有外壳</p>
+</li>
+<li><p>更具描述性的错误。</p>
+</li>
+</ul>
+<ol>
+<li><p>安装 execa</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm install execa -S</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>简单使用 execa</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line">(<span class="keyword">async</span> () =&gt; {</span><br><span class="line">    <span class="keyword">const</span> {stdout} = <span class="keyword">await</span> <span class="title function_">execa</span>(<span class="string">'echo'</span>, [<span class="string">'unicorns'</span>]);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(stdout);</span><br><span class="line">    <span class="comment">//=&gt; 'unicorns'</span></span><br><span class="line">})();</span><br><span class="line"></span><br><span class="line"><span class="comment">// stdout 表示执行命令的输出结果</span></span><br><span class="line"><span class="comment">/*{</span></span><br><span class="line"><span class="comment">  command: 'echo unicorns',</span></span><br><span class="line"><span class="comment">  escapedCommand: 'echo unicorns',</span></span><br><span class="line"><span class="comment">  exitCode: 0,</span></span><br><span class="line"><span class="comment">  stdout: '"unicorns"',</span></span><br><span class="line"><span class="comment">  stderr: '',</span></span><br><span class="line"><span class="comment">  all: undefined,</span></span><br><span class="line"><span class="comment">  failed: false,</span></span><br><span class="line"><span class="comment">  timedOut: false,</span></span><br><span class="line"><span class="comment">  isCanceled: false,</span></span><br><span class="line"><span class="comment">  killed: false</span></span><br><span class="line"><span class="comment">}*/</span></span><br></pre></td></tr></tbody></table></figure>
+<p>execa还可以执行脚本命令，并输出结果，下面看一下如何在代码里面获取当前操作的分支👇</p>
+</li>
+<li><p>实际项目中的代码</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getGitBranch</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">const</span> res = execa.<span class="title function_">commandSync</span>(<span class="string">'git rev-parse --abbrev-ref HEAD'</span>);</span><br><span class="line">  <span class="keyword">return</span> res.<span class="property">stdout</span>;</span><br><span class="line">}</span><br><span class="line"><span class="keyword">const</span> curbranch = <span class="title function_">getGitBranch</span>()</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'curbranch=='</span>, curbranch); <span class="comment">// master</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 以下是res输出</span></span><br><span class="line">curbranch== master</span><br><span class="line">{</span><br><span class="line">  <span class="attr">command</span>: <span class="string">'git rev-parse --abbrev-ref HEAD'</span>,</span><br><span class="line">  <span class="attr">escapedCommand</span>: <span class="string">'git rev-parse --abbrev-ref HEAD'</span>,</span><br><span class="line">  <span class="attr">exitCode</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="attr">stdout</span>: <span class="string">'master'</span>, # 命令执行结果输出</span><br><span class="line">  <span class="attr">stderr</span>: <span class="string">''</span>,</span><br><span class="line">  <span class="attr">failed</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">timedOut</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">isCanceled</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">killed</span>: <span class="literal">false</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>下面说一下脚本获取方式</p>
+</li>
+</ol>
+<h2 id="3、脚本获取"><a href="#3、脚本获取" class="headerlink" title="3、脚本获取"></a>3、脚本获取</h2><blockquote>
+<p>我在掘金 <a href="https://juejin.cn/post/7113502858481254413">git编写脚本 组合 commit-msg</a> 一文中使用脚本获取分支信息，感兴趣可以看一下。</p>
+</blockquote>
+<ol>
+<li><p>可以看一下项目中 <code>.git/HEAD</code> 文件中的内容</p>
+<p> HEAD指向最新放入仓库的版本</p>
+</li>
+</ol>
+<figure class="highlight angelscript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">ref</span>: <span class="built_in">ref</span>s/heads/dev_0922</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>编写脚本</li>
+</ol>
+<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取当前分支</span></span><br><span class="line">line=$(<span class="built_in">head</span> -n +1 .git/HEAD)</span><br><span class="line">branch=<span class="variable">${line##*/}</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$branch</span> <span class="comment"># dev_0922</span></span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
       </tags>
   </entry>
   <entry>
@@ -3917,54 +3861,6 @@
       </tags>
   </entry>
   <entry>
-    <title>博客评论插件Beaudar安装使用</title>
-    <url>/posts/34114278.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="Beaudar"><a href="#Beaudar" class="headerlink" title="Beaudar"></a>Beaudar</h2><p><code>Hexo</code>主题选用的<a href="https://xaoxuu.com/wiki/stellar/"><code>Stellar</code></a></p>
-<p>基于 GitHub issue 的轻量评论插件，Utterances 的中文版本，官网在<a href="https://beaudar.lipk.org/">这里</a></p>
-<h2 id="Beaudar-是如何工作的？"><a href="#Beaudar-是如何工作的？" class="headerlink" title="Beaudar 是如何工作的？"></a>Beaudar 是如何工作的？</h2><p>Beaudar 加载时，将使用 GitHub issue 搜索 API 根据 url，“路径名”或“标题”查找与页面相关的 issue。如果找不到与页面匹配的 issue，即没有评论，当有人首次发表评论时，Beaudar-bot 会自动创建一个 issue。</p>
-<h2 id="配置使用"><a href="#配置使用" class="headerlink" title="配置使用"></a>配置使用</h2><ol>
-<li>准备</li>
-</ol>
-<p>Beaudar 的配置方法很简单，创建一个仓库<a href="https://github.com/all-smile/blog-comments"><code>blog-comments</code></a>，在仓库中创建一个域名白名单文件<code>beaudar.json</code>，然后在<a href="https://github.com/apps/beaudar">此处</a>授权安装即可。</p>
-<p><code>beaudar.json</code>文件</p>
-<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li><code>Hexo</code>配置</li>
-</ol>
-<p>在主题配置文件里<code>_config_[theme].yml</code>里面增加如下配置</p>
-<figure class="highlight yml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 评论 [beaudar](https://beaudar.lipk.org/) 插件</span></span><br><span class="line"><span class="attr">comments:</span></span><br><span class="line">  <span class="attr">service:</span> <span class="string">beaudar</span></span><br><span class="line">  <span class="attr">beaudar:</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">all-smile/blog-comments</span> <span class="comment"># 指向你自己的repo</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p>使用<code>GitHub</code>登录后评论</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b40c16f2c2beb16136d9.jpg"></p>
-<h2 id="问题处理"><a href="#问题处理" class="headerlink" title="问题处理"></a>问题处理</h2><ol>
-<li><code>blog-comments</code> 仓库默认分支为<code>main</code></li>
-</ol>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b22716f2c2beb15ee173.jpg"></p>
-<p><strong>解决：</strong></p>
-<p>进入<code>blog-comments</code> 仓库，在 settings -&gt; branches 里面，修改 <code>Default branch</code> 为 <code>main</code></p>
-<ol start="2">
-<li><code>Hexo</code> 本地服务测试<code>Beaudar</code>，添加白名单配置</li>
-</ol>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b2a816f2c2beb15f64b2.jpg"></p>
-<p><strong>解决：</strong></p>
-<p>修改<code>beaudar.json</code>文件</p>
-<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>多路径来源页面导航高亮以及面包屑导航修改</title>
     <url>/posts/2025032412.html</url>
     <content><![CDATA[<html><head></head><body><h2 id="问题缘由"><a href="#问题缘由" class="headerlink" title="问题缘由"></a>问题缘由</h2><p>这个问题比较普遍，原因是业务方面对产品进行多维度的划分（或者对产品进行归档、打标签、收藏等等），反应在前端方面就是同一个页面可以有不同的入口（产品目录结构划分）</p>
@@ -4017,6 +3913,54 @@
       </categories>
       <tags>
         <tag>前端</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客评论插件Beaudar安装使用</title>
+    <url>/posts/34114278.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="Beaudar"><a href="#Beaudar" class="headerlink" title="Beaudar"></a>Beaudar</h2><p><code>Hexo</code>主题选用的<a href="https://xaoxuu.com/wiki/stellar/"><code>Stellar</code></a></p>
+<p>基于 GitHub issue 的轻量评论插件，Utterances 的中文版本，官网在<a href="https://beaudar.lipk.org/">这里</a></p>
+<h2 id="Beaudar-是如何工作的？"><a href="#Beaudar-是如何工作的？" class="headerlink" title="Beaudar 是如何工作的？"></a>Beaudar 是如何工作的？</h2><p>Beaudar 加载时，将使用 GitHub issue 搜索 API 根据 url，“路径名”或“标题”查找与页面相关的 issue。如果找不到与页面匹配的 issue，即没有评论，当有人首次发表评论时，Beaudar-bot 会自动创建一个 issue。</p>
+<h2 id="配置使用"><a href="#配置使用" class="headerlink" title="配置使用"></a>配置使用</h2><ol>
+<li>准备</li>
+</ol>
+<p>Beaudar 的配置方法很简单，创建一个仓库<a href="https://github.com/all-smile/blog-comments"><code>blog-comments</code></a>，在仓库中创建一个域名白名单文件<code>beaudar.json</code>，然后在<a href="https://github.com/apps/beaudar">此处</a>授权安装即可。</p>
+<p><code>beaudar.json</code>文件</p>
+<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li><code>Hexo</code>配置</li>
+</ol>
+<p>在主题配置文件里<code>_config_[theme].yml</code>里面增加如下配置</p>
+<figure class="highlight yml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 评论 [beaudar](https://beaudar.lipk.org/) 插件</span></span><br><span class="line"><span class="attr">comments:</span></span><br><span class="line">  <span class="attr">service:</span> <span class="string">beaudar</span></span><br><span class="line">  <span class="attr">beaudar:</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">all-smile/blog-comments</span> <span class="comment"># 指向你自己的repo</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p>使用<code>GitHub</code>登录后评论</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b40c16f2c2beb16136d9.jpg"></p>
+<h2 id="问题处理"><a href="#问题处理" class="headerlink" title="问题处理"></a>问题处理</h2><ol>
+<li><code>blog-comments</code> 仓库默认分支为<code>main</code></li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b22716f2c2beb15ee173.jpg"></p>
+<p><strong>解决：</strong></p>
+<p>进入<code>blog-comments</code> 仓库，在 settings -&gt; branches 里面，修改 <code>Default branch</code> 为 <code>main</code></p>
+<ol start="2">
+<li><code>Hexo</code> 本地服务测试<code>Beaudar</code>，添加白名单配置</li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6315b2a816f2c2beb15f64b2.jpg"></p>
+<p><strong>解决：</strong></p>
+<p>修改<code>beaudar.json</code>文件</p>
+<figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"origins"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">"https://..."</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">"http://localhost:4000"</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -4479,71 +4423,89 @@
       </tags>
   </entry>
   <entry>
-    <title>最近接触的东西</title>
-    <url>/posts/2564859285.html</url>
-    <content><![CDATA[<html><head></head><body><p>我的博客最开始采用的是<code>Hexo</code>+<code>hexo-theme-next</code>搭建的，使用<code>GitHub Pages</code>托管并进行自动化部署，写文发布的流程非常简单方便，云端写作发布也轻而易举。</p>
-<p>本来事情到这里就应该结束了，但是，我又进行了下面的一些尝试</p>
-<h2 id="装备"><a href="#装备" class="headerlink" title="装备"></a>装备</h2><ol>
-<li>美化博客<ul>
-<li><code>NexT</code>主题允许通过<code>custom_file_path</code>设置外挂文件进行修改</li>
-<li>自定义界面修改</li>
-</ul>
-</li>
-<li>图片加载优化<ul>
-<li><code>lazyload</code></li>
-</ul>
-</li>
-<li>图床使用<ul>
-<li>目前使用的<code>聚合图床</code>效果不佳</li>
-<li><a href="https://img.show/">img.show</a></li>
-<li><a href="https://imagelol.com/">笑果图床</a></li>
-</ul>
-</li>
-<li>文章压缩发布<ul>
-<li><code>hexo-neat</code></li>
-</ul>
-</li>
-<li>评论、统计分析插件<ul>
-<li><code>valine</code>、<code>waline</code>、<code>changyan</code>、<code>livere</code>、<code>gitalk</code></li>
-<li><code>busuanzi</code>、<code>leancloud</code>、<code>cloudflare</code></li>
-</ul>
-</li>
-<li>搜索引擎优化<ul>
-<li><code>Bing</code></li>
-<li><code>Baidu</code></li>
-<li><code>sogou</code></li>
-<li>……</li>
-</ul>
-</li>
-<li><a href="https://www.addthis.com/">AddThis</a>挂件添加</li>
-<li>友链页面定制开发</li>
-<li>本地搜索<code>local_search</code></li>
-<li><a href="https://gitter.im/">Gitter</a>聊天工具添加</li>
-<li>备案信息</li>
-<li>……</li>
-</ol>
-<p><code>NexT</code>主题虽好，但还是有一些界面样式不太美观，我就开始动手修改。不得不说美化主题这件事真的很费心思，自己内心对美的追求让我反复修改，不禁让我想起来工作中产品经理频繁改方案的场景。经过反复拉扯，最终还算满意。</p>
-<p>本来事情到这里就应该结束了，但是，国内访问<code>GitHub Pages</code>部署的站点加载比较慢，所以，我就开始尝试部署到<code>Netlify</code>、<code>Vercel</code>上，</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>个人觉得任何改动都要有一个长远的打算。对博客站点来说，就是要充分考虑可迁移性、弹性部署、写作方便、相关依赖升级方便。比如要考虑<code>NexT</code>主题升级、评论数据可迁移。总之，一个原则：<strong>使用平台的同时不能受制于平台</strong>，最初的目的就是打造一片属于自己的“自留地”😊</p>
+    <title>浏览器内核和JS引擎</title>
+    <url>/posts/3718582230.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="浏览器内核"><a href="#浏览器内核" class="headerlink" title="浏览器内核"></a>浏览器内核</h2><p>浏览器内核是什么东西。英文叫做：Rendering Engine，常见的叫法如：排版引擎、解释引擎、渲染引擎，现在流行称为浏览器内核</p>
+<table>
+<thead>
+<tr>
+<th>浏览器</th>
+<th>内核</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IE</td>
+<td>Trident</td>
+<td>IE、猎豹安全、360极速浏览器、百度浏览器</td>
+</tr>
+<tr>
+<td>FireFox</td>
+<td>Gecko</td>
+<td>可惜这几年已经没落了，打开速度慢、升级频繁、猪一样的队友flash、神一样的对手chrome。</td>
+</tr>
+<tr>
+<td>Safari</td>
+<td>Webkit</td>
+<td>从Safari推出之时起，它的渲染引擎就是Webkit，一提到 webkit，首先想到的便是 chrome，可以说，chrome 将 Webkit内核 深入人心，殊不知，Webkit 的鼻祖其实是 Safari。</td>
+</tr>
+<tr>
+<td>Chrome</td>
+<td>Chromium/Blink</td>
+<td>在 Chromium 项目中研发 Blink 渲染引擎（即浏览器核心），内置于 Chrome 浏览器之中。Blink 其实是 WebKit 的分支。大部分国产浏览器最新版都采用Blink内核。二次开发</td>
+</tr>
+<tr>
+<td>Opera</td>
+<td>Blink</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="浏览器渲染过程"><a href="#浏览器渲染过程" class="headerlink" title="浏览器渲染过程"></a>浏览器渲染过程</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/636c858716f2c2beb1bf0eae.jpg"></p>
 <ol>
-<li>图床使用：稳定、高速</li>
-<li>评论插件：隐私、可管理、可迁移，较低的侵入性，不需要魔改主题文件，不然主题升级会带来很多麻烦</li>
-<li>搜索引擎优化：基本都是同一个路子，添加验证、网站收录url等，效果还不是很明显，需要进一步研究</li>
-<li>友链页面：本着最少改动、不影响主题升级，自己动手开发</li>
-<li>托管部署：有很多平台可供部署网站，集成云数据库、<code>Serverless</code>等功能，部署成功之后生成一个平台自动分配的域名，也可以绑定个人域名。没有云服务器同样可以部署网站😃</li>
+<li>HTML首先会被浏览器内核中的HTML Parser解析，最终会构建成一颗<strong>DOM树</strong></li>
+<li>css会被浏览器内核中的CSS Parser解析，形成<strong>css规则</strong>，css规则和DOM树结合形成一个<strong>渲染树</strong>，通过<strong>layout</strong>（布局）生成最终的渲染树。为什么要有layout呢？因为要适配不同尺寸的屏幕。有了渲染树之后就可以绘制展现出来了。</li>
 </ol>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+<h2 id="常见的js引擎"><a href="#常见的js引擎" class="headerlink" title="常见的js引擎"></a>常见的js引擎</h2><p>● SpiderMonkey：第一款js引擎，由Brendan Eich开发（js作者）。<br>● Chakra：微软开发，由于IE浏览器。<br>● javascriptCore：webkit的js引擎，Apple公司开发。<br>● V8：Google开发的强大js引擎，也帮助Chrome从众多浏览器中脱颖而出。</p>
+<h2 id="浏览器内核和js引擎的关系"><a href="#浏览器内核和js引擎的关系" class="headerlink" title="浏览器内核和js引擎的关系"></a>浏览器内核和js引擎的关系</h2><p>这里用webkit为列，webkit最重要的两部分：</p>
+<ol>
+<li>WebCore： 负责HTML、CSS的解析、布局、渲染等相关工作；</li>
+<li>JavascriptCore：解析、执行js代码。</li>
+</ol>
+<p>下面是Chromium的架构图</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/636c85a316f2c2beb1bf33a5.jpg"></p>
+<h2 id="普通JavaScript引擎（笨重）"><a href="#普通JavaScript引擎（笨重）" class="headerlink" title="普通JavaScript引擎（笨重）"></a>普通JavaScript引擎（笨重）</h2><p><strong>作用</strong>：javascript引擎帮助我们将js代码编译成CPU认识的指令集，最终被cpu执行。</p>
+<blockquote>
+<p>当然除了编译之外还要负责执行以及内存的管理。 js是解释形语言，由引擎直接读取源码，一边编译一边执行，这样效率相对较低，而编译形语言（如c++）是把源码直接编译成可直接执行的代码执行效率更高。</p>
+</blockquote>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/636c85ba16f2c2beb1bf617d.jpg"></p>
+<p>随着技术的发展，对JavaScript性能的要求越来越高，V8引擎就是在此背景下产生的，它产生的目的就是为了提高javascript执行的性能。</p>
+<h2 id="V8引擎（轻量）"><a href="#V8引擎（轻量）" class="headerlink" title="V8引擎（轻量）"></a>V8引擎（轻量）</h2><p>V8是用C++编写的Google开源的高性能js引擎，v8可以独立运行，亦可以嵌入到任何c++程序中，所以node.js可以运行js代码。</p>
+<h3 id="将javascript代码转换成AST"><a href="#将javascript代码转换成AST" class="headerlink" title="将javascript代码转换成AST"></a><strong>将javascript代码转换成AST</strong></h3><p>V8引擎会先将javascript代码转换成AST（抽象语法树），而事实上无论使用什么编程语言都会将源代码解析成抽象语法树（abstract syntax tree, AST）。AST是计算机科学中很早的一个概念，不是V8特有的（只是V8在转换过程中做了非常多的优化），更不是javascript特有的。</p>
+<h3 id="AST的用途"><a href="#AST的用途" class="headerlink" title="AST的用途"></a>AST的用途</h3><p>AST的作用也不仅仅是用来在V8的编译上，比如我们常用的babel插件将 es6-&gt;es5 、ts-&gt;js 、死区分析、Dead Code、编译压缩打包、css预处理器、eslint等等，这些功能的实现都离不开AST。</p>
+<h3 id="AST编译过程"><a href="#AST编译过程" class="headerlink" title="AST编译过程"></a>AST编译过程</h3><p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/636c85c516f2c2beb1bfbae3.jpg"></p>
+<h3 id="V8执行js的流程"><a href="#V8执行js的流程" class="headerlink" title="V8执行js的流程"></a>V8执行js的流程</h3><ol>
+<li>浏览器内核将源码<strong>以流的方式</strong>交给v8引擎，v8引擎获取到源码并进行编码转换</li>
+<li>词法分析scanner，将代码转成tokens</li>
+<li>语法分析Parser、Preparser，直接将tokens转换成AST树结构</li>
+<li>字节码生成<blockquote>
+<ol>
+<li>parser就是直接将tokens转换成AST树结构</li>
+<li>preParse称之为预解析，为什么需要预解析呢？</li>
+</ol>
+<ul>
+<li>这是因为并不是所有的js代码一开始就会被执行，如果对所有的js代码都进行解析，会影响网页运行效率。所以v8引擎就实现了<strong>延迟解析</strong>的方案，将不必要的函数进行预解析，也就是只解析暂时需要的内容，而对函数的全量解析是在函数被调用时才会进行；</li>
+<li>比如我们在一个函数outer内部定义了另外一个函数inner，那么inner函数就会进行预解析；</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/636c85ef16f2c2beb1c00095.jpg"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6368fc4816f2c2beb15b5ba6.jpg"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a>☭</p>
+<p>微信公众号：【看见另一种可能】</p>
+<p>热爱前端开发，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。数风流人物还看中国、看今朝、看你我。</p>
 </body></html>]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-      </tags>
   </entry>
   <entry>
     <title>看了的，没看的书</title>
@@ -4723,113 +4685,6 @@
       </tags>
   </entry>
   <entry>
-    <title>认识HTTP缓存</title>
-    <url>/posts/2358217424.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>通常针对静态资源。内存缓存/磁盘缓存</p>
-</blockquote>
-<h2 id="1、原理："><a href="#1、原理：" class="headerlink" title="1、原理："></a>1、原理：</h2><p>在首次请求后，保存一份请求资源的响应副本，当用户再次发起相同请求后，如果判断缓存命中，则拦截请求，将之前存储的相应副本返回给用户，从而避免重新向服务器发起资源请求。</p>
-<h2 id="2、缓存的技术种类："><a href="#2、缓存的技术种类：" class="headerlink" title="2、缓存的技术种类："></a>2、缓存的技术种类：</h2><p>代理缓存，浏览器缓存，网关缓存，负载均衡器，内容分发网络</p>
-<p>它们大致可以分为两类： 共享缓存，私有缓存</p>
-<ul>
-<li><p><em>共享缓存</em>：缓存的内容可以被多个用户使用。如公司内部架设的内部Web代理</p>
-</li>
-<li><p><em>私有缓存</em>：只能单独被用户使用的缓存。如浏览器缓存</p>
-</li>
-</ul>
-<h2 id="3、禁止缓存"><a href="#3、禁止缓存" class="headerlink" title="3、禁止缓存"></a>3、禁止缓存</h2><p>发送如下响应头可以关闭缓存。此外，可以参考<code>Expires</code>和<code>Pragma</code>消息头。</p>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title class_">Cache</span>-<span class="title class_">Control</span>: no-store</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="4、http缓存可分为强制缓存和协商缓存"><a href="#4、http缓存可分为强制缓存和协商缓存" class="headerlink" title="4、http缓存可分为强制缓存和协商缓存"></a>4、http缓存可分为强制缓存和协商缓存</h2><ul>
-<li><p>强制缓存不用判断缓存是否过期，可以直接使用。</p>
-</li>
-<li><p>协商缓存每次都要询问一下服务器，看一下内容有没有更新，如果没有更新就使用缓存中的资源，如果更新了就继续请求</p>
-</li>
-</ul>
-<p>响应头设置：</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8eccface9efa421b8430e62444edf4b7~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<h3 id="4-1、cache-control（http1-1）"><a href="#4-1、cache-control（http1-1）" class="headerlink" title="4.1、cache-control（http1.1）"></a>4.1、cache-control（http1.1）</h3><p><code>cache-control</code>属性值：</p>
-<ul>
-<li><p>no-cache  强制进行协商缓存</p>
-</li>
-<li><p>no-store 不缓存</p>
-</li>
-<li><p>max-age   表示缓存的过期时长</p>
-<figure class="highlight awk"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">'cache-control'</span>: <span class="string">'max-age=5'</span> <span class="regexp">//</span> 滑动时间，单位是秒</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>private, public： 用以明确响应资源是否可以被代理服务器缓存。</p>
-</li>
-<li><p>private  只能被浏览器缓存</p>
-</li>
-<li><p>public  响应资源既可以被浏览器私有缓存，又可以被代理服务器公共缓存</p>
-</li>
-</ul>
-<figure class="highlight lasso"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">cache</span><span class="params">-control</span>: <span class="keyword">public</span>, <span class="keyword">max</span><span class="params">-age</span>=<span class="number">10</span>;</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4e506a323ebc49449aa316ff302b2116~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ab505a1c9bde44c2a1d3d9ae05bc2266~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/483abb75d50347a081dd4cb7562d6817~tplv-k3u1fbpfcp-zoom-1.image"></p>
-<figure class="highlight yaml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">last-modified:</span> <span class="string">''</span></span><br><span class="line"><span class="attr">if-modified-since:</span></span><br><span class="line"><span class="attr">cache-control:</span> <span class="literal">no</span><span class="string">-cache</span></span><br></pre></td></tr></tbody></table></figure>
-<p><strong>原理</strong>:是根据资源最后的<em>修改时间</em>来判断是否需要读取缓存</p>
-<blockquote>
-<p>根据时间判断有局限性，比方说只改变文件命名，也会引起资源修改时间发生变化，但是对资源本身并没有改动</p>
-</blockquote>
-<h3 id="4-2、✨补充的方案是ETag（根据文件资源生成指纹）"><a href="#4-2、✨补充的方案是ETag（根据文件资源生成指纹）" class="headerlink" title="4.2、✨补充的方案是ETag（根据文件资源生成指纹）"></a>4.2、✨补充的方案是<strong>ETag</strong>（根据文件资源生成指纹）</h3><ul>
-<li><p>安装</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm i etag</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>使用</p>
-</li>
-</ul>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> etag = <span class="built_in">require</span>(<span class="string">'etag'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> data = fs.<span class="title function_">readFilSeync</span>(<span class="string">'./img/04.jpg'</span>)</span><br><span class="line"><span class="keyword">const</span> etagContent = <span class="title function_">etag</span>(data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ifNoneMatch = req.<span class="property">headers</span>[<span class="string">'if-none-match'</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (ifNoneMatch === etagContent) {</span><br><span class="line">  res.<span class="property">statusCode</span> = <span class="number">304</span></span><br><span class="line">  res.<span class="title function_">end</span>()</span><br><span class="line">  <span class="keyword">return</span> <span class="comment">// 直接返回，不操作服务器资源，减少带宽</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">res.<span class="title function_">setHeader</span>(<span class="string">'etag'</span>, etagContent)</span><br><span class="line">res.<span class="title function_">setHeader</span>(<span class="string">'Cache-Control'</span>,<span class="string">'no-cache'</span>)</span><br><span class="line">res.<span class="title function_">end</span>(data)</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li><p>If-None-Match</p>
-</li>
-<li><p><strong>强验证Etag</strong>，资源细微的改动都会引起指纹的变化</p>
-</li>
-<li><p><strong>弱验证ETag</strong>， 相对灵活的过滤资源的某些变化</p>
-</li>
-</ul>
-<h2 id="5、强缓存"><a href="#5、强缓存" class="headerlink" title="5、强缓存"></a>5、强缓存</h2><h3 id="介绍："><a href="#介绍：" class="headerlink" title="介绍："></a>介绍：</h3><p>不会向服务器发送请求，直接从缓存中读取资源，在chrome控制台的Network选项中可以看到该请求返回200的状态码，并且Size显示<code>from disk cache</code>或<code>from memory cache</code>。</p>
-<h3 id="设置："><a href="#设置：" class="headerlink" title="设置："></a>设置：</h3><p>强缓存可以通过设置两种 <code>HTTP Header</code> 实现，分别是：<code>Expires</code> 和 <code>Cache-Control</code>。</p>
-<blockquote>
-<p>Expires 是http1.0的产物，Cache-Control是http1.1的产物，两者同时存在的话，Cache-Control优先级高于Expires；</p>
-</blockquote>
-<h2 id="6、协商缓存"><a href="#6、协商缓存" class="headerlink" title="6、协商缓存"></a>6、协商缓存</h2><h3 id="介绍：-1"><a href="#介绍：-1" class="headerlink" title="介绍："></a>介绍：</h3><p>协商缓存就是强制缓存失效后，浏览器<em>携带缓存标识</em>向服务器发起请求，由服务器根据缓存标识决定是否使用缓存的过程，主要有以下两种情况：</p>
-<ul>
-<li><p>协商缓存生效，返回<code>304</code>和<code>Not Modified</code></p>
-</li>
-<li><p>协商缓存失效，返回<code>200</code>和<code>请求结果</code></p>
-</li>
-</ul>
-<h3 id="设置：-1"><a href="#设置：-1" class="headerlink" title="设置："></a>设置：</h3><p>协商缓存可以通过设置两种 HTTP Header 实现, 分别是：<code>Last-Modified</code> 和 <code>ETag</code> 。</p>
-<h2 id="7、缓存机制🎉"><a href="#7、缓存机制🎉" class="headerlink" title="7、缓存机制🎉"></a>7、缓存机制🎉</h2><ol>
-<li><p>强制缓存优先于协商缓存进行，若强制缓存(Expires和Cache-Control)生效则直接使用缓存，若不生效则进行协商缓存(<code>Last-Modified / If-Modified-Since和Etag / If-None-Match</code>)</p>
-</li>
-<li><p>协商缓存由服务器决定是否使用缓存，若协商缓存失效，那么代表该请求的缓存失效，返回200，重新返回资源和缓存标识，再存入浏览器缓存中；生效则返回304，继续使用缓存。</p>
-</li>
-</ol>
-<h2 id="8、缓存策略树🎉"><a href="#8、缓存策略树🎉" class="headerlink" title="8、缓存策略树🎉"></a>8、缓存策略树🎉</h2><p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4b20c21694e940d5acf2b343148bfbbf~tplv-k3u1fbpfcp-zoom-1.image" alt="缓存策略树，很早很早之前画的🤣，现在看看也是醉了😂"></p>
-<p align="center">缓存策略树，很早很早之前画的🤣，现在看看也是醉了😂</p>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cc8e06075df24102b9989fc1ff0eb797~tplv-k3u1fbpfcp-zoom-1.image" alt="该图来源网络，侵删"></p>
-<p align="center">该图来源网络，侵删</p>
-
-<p>更多看<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Caching">这里</a></p>
-<hr>
-<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>HTTP</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>认识Chrome扩展插件</title>
     <url>/posts/9575625.html</url>
     <content><![CDATA[<html><head></head><body><hr>
@@ -4972,6 +4827,113 @@
       <tags>
         <tag>前端</tag>
         <tag>Chrome插件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>认识HTTP缓存</title>
+    <url>/posts/2358217424.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>通常针对静态资源。内存缓存/磁盘缓存</p>
+</blockquote>
+<h2 id="1、原理："><a href="#1、原理：" class="headerlink" title="1、原理："></a>1、原理：</h2><p>在首次请求后，保存一份请求资源的响应副本，当用户再次发起相同请求后，如果判断缓存命中，则拦截请求，将之前存储的相应副本返回给用户，从而避免重新向服务器发起资源请求。</p>
+<h2 id="2、缓存的技术种类："><a href="#2、缓存的技术种类：" class="headerlink" title="2、缓存的技术种类："></a>2、缓存的技术种类：</h2><p>代理缓存，浏览器缓存，网关缓存，负载均衡器，内容分发网络</p>
+<p>它们大致可以分为两类： 共享缓存，私有缓存</p>
+<ul>
+<li><p><em>共享缓存</em>：缓存的内容可以被多个用户使用。如公司内部架设的内部Web代理</p>
+</li>
+<li><p><em>私有缓存</em>：只能单独被用户使用的缓存。如浏览器缓存</p>
+</li>
+</ul>
+<h2 id="3、禁止缓存"><a href="#3、禁止缓存" class="headerlink" title="3、禁止缓存"></a>3、禁止缓存</h2><p>发送如下响应头可以关闭缓存。此外，可以参考<code>Expires</code>和<code>Pragma</code>消息头。</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title class_">Cache</span>-<span class="title class_">Control</span>: no-store</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="4、http缓存可分为强制缓存和协商缓存"><a href="#4、http缓存可分为强制缓存和协商缓存" class="headerlink" title="4、http缓存可分为强制缓存和协商缓存"></a>4、http缓存可分为强制缓存和协商缓存</h2><ul>
+<li><p>强制缓存不用判断缓存是否过期，可以直接使用。</p>
+</li>
+<li><p>协商缓存每次都要询问一下服务器，看一下内容有没有更新，如果没有更新就使用缓存中的资源，如果更新了就继续请求</p>
+</li>
+</ul>
+<p>响应头设置：</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8eccface9efa421b8430e62444edf4b7~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h3 id="4-1、cache-control（http1-1）"><a href="#4-1、cache-control（http1-1）" class="headerlink" title="4.1、cache-control（http1.1）"></a>4.1、cache-control（http1.1）</h3><p><code>cache-control</code>属性值：</p>
+<ul>
+<li><p>no-cache  强制进行协商缓存</p>
+</li>
+<li><p>no-store 不缓存</p>
+</li>
+<li><p>max-age   表示缓存的过期时长</p>
+<figure class="highlight awk"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">'cache-control'</span>: <span class="string">'max-age=5'</span> <span class="regexp">//</span> 滑动时间，单位是秒</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>private, public： 用以明确响应资源是否可以被代理服务器缓存。</p>
+</li>
+<li><p>private  只能被浏览器缓存</p>
+</li>
+<li><p>public  响应资源既可以被浏览器私有缓存，又可以被代理服务器公共缓存</p>
+</li>
+</ul>
+<figure class="highlight lasso"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">cache</span><span class="params">-control</span>: <span class="keyword">public</span>, <span class="keyword">max</span><span class="params">-age</span>=<span class="number">10</span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4e506a323ebc49449aa316ff302b2116~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ab505a1c9bde44c2a1d3d9ae05bc2266~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/483abb75d50347a081dd4cb7562d6817~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<figure class="highlight yaml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">last-modified:</span> <span class="string">''</span></span><br><span class="line"><span class="attr">if-modified-since:</span></span><br><span class="line"><span class="attr">cache-control:</span> <span class="literal">no</span><span class="string">-cache</span></span><br></pre></td></tr></tbody></table></figure>
+<p><strong>原理</strong>:是根据资源最后的<em>修改时间</em>来判断是否需要读取缓存</p>
+<blockquote>
+<p>根据时间判断有局限性，比方说只改变文件命名，也会引起资源修改时间发生变化，但是对资源本身并没有改动</p>
+</blockquote>
+<h3 id="4-2、✨补充的方案是ETag（根据文件资源生成指纹）"><a href="#4-2、✨补充的方案是ETag（根据文件资源生成指纹）" class="headerlink" title="4.2、✨补充的方案是ETag（根据文件资源生成指纹）"></a>4.2、✨补充的方案是<strong>ETag</strong>（根据文件资源生成指纹）</h3><ul>
+<li><p>安装</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm i etag</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>使用</p>
+</li>
+</ul>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> etag = <span class="built_in">require</span>(<span class="string">'etag'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> data = fs.<span class="title function_">readFilSeync</span>(<span class="string">'./img/04.jpg'</span>)</span><br><span class="line"><span class="keyword">const</span> etagContent = <span class="title function_">etag</span>(data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ifNoneMatch = req.<span class="property">headers</span>[<span class="string">'if-none-match'</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (ifNoneMatch === etagContent) {</span><br><span class="line">  res.<span class="property">statusCode</span> = <span class="number">304</span></span><br><span class="line">  res.<span class="title function_">end</span>()</span><br><span class="line">  <span class="keyword">return</span> <span class="comment">// 直接返回，不操作服务器资源，减少带宽</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">res.<span class="title function_">setHeader</span>(<span class="string">'etag'</span>, etagContent)</span><br><span class="line">res.<span class="title function_">setHeader</span>(<span class="string">'Cache-Control'</span>,<span class="string">'no-cache'</span>)</span><br><span class="line">res.<span class="title function_">end</span>(data)</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><p>If-None-Match</p>
+</li>
+<li><p><strong>强验证Etag</strong>，资源细微的改动都会引起指纹的变化</p>
+</li>
+<li><p><strong>弱验证ETag</strong>， 相对灵活的过滤资源的某些变化</p>
+</li>
+</ul>
+<h2 id="5、强缓存"><a href="#5、强缓存" class="headerlink" title="5、强缓存"></a>5、强缓存</h2><h3 id="介绍："><a href="#介绍：" class="headerlink" title="介绍："></a>介绍：</h3><p>不会向服务器发送请求，直接从缓存中读取资源，在chrome控制台的Network选项中可以看到该请求返回200的状态码，并且Size显示<code>from disk cache</code>或<code>from memory cache</code>。</p>
+<h3 id="设置："><a href="#设置：" class="headerlink" title="设置："></a>设置：</h3><p>强缓存可以通过设置两种 <code>HTTP Header</code> 实现，分别是：<code>Expires</code> 和 <code>Cache-Control</code>。</p>
+<blockquote>
+<p>Expires 是http1.0的产物，Cache-Control是http1.1的产物，两者同时存在的话，Cache-Control优先级高于Expires；</p>
+</blockquote>
+<h2 id="6、协商缓存"><a href="#6、协商缓存" class="headerlink" title="6、协商缓存"></a>6、协商缓存</h2><h3 id="介绍：-1"><a href="#介绍：-1" class="headerlink" title="介绍："></a>介绍：</h3><p>协商缓存就是强制缓存失效后，浏览器<em>携带缓存标识</em>向服务器发起请求，由服务器根据缓存标识决定是否使用缓存的过程，主要有以下两种情况：</p>
+<ul>
+<li><p>协商缓存生效，返回<code>304</code>和<code>Not Modified</code></p>
+</li>
+<li><p>协商缓存失效，返回<code>200</code>和<code>请求结果</code></p>
+</li>
+</ul>
+<h3 id="设置：-1"><a href="#设置：-1" class="headerlink" title="设置："></a>设置：</h3><p>协商缓存可以通过设置两种 HTTP Header 实现, 分别是：<code>Last-Modified</code> 和 <code>ETag</code> 。</p>
+<h2 id="7、缓存机制🎉"><a href="#7、缓存机制🎉" class="headerlink" title="7、缓存机制🎉"></a>7、缓存机制🎉</h2><ol>
+<li><p>强制缓存优先于协商缓存进行，若强制缓存(Expires和Cache-Control)生效则直接使用缓存，若不生效则进行协商缓存(<code>Last-Modified / If-Modified-Since和Etag / If-None-Match</code>)</p>
+</li>
+<li><p>协商缓存由服务器决定是否使用缓存，若协商缓存失效，那么代表该请求的缓存失效，返回200，重新返回资源和缓存标识，再存入浏览器缓存中；生效则返回304，继续使用缓存。</p>
+</li>
+</ol>
+<h2 id="8、缓存策略树🎉"><a href="#8、缓存策略树🎉" class="headerlink" title="8、缓存策略树🎉"></a>8、缓存策略树🎉</h2><p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4b20c21694e940d5acf2b343148bfbbf~tplv-k3u1fbpfcp-zoom-1.image" alt="缓存策略树，很早很早之前画的🤣，现在看看也是醉了😂"></p>
+<p align="center">缓存策略树，很早很早之前画的🤣，现在看看也是醉了😂</p>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cc8e06075df24102b9989fc1ff0eb797~tplv-k3u1fbpfcp-zoom-1.image" alt="该图来源网络，侵删"></p>
+<p align="center">该图来源网络，侵删</p>
+
+<p>更多看<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Caching">这里</a></p>
+<hr>
+<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>HTTP</tag>
       </tags>
   </entry>
   <entry>
@@ -5253,6 +5215,129 @@
       </categories>
       <tags>
         <tag>SEO</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker | 容器互联互通</title>
+    <url>/posts/2247720414.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
+</blockquote>
+<p>上篇讲到创建自定义网络，我创建了 <code>mynet</code> 网络，并指定了网关和子网地址。在上篇结尾呢，我抛出了一个问题：其它网络下的容器可以直接访问<code>mynet</code>网络下的容器吗？今天就让我们一块看下怎么实现容器互联。</p>
+<h2 id="其它网络下的容器加入mynet网络，实现一个容器两个ip地址"><a href="#其它网络下的容器加入mynet网络，实现一个容器两个ip地址" class="headerlink" title="其它网络下的容器加入mynet网络，实现一个容器两个ip地址"></a>其它网络下的容器加入<code>mynet</code>网络，实现一个容器两个<code>ip</code>地址</h2><p><strong>网络集群</strong></p>
+<blockquote>
+<ol>
+<li>先创建<code>test-network</code>网络：</li>
+</ol>
+<ul>
+<li><code>docker network create test-network</code></li>
+</ul>
+<ol start="2">
+<li>再运行<code>centos01</code>容器并加入到<code>test-network</code>网络下</li>
+</ol>
+<ul>
+<li><code>docker run -it -P --name centos01 --net test-network centos</code></li>
+</ul>
+</blockquote>
+<p><code>centos01</code>容器已经加入在<code>test-network</code>网络下了</p>
+<h3 id="centos01加入mynet网络"><a href="#centos01加入mynet网络" class="headerlink" title="centos01加入mynet网络"></a><code>centos01</code>加入<code>mynet</code>网络</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">root@--- ~]<span class="comment"># docker network connect mynet centos01</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="查看mynet网络"><a href="#查看mynet网络" class="headerlink" title="查看mynet网络"></a>查看mynet网络</h3><ul>
+<li><code>docker network ls</code></li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network ls</span></span><br><span class="line">NETWORK ID     NAME           DRIVER    SCOPE</span><br><span class="line">feafa30d4051   bridge         bridge    <span class="built_in">local</span></span><br><span class="line">e8bf4fced9e2   host           host      <span class="built_in">local</span></span><br><span class="line">0096a971fd2c   mynet          bridge    <span class="built_in">local</span>  <span class="comment"># 自定义bridge网桥</span></span><br><span class="line">6263db0933b9   none           null      <span class="built_in">local</span></span><br><span class="line">799426d70aa2   test-network   bridge    <span class="built_in">local</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><code>docker network inspect 0096</code></li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network inspect 0096</span></span><br><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        <span class="string">"Name"</span>: <span class="string">"mynet"</span>,</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"0096a971fd2c66400e53cbae5e53eceedc2f90d5685917e9534640a3535c0ef1"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2021-10-04T10:18:09.113847736+08:00"</span>,</span><br><span class="line">        <span class="comment"># ... 省略代码展示</span></span><br><span class="line">        <span class="string">"IPAM"</span>: {</span><br><span class="line">            <span class="string">"Driver"</span>: <span class="string">"default"</span>,</span><br><span class="line">            <span class="string">"Options"</span>: {},</span><br><span class="line">            <span class="string">"Config"</span>: [</span><br><span class="line">                {</span><br><span class="line">                    <span class="string">"Subnet"</span>: <span class="string">"192.168.0.0/16"</span>,</span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"192.168.0.1"</span></span><br><span class="line">                }</span><br><span class="line">            ]</span><br><span class="line">        },</span><br><span class="line">        <span class="comment"># ... 省略代码展示</span></span><br><span class="line">        <span class="string">"Containers"</span>: {</span><br><span class="line">            <span class="string">"2fac920eebd505794c4a27ef4efdf531d32805e8663bded93a473bd28236bc27"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"mynet-centos01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"3aff075..."</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:c0:a8:00:02"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"192.168.0.2/16"</span>,</span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">"3dceda051252b6970fe2156bac7710ba6489a97aac68c49b1c85a2f130d0556f"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"mynet-tomcat01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"9f52b19..."</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:c0:a8:00:03"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"192.168.0.3/16"</span>,</span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">"cb1922b95b9316d129b54f3545fad9729092926e10a1d5517f8928db42706151"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"centos01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"0ba2107..."</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:c0:a8:00:04"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"192.168.0.4/16"</span>,   <span class="comment"># 新加入的centos01容器</span></span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            }</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Options"</span>: {},</span><br><span class="line">        <span class="string">"Labels"</span>: {}</span><br><span class="line">    }</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="查看centos01的容器信息"><a href="#查看centos01的容器信息" class="headerlink" title="查看centos01的容器信息"></a>查看centos01的容器信息</h3><p>可以看到<code>Networks</code>下面存在<code>mynet</code>、<code>test-network</code>两个网络连接信息</p>
+<p>一个容器两个<code>ip</code>地址</p>
+<p>无关代码已省略展示</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker inspect cb19</span></span><br><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"cb1922b95b9316d129b54f3545fad9729092926e10a1d5517f8928db42706151"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2021-10-03T13:39:00.942877668Z"</span>,</span><br><span class="line">        <span class="string">"Path"</span>: <span class="string">"/bin/bash"</span>,</span><br><span class="line">        <span class="string">"Args"</span>: [],</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ... 省略代码展示</span></span><br><span class="line"></span><br><span class="line">        <span class="string">"NetworkSettings"</span>: {</span><br><span class="line">            <span class="comment"># ... 省略代码展示</span></span><br><span class="line">            <span class="string">"Networks"</span>: {</span><br><span class="line">                <span class="comment"># 网络连接1 ： mynet</span></span><br><span class="line">                <span class="string">"mynet"</span>: {、</span><br><span class="line">                    <span class="comment"># ... 省略代码展示</span></span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"192.168.0.1"</span>,</span><br><span class="line">                    <span class="string">"IPAddress"</span>: <span class="string">"192.168.0.4"</span>,</span><br><span class="line">                    <span class="string">"MacAddress"</span>: <span class="string">"02:42:c0:a8:00:04"</span>,</span><br><span class="line">                },</span><br><span class="line">                <span class="comment"># 网络连接2 ： test-network</span></span><br><span class="line">                <span class="string">"test-network"</span>: {</span><br><span class="line">                    <span class="comment"># ... 省略代码展示</span></span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"172.18.0.1"</span>,</span><br><span class="line">                    <span class="string">"IPAddress"</span>: <span class="string">"172.18.0.3"</span>,</span><br><span class="line">                    <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:12:00:03"</span>,</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="test-network网卡下的centos01访问mynet网卡下的mynet-centos01、mynet-tomcat01"><a href="#test-network网卡下的centos01访问mynet网卡下的mynet-centos01、mynet-tomcat01" class="headerlink" title="test-network网卡下的centos01访问mynet网卡下的mynet-centos01、mynet-tomcat01"></a>test-network网卡下的centos01访问mynet网卡下的mynet-centos01、mynet-tomcat01</h2><p>容器ip和容器名都可以连接</p>
+<h3 id="进入centos01容器"><a href="#进入centos01容器" class="headerlink" title="进入centos01容器"></a>进入centos01容器</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker exec -it cb19 /bin/bash</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>mynet-tomcat01</code> 容器的IP是: <code>192.168.0.3</code></p>
+<h3 id="ping-mynet-tomcat01-容器的IP"><a href="#ping-mynet-tomcat01-容器的IP" class="headerlink" title="ping mynet-tomcat01 容器的IP"></a>ping <code>mynet-tomcat01</code> 容器的IP</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@cb1922b95b93 /]<span class="comment"># ping 192.168.0.3</span></span><br><span class="line">PING 192.168.0.3 (192.168.0.3) 56(84) bytes of data.</span><br><span class="line">64 bytes from 192.168.0.3: icmp_seq=1 ttl=64 time=0.186 ms</span><br><span class="line">^C</span><br><span class="line">--- 192.168.0.3 ping statistics ---</span><br><span class="line">7 packets transmitted, 7 received, 0% packet loss, time 6000ms</span><br><span class="line">rtt min/avg/max/mdev = 0.090/0.127/0.186/0.029 ms</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="直接ping-容器名-mynet-centos01-mynet-tomcat01"><a href="#直接ping-容器名-mynet-centos01-mynet-tomcat01" class="headerlink" title="直接ping 容器名 mynet-centos01 mynet-tomcat01"></a>直接ping 容器名 <code>mynet-centos01</code> <code>mynet-tomcat01</code></h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@cb1922b95b93 /]<span class="comment"># ping mynet-centos01</span></span><br><span class="line">PING mynet-centos01 (192.168.0.2) 56(84) bytes of data.</span><br><span class="line">64 bytes from mynet-centos01.mynet (192.168.0.2): icmp_seq=1 ttl=64 time=0.105 ms</span><br><span class="line">^C</span><br><span class="line">--- mynet-centos01 ping statistics ---</span><br><span class="line">3 packets transmitted, 3 received, 0% packet loss, time 2001ms</span><br><span class="line">rtt min/avg/max/mdev = 0.105/0.116/0.130/0.013 ms</span><br><span class="line"></span><br><span class="line">[root@cb1922b95b93 /]<span class="comment"># ping mynet-tomcat01</span></span><br><span class="line">PING mynet-tomcat01 (192.168.0.3) 56(84) bytes of data.</span><br><span class="line">64 bytes from mynet-tomcat01.mynet (192.168.0.3): icmp_seq=1 ttl=64 time=0.085 ms</span><br><span class="line">^C</span><br><span class="line">--- mynet-tomcat01 ping statistics ---</span><br><span class="line">2 packets transmitted, 2 received, 0% packet loss, time 1001ms</span><br><span class="line">rtt min/avg/max/mdev = 0.085/0.093/0.102/0.012 ms</span><br><span class="line">[root@cb1922b95b93 /]<span class="comment">#</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>其它网络下的容器可以通过加入docker网络，来访问该docker网络下的容器，并且既可以通过容器ip也可以通过容器名连接，非常方便。<code>docker0</code>十分强大</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634d69ae16f2c2beb1d5df36.jpg"></p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+  </entry>
+  <entry>
+    <title>最近接触的东西</title>
+    <url>/posts/2564859285.html</url>
+    <content><![CDATA[<html><head></head><body><p>我的博客最开始采用的是<code>Hexo</code>+<code>hexo-theme-next</code>搭建的，使用<code>GitHub Pages</code>托管并进行自动化部署，写文发布的流程非常简单方便，云端写作发布也轻而易举。</p>
+<p>本来事情到这里就应该结束了，但是，我又进行了下面的一些尝试</p>
+<h2 id="装备"><a href="#装备" class="headerlink" title="装备"></a>装备</h2><ol>
+<li>美化博客<ul>
+<li><code>NexT</code>主题允许通过<code>custom_file_path</code>设置外挂文件进行修改</li>
+<li>自定义界面修改</li>
+</ul>
+</li>
+<li>图片加载优化<ul>
+<li><code>lazyload</code></li>
+</ul>
+</li>
+<li>图床使用<ul>
+<li>目前使用的<code>聚合图床</code>效果不佳</li>
+<li><a href="https://img.show/">img.show</a></li>
+<li><a href="https://imagelol.com/">笑果图床</a></li>
+</ul>
+</li>
+<li>文章压缩发布<ul>
+<li><code>hexo-neat</code></li>
+</ul>
+</li>
+<li>评论、统计分析插件<ul>
+<li><code>valine</code>、<code>waline</code>、<code>changyan</code>、<code>livere</code>、<code>gitalk</code></li>
+<li><code>busuanzi</code>、<code>leancloud</code>、<code>cloudflare</code></li>
+</ul>
+</li>
+<li>搜索引擎优化<ul>
+<li><code>Bing</code></li>
+<li><code>Baidu</code></li>
+<li><code>sogou</code></li>
+<li>……</li>
+</ul>
+</li>
+<li><a href="https://www.addthis.com/">AddThis</a>挂件添加</li>
+<li>友链页面定制开发</li>
+<li>本地搜索<code>local_search</code></li>
+<li><a href="https://gitter.im/">Gitter</a>聊天工具添加</li>
+<li>备案信息</li>
+<li>……</li>
+</ol>
+<p><code>NexT</code>主题虽好，但还是有一些界面样式不太美观，我就开始动手修改。不得不说美化主题这件事真的很费心思，自己内心对美的追求让我反复修改，不禁让我想起来工作中产品经理频繁改方案的场景。经过反复拉扯，最终还算满意。</p>
+<p>本来事情到这里就应该结束了，但是，国内访问<code>GitHub Pages</code>部署的站点加载比较慢，所以，我就开始尝试部署到<code>Netlify</code>、<code>Vercel</code>上，</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>个人觉得任何改动都要有一个长远的打算。对博客站点来说，就是要充分考虑可迁移性、弹性部署、写作方便、相关依赖升级方便。比如要考虑<code>NexT</code>主题升级、评论数据可迁移。总之，一个原则：<strong>使用平台的同时不能受制于平台</strong>，最初的目的就是打造一片属于自己的“自留地”😊</p>
+<ol>
+<li>图床使用：稳定、高速</li>
+<li>评论插件：隐私、可管理、可迁移，较低的侵入性，不需要魔改主题文件，不然主题升级会带来很多麻烦</li>
+<li>搜索引擎优化：基本都是同一个路子，添加验证、网站收录url等，效果还不是很明显，需要进一步研究</li>
+<li>友链页面：本着最少改动、不影响主题升级，自己动手开发</li>
+<li>托管部署：有很多平台可供部署网站，集成云数据库、<code>Serverless</code>等功能，部署成功之后生成一个平台自动分配的域名，也可以绑定个人域名。没有云服务器同样可以部署网站😃</li>
+</ol>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
       </tags>
   </entry>
 </search>
