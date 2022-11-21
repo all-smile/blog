@@ -1233,61 +1233,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker | 部署nginx服务</title>
-    <url>/posts/1512743311.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
-</blockquote>
-<p>容器时相互隔离的，<code>docker</code>启动的<code>nginx</code>是容器内的服务，不影响我原先服务器上的<code>nginx</code>服务，小伙伴们可大胆尝试😃</p>
-<p>本篇实在linux环境下操作的，主要目的是夺人眼目，对使用Docker部署服务进行尝鲜，先体会一下Docker的便捷之处。</p>
-<h2 id="1、下载nginx镜像"><a href="#1、下载nginx镜像" class="headerlink" title="1、下载nginx镜像"></a>1、下载nginx镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker pull nginx</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="2、查看下载的镜像"><a href="#2、查看下载的镜像" class="headerlink" title="2、查看下载的镜像"></a>2、查看下载的镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="3、启动nginx镜像"><a href="#3、启动nginx镜像" class="headerlink" title="3、启动nginx镜像"></a>3、启动nginx镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -d --name nginx01 -p 3344:80 nginx（镜像名或者镜像<span class="built_in">id</span>）</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63423e4516f2c2beb109d82d.jpg"></p>
-<h2 id="4、查看启动的nginx"><a href="#4、查看启动的nginx" class="headerlink" title="4、查看启动的nginx"></a>4、查看启动的nginx</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="5、访问启动的nginx"><a href="#5、访问启动的nginx" class="headerlink" title="5、访问启动的nginx"></a>5、访问启动的nginx</h2><p>在云服务器内使用 curl 测试访问</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">curl localhost:3344</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63423e5d16f2c2beb10a0248.jpg"></p>
-<h3 id="5-1、linux开放防火墙端口"><a href="#5-1、linux开放防火墙端口" class="headerlink" title="5.1、linux开放防火墙端口"></a>5.1、linux开放防火墙端口</h3><p><code>firewall-cmd</code>位于<code>firewalld</code>包中</p>
-<p><code>systemctl</code>位于<code>systemd</code>包中</p>
-<p><strong>安装防火墙工具：</strong></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum install firewalld systemd -y</span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>常用命令：</strong></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 查看firewall(防火墙)服务状态</span></span><br><span class="line">systemctl status firewalld</span><br><span class="line"></span><br><span class="line"><span class="comment">#开启防火墙</span></span><br><span class="line">systemctl start firewalld</span><br><span class="line"></span><br><span class="line"><span class="comment">#重启防火墙</span></span><br><span class="line">service firewalld  restart</span><br><span class="line"></span><br><span class="line"><span class="comment">#关闭防火墙</span></span><br><span class="line">service firewalld  stop</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看防火墙规则</span></span><br><span class="line">firewall-cmd --list-all　　 　　<span class="comment">#查看全部信息</span></span><br><span class="line">firewall-cmd --list-ports 　　  <span class="comment">#只看端口信息</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#添加防火墙开放端口</span></span><br><span class="line">firewall-cmd --add-port=8001/tcp --permanent</span><br><span class="line">or</span><br><span class="line">firewall-cmd --zone=public --add-port=8080/tcp --permanent</span><br><span class="line">命令含义:</span><br><span class="line">　　--zone 　　　　　　　　 <span class="comment">#作用域（public标识公共的）</span></span><br><span class="line">　　--add-port=80/tcp 　　<span class="comment">#添加端口， 格式为:端口/通讯协议</span></span><br><span class="line">　　--permanent 　　　　　　<span class="comment">#永久生效，没有此参数重启后失效</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 不要忘记reload！</span></span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="5-2、阿里云服务器需要配置安全组规则"><a href="#5-2、阿里云服务器需要配置安全组规则" class="headerlink" title="5.2、阿里云服务器需要配置安全组规则"></a>5.2、阿里云服务器需要配置安全组规则</h3><p>配置完之后就可以在浏览器访问<code>公网ip+3344端口号</code>查看了</p>
-<h3 id="5-3、原理"><a href="#5-3、原理" class="headerlink" title="5.3、原理"></a>5.3、原理</h3><p>端口暴露，linux端口映射到容器端口</p>
-<p>0.0.0.0:3344-&gt;80/tcp</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63423e7416f2c2beb10a2e22.jpg"></p>
-<h2 id="6-进入nginx容器"><a href="#6-进入nginx容器" class="headerlink" title="6.进入nginx容器"></a>6.进入nginx容器</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it 0a7ebd6bc291 /bin/bash</span><br><span class="line">root@0a7ebd6bc291:/<span class="comment"># ls</span></span><br><span class="line">bin  boot  dev	docker-entrypoint.d  docker-entrypoint.sh  etc	home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var</span><br><span class="line">root@0a7ebd6bc291:/<span class="comment"># whereis nginx</span></span><br><span class="line">nginx: /usr/sbin/nginx /usr/lib/nginx /etc/nginx /usr/share/nginx</span><br><span class="line">root@0a7ebd6bc291:/<span class="comment"># cd /etc/nginx/</span></span><br><span class="line">root@0a7ebd6bc291:/etc/nginx<span class="comment"># ls</span></span><br><span class="line">conf.d	fastcgi_params	mime.types  modules  nginx.conf  scgi_params  uwsgi_params</span><br><span class="line">root@0a7ebd6bc291:/etc/nginx<span class="comment">#</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="问题探索"><a href="#问题探索" class="headerlink" title="问题探索"></a>问题探索</h2><p>每次改动<code>nginx</code>配置，都需要进入容器内部修改，十分麻烦，能否在容器外部提供一个映射路径，达到修改配置文件，容器内部就会自动修改？</p>
-<blockquote>
-<p>数据卷技术</p>
-<p><code>nginx.conf</code>配置文件，注意<code>Nginx</code>默认是后台运行的，但<code>Docker</code>需要其在前台运行，否则直接退出容器。配置文件中添加<code>daemon off;</code>关闭后台运行。可以通过<code>Dockerfile</code>配置CMD命令实现</p>
-</blockquote>
-<p>感谢阅读，本篇完，数据卷技术下文继续分享！</p>
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>Docker</category>
-        <category>Nginx</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-        <tag>Nginx</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker | 自定义网络（网关、子网地址）</title>
     <url>/posts/2785354845.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1340,6 +1285,61 @@
       </categories>
       <tags>
         <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker | 部署nginx服务</title>
+    <url>/posts/1512743311.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
+</blockquote>
+<p>容器时相互隔离的，<code>docker</code>启动的<code>nginx</code>是容器内的服务，不影响我原先服务器上的<code>nginx</code>服务，小伙伴们可大胆尝试😃</p>
+<p>本篇实在linux环境下操作的，主要目的是夺人眼目，对使用Docker部署服务进行尝鲜，先体会一下Docker的便捷之处。</p>
+<h2 id="1、下载nginx镜像"><a href="#1、下载nginx镜像" class="headerlink" title="1、下载nginx镜像"></a>1、下载nginx镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker pull nginx</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="2、查看下载的镜像"><a href="#2、查看下载的镜像" class="headerlink" title="2、查看下载的镜像"></a>2、查看下载的镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="3、启动nginx镜像"><a href="#3、启动nginx镜像" class="headerlink" title="3、启动nginx镜像"></a>3、启动nginx镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -d --name nginx01 -p 3344:80 nginx（镜像名或者镜像<span class="built_in">id</span>）</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63423e4516f2c2beb109d82d.jpg"></p>
+<h2 id="4、查看启动的nginx"><a href="#4、查看启动的nginx" class="headerlink" title="4、查看启动的nginx"></a>4、查看启动的nginx</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="5、访问启动的nginx"><a href="#5、访问启动的nginx" class="headerlink" title="5、访问启动的nginx"></a>5、访问启动的nginx</h2><p>在云服务器内使用 curl 测试访问</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">curl localhost:3344</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63423e5d16f2c2beb10a0248.jpg"></p>
+<h3 id="5-1、linux开放防火墙端口"><a href="#5-1、linux开放防火墙端口" class="headerlink" title="5.1、linux开放防火墙端口"></a>5.1、linux开放防火墙端口</h3><p><code>firewall-cmd</code>位于<code>firewalld</code>包中</p>
+<p><code>systemctl</code>位于<code>systemd</code>包中</p>
+<p><strong>安装防火墙工具：</strong></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum install firewalld systemd -y</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>常用命令：</strong></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 查看firewall(防火墙)服务状态</span></span><br><span class="line">systemctl status firewalld</span><br><span class="line"></span><br><span class="line"><span class="comment">#开启防火墙</span></span><br><span class="line">systemctl start firewalld</span><br><span class="line"></span><br><span class="line"><span class="comment">#重启防火墙</span></span><br><span class="line">service firewalld  restart</span><br><span class="line"></span><br><span class="line"><span class="comment">#关闭防火墙</span></span><br><span class="line">service firewalld  stop</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看防火墙规则</span></span><br><span class="line">firewall-cmd --list-all　　 　　<span class="comment">#查看全部信息</span></span><br><span class="line">firewall-cmd --list-ports 　　  <span class="comment">#只看端口信息</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#添加防火墙开放端口</span></span><br><span class="line">firewall-cmd --add-port=8001/tcp --permanent</span><br><span class="line">or</span><br><span class="line">firewall-cmd --zone=public --add-port=8080/tcp --permanent</span><br><span class="line">命令含义:</span><br><span class="line">　　--zone 　　　　　　　　 <span class="comment">#作用域（public标识公共的）</span></span><br><span class="line">　　--add-port=80/tcp 　　<span class="comment">#添加端口， 格式为:端口/通讯协议</span></span><br><span class="line">　　--permanent 　　　　　　<span class="comment">#永久生效，没有此参数重启后失效</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 不要忘记reload！</span></span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="5-2、阿里云服务器需要配置安全组规则"><a href="#5-2、阿里云服务器需要配置安全组规则" class="headerlink" title="5.2、阿里云服务器需要配置安全组规则"></a>5.2、阿里云服务器需要配置安全组规则</h3><p>配置完之后就可以在浏览器访问<code>公网ip+3344端口号</code>查看了</p>
+<h3 id="5-3、原理"><a href="#5-3、原理" class="headerlink" title="5.3、原理"></a>5.3、原理</h3><p>端口暴露，linux端口映射到容器端口</p>
+<p>0.0.0.0:3344-&gt;80/tcp</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63423e7416f2c2beb10a2e22.jpg"></p>
+<h2 id="6-进入nginx容器"><a href="#6-进入nginx容器" class="headerlink" title="6.进入nginx容器"></a>6.进入nginx容器</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it 0a7ebd6bc291 /bin/bash</span><br><span class="line">root@0a7ebd6bc291:/<span class="comment"># ls</span></span><br><span class="line">bin  boot  dev	docker-entrypoint.d  docker-entrypoint.sh  etc	home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var</span><br><span class="line">root@0a7ebd6bc291:/<span class="comment"># whereis nginx</span></span><br><span class="line">nginx: /usr/sbin/nginx /usr/lib/nginx /etc/nginx /usr/share/nginx</span><br><span class="line">root@0a7ebd6bc291:/<span class="comment"># cd /etc/nginx/</span></span><br><span class="line">root@0a7ebd6bc291:/etc/nginx<span class="comment"># ls</span></span><br><span class="line">conf.d	fastcgi_params	mime.types  modules  nginx.conf  scgi_params  uwsgi_params</span><br><span class="line">root@0a7ebd6bc291:/etc/nginx<span class="comment">#</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="问题探索"><a href="#问题探索" class="headerlink" title="问题探索"></a>问题探索</h2><p>每次改动<code>nginx</code>配置，都需要进入容器内部修改，十分麻烦，能否在容器外部提供一个映射路径，达到修改配置文件，容器内部就会自动修改？</p>
+<blockquote>
+<p>数据卷技术</p>
+<p><code>nginx.conf</code>配置文件，注意<code>Nginx</code>默认是后台运行的，但<code>Docker</code>需要其在前台运行，否则直接退出容器。配置文件中添加<code>daemon off;</code>关闭后台运行。可以通过<code>Dockerfile</code>配置CMD命令实现</p>
+</blockquote>
+<p>感谢阅读，本篇完，数据卷技术下文继续分享！</p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+        <category>Nginx</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -3197,6 +3197,74 @@
       </tags>
   </entry>
   <entry>
+    <title>js获取项目git分支信息</title>
+    <url>/posts/3067788882.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="1、git-bash-获取分支信息"><a href="#1、git-bash-获取分支信息" class="headerlink" title="1、git bash 获取分支信息"></a>1、git bash 获取分支信息</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 获取当前分支名</span></span><br><span class="line">git rev-parse --abbrev-ref HEAD</span><br><span class="line">git branch --show-current</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取当前hash</span></span><br><span class="line">git rev-parse HEAD</span><br><span class="line">git rev-parse --short HEAD  <span class="comment"># 短的</span></span><br></pre></td></tr></tbody></table></figure>
+<p>上面的代码是通过git命令获取的分支信息，怎么可以在项目代码里面获取分支信息呢？请看下文👇</p>
+<h2 id="2、JavaScript-通过-execa-插件获取项目分支信息"><a href="#2、JavaScript-通过-execa-插件获取项目分支信息" class="headerlink" title="2、JavaScript 通过 execa 插件获取项目分支信息"></a>2、JavaScript 通过 <a href="https://github.com/sindresorhus/execa">execa</a> 插件获取项目分支信息</h2><p>execa具备如下特点：</p>
+<ul>
+<li><p>Promise接口</p>
+</li>
+<li><p>从输出中删除最后的换行符，这样您就不必执行stdout.trim()</p>
+</li>
+<li><p>支持<strong>跨平台</strong>的shebang二进制文件</p>
+</li>
+<li><p>改进Windows支持。</p>
+</li>
+<li><p>更高的最大缓冲区。100mb而不是200kb。</p>
+</li>
+<li><p>按名称执行本地安装的二进制文件。</p>
+</li>
+<li><p>在父进程终止时清除派生的进程。</p>
+</li>
+<li><p>从 stdout和stderr获得交错输出，类似于在终端上打印的输出。(<strong>异步</strong>)</p>
+</li>
+<li><p>可以指定文件和参数作为一个单一的字符串没有外壳</p>
+</li>
+<li><p>更具描述性的错误。</p>
+</li>
+</ul>
+<ol>
+<li><p>安装 execa</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm install execa -S</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>简单使用 execa</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line">(<span class="keyword">async</span> () =&gt; {</span><br><span class="line">    <span class="keyword">const</span> {stdout} = <span class="keyword">await</span> <span class="title function_">execa</span>(<span class="string">'echo'</span>, [<span class="string">'unicorns'</span>]);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(stdout);</span><br><span class="line">    <span class="comment">//=&gt; 'unicorns'</span></span><br><span class="line">})();</span><br><span class="line"></span><br><span class="line"><span class="comment">// stdout 表示执行命令的输出结果</span></span><br><span class="line"><span class="comment">/*{</span></span><br><span class="line"><span class="comment">  command: 'echo unicorns',</span></span><br><span class="line"><span class="comment">  escapedCommand: 'echo unicorns',</span></span><br><span class="line"><span class="comment">  exitCode: 0,</span></span><br><span class="line"><span class="comment">  stdout: '"unicorns"',</span></span><br><span class="line"><span class="comment">  stderr: '',</span></span><br><span class="line"><span class="comment">  all: undefined,</span></span><br><span class="line"><span class="comment">  failed: false,</span></span><br><span class="line"><span class="comment">  timedOut: false,</span></span><br><span class="line"><span class="comment">  isCanceled: false,</span></span><br><span class="line"><span class="comment">  killed: false</span></span><br><span class="line"><span class="comment">}*/</span></span><br></pre></td></tr></tbody></table></figure>
+<p>execa还可以执行脚本命令，并输出结果，下面看一下如何在代码里面获取当前操作的分支👇</p>
+</li>
+<li><p>实际项目中的代码</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getGitBranch</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">const</span> res = execa.<span class="title function_">commandSync</span>(<span class="string">'git rev-parse --abbrev-ref HEAD'</span>);</span><br><span class="line">  <span class="keyword">return</span> res.<span class="property">stdout</span>;</span><br><span class="line">}</span><br><span class="line"><span class="keyword">const</span> curbranch = <span class="title function_">getGitBranch</span>()</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'curbranch=='</span>, curbranch); <span class="comment">// master</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 以下是res输出</span></span><br><span class="line">curbranch== master</span><br><span class="line">{</span><br><span class="line">  <span class="attr">command</span>: <span class="string">'git rev-parse --abbrev-ref HEAD'</span>,</span><br><span class="line">  <span class="attr">escapedCommand</span>: <span class="string">'git rev-parse --abbrev-ref HEAD'</span>,</span><br><span class="line">  <span class="attr">exitCode</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="attr">stdout</span>: <span class="string">'master'</span>, # 命令执行结果输出</span><br><span class="line">  <span class="attr">stderr</span>: <span class="string">''</span>,</span><br><span class="line">  <span class="attr">failed</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">timedOut</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">isCanceled</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">killed</span>: <span class="literal">false</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>下面说一下脚本获取方式</p>
+</li>
+</ol>
+<h2 id="3、脚本获取"><a href="#3、脚本获取" class="headerlink" title="3、脚本获取"></a>3、脚本获取</h2><blockquote>
+<p>我在掘金 <a href="https://juejin.cn/post/7113502858481254413">git编写脚本 组合 commit-msg</a> 一文中使用脚本获取分支信息，感兴趣可以看一下。</p>
+</blockquote>
+<ol>
+<li><p>可以看一下项目中 <code>.git/HEAD</code> 文件中的内容</p>
+<p> HEAD指向最新放入仓库的版本</p>
+</li>
+</ol>
+<figure class="highlight angelscript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">ref</span>: <span class="built_in">ref</span>s/heads/dev_0922</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>编写脚本</li>
+</ol>
+<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取当前分支</span></span><br><span class="line">line=$(<span class="built_in">head</span> -n +1 .git/HEAD)</span><br><span class="line">branch=<span class="variable">${line##*/}</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$branch</span> <span class="comment"># dev_0922</span></span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker常用命令——排错很有帮助😏</title>
     <url>/posts/1627929391.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -3290,71 +3358,16 @@
       </tags>
   </entry>
   <entry>
-    <title>js获取项目git分支信息</title>
-    <url>/posts/3067788882.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="1、git-bash-获取分支信息"><a href="#1、git-bash-获取分支信息" class="headerlink" title="1、git bash 获取分支信息"></a>1、git bash 获取分支信息</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 获取当前分支名</span></span><br><span class="line">git rev-parse --abbrev-ref HEAD</span><br><span class="line">git branch --show-current</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取当前hash</span></span><br><span class="line">git rev-parse HEAD</span><br><span class="line">git rev-parse --short HEAD  <span class="comment"># 短的</span></span><br></pre></td></tr></tbody></table></figure>
-<p>上面的代码是通过git命令获取的分支信息，怎么可以在项目代码里面获取分支信息呢？请看下文👇</p>
-<h2 id="2、JavaScript-通过-execa-插件获取项目分支信息"><a href="#2、JavaScript-通过-execa-插件获取项目分支信息" class="headerlink" title="2、JavaScript 通过 execa 插件获取项目分支信息"></a>2、JavaScript 通过 <a href="https://github.com/sindresorhus/execa">execa</a> 插件获取项目分支信息</h2><p>execa具备如下特点：</p>
-<ul>
-<li><p>Promise接口</p>
-</li>
-<li><p>从输出中删除最后的换行符，这样您就不必执行stdout.trim()</p>
-</li>
-<li><p>支持<strong>跨平台</strong>的shebang二进制文件</p>
-</li>
-<li><p>改进Windows支持。</p>
-</li>
-<li><p>更高的最大缓冲区。100mb而不是200kb。</p>
-</li>
-<li><p>按名称执行本地安装的二进制文件。</p>
-</li>
-<li><p>在父进程终止时清除派生的进程。</p>
-</li>
-<li><p>从 stdout和stderr获得交错输出，类似于在终端上打印的输出。(<strong>异步</strong>)</p>
-</li>
-<li><p>可以指定文件和参数作为一个单一的字符串没有外壳</p>
-</li>
-<li><p>更具描述性的错误。</p>
-</li>
-</ul>
-<ol>
-<li><p>安装 execa</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">npm install execa -S</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>简单使用 execa</p>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line">(<span class="keyword">async</span> () =&gt; {</span><br><span class="line">    <span class="keyword">const</span> {stdout} = <span class="keyword">await</span> <span class="title function_">execa</span>(<span class="string">'echo'</span>, [<span class="string">'unicorns'</span>]);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(stdout);</span><br><span class="line">    <span class="comment">//=&gt; 'unicorns'</span></span><br><span class="line">})();</span><br><span class="line"></span><br><span class="line"><span class="comment">// stdout 表示执行命令的输出结果</span></span><br><span class="line"><span class="comment">/*{</span></span><br><span class="line"><span class="comment">  command: 'echo unicorns',</span></span><br><span class="line"><span class="comment">  escapedCommand: 'echo unicorns',</span></span><br><span class="line"><span class="comment">  exitCode: 0,</span></span><br><span class="line"><span class="comment">  stdout: '"unicorns"',</span></span><br><span class="line"><span class="comment">  stderr: '',</span></span><br><span class="line"><span class="comment">  all: undefined,</span></span><br><span class="line"><span class="comment">  failed: false,</span></span><br><span class="line"><span class="comment">  timedOut: false,</span></span><br><span class="line"><span class="comment">  isCanceled: false,</span></span><br><span class="line"><span class="comment">  killed: false</span></span><br><span class="line"><span class="comment">}*/</span></span><br></pre></td></tr></tbody></table></figure>
-<p>execa还可以执行脚本命令，并输出结果，下面看一下如何在代码里面获取当前操作的分支👇</p>
-</li>
-<li><p>实际项目中的代码</p>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getGitBranch</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">const</span> res = execa.<span class="title function_">commandSync</span>(<span class="string">'git rev-parse --abbrev-ref HEAD'</span>);</span><br><span class="line">  <span class="keyword">return</span> res.<span class="property">stdout</span>;</span><br><span class="line">}</span><br><span class="line"><span class="keyword">const</span> curbranch = <span class="title function_">getGitBranch</span>()</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'curbranch=='</span>, curbranch); <span class="comment">// master</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 以下是res输出</span></span><br><span class="line">curbranch== master</span><br><span class="line">{</span><br><span class="line">  <span class="attr">command</span>: <span class="string">'git rev-parse --abbrev-ref HEAD'</span>,</span><br><span class="line">  <span class="attr">escapedCommand</span>: <span class="string">'git rev-parse --abbrev-ref HEAD'</span>,</span><br><span class="line">  <span class="attr">exitCode</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="attr">stdout</span>: <span class="string">'master'</span>, # 命令执行结果输出</span><br><span class="line">  <span class="attr">stderr</span>: <span class="string">''</span>,</span><br><span class="line">  <span class="attr">failed</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">timedOut</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">isCanceled</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">killed</span>: <span class="literal">false</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>下面说一下脚本获取方式</p>
-</li>
-</ol>
-<h2 id="3、脚本获取"><a href="#3、脚本获取" class="headerlink" title="3、脚本获取"></a>3、脚本获取</h2><blockquote>
-<p>我在掘金 <a href="https://juejin.cn/post/7113502858481254413">git编写脚本 组合 commit-msg</a> 一文中使用脚本获取分支信息，感兴趣可以看一下。</p>
-</blockquote>
-<ol>
-<li><p>可以看一下项目中 <code>.git/HEAD</code> 文件中的内容</p>
-<p> HEAD指向最新放入仓库的版本</p>
-</li>
-</ol>
-<figure class="highlight angelscript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">ref</span>: <span class="built_in">ref</span>s/heads/dev_0922</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>编写脚本</li>
-</ol>
-<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取当前分支</span></span><br><span class="line">line=$(<span class="built_in">head</span> -n +1 .git/HEAD)</span><br><span class="line">branch=<span class="variable">${line##*/}</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$branch</span> <span class="comment"># dev_0922</span></span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+    <title>nginx配置文件</title>
+    <url>/posts/220664946.html</url>
+    <content><![CDATA[<html><head></head><body><p>云服务器到期了，备份一下<code>nginx</code>的配置文件😊</p>
+<figure class="highlight nginx"><table><tbody><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#user  nobody;</span></span><br><span class="line"><span class="comment"># 启动进程，通常设置成和cpu数量相等</span></span><br><span class="line"><span class="attribute">worker_processes</span>  <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">#error_log  logs/error.log;</span></span><br><span class="line"><span class="comment">#error_log  logs/error.log  notice;</span></span><br><span class="line"><span class="comment">#error_log  logs/error.log  info;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#pid        logs/nginx.pid;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 起到 ulimit -a 的作用</span></span><br><span class="line"><span class="attribute">worker_rlimit_nofile</span> <span class="number">65535</span>;</span><br><span class="line"></span><br><span class="line"><span class="section">events</span> {</span><br><span class="line">  <span class="comment"># epoll 是多路复用IO(I/O Multiplexing)中的一种方式</span></span><br><span class="line">  <span class="comment"># use epoll;</span></span><br><span class="line">  <span class="comment"># 单个worker processes 进程最大并发连接数，worker_connections小于work_rlimit_nofile</span></span><br><span class="line">  <span class="attribute">worker_connections</span>  <span class="number">1024</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="section">http</span> {</span><br><span class="line">    <span class="attribute">include</span>       mime.types;</span><br><span class="line">    <span class="attribute">default_type</span>  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '</span></span><br><span class="line">    <span class="comment">#                  '$status $body_bytes_sent "$http_referer" '</span></span><br><span class="line">    <span class="comment">#                  '"$http_user_agent" "$http_x_forwarded_for"';</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#access_log  logs/access.log  main;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># 关闭在错误页面中nginx的版本信息</span></span><br><span class="line">  <span class="attribute">server_tokens</span>   <span class="literal">off</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment"># 反向代理设置为on, fastdfs设置为off</span></span><br><span class="line">  <span class="attribute">sendfile</span>        <span class="literal">on</span>;</span><br><span class="line">  <span class="comment"># 在一个数据包里发送所有头文件</span></span><br><span class="line">  <span class="attribute">tcp_nopush</span>     <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">  <span class="attribute">keepalive_timeout</span>  <span class="number">65</span>;</span><br><span class="line">  <span class="attribute">tcp_nodelay</span>        <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">  <span class="attribute">gzip</span>  <span class="literal">on</span>;</span><br><span class="line">  <span class="attribute">gzip_static</span> <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="attribute">gzip_min_length</span> <span class="number">1k</span>;</span><br><span class="line">  <span class="attribute">gzip_types</span> text/plain application/javascript application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png;</span><br><span class="line">  <span class="attribute">gzip_disable</span> <span class="string">"MSIE [1-6]."</span>;</span><br><span class="line">  <span class="comment"># 打开缓存的同时也指定了缓存最大数目，以及缓存的时间。我们可以设置一个相对高的最大时间，这样我们可以在它们不活动超过20秒后清除掉。</span></span><br><span class="line">  <span class="attribute">open_file_cache</span> max=<span class="number">65535</span> inactive=<span class="number">60s</span>;</span><br><span class="line">  <span class="comment"># 在open_file_cache中指定检测正确信息的间隔时间。</span></span><br><span class="line">  <span class="attribute">open_file_cache_valid</span> <span class="number">80s</span>;</span><br><span class="line">  <span class="comment"># 定义了open_file_cache中指令参数不活动时间期间里最小的文件数。</span></span><br><span class="line">  <span class="attribute">open_file_cache_min_uses</span> <span class="number">1</span>;</span><br><span class="line">  <span class="comment"># 指定了当搜索一个文件时是否缓存错误信息，也包括再次给配置中添加文件。我们也包括了服务器模缺，这些是在不同文件中定义的，如果你的服务模块不再这些位置，你就得修正这一行来指定正确的位置</span></span><br><span class="line">  <span class="attribute">open_file_cache_errors</span> <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment"># 设置请求头缓冲</span></span><br><span class="line">  <span class="comment"># 客户端请求头部的缓冲区大小，这个可以根据你的系统分页大小来设置，一般一个请求头的大小不会超过1x，不过由于一般系统分页都要大于1k，所以这里设置分页大小。分页大小用命令 getconf PAGESIZE 获得</span></span><br><span class="line">  <span class="attribute">client_header_buffer_size</span> <span class="number">4096</span>;</span><br><span class="line">  <span class="attribute">client_body_buffer_size</span> <span class="number">512k</span>;</span><br><span class="line">  <span class="comment"># 缓冲区代理缓冲用户端请求的最大字节数,如果请求大于指定的大小，则NGINX发回HTTP 413（Raquest Entity too large）错误.</span></span><br><span class="line">  <span class="attribute">client_max_body_size</span> <span class="number">128m</span>;</span><br><span class="line">  <span class="attribute">large_client_header_buffers</span> <span class="number">4</span> <span class="number">128k</span>;</span><br><span class="line">  <span class="attribute">client_header_timeout</span> <span class="number">15</span>;</span><br><span class="line">  <span class="attribute">client_body_timeout</span> <span class="number">15</span>;</span><br><span class="line">  <span class="comment"># 指定客户端的响应超时时间</span></span><br><span class="line">  <span class="attribute">send_timeout</span> <span class="number">30</span>;</span><br><span class="line"></span><br><span class="line">  <span class="section">server</span> {</span><br><span class="line">    <span class="attribute">listen</span>       <span class="number">18600</span>;</span><br><span class="line">    <span class="attribute">server_name</span>  <span class="number">0.0.0.0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#charset koi8-r;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#access_log  logs/host.access.log  main;</span></span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> / {</span><br><span class="line">      <span class="attribute">root</span>   D:\mine-project\pc-web\dist;</span><br><span class="line">      <span class="attribute">index</span>  index.html index.htm;</span><br><span class="line">      <span class="attribute">try_files</span>  <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.html;</span><br><span class="line">      <span class="comment"># add_header Cache-Control no-cache;</span></span><br><span class="line">      <span class="comment"># add_header Content-Encoding gzip;</span></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> /pcApi/ {</span><br><span class="line">      <span class="attribute">rewrite</span><span class="regexp"> ^/pcApi/(.*)$</span> /<span class="variable">$1</span> <span class="literal">break</span>; <span class="comment"># 把请求路径里不存在的路径重写掉</span></span><br><span class="line">      <span class="attribute">proxy_pass</span> http://172.15.37.225:3000;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">#error_page  404              /404.html;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># redirect server error pages to the static page /50x.html</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">error_page</span>   <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span>  /50x.html;</span><br><span class="line">    <span class="section">location</span> = /50x.html {</span><br><span class="line">      <span class="attribute">root</span>   html;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment"># server {</span></span><br><span class="line">    <span class="comment">#	listen 80;</span></span><br><span class="line">    <span class="comment">#	server_name 123.123.123.123;</span></span><br><span class="line">    <span class="comment">#	server_name my.example.com t.example.com;</span></span><br><span class="line">    <span class="comment">#	rewrite ^/(.*) https://${host}:1900/$1 redirect;</span></span><br><span class="line">    <span class="comment">#}</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"># another virtual host using mix of IP-, name-, and port-based configuration</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#server {</span></span><br><span class="line">    <span class="comment">#    listen       8000;</span></span><br><span class="line">    <span class="comment">#    listen       somename:8080;</span></span><br><span class="line">    <span class="comment">#    server_name  somename  alias  another.alias;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    location / {</span></span><br><span class="line">    <span class="comment">#        root   html;</span></span><br><span class="line">    <span class="comment">#        index  index.html index.htm;</span></span><br><span class="line">    <span class="comment">#    }</span></span><br><span class="line">    <span class="comment">#}</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"># HTTPS server</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#server {</span></span><br><span class="line">    <span class="comment">#    listen       443 ssl;</span></span><br><span class="line">    <span class="comment">#    server_name  localhost;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    ssl_certificate      cert.pem;</span></span><br><span class="line">    <span class="comment">#    ssl_certificate_key  cert.key;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    ssl_session_cache    shared:SSL:1m;</span></span><br><span class="line">    <span class="comment">#    ssl_session_timeout  5m;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    ssl_ciphers  HIGH:!aNULL:!MD5;</span></span><br><span class="line">    <span class="comment">#    ssl_prefer_server_ciphers  on;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    location / {</span></span><br><span class="line">    <span class="comment">#        root   html;</span></span><br><span class="line">    <span class="comment">#        index  index.html index.htm;</span></span><br><span class="line">    <span class="comment">#    }</span></span><br><span class="line">    <span class="comment">#}</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># https配置 80转发443</span></span><br><span class="line">    <span class="comment">#server {</span></span><br><span class="line">      <span class="comment">#    listen        80;</span></span><br><span class="line">      <span class="comment">#    server_name   www.i-xiao.space;</span></span><br><span class="line">      <span class="comment">#    #server_name   118.190.59.105;</span></span><br><span class="line">      <span class="comment">#    rewrite       ^ https://$server_name$request_uri permanent; # http -&gt; https 80端口转发443端口</span></span><br><span class="line">      <span class="comment">#    # rewrite       ^ https://$server_name:8090 permanent;</span></span><br><span class="line">      <span class="comment">#    #charset koi8-r;</span></span><br><span class="line">      <span class="comment">#    add_header Cache-Control no-cache;</span></span><br><span class="line">    <span class="comment">#}</span></span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> {</span><br><span class="line">       <span class="comment">#监听443端口</span></span><br><span class="line">       <span class="attribute">listen</span>               <span class="number">443</span>;</span><br><span class="line">       <span class="comment">#你的域名</span></span><br><span class="line">       <span class="comment">#server_name          i-xiao.space;</span></span><br><span class="line">       <span class="attribute">ssl</span>                  <span class="literal">on</span>;</span><br><span class="line">       <span class="attribute">root</span>                 /usr/local/nginx/html;</span><br><span class="line">       <span class="comment">#index index.html index.htm;</span></span><br><span class="line">       <span class="attribute">ssl_certificate</span>      /usr/local/nginx/cert/i-xiao.space.pem;</span><br><span class="line">       <span class="attribute">ssl_certificate_key</span>  /usr/local/nginx/cert/i-xiao.space.key;</span><br><span class="line">       <span class="attribute">ssl_session_timeout</span>  <span class="number">5m</span>;</span><br><span class="line">       <span class="attribute">ssl_ciphers</span>          ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;</span><br><span class="line">       <span class="attribute">ssl_protocols</span>        TLSv1 TLSv1.<span class="number">1</span> TLSv1.<span class="number">2</span>;</span><br><span class="line">       <span class="attribute">ssl_prefer_server_ciphers</span> <span class="literal">on</span>;</span><br><span class="line">       <span class="section">location</span> / {</span><br><span class="line">           <span class="attribute">index</span> index.html index.htm;</span><br><span class="line">	       <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.html;</span><br><span class="line"></span><br><span class="line">           <span class="comment"># To allow POST on static pages 允许静态页使用POST方法</span></span><br><span class="line">           <span class="attribute">error_page</span>  <span class="number">405</span> =<span class="number">200</span> <span class="variable">$uri</span>;</span><br><span class="line">       }</span><br><span class="line"></span><br><span class="line">       <span class="comment"># 禁用缓存</span></span><br><span class="line">       <span class="section">location</span> = /index.html {</span><br><span class="line">            <span class="attribute">add_header</span> Cache-Control <span class="string">"no-cache, no-store"</span>;</span><br><span class="line">       }</span><br><span class="line">       <span class="section">location</span> /lily {</span><br><span class="line">             <span class="comment">#alias /usr/local/nginx/html/lily/;#把匹配到的路径重写, 注意要以/结尾</span></span><br><span class="line">             <span class="attribute">root</span> /usr/local/nginx/html; <span class="comment">#在匹配到的路径前面，增加root基础路径配置</span></span><br><span class="line">             <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /lily/index.html; <span class="comment"># 指定特定路径</span></span><br><span class="line">             <span class="attribute">index</span> index.html index.htm;</span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /mimosa {</span><br><span class="line">             <span class="comment">#alias /usr/local/nginx/html/mimosa/;</span></span><br><span class="line">             <span class="attribute">root</span> /usr/local/nginx/html;</span><br><span class="line">             <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /mimosa/index.html;</span><br><span class="line">             <span class="attribute">index</span> index.html index.htm;</span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /pcApi/ {</span><br><span class="line">             <span class="attribute">proxy_pass</span> http://118.190.59.105:3000/;</span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /supervisor/ {</span><br><span class="line">             <span class="attribute">proxy_pass</span> http://118.190.59.105:9001/;</span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /pc/ {</span><br><span class="line">            <span class="attribute">proxy_pass</span> http://118.190.59.105:8090/;</span><br><span class="line">            <span class="comment"># try_files $uri $uri/ /index.html;</span></span><br><span class="line">            <span class="comment"># index index.html index.htm;</span></span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /h5/ {</span><br><span class="line">            <span class="attribute">proxy_pass</span> http://118.190.59.105:8001/;</span><br><span class="line">            <span class="attribute">add_header</span> Cache-Control <span class="literal">no</span>-cache;</span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /student/ {</span><br><span class="line">            <span class="comment"># 暂时不正确访问</span></span><br><span class="line">            <span class="attribute">proxy_pass</span> http://118.190.59.105:3000/;</span><br><span class="line">        }</span><br><span class="line">        <span class="comment"># 静态文件-人脸识别模型文件</span></span><br><span class="line">        <span class="section">location</span> /model-face/ {</span><br><span class="line">            <span class="attribute">root</span> /var/pc-h5/static;</span><br><span class="line">            <span class="attribute">add_header</span> <span class="string">'Access-Control-Allow-Origin'</span> <span class="string">'*'</span>;</span><br><span class="line">            <span class="attribute">add_header</span> <span class="string">'Access-Control-Allow-Credentials'</span> <span class="string">'true'</span>;</span><br><span class="line">            <span class="attribute">add_header</span> <span class="string">'Access-Control-Allow-Methods'</span> <span class="string">'GET, POST, OPTIONS'</span>;</span><br><span class="line">            <span class="attribute">add_header</span> Cache-Control <span class="literal">no</span>-cache;</span><br><span class="line">            <span class="comment"># add_header Content-Encoding gzip;</span></span><br><span class="line">            <span class="comment"># add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';</span></span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /static/ {</span><br><span class="line">            <span class="attribute">root</span> /var/pc-h5;</span><br><span class="line">            <span class="attribute">add_header</span> <span class="string">'Access-Control-Allow-Origin'</span> <span class="string">'*'</span>;</span><br><span class="line">            <span class="attribute">add_header</span> Cache-Control <span class="literal">no</span>-cache;</span><br><span class="line">        }</span><br><span class="line">       <span class="attribute">error_page</span>  <span class="number">404</span>              /<span class="number">404</span>.html;</span><br><span class="line">       <span class="attribute">error_page</span>  <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span>  /50x.html;</span><br><span class="line">       <span class="section">location</span> = /50x.html {</span><br><span class="line">             <span class="attribute">root</span>   html;</span><br><span class="line">       }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 </body></html>]]></content>
       <categories>
-        <category>JavaScript</category>
+        <category>nginx</category>
       </categories>
       <tags>
-        <tag>Git</tag>
+        <tag>nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -3416,19 +3429,6 @@
       </categories>
       <tags>
         <tag>npm</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>nginx配置文件</title>
-    <url>/posts/220664946.html</url>
-    <content><![CDATA[<html><head></head><body><p>云服务器到期了，备份一下<code>nginx</code>的配置文件😊</p>
-<figure class="highlight nginx"><table><tbody><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#user  nobody;</span></span><br><span class="line"><span class="comment"># 启动进程，通常设置成和cpu数量相等</span></span><br><span class="line"><span class="attribute">worker_processes</span>  <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">#error_log  logs/error.log;</span></span><br><span class="line"><span class="comment">#error_log  logs/error.log  notice;</span></span><br><span class="line"><span class="comment">#error_log  logs/error.log  info;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#pid        logs/nginx.pid;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 起到 ulimit -a 的作用</span></span><br><span class="line"><span class="attribute">worker_rlimit_nofile</span> <span class="number">65535</span>;</span><br><span class="line"></span><br><span class="line"><span class="section">events</span> {</span><br><span class="line">	<span class="comment"># epoll 是多路复用IO(I/O Multiplexing)中的一种方式</span></span><br><span class="line">	<span class="comment"># use epoll;</span></span><br><span class="line">	<span class="comment"># 单个worker processes 进程最大并发连接数，worker_connections小于work_rlimit_nofile</span></span><br><span class="line">    <span class="attribute">worker_connections</span>  <span class="number">1024</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="section">http</span> {</span><br><span class="line">    <span class="attribute">include</span>       mime.types;</span><br><span class="line">    <span class="attribute">default_type</span>  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '</span></span><br><span class="line">    <span class="comment">#                  '$status $body_bytes_sent "$http_referer" '</span></span><br><span class="line">    <span class="comment">#                  '"$http_user_agent" "$http_x_forwarded_for"';</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#access_log  logs/access.log  main;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># 关闭在错误页面中nginx的版本信息</span></span><br><span class="line">  <span class="attribute">server_tokens</span>   <span class="literal">off</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment"># 反向代理设置为on, fastdfs设置为off</span></span><br><span class="line">  <span class="attribute">sendfile</span>        <span class="literal">on</span>;</span><br><span class="line">  <span class="comment"># 在一个数据包里发送所有头文件</span></span><br><span class="line">  <span class="attribute">tcp_nopush</span>     <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">   <span class="attribute">keepalive_timeout</span>  <span class="number">65</span>;</span><br><span class="line">	 <span class="attribute">tcp_nodelay</span>        <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">gzip</span>  <span class="literal">on</span>;</span><br><span class="line">	<span class="attribute">gzip_static</span> <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="attribute">gzip_min_length</span> <span class="number">1k</span>;</span><br><span class="line">	<span class="attribute">gzip_types</span> text/plain application/javascript application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png;</span><br><span class="line">	<span class="attribute">gzip_disable</span> <span class="string">"MSIE [1-6]."</span>;</span><br><span class="line">	<span class="comment"># 打开缓存的同时也指定了缓存最大数目，以及缓存的时间。我们可以设置一个相对高的最大时间，这样我们可以在它们不活动超过20秒后清除掉。</span></span><br><span class="line">	<span class="attribute">open_file_cache</span> max=<span class="number">65535</span> inactive=<span class="number">60s</span>;</span><br><span class="line">	<span class="comment"># 在open_file_cache中指定检测正确信息的间隔时间。</span></span><br><span class="line">	<span class="attribute">open_file_cache_valid</span> <span class="number">80s</span>;</span><br><span class="line">	<span class="comment"># 定义了open_file_cache中指令参数不活动时间期间里最小的文件数。</span></span><br><span class="line">	<span class="attribute">open_file_cache_min_uses</span> <span class="number">1</span>;</span><br><span class="line">	<span class="comment"># 指定了当搜索一个文件时是否缓存错误信息，也包括再次给配置中添加文件。我们也包括了服务器模缺，这些是在不同文件中定义的，如果你的服务模块不再这些位置，你就得修正这一行来指定正确的位置</span></span><br><span class="line">	<span class="attribute">open_file_cache_errors</span> <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 设置请求头缓冲</span></span><br><span class="line">	<span class="comment"># 客户端请求头部的缓冲区大小，这个可以根据你的系统分页大小来设置，一般一个请求头的大小不会超过1x，不过由于一般系统分页都要大于1k，所以这里设置分页大小。分页大小用命令 getconf PAGESIZE 获得</span></span><br><span class="line">	<span class="attribute">client_header_buffer_size</span> <span class="number">4096</span>;</span><br><span class="line">	<span class="attribute">client_body_buffer_size</span> <span class="number">512k</span>;</span><br><span class="line">	<span class="comment"># 缓冲区代理缓冲用户端请求的最大字节数,如果请求大于指定的大小，则NGINX发回HTTP 413（Raquest Entity too large）错误.</span></span><br><span class="line">	<span class="attribute">client_max_body_size</span> <span class="number">128m</span>;</span><br><span class="line">	<span class="attribute">large_client_header_buffers</span> <span class="number">4</span> <span class="number">128k</span>;</span><br><span class="line">	<span class="attribute">client_header_timeout</span> <span class="number">15</span>;</span><br><span class="line">	<span class="attribute">client_body_timeout</span> <span class="number">15</span>;</span><br><span class="line">	<span class="comment"># 指定客户端的响应超时时间</span></span><br><span class="line">	<span class="attribute">send_timeout</span> <span class="number">30</span>;</span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> {</span><br><span class="line">        <span class="attribute">listen</span>       <span class="number">18600</span>;</span><br><span class="line">        <span class="attribute">server_name</span>  <span class="number">0.0.0.0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">#charset koi8-r;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#access_log  logs/host.access.log  main;</span></span><br><span class="line"></span><br><span class="line">        <span class="section">location</span> / {</span><br><span class="line">            <span class="attribute">root</span>   D:\mine-project\pc-web\dist;</span><br><span class="line">            <span class="attribute">index</span>  index.html index.htm;</span><br><span class="line">			<span class="attribute">try_files</span>  <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.html;</span><br><span class="line">			<span class="comment"># add_header Cache-Control no-cache;</span></span><br><span class="line">			<span class="comment"># add_header Content-Encoding gzip;</span></span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">		<span class="section">location</span> /pcApi/ {</span><br><span class="line">			<span class="attribute">rewrite</span><span class="regexp"> ^/pcApi/(.*)$</span> /<span class="variable">$1</span> <span class="literal">break</span>;</span><br><span class="line">			<span class="attribute">proxy_pass</span> http://172.15.37.225:3000;</span><br><span class="line">		}</span><br><span class="line"></span><br><span class="line">        <span class="comment">#error_page  404              /404.html;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># redirect server error pages to the static page /50x.html</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="attribute">error_page</span>   <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span>  /50x.html;</span><br><span class="line">        <span class="section">location</span> = /50x.html {</span><br><span class="line">            <span class="attribute">root</span>   html;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment"># proxy the PHP scripts to Apache listening on 127.0.0.1:80</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment">#location ~ \.php$ {</span></span><br><span class="line">        <span class="comment">#    proxy_pass   http://127.0.0.1;</span></span><br><span class="line">        <span class="comment">#}</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment">#location ~ \.php$ {</span></span><br><span class="line">        <span class="comment">#    root           html;</span></span><br><span class="line">        <span class="comment">#    fastcgi_pass   127.0.0.1:9000;</span></span><br><span class="line">        <span class="comment">#    fastcgi_index  index.php;</span></span><br><span class="line">        <span class="comment">#    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</span></span><br><span class="line">        <span class="comment">#    include        fastcgi_params;</span></span><br><span class="line">        <span class="comment">#}</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># deny access to .htaccess files, if Apache's document root</span></span><br><span class="line">        <span class="comment"># concurs with nginx's one</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment">#location ~ /\.ht {</span></span><br><span class="line">        <span class="comment">#    deny  all;</span></span><br><span class="line">        <span class="comment">#}</span></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">	<span class="comment"># server {</span></span><br><span class="line">	<span class="comment">#	listen 80;</span></span><br><span class="line">	<span class="comment">#	server_name 123.123.123.123;</span></span><br><span class="line">	<span class="comment">#	server_name my.example.com t.example.com;</span></span><br><span class="line">	<span class="comment">#	rewrite ^/(.*) https://${host}:1900/$1 redirect;</span></span><br><span class="line">	<span class="comment">#}</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"># another virtual host using mix of IP-, name-, and port-based configuration</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#server {</span></span><br><span class="line">    <span class="comment">#    listen       8000;</span></span><br><span class="line">    <span class="comment">#    listen       somename:8080;</span></span><br><span class="line">    <span class="comment">#    server_name  somename  alias  another.alias;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    location / {</span></span><br><span class="line">    <span class="comment">#        root   html;</span></span><br><span class="line">    <span class="comment">#        index  index.html index.htm;</span></span><br><span class="line">    <span class="comment">#    }</span></span><br><span class="line">    <span class="comment">#}</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"># HTTPS server</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#server {</span></span><br><span class="line">    <span class="comment">#    listen       443 ssl;</span></span><br><span class="line">    <span class="comment">#    server_name  localhost;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    ssl_certificate      cert.pem;</span></span><br><span class="line">    <span class="comment">#    ssl_certificate_key  cert.key;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    ssl_session_cache    shared:SSL:1m;</span></span><br><span class="line">    <span class="comment">#    ssl_session_timeout  5m;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    ssl_ciphers  HIGH:!aNULL:!MD5;</span></span><br><span class="line">    <span class="comment">#    ssl_prefer_server_ciphers  on;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    location / {</span></span><br><span class="line">    <span class="comment">#        root   html;</span></span><br><span class="line">    <span class="comment">#        index  index.html index.htm;</span></span><br><span class="line">    <span class="comment">#    }</span></span><br><span class="line">    <span class="comment">#}</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#server {</span></span><br><span class="line">      <span class="comment">#    listen        80;</span></span><br><span class="line">      <span class="comment">#    server_name   www.i-xiao.space;</span></span><br><span class="line">      <span class="comment">#    #server_name   118.190.59.105;</span></span><br><span class="line">      <span class="comment">#    rewrite       ^ https://$server_name$request_uri permanent; # http -&gt; https 80端口转发443端口</span></span><br><span class="line">      <span class="comment">#    # rewrite       ^ https://$server_name:8090 permanent;</span></span><br><span class="line">      <span class="comment">#    #charset koi8-r;</span></span><br><span class="line">      <span class="comment">#    add_header Cache-Control no-cache;</span></span><br><span class="line">    <span class="comment">#}</span></span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> {</span><br><span class="line">       <span class="comment">#监听443端口</span></span><br><span class="line">       <span class="attribute">listen</span>               <span class="number">443</span>;</span><br><span class="line">       <span class="comment">#你的域名</span></span><br><span class="line">       <span class="comment">#server_name          i-xiao.space;</span></span><br><span class="line">       <span class="attribute">ssl</span>                  <span class="literal">on</span>;</span><br><span class="line">       <span class="attribute">root</span>                 /usr/local/nginx/html;</span><br><span class="line">       <span class="comment">#index index.html index.htm;</span></span><br><span class="line">       <span class="attribute">ssl_certificate</span>      /usr/local/nginx/cert/i-xiao.space.pem;</span><br><span class="line">       <span class="attribute">ssl_certificate_key</span>  /usr/local/nginx/cert/i-xiao.space.key;</span><br><span class="line">       <span class="attribute">ssl_session_timeout</span>  <span class="number">5m</span>;</span><br><span class="line">       <span class="attribute">ssl_ciphers</span>          ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;</span><br><span class="line">       <span class="attribute">ssl_protocols</span>        TLSv1 TLSv1.<span class="number">1</span> TLSv1.<span class="number">2</span>;</span><br><span class="line">       <span class="attribute">ssl_prefer_server_ciphers</span> <span class="literal">on</span>;</span><br><span class="line">       <span class="section">location</span> / {</span><br><span class="line">           <span class="attribute">index</span> index.html index.htm;</span><br><span class="line">	       <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.html;</span><br><span class="line"></span><br><span class="line">           <span class="comment"># To allow POST on static pages 允许静态页使用POST方法</span></span><br><span class="line">           <span class="attribute">error_page</span>  <span class="number">405</span> =<span class="number">200</span> <span class="variable">$uri</span>;</span><br><span class="line">       }</span><br><span class="line"></span><br><span class="line">       <span class="comment"># 禁用缓存</span></span><br><span class="line">       <span class="section">location</span> = /index.html {</span><br><span class="line">            <span class="attribute">add_header</span> Cache-Control <span class="string">"no-cache, no-store"</span>;</span><br><span class="line">       }</span><br><span class="line">       <span class="section">location</span> /lily {</span><br><span class="line">             <span class="comment">#alias /usr/local/nginx/html/lily/;#把匹配到的路径重写, 注意要以/结尾</span></span><br><span class="line">             <span class="attribute">root</span> /usr/local/nginx/html; <span class="comment">#在匹配到的路径前面，增加root基础路径配置</span></span><br><span class="line">             <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /lily/index.html; <span class="comment"># 指定特定路径</span></span><br><span class="line">             <span class="attribute">index</span> index.html index.htm;</span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /mimosa {</span><br><span class="line">             <span class="comment">#alias /usr/local/nginx/html/mimosa/;</span></span><br><span class="line">             <span class="attribute">root</span> /usr/local/nginx/html;</span><br><span class="line">             <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /mimosa/index.html;</span><br><span class="line">             <span class="attribute">index</span> index.html index.htm;</span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /pcApi/ {</span><br><span class="line">             <span class="attribute">proxy_pass</span> http://118.190.59.105:3000/;</span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /supervisor/ {</span><br><span class="line">             <span class="attribute">proxy_pass</span> http://118.190.59.105:9001/;</span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /pc/ {</span><br><span class="line">            <span class="attribute">proxy_pass</span> http://118.190.59.105:8090/;</span><br><span class="line">            <span class="comment"># try_files $uri $uri/ /index.html;</span></span><br><span class="line">            <span class="comment"># index index.html index.htm;</span></span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /h5/ {</span><br><span class="line">            <span class="attribute">proxy_pass</span> http://118.190.59.105:8001/;</span><br><span class="line">            <span class="attribute">add_header</span> Cache-Control <span class="literal">no</span>-cache;</span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /student/ {</span><br><span class="line">            <span class="comment"># 暂时不正确访问</span></span><br><span class="line">            <span class="attribute">proxy_pass</span> http://118.190.59.105:3000/;</span><br><span class="line">        }</span><br><span class="line">        <span class="comment"># 静态文件-人脸识别模型文件</span></span><br><span class="line">        <span class="section">location</span> /model-face/ {</span><br><span class="line">            <span class="attribute">root</span> /var/pc-h5/static;</span><br><span class="line">            <span class="attribute">add_header</span> <span class="string">'Access-Control-Allow-Origin'</span> <span class="string">'*'</span>;</span><br><span class="line">            <span class="attribute">add_header</span> <span class="string">'Access-Control-Allow-Credentials'</span> <span class="string">'true'</span>;</span><br><span class="line">            <span class="attribute">add_header</span> <span class="string">'Access-Control-Allow-Methods'</span> <span class="string">'GET, POST, OPTIONS'</span>;</span><br><span class="line">            <span class="attribute">add_header</span> Cache-Control <span class="literal">no</span>-cache;</span><br><span class="line">            <span class="comment"># add_header Content-Encoding gzip;</span></span><br><span class="line">            <span class="comment"># add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';</span></span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /static/ {</span><br><span class="line">            <span class="attribute">root</span> /var/pc-h5;</span><br><span class="line">            <span class="attribute">add_header</span> <span class="string">'Access-Control-Allow-Origin'</span> <span class="string">'*'</span>;</span><br><span class="line">            <span class="attribute">add_header</span> Cache-Control <span class="literal">no</span>-cache;</span><br><span class="line">        }</span><br><span class="line">       <span class="attribute">error_page</span>  <span class="number">404</span>              /<span class="number">404</span>.html;</span><br><span class="line">       <span class="attribute">error_page</span>  <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span>  /50x.html;</span><br><span class="line">       <span class="section">location</span> = /50x.html {</span><br><span class="line">             <span class="attribute">root</span>   html;</span><br><span class="line">       }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-</body></html>]]></content>
-      <categories>
-        <category>nginx</category>
-      </categories>
-      <tags>
-        <tag>nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -4973,6 +4973,77 @@
       </tags>
   </entry>
   <entry>
+    <title>记一个 &#39;奇葩&#39; 需求的实现</title>
+    <url>/posts/2156089668.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们这边没有专门的产品经理，<code>UI</code>对产品的设计基本具有决定权，说实话，是有那么一点可怖的（前后改了很多次，差一点就改回原版了，我自己都觉得不好意思了🤣）。个人感觉我们<code>UI</code>还是体验的少，缺乏对产品以及用户行为的认识。设计出来的东西看似很华丽，其实缺失很多场景下的分析，不切合实际，大多数人说的“用户体验”或许只是主观的、想当然的（我也一样😮）。</p>
+<p>自从接触互联网开始我就在有意的学习怎么做产品，期间还考虑过转产品，永远不要拿业余的跟专业的比，没什么可比性，不成熟。继续保持思考、学习。</p>
+<blockquote>
+<p>所用技术：<code>vue</code>、<code>vue-router</code>、<code>element-ui</code></p>
+</blockquote>
+<h2 id="需求："><a href="#需求：" class="headerlink" title="需求："></a>需求：</h2><blockquote>
+<p>导航菜单（<code>el-menu</code>组件）竖向展示的</p>
+</blockquote>
+<ol>
+<li><p>鼠标移入一级菜单展示下面的子菜单，移出则收起来（手风琴模式，正常状态下只保持一个菜单处于展开状态，手动鼠标悬浮展开的不算）</p>
+</li>
+<li><p>选中某个子菜单时高亮对应的一级菜单，并且当鼠标移出高亮的这个菜单模块时不折叠，但是可以点击一级菜单进行折叠（注意：跟第一条有区别）</p>
+</li>
+</ol>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
+<li><p><code>element-ui</code>的导航组件子菜单打开的触发方式可以通过 <code>menu-trigger</code> 参数控制，但是，只在菜单是水平展示（<code>horizontal</code>）的情况下生效。嘶~！我不禁暗想：垂直模式滑动展开真的会有系统这么做吗？（只能自己修改了）</p>
+</li>
+<li><p><code>unique-opened</code> 参数可以控制是否只保持一个子菜单展开，但是在没有子菜单的情况下失效（需要手动修改）</p>
+</li>
+</ol>
+<h2 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h2><p>导航菜单使用递归<code>el-submenu</code>组件实现</p>
+<ol>
+<li>鼠标滑动展开关闭需求：</li>
+</ol>
+<ul>
+<li><code>el-submenu</code> 组件编写鼠标移入移出事件（<code>mouseenter</code>、<code>mouseleave</code>），拿到<code>indexPath</code>，调用<code>open</code>和<code>close</code>方法打开或者折叠菜单（注意：没有子菜单的一级菜单鼠标移入移出不做处理）</li>
+</ul>
+<ol start="2">
+<li>只保持一个菜单出于展开状态</li>
+</ol>
+<ul>
+<li>先配置 <code>unique-opened</code> 参数为 <code>false</code> ，以保证 <code>openedMenus</code> 只有一个（ <code>openedMenus</code> 是<code>el-menu</code>内部维护的属性, 可以自行打印看一下）</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ebfb16f2c2beb1163942.jpg"></p>
+<blockquote>
+<p>一开始我想在子菜单展开折叠的回调事件（<code>open</code>、<code>close</code>）里写逻辑判断，但是不知道什么原因回调事件不触发（注意：<code>open方法</code>和<code>open事件</code>不一样，组件三大要素：<strong>属性、事件、方法</strong>），所以我就考虑在<code>select</code>回调事件里写逻辑了</p>
+</blockquote>
+<ul>
+<li>在菜单激活的<code>select</code>回调事件中，让上一个打开的菜单调用<code>close</code>方法关闭。（这里需要记录上次打开菜单的<code>index</code>，这里我使用<code>sessionStorage</code>记录）</li>
+</ul>
+<h2 id="代码展示"><a href="#代码展示" class="headerlink" title="代码展示"></a>代码展示</h2><p>只展示代码片段，仅供参考</p>
+<p><code>sessionStorage</code>使用自己封装的，之前文章有写过，感兴趣的可以看一下</p>
+<ul>
+<li><code>el-submenu</code> 组件</li>
+</ul>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">menuEnter</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// isNest 是否还有子菜单 true:没有子菜单 false:有子菜单</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; <span class="variable language_">this</span>.<span class="property">item</span>.<span class="property">alwaysShow</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleOpen'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="title function_">menuLeave</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 存在子菜单，并且不是打开状态的菜单，鼠标离开的时候需要合起来</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; !<span class="variable language_">this</span>.<span class="property">curMenuIsOpened</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleClose'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><code>el-menu</code> 组件</li>
+</ul>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 登录系统的时候，记录展开的菜单信息，</span></span><br><span class="line"><span class="comment">// 在 mounted 里面获取 openedMenus ，并记录信息</span></span><br><span class="line"><span class="title function_">mounted</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 获取当前展开的菜单 - array</span></span><br><span class="line">  <span class="comment">// 手风琴模式，只有一个展开菜单</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// openedMenus 是内部属性</span></span><br><span class="line">  <span class="keyword">const</span> {openedMenus = []} = <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (openedMenus &amp;&amp; openedMenus.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">    <span class="comment">// 获取展开菜单的 index</span></span><br><span class="line">    <span class="keyword">const</span> index = openedMenus[<span class="number">0</span>];</span><br><span class="line">    sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, index)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="attr">methods</span>: {</span><br><span class="line">  <span class="title function_">handleOpen</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 open 方法, 打开close,</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">open</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handleClose</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 close 方法, 关闭close</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handlerSelect</span>(<span class="params">index, indexPath</span>) {</span><br><span class="line">    <span class="comment">// 1. 获取上次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">const</span> _preActiveMenu = sessionStorage.<span class="title function_">get</span>(<span class="string">'preActiveMenu'</span>) || <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">if</span> (_preActiveMenu) {</span><br><span class="line">      <span class="comment">// 如果存在，则关闭该菜单，再打开新的</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(_preActiveMenu);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 记录这次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">if</span> (indexPath.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">      sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, indexPath[<span class="number">0</span>])</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="最终效果展示"><a href="#最终效果展示" class="headerlink" title="最终效果展示"></a>最终效果展示</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ec1816f2c2beb1164933.jpg"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>用了<code>UI</code>框架之后就不可避免的会跟产品设计风格向左，这就需要在框架基础之上进行修改。框架也是一个个组件组成的，抓住组件设计的三要素：属性、事件、方法，了解框架组件的工作原理，就可以轻松的进行修改啦🎉🎉</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+        <tag>element-ui</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>认识HTTP缓存</title>
     <url>/posts/2358217424.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -5077,77 +5148,6 @@
       </categories>
       <tags>
         <tag>HTTP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>记一个 &#39;奇葩&#39; 需求的实现</title>
-    <url>/posts/2156089668.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们这边没有专门的产品经理，<code>UI</code>对产品的设计基本具有决定权，说实话，是有那么一点可怖的（前后改了很多次，差一点就改回原版了，我自己都觉得不好意思了🤣）。个人感觉我们<code>UI</code>还是体验的少，缺乏对产品以及用户行为的认识。设计出来的东西看似很华丽，其实缺失很多场景下的分析，不切合实际，大多数人说的“用户体验”或许只是主观的、想当然的（我也一样😮）。</p>
-<p>自从接触互联网开始我就在有意的学习怎么做产品，期间还考虑过转产品，永远不要拿业余的跟专业的比，没什么可比性，不成熟。继续保持思考、学习。</p>
-<blockquote>
-<p>所用技术：<code>vue</code>、<code>vue-router</code>、<code>element-ui</code></p>
-</blockquote>
-<h2 id="需求："><a href="#需求：" class="headerlink" title="需求："></a>需求：</h2><blockquote>
-<p>导航菜单（<code>el-menu</code>组件）竖向展示的</p>
-</blockquote>
-<ol>
-<li><p>鼠标移入一级菜单展示下面的子菜单，移出则收起来（手风琴模式，正常状态下只保持一个菜单处于展开状态，手动鼠标悬浮展开的不算）</p>
-</li>
-<li><p>选中某个子菜单时高亮对应的一级菜单，并且当鼠标移出高亮的这个菜单模块时不折叠，但是可以点击一级菜单进行折叠（注意：跟第一条有区别）</p>
-</li>
-</ol>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
-<li><p><code>element-ui</code>的导航组件子菜单打开的触发方式可以通过 <code>menu-trigger</code> 参数控制，但是，只在菜单是水平展示（<code>horizontal</code>）的情况下生效。嘶~！我不禁暗想：垂直模式滑动展开真的会有系统这么做吗？（只能自己修改了）</p>
-</li>
-<li><p><code>unique-opened</code> 参数可以控制是否只保持一个子菜单展开，但是在没有子菜单的情况下失效（需要手动修改）</p>
-</li>
-</ol>
-<h2 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h2><p>导航菜单使用递归<code>el-submenu</code>组件实现</p>
-<ol>
-<li>鼠标滑动展开关闭需求：</li>
-</ol>
-<ul>
-<li><code>el-submenu</code> 组件编写鼠标移入移出事件（<code>mouseenter</code>、<code>mouseleave</code>），拿到<code>indexPath</code>，调用<code>open</code>和<code>close</code>方法打开或者折叠菜单（注意：没有子菜单的一级菜单鼠标移入移出不做处理）</li>
-</ul>
-<ol start="2">
-<li>只保持一个菜单出于展开状态</li>
-</ol>
-<ul>
-<li>先配置 <code>unique-opened</code> 参数为 <code>false</code> ，以保证 <code>openedMenus</code> 只有一个（ <code>openedMenus</code> 是<code>el-menu</code>内部维护的属性, 可以自行打印看一下）</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ebfb16f2c2beb1163942.jpg"></p>
-<blockquote>
-<p>一开始我想在子菜单展开折叠的回调事件（<code>open</code>、<code>close</code>）里写逻辑判断，但是不知道什么原因回调事件不触发（注意：<code>open方法</code>和<code>open事件</code>不一样，组件三大要素：<strong>属性、事件、方法</strong>），所以我就考虑在<code>select</code>回调事件里写逻辑了</p>
-</blockquote>
-<ul>
-<li>在菜单激活的<code>select</code>回调事件中，让上一个打开的菜单调用<code>close</code>方法关闭。（这里需要记录上次打开菜单的<code>index</code>，这里我使用<code>sessionStorage</code>记录）</li>
-</ul>
-<h2 id="代码展示"><a href="#代码展示" class="headerlink" title="代码展示"></a>代码展示</h2><p>只展示代码片段，仅供参考</p>
-<p><code>sessionStorage</code>使用自己封装的，之前文章有写过，感兴趣的可以看一下</p>
-<ul>
-<li><code>el-submenu</code> 组件</li>
-</ul>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title function_">menuEnter</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// isNest 是否还有子菜单 true:没有子菜单 false:有子菜单</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; <span class="variable language_">this</span>.<span class="property">item</span>.<span class="property">alwaysShow</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleOpen'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="title function_">menuLeave</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 存在子菜单，并且不是打开状态的菜单，鼠标离开的时候需要合起来</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">isNest</span> &amp;&amp; !<span class="variable language_">this</span>.<span class="property">curMenuIsOpened</span>) {</span><br><span class="line">    <span class="comment">// basePath: 一级菜单</span></span><br><span class="line">    <span class="variable language_">this</span>.$emit(<span class="string">'handleClose'</span>, <span class="variable language_">this</span>.<span class="property">basePath</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li><code>el-menu</code> 组件</li>
-</ul>
-<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 登录系统的时候，记录展开的菜单信息，</span></span><br><span class="line"><span class="comment">// 在 mounted 里面获取 openedMenus ，并记录信息</span></span><br><span class="line"><span class="title function_">mounted</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 获取当前展开的菜单 - array</span></span><br><span class="line">  <span class="comment">// 手风琴模式，只有一个展开菜单</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// openedMenus 是内部属性</span></span><br><span class="line">  <span class="keyword">const</span> {openedMenus = []} = <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (openedMenus &amp;&amp; openedMenus.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">    <span class="comment">// 获取展开菜单的 index</span></span><br><span class="line">    <span class="keyword">const</span> index = openedMenus[<span class="number">0</span>];</span><br><span class="line">    sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, index)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="attr">methods</span>: {</span><br><span class="line">  <span class="title function_">handleOpen</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 open 方法, 打开close,</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">open</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handleClose</span>(<span class="params">indexPath</span>) {</span><br><span class="line">    <span class="comment">// 调用 close 方法, 关闭close</span></span><br><span class="line">  	<span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(indexPath);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handlerSelect</span>(<span class="params">index, indexPath</span>) {</span><br><span class="line">    <span class="comment">// 1. 获取上次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">const</span> _preActiveMenu = sessionStorage.<span class="title function_">get</span>(<span class="string">'preActiveMenu'</span>) || <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">if</span> (_preActiveMenu) {</span><br><span class="line">      <span class="comment">// 如果存在，则关闭该菜单，再打开新的</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">menuRef</span>.<span class="title function_">close</span>(_preActiveMenu);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 记录这次激活的菜单信息</span></span><br><span class="line">    <span class="keyword">if</span> (indexPath.<span class="property">length</span> &gt; <span class="number">0</span>) {</span><br><span class="line">      sessionStorage.<span class="title function_">put</span>(<span class="string">'preActiveMenu'</span>, indexPath[<span class="number">0</span>])</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="最终效果展示"><a href="#最终效果展示" class="headerlink" title="最终效果展示"></a>最终效果展示</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6311ec1816f2c2beb1164933.jpg"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>用了<code>UI</code>框架之后就不可避免的会跟产品设计风格向左，这就需要在框架基础之上进行修改。框架也是一个个组件组成的，抓住组件设计的三要素：属性、事件、方法，了解框架组件的工作原理，就可以轻松的进行修改啦🎉🎉</p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我</strong>。</p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>vue</tag>
-        <tag>element-ui</tag>
       </tags>
   </entry>
   <entry>
@@ -5258,6 +5258,53 @@
       </tags>
   </entry>
   <entry>
+    <title>静态博客SEO优化</title>
+    <url>/posts/2912186581.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p><a href="https://www.sousuoyinqingtijiao.com/">屈站长</a>汇总了各大搜索引擎网站提交入口，非常方便，可以前去提交验证。</p>
+</blockquote>
+<h2 id="Baidu-Webmaster-Tools"><a href="#Baidu-Webmaster-Tools" class="headerlink" title="Baidu Webmaster Tools"></a>Baidu Webmaster Tools</h2><p>首先注册登录<a href="https://ziyuan.baidu.com/site/#/">百度搜索资源平台</a>，然后执行下面的步骤：</p>
+<ol>
+<li>添加网站（输入网站）</li>
+<li>设置站点属性</li>
+<li>验证网站，以下三种方式，任选其一即可<ul>
+<li>文件验证 （下载文件，放到网站根目录，可访问）</li>
+<li><code>HTML</code>标签验证（网站增加 <code>meta</code> 标签）</li>
+<li><code>CNAME</code>验证 （增加域名解析记录）</li>
+</ul>
+</li>
+</ol>
+<p>我使用的是<code>HTML</code>标签验证，<code>Hexo</code> 提供的有<code>API</code>， 可以往页面里注入 <code>HTML</code></p>
+<blockquote>
+<p>百度移动统计: <a href="https://mtj.baidu.com/web/dashboard">https://mtj.baidu.com/web/dashboard</a></p>
+</blockquote>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// baidu seo</span></span><br><span class="line">hexo.<span class="property">extend</span>.<span class="property">injector</span>.<span class="title function_">register</span>(</span><br><span class="line">  <span class="string">'head_begin'</span>,</span><br><span class="line">  <span class="string">'&lt;meta name="baidu-site-verification" content="code-xyJs6My2et" /&gt;'</span>,</span><br><span class="line">  <span class="string">'default'</span></span><br><span class="line">);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>更多<code>Hexo API</code>请查看<a href="https://hexo.io/api/injector">这里</a></p>
+<h2 id="Bing-Webmaster-Tools"><a href="#Bing-Webmaster-Tools" class="headerlink" title="Bing Webmaster Tools"></a>Bing Webmaster Tools</h2><ul>
+<li><a href="https://www.bing.com/webmasters">必应工具</a>，添加网站</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6322ba7916f2c2beb1bed61e.jpg"></p>
+<ul>
+<li>提交网站地图</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6322bc9716f2c2beb1c1a6db.jpg"></p>
+<p>步骤同百度类似，这里就不介绍了。</p>
+<p><code>NexT</code>官方<code>SEO</code>教程请来<a href="https://theme-next.js.org/docs/theme-settings/seo.html">这里</a></p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
+<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>SEO</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>部署Netlify站点博客</title>
     <url>/posts/818123119.html</url>
     <content><![CDATA[<html><head></head><body><h2 id="Netlify站点部署静态博客"><a href="#Netlify站点部署静态博客" class="headerlink" title="Netlify站点部署静态博客"></a>Netlify站点部署静态博客</h2><p>今天尝试把站点部署在<a href="https://app.netlify.com/">Netlify</a>上，因为部署在GitHub Pages上，国内访问速度太慢了，所以就尝试一下别的站点，部署成功之后发现速度还是不太行，后边继续找找原因</p>
@@ -5311,53 +5358,6 @@
       </categories>
       <tags>
         <tag>站点建设</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>静态博客SEO优化</title>
-    <url>/posts/2912186581.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p><a href="https://www.sousuoyinqingtijiao.com/">屈站长</a>汇总了各大搜索引擎网站提交入口，非常方便，可以前去提交验证。</p>
-</blockquote>
-<h2 id="Baidu-Webmaster-Tools"><a href="#Baidu-Webmaster-Tools" class="headerlink" title="Baidu Webmaster Tools"></a>Baidu Webmaster Tools</h2><p>首先注册登录<a href="https://ziyuan.baidu.com/site/#/">百度搜索资源平台</a>，然后执行下面的步骤：</p>
-<ol>
-<li>添加网站（输入网站）</li>
-<li>设置站点属性</li>
-<li>验证网站，以下三种方式，任选其一即可<ul>
-<li>文件验证 （下载文件，放到网站根目录，可访问）</li>
-<li><code>HTML</code>标签验证（网站增加 <code>meta</code> 标签）</li>
-<li><code>CNAME</code>验证 （增加域名解析记录）</li>
-</ul>
-</li>
-</ol>
-<p>我使用的是<code>HTML</code>标签验证，<code>Hexo</code> 提供的有<code>API</code>， 可以往页面里注入 <code>HTML</code></p>
-<blockquote>
-<p>百度移动统计: <a href="https://mtj.baidu.com/web/dashboard">https://mtj.baidu.com/web/dashboard</a></p>
-</blockquote>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// baidu seo</span></span><br><span class="line">hexo.<span class="property">extend</span>.<span class="property">injector</span>.<span class="title function_">register</span>(</span><br><span class="line">  <span class="string">'head_begin'</span>,</span><br><span class="line">  <span class="string">'&lt;meta name="baidu-site-verification" content="code-xyJs6My2et" /&gt;'</span>,</span><br><span class="line">  <span class="string">'default'</span></span><br><span class="line">);</span><br></pre></td></tr></tbody></table></figure>
-
-<p>更多<code>Hexo API</code>请查看<a href="https://hexo.io/api/injector">这里</a></p>
-<h2 id="Bing-Webmaster-Tools"><a href="#Bing-Webmaster-Tools" class="headerlink" title="Bing Webmaster Tools"></a>Bing Webmaster Tools</h2><ul>
-<li><a href="https://www.bing.com/webmasters">必应工具</a>，添加网站</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6322ba7916f2c2beb1bed61e.jpg"></p>
-<ul>
-<li>提交网站地图</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/6322bc9716f2c2beb1c1a6db.jpg"></p>
-<p>步骤同百度类似，这里就不介绍了。</p>
-<p><code>NexT</code>官方<code>SEO</code>教程请来<a href="https://theme-next.js.org/docs/theme-settings/seo.html">这里</a></p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://cdn.jsdelivr.net/gh/all-smile/nav@1.0.7/static/images/wind_girl.webp"></p>
-<p>我是 <a href="https://home.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>SEO</tag>
       </tags>
   </entry>
 </search>
