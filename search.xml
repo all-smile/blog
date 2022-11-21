@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Actions</title>
+    <url>/posts/3405105267.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>持续集成、持续部署</p>
+</body></html>]]></content>
+  </entry>
+  <entry>
     <title>2022年中秋佳节，于梦开始的地方</title>
     <url>/posts/4798453.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -35,12 +41,6 @@
       <tags>
         <tag>梦开始的地方</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Actions</title>
-    <url>/posts/3405105267.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>持续集成、持续部署</p>
-</body></html>]]></content>
   </entry>
   <entry>
     <title>CSS -webkit-box-orient: vertical 编译报错之autoprefixer问题</title>
@@ -89,6 +89,156 @@
       </categories>
       <tags>
         <tag>CSS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker | Compose创建mysql容器</title>
+    <url>/posts/2048262040.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
+</blockquote>
+<p>本文通过<code>Docker Compose</code>来创建<code>mysql</code>容器</p>
+<h2 id="在linux服务器上创建文件，用于管理容器"><a href="#在linux服务器上创建文件，用于管理容器" class="headerlink" title="在linux服务器上创建文件，用于管理容器"></a>在linux服务器上创建文件，用于管理容器</h2><ul>
+<li>mkdir docker-mysql</li>
+<li>cd docker-mysql</li>
+<li>vim docker-compose.yml  #写入如下内容</li>
+</ul>
+<p><code>docker-compose.yml</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">version: <span class="string">"3"</span></span><br><span class="line">services:</span><br><span class="line">  mysqldb:</span><br><span class="line">    image: mysql:5.7</span><br><span class="line">    restart: always</span><br><span class="line">    container_name: mysql57</span><br><span class="line">    ports:</span><br><span class="line">      - 3310:3306</span><br><span class="line">    volumes:</span><br><span class="line">      - /var/vol_dockers/mysqldb/conf:/etc/mysql/conf.d</span><br><span class="line">      - /var/vol_dockers/mysqldb/data:/var/lib/mysql</span><br><span class="line">    environment:</span><br><span class="line">      MYSQL_PSAAWORD: PSAAWORD</span><br><span class="line">      MYSQL_ROOT_PASSWORD: PSAAWORD</span><br><span class="line">      MYSQL_USER: root</span><br><span class="line">      MYSQL_DATABASE: database</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>记得防火墙要开放3306、3310端口</p>
+</blockquote>
+<h2 id="创建启停脚本文件"><a href="#创建启停脚本文件" class="headerlink" title="创建启停脚本文件"></a>创建启停脚本文件</h2><ul>
+<li><p>vim start</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>vim restart</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose restart</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>vim stop</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose stop</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="修改脚本文件权限"><a href="#修改脚本文件权限" class="headerlink" title="修改脚本文件权限"></a>修改脚本文件权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 777 st* restart</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450d9c16f2c2beb1fc717d.jpg"></p>
+<h2 id="启动mysql容器"><a href="#启动mysql容器" class="headerlink" title="启动mysql容器"></a>启动<code>mysql</code>容器</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./start</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>查看容器</li>
+</ul>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450e0116f2c2beb1fd0442.jpg"></p>
+<h2 id="mysql数据库基本配置"><a href="#mysql数据库基本配置" class="headerlink" title="mysql数据库基本配置"></a>mysql数据库基本配置</h2><ol>
+<li>创建MySql用户</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">CREATE USER dbadmin@localhost IDENTIFIED BY <span class="string">'pwd'</span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>dbadmin@localhost</code>，表示只允许<code>localhost</code>环境的<code>dbadmin</code>用户登录</p>
+<ol start="2">
+<li>设置可访问的主机</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">update user <span class="built_in">set</span> host = <span class="string">'%'</span> <span class="built_in">where</span> user = <span class="string">'dbadmin'</span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>% 表示接受所有主机ip访问</p>
+<ol start="3">
+<li>最后刷新生效</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">flush privileges;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>整体步骤：</strong></p>
+<p>1、连接服务器: mysql -u root -p</p>
+<p>2、看当前所有数据库：show databases;</p>
+<p>3、进入mysql数据库：use mysql;</p>
+<p>4、查看mysql数据库中所有的表：show tables;</p>
+<p>5、查看user表中的数据：select Host, User,Password from user;</p>
+<p>6、修改user表中的Host: update user set Host=’%’ where User=’root’;</p>
+<p>7、最后刷新一下：flush privileges;</p>
+<p><strong>客户端连接</strong></p>
+<p>这里我使用的是<code>SQLyog</code>工具连接<code>MySQL</code>数据库</p>
+<p><code>sqlyog</code>连接服务器的<code>3310</code>端口，<code>3310</code>端口映射<code>MySQL</code>容器的<code>3306</code>端口。</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450db816f2c2beb1fc98ab.jpg"></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450def16f2c2beb1fce7fa.jpg"></p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker | dockerfile构建centos镜像，以及CMD和ENTRYPOINT的区别</title>
+    <url>/posts/1048738116.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
+</blockquote>
+<h1 id="构建自己的centos镜像"><a href="#构建自己的centos镜像" class="headerlink" title="构建自己的centos镜像"></a>构建自己的centos镜像</h1><p><code>docker pull centos</code>下载下来的镜像都是基础版本，缺少很多常用的命令功能，比如：<code>ll</code>、<code>vim</code>等等，</p>
+<p>下面介绍制作一个功能较全的自己的centos镜像。</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1、编写dockerfile文件"><a href="#1、编写dockerfile文件" class="headerlink" title="1、编写dockerfile文件"></a>1、编写dockerfile文件</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER xiao&lt;example@163.com&gt;</span><br><span class="line">ENV MYPATH /usr/local</span><br><span class="line">WORKDIR <span class="variable">$MYPATH</span></span><br><span class="line"></span><br><span class="line">RUN yum -y install vim       <span class="comment"># vim命令</span></span><br><span class="line">RUN yum -y install net-tools <span class="comment"># ifconfig命令</span></span><br><span class="line"></span><br><span class="line">EXPOSE 80</span><br><span class="line">CMD <span class="built_in">echo</span> <span class="variable">$MYPATH</span></span><br><span class="line">CMD <span class="built_in">echo</span> <span class="string">"---end--"</span></span><br><span class="line">CMD /bin/bash</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="2、构建镜像"><a href="#2、构建镜像" class="headerlink" title="2、构建镜像"></a>2、构建镜像</h3><ul>
+<li><p>-f  file 指定dockerfile文件的路径</p>
+</li>
+<li><p>-t  tag  指定name:tag</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -f ./mydockerfile -t mycentos:0.1 .</span><br><span class="line"></span><br><span class="line">Successfully built e7527f97f78a</span><br><span class="line">Successfully tagged mycentos:0.1</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="3、测试运行"><a href="#3、测试运行" class="headerlink" title="3、测试运行"></a>3、测试运行</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker images</span><br><span class="line">docker run -it mycentos:0.1</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可以看到进入容器之后，直接就是在 <code>/usr/local</code> 目录下，是因为<code>dockerfile</code>配置的<code>WORKDIR</code></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92ce16f2c2beb1726bca.jpg"></p>
+<p>这时，<code>ifconfig</code>、<code>vim</code>命令都可以使用了</p>
+<h3 id="4、查看镜像构建历史记录"><a href="#4、查看镜像构建历史记录" class="headerlink" title="4、查看镜像构建历史记录"></a>4、查看镜像构建历史记录</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">history</span> imageID</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92e316f2c2beb1729aca.jpg"></p>
+<h1 id="CMD和ENTRYPOINT的区别"><a href="#CMD和ENTRYPOINT的区别" class="headerlink" title="CMD和ENTRYPOINT的区别"></a>CMD和ENTRYPOINT的区别</h1><h2 id="编写CMD测试dockerfile文件"><a href="#编写CMD测试dockerfile文件" class="headerlink" title="编写CMD测试dockerfile文件"></a>编写CMD测试dockerfile文件</h2><ol>
+<li>编写dockerfile文件</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">CMD [<span class="string">"ls"</span>, <span class="string">"-a"</span>]</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>构建镜像</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -f ./dockerfile -t cmd-test .</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>启动镜像</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run imageID/iamgeName</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92fb16f2c2beb172c300.jpg"></p>
+<p>测试发现，启动镜像时追加的命令替换了<code>CMD</code>命令，如下图所示:</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a930916f2c2beb172d924.jpg"></p>
+<h2 id="编写ENTRYPOINT测试dockerfile文件"><a href="#编写ENTRYPOINT测试dockerfile文件" class="headerlink" title="编写ENTRYPOINT测试dockerfile文件"></a>编写ENTRYPOINT测试dockerfile文件</h2><p>每个<code>Dockerfile</code>只能有一个<code>ENTRYPOINT</code>，如果指定了多个，只有最后一个被执行,而且一定会被执行</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">ENTRYPOINT [<span class="string">"ls"</span>, <span class="string">"-a"</span>]</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># nginx 镜像</span></span><br><span class="line">ENTRYPOINT [ <span class="string">"/usr/sbin/nginx"</span>, <span class="string">"-g"</span>, <span class="string">"daemon off;"</span> ]</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a931916f2c2beb1731507.jpg"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li><code>CMD</code>命令会被启动容器时追加的命令替换执行，</li>
+</ol>
+<p>2.<code>ENTRYPOINT</code>命令不会被启动容器时追加的命令替换，而是合并执行</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a932b16f2c2beb1736e15.jpg"></p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
       </tags>
   </entry>
   <entry>
@@ -307,156 +457,6 @@
       </categories>
       <tags>
         <tag>V8</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Docker | Compose创建mysql容器</title>
-    <url>/posts/2048262040.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
-</blockquote>
-<p>本文通过<code>Docker Compose</code>来创建<code>mysql</code>容器</p>
-<h2 id="在linux服务器上创建文件，用于管理容器"><a href="#在linux服务器上创建文件，用于管理容器" class="headerlink" title="在linux服务器上创建文件，用于管理容器"></a>在linux服务器上创建文件，用于管理容器</h2><ul>
-<li>mkdir docker-mysql</li>
-<li>cd docker-mysql</li>
-<li>vim docker-compose.yml  #写入如下内容</li>
-</ul>
-<p><code>docker-compose.yml</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">version: <span class="string">"3"</span></span><br><span class="line">services:</span><br><span class="line">  mysqldb:</span><br><span class="line">    image: mysql:5.7</span><br><span class="line">    restart: always</span><br><span class="line">    container_name: mysql57</span><br><span class="line">    ports:</span><br><span class="line">      - 3310:3306</span><br><span class="line">    volumes:</span><br><span class="line">      - /var/vol_dockers/mysqldb/conf:/etc/mysql/conf.d</span><br><span class="line">      - /var/vol_dockers/mysqldb/data:/var/lib/mysql</span><br><span class="line">    environment:</span><br><span class="line">      MYSQL_PSAAWORD: PSAAWORD</span><br><span class="line">      MYSQL_ROOT_PASSWORD: PSAAWORD</span><br><span class="line">      MYSQL_USER: root</span><br><span class="line">      MYSQL_DATABASE: database</span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p>记得防火墙要开放3306、3310端口</p>
-</blockquote>
-<h2 id="创建启停脚本文件"><a href="#创建启停脚本文件" class="headerlink" title="创建启停脚本文件"></a>创建启停脚本文件</h2><ul>
-<li><p>vim start</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>vim restart</p>
-</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose restart</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>vim stop</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker-compose stop</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="修改脚本文件权限"><a href="#修改脚本文件权限" class="headerlink" title="修改脚本文件权限"></a>修改脚本文件权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 777 st* restart</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450d9c16f2c2beb1fc717d.jpg"></p>
-<h2 id="启动mysql容器"><a href="#启动mysql容器" class="headerlink" title="启动mysql容器"></a>启动<code>mysql</code>容器</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./start</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>查看容器</li>
-</ul>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450e0116f2c2beb1fd0442.jpg"></p>
-<h2 id="mysql数据库基本配置"><a href="#mysql数据库基本配置" class="headerlink" title="mysql数据库基本配置"></a>mysql数据库基本配置</h2><ol>
-<li>创建MySql用户</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">CREATE USER dbadmin@localhost IDENTIFIED BY <span class="string">'pwd'</span>;</span><br></pre></td></tr></tbody></table></figure>
-
-<p><code>dbadmin@localhost</code>，表示只允许<code>localhost</code>环境的<code>dbadmin</code>用户登录</p>
-<ol start="2">
-<li>设置可访问的主机</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">update user <span class="built_in">set</span> host = <span class="string">'%'</span> <span class="built_in">where</span> user = <span class="string">'dbadmin'</span>;</span><br></pre></td></tr></tbody></table></figure>
-
-<p>% 表示接受所有主机ip访问</p>
-<ol start="3">
-<li>最后刷新生效</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">flush privileges;</span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>整体步骤：</strong></p>
-<p>1、连接服务器: mysql -u root -p</p>
-<p>2、看当前所有数据库：show databases;</p>
-<p>3、进入mysql数据库：use mysql;</p>
-<p>4、查看mysql数据库中所有的表：show tables;</p>
-<p>5、查看user表中的数据：select Host, User,Password from user;</p>
-<p>6、修改user表中的Host: update user set Host=’%’ where User=’root’;</p>
-<p>7、最后刷新一下：flush privileges;</p>
-<p><strong>客户端连接</strong></p>
-<p>这里我使用的是<code>SQLyog</code>工具连接<code>MySQL</code>数据库</p>
-<p><code>sqlyog</code>连接服务器的<code>3310</code>端口，<code>3310</code>端口映射<code>MySQL</code>容器的<code>3306</code>端口。</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450db816f2c2beb1fc98ab.jpg"></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/63450def16f2c2beb1fce7fa.jpg"></p>
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>Docker MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Docker | dockerfile构建centos镜像，以及CMD和ENTRYPOINT的区别</title>
-    <url>/posts/1048738116.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
-</blockquote>
-<h1 id="构建自己的centos镜像"><a href="#构建自己的centos镜像" class="headerlink" title="构建自己的centos镜像"></a>构建自己的centos镜像</h1><p><code>docker pull centos</code>下载下来的镜像都是基础版本，缺少很多常用的命令功能，比如：<code>ll</code>、<code>vim</code>等等，</p>
-<p>下面介绍制作一个功能较全的自己的centos镜像。</p>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1、编写dockerfile文件"><a href="#1、编写dockerfile文件" class="headerlink" title="1、编写dockerfile文件"></a>1、编写dockerfile文件</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">MAINTAINER xiao&lt;example@163.com&gt;</span><br><span class="line">ENV MYPATH /usr/local</span><br><span class="line">WORKDIR <span class="variable">$MYPATH</span></span><br><span class="line"></span><br><span class="line">RUN yum -y install vim       <span class="comment"># vim命令</span></span><br><span class="line">RUN yum -y install net-tools <span class="comment"># ifconfig命令</span></span><br><span class="line"></span><br><span class="line">EXPOSE 80</span><br><span class="line">CMD <span class="built_in">echo</span> <span class="variable">$MYPATH</span></span><br><span class="line">CMD <span class="built_in">echo</span> <span class="string">"---end--"</span></span><br><span class="line">CMD /bin/bash</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="2、构建镜像"><a href="#2、构建镜像" class="headerlink" title="2、构建镜像"></a>2、构建镜像</h3><ul>
-<li><p>-f  file 指定dockerfile文件的路径</p>
-</li>
-<li><p>-t  tag  指定name:tag</p>
-</li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -f ./mydockerfile -t mycentos:0.1 .</span><br><span class="line"></span><br><span class="line">Successfully built e7527f97f78a</span><br><span class="line">Successfully tagged mycentos:0.1</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="3、测试运行"><a href="#3、测试运行" class="headerlink" title="3、测试运行"></a>3、测试运行</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker images</span><br><span class="line">docker run -it mycentos:0.1</span><br></pre></td></tr></tbody></table></figure>
-
-<p>可以看到进入容器之后，直接就是在 <code>/usr/local</code> 目录下，是因为<code>dockerfile</code>配置的<code>WORKDIR</code></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92ce16f2c2beb1726bca.jpg"></p>
-<p>这时，<code>ifconfig</code>、<code>vim</code>命令都可以使用了</p>
-<h3 id="4、查看镜像构建历史记录"><a href="#4、查看镜像构建历史记录" class="headerlink" title="4、查看镜像构建历史记录"></a>4、查看镜像构建历史记录</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">history</span> imageID</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92e316f2c2beb1729aca.jpg"></p>
-<h1 id="CMD和ENTRYPOINT的区别"><a href="#CMD和ENTRYPOINT的区别" class="headerlink" title="CMD和ENTRYPOINT的区别"></a>CMD和ENTRYPOINT的区别</h1><h2 id="编写CMD测试dockerfile文件"><a href="#编写CMD测试dockerfile文件" class="headerlink" title="编写CMD测试dockerfile文件"></a>编写CMD测试dockerfile文件</h2><ol>
-<li>编写dockerfile文件</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">CMD [<span class="string">"ls"</span>, <span class="string">"-a"</span>]</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>构建镜像</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker build -f ./dockerfile -t cmd-test .</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="3">
-<li>启动镜像</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run imageID/iamgeName</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a92fb16f2c2beb172c300.jpg"></p>
-<p>测试发现，启动镜像时追加的命令替换了<code>CMD</code>命令，如下图所示:</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a930916f2c2beb172d924.jpg"></p>
-<h2 id="编写ENTRYPOINT测试dockerfile文件"><a href="#编写ENTRYPOINT测试dockerfile文件" class="headerlink" title="编写ENTRYPOINT测试dockerfile文件"></a>编写ENTRYPOINT测试dockerfile文件</h2><p>每个<code>Dockerfile</code>只能有一个<code>ENTRYPOINT</code>，如果指定了多个，只有最后一个被执行,而且一定会被执行</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">FROM centos</span><br><span class="line">ENTRYPOINT [<span class="string">"ls"</span>, <span class="string">"-a"</span>]</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># nginx 镜像</span></span><br><span class="line">ENTRYPOINT [ <span class="string">"/usr/sbin/nginx"</span>, <span class="string">"-g"</span>, <span class="string">"daemon off;"</span> ]</span><br></pre></td></tr></tbody></table></figure>
-
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a931916f2c2beb1731507.jpg"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
-<li><code>CMD</code>命令会被启动容器时追加的命令替换执行，</li>
-</ol>
-<p>2.<code>ENTRYPOINT</code>命令不会被启动容器时追加的命令替换，而是合并执行</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634a932b16f2c2beb1736e15.jpg"></p>
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
       </tags>
   </entry>
   <entry>
@@ -1233,61 +1233,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker | 自定义网络（网关、子网地址）</title>
-    <url>/posts/2785354845.html</url>
-    <content><![CDATA[<html><head></head><body><blockquote>
-<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
-</blockquote>
-<h2 id="了解-docker-network"><a href="#了解-docker-network" class="headerlink" title="了解 docker network"></a>了解 docker network</h2><p>通过下面的命令来获取帮助</p>
-<ol>
-<li>docker network –help</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">Commands:</span><br><span class="line">  connect     Connect a container to a network</span><br><span class="line">  create      Create a network</span><br><span class="line">  disconnect  Disconnect a container from a network</span><br><span class="line">  inspect     Display detailed information on one or more networks</span><br><span class="line">  <span class="built_in">ls</span>          List networks</span><br><span class="line">  prune       Remove all unused networks</span><br><span class="line">  <span class="built_in">rm</span>          Remove one or more networks</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>docker network create –help</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">Options:</span><br><span class="line">      --attachable           Enable manual container attachment</span><br><span class="line">      --aux-address map      Auxiliary IPv4 or IPv6 addresses used by Network driver (default map[])</span><br><span class="line">      --config-from string   The network from <span class="built_in">which</span> to copy the configuration</span><br><span class="line">      --config-only          Create a configuration only network</span><br><span class="line">  -d, --driver string        Driver to manage the Network (default <span class="string">"bridge"</span>)</span><br><span class="line">      --gateway strings      IPv4 or IPv6 Gateway <span class="keyword">for</span> the master subnet   <span class="comment"># 网关</span></span><br><span class="line">      --ingress              Create swarm routing-mesh network</span><br><span class="line">      --internal             Restrict external access to the network</span><br><span class="line">      --ip-range strings     Allocate container ip from a sub-range</span><br><span class="line">      --ipam-driver string   IP Address Management Driver (default <span class="string">"default"</span>)</span><br><span class="line">      --ipam-opt map         Set IPAM driver specific options (default map[])</span><br><span class="line">      --ipv6                 Enable IPv6 networking</span><br><span class="line">      --label list           Set metadata on a network</span><br><span class="line">  -o, --opt map              Set driver specific options (default map[])</span><br><span class="line">      --scope string         Control the network<span class="string">'s scope</span></span><br><span class="line"><span class="string">      --subnet strings       Subnet in CIDR format that represents a network segment  #子网</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="创建网络"><a href="#创建网络" class="headerlink" title="创建网络"></a>创建网络</h2><ul>
-<li>–driver bridge          网络类型，默认bridge网桥</li>
-<li>–subnet 192.168.0.0/16  子网</li>
-<li>–gateway 192.168.0.1    网关</li>
-</ul>
-<h3 id="创建-mynet-网络"><a href="#创建-mynet-网络" class="headerlink" title="创建 mynet 网络"></a>创建 <code>mynet</code> 网络</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker network create --driver bridge --subnet 192.168.0.0/16 --gateway 192.168.0.1 mynet</span><br><span class="line">0096a971fd2c66400e53cbae5e53eceedc2f90d5685917e9534640a3535c0ef1</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="查看网卡"><a href="#查看网卡" class="headerlink" title="查看网卡"></a>查看网卡</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># ip addr</span></span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:16:3e:0a:00:34 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.31.81.32/20 brd 172.31.95.255 scope global dynamic eth0</span><br><span class="line">       valid_lft 291870572sec preferred_lft 291870572sec</span><br><span class="line">3: docker0: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:a4:2f:c5:62 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">140: br-799426d70aa2: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:7f:01:1d:00 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.18.0.1/16 brd 172.18.255.255 scope global br-799426d70aa2     <span class="comment"># test-network</span></span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">176: br-0096a971fd2c: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:d9:14:c1:d3 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 192.168.0.1/16 brd 192.168.255.255 scope global br-0096a971fd2c   <span class="comment"># mynet</span></span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="查看网络"><a href="#查看网络" class="headerlink" title="查看网络"></a>查看网络</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network ls</span></span><br><span class="line">NETWORK ID     NAME           DRIVER    SCOPE</span><br><span class="line">feafa30d4051   bridge         bridge    <span class="built_in">local</span></span><br><span class="line">e8bf4fced9e2   host           host      <span class="built_in">local</span></span><br><span class="line">0096a971fd2c   mynet          bridge    <span class="built_in">local</span>  <span class="comment"># 自定义bridge网桥</span></span><br><span class="line">6263db0933b9   none           null      <span class="built_in">local</span></span><br><span class="line">799426d70aa2   test-network   bridge    <span class="built_in">local</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="查看-mynet-网络详细信息"><a href="#查看-mynet-网络详细信息" class="headerlink" title="查看 mynet 网络详细信息"></a>查看 <code>mynet</code> 网络详细信息</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network inspect 0096a971fd2c</span></span><br><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        <span class="string">"Name"</span>: <span class="string">"mynet"</span>,</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"0096a971fd2c66400e53cbae5e53eceedc2f90d5685917e9534640a3535c0ef1"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2021-10-04T10:18:09.113847736+08:00"</span>,</span><br><span class="line">        <span class="string">"Scope"</span>: <span class="string">"local"</span>,</span><br><span class="line">        <span class="string">"Driver"</span>: <span class="string">"bridge"</span>,  <span class="comment"># mynet 网络类型</span></span><br><span class="line">        <span class="string">"EnableIPv6"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"IPAM"</span>: {</span><br><span class="line">            <span class="string">"Driver"</span>: <span class="string">"default"</span>,</span><br><span class="line">            <span class="string">"Options"</span>: {},</span><br><span class="line">            <span class="string">"Config"</span>: [</span><br><span class="line">                {</span><br><span class="line">                    <span class="string">"Subnet"</span>: <span class="string">"192.168.0.0/16"</span>,   <span class="comment"># mynet 子网</span></span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"192.168.0.1"</span>      <span class="comment"># mynet 网关</span></span><br><span class="line">                }</span><br><span class="line">            ]</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Internal"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Attachable"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Ingress"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"ConfigFrom"</span>: {</span><br><span class="line">            <span class="string">"Network"</span>: <span class="string">""</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"ConfigOnly"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Containers"</span>: {},</span><br><span class="line">        <span class="string">"Options"</span>: {},</span><br><span class="line">        <span class="string">"Labels"</span>: {}</span><br><span class="line">    }</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="启动容器，并加入mynet网络"><a href="#启动容器，并加入mynet网络" class="headerlink" title="启动容器，并加入mynet网络"></a>启动容器，并加入mynet网络</h2><h3 id="启动-mynet-centos01-mynet-tomcat01-并加入mynet网络"><a href="#启动-mynet-centos01-mynet-tomcat01-并加入mynet网络" class="headerlink" title="启动 mynet-centos01 , mynet-tomcat01 并加入mynet网络"></a>启动 <code>mynet-centos01</code> , <code>mynet-tomcat01</code> 并加入mynet网络</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker run -it -P --name mynet-tomcat01 --net mynet tomcat</span></span><br><span class="line">[root@--- ~]<span class="comment"># docker run -it -P --name mynet-centos01 --net mynet centos</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="查看mynet网桥信息"><a href="#查看mynet网桥信息" class="headerlink" title="查看mynet网桥信息"></a>查看mynet网桥信息</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network inspect 0096</span></span><br><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        <span class="string">"Name"</span>: <span class="string">"mynet"</span>,</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"0096a971fd2c66400e53cbae5e53eceedc2f90d5685917e9534640a3535c0ef1"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2021-10-04T10:18:09.113847736+08:00"</span>,</span><br><span class="line">        <span class="string">"Scope"</span>: <span class="string">"local"</span>,</span><br><span class="line">        <span class="string">"Driver"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"EnableIPv6"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"IPAM"</span>: {</span><br><span class="line">            <span class="string">"Driver"</span>: <span class="string">"default"</span>,</span><br><span class="line">            <span class="string">"Options"</span>: {},</span><br><span class="line">            <span class="string">"Config"</span>: [</span><br><span class="line">                {</span><br><span class="line">                    <span class="string">"Subnet"</span>: <span class="string">"192.168.0.0/16"</span>,</span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"192.168.0.1"</span></span><br><span class="line">                }</span><br><span class="line">            ]</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Internal"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Attachable"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Ingress"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"ConfigFrom"</span>: {</span><br><span class="line">            <span class="string">"Network"</span>: <span class="string">""</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"ConfigOnly"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Containers"</span>: {</span><br><span class="line">            <span class="string">"2fac920eebd505794c4a27ef4efdf531d32805e8663bded93a473bd28236bc27"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"mynet-centos01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"3aff0752e641651a446ec490faa000812417855739086b2edb584ac2a95a26dd"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:c0:a8:00:02"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"192.168.0.2/16"</span>,</span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">"3dceda051252b6970fe2156bac7710ba6489a97aac68c49b1c85a2f130d0556f"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"mynet-tomcat01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"9f52b19493d35c48fe9b33a319de5dbe54c50de1a5d049103cb4e39bfe645f1b"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:c0:a8:00:03"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"192.168.0.3/16"</span>,</span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            }</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Options"</span>: {},</span><br><span class="line">        <span class="string">"Labels"</span>: {}</span><br><span class="line">    }</span><br><span class="line">]</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="进入-mynet-centos01-测试连接-mynet-tomcat01"><a href="#进入-mynet-centos01-测试连接-mynet-tomcat01" class="headerlink" title="进入 mynet-centos01 测试连接 mynet-tomcat01"></a>进入 <code>mynet-centos01</code> 测试连接 <code>mynet-tomcat01</code></h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 发现通过容器ip和容器名都可以连接</span></span><br><span class="line"></span><br><span class="line">[root@--- ~]<span class="comment"># docker exec -it 2fac920eebd5 /bin/sh</span></span><br><span class="line">sh-4.4<span class="comment"># ping</span></span><br><span class="line">sh-4.4<span class="comment"># ping 192.168.0.3   # 通过容器ip连接</span></span><br><span class="line">PING 192.168.0.3 (192.168.0.3) 56(84) bytes of data.</span><br><span class="line">64 bytes from 192.168.0.3: icmp_seq=1 ttl=64 time=0.140 ms</span><br><span class="line">64 bytes from 192.168.0.3: icmp_seq=2 ttl=64 time=0.110 ms</span><br><span class="line">^C</span><br><span class="line">--- 192.168.0.3 ping statistics ---</span><br><span class="line">4 packets transmitted, 4 received, 0% packet loss, time 3000ms</span><br><span class="line">rtt min/avg/max/mdev = 0.110/0.121/0.140/0.016 ms</span><br><span class="line"></span><br><span class="line">sh-4.4<span class="comment"># ping mynet-tomcat01   # 通过容器名连接</span></span><br><span class="line">PING mynet-tomcat01 (192.168.0.3) 56(84) bytes of data.</span><br><span class="line">64 bytes from mynet-tomcat01.mynet (192.168.0.3): icmp_seq=1 ttl=64 time=0.078 ms</span><br><span class="line">64 bytes from mynet-tomcat01.mynet (192.168.0.3): icmp_seq=2 ttl=64 time=0.131 ms</span><br><span class="line">^C</span><br><span class="line">--- mynet-tomcat01 ping statistics ---</span><br><span class="line">3 packets transmitted, 3 received, 0% packet loss, time 2001ms</span><br><span class="line">rtt min/avg/max/mdev = 0.078/0.110/0.131/0.026 ms</span><br><span class="line">sh-4.4<span class="comment">#</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><p>在同一网络下的容器，发现通过<code>容器ip</code>和<code>容器名</code>都可以连接</p>
-<h2 id="思考问题："><a href="#思考问题：" class="headerlink" title="思考问题："></a>思考问题：</h2><blockquote>
-<p>其它网络下的容器可以直接访问mynet网络下的容器吗？</p>
-<p>答案：不可以</p>
-<p>解决方法： 让别的网络下的容器加入到<code>mynet</code>网络下</p>
-</blockquote>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634d69ae16f2c2beb1d5df36.jpg"></p>
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker | 部署nginx服务</title>
     <url>/posts/1512743311.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1340,6 +1285,61 @@
       <tags>
         <tag>Docker</tag>
         <tag>Nginx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker | 自定义网络（网关、子网地址）</title>
+    <url>/posts/2785354845.html</url>
+    <content><![CDATA[<html><head></head><body><blockquote>
+<p>本篇收录至<a href="https://blog.i-xiao.space/categories/Docker/">Docker专栏</a>，持续更新，欢迎访问😊</p>
+</blockquote>
+<h2 id="了解-docker-network"><a href="#了解-docker-network" class="headerlink" title="了解 docker network"></a>了解 docker network</h2><p>通过下面的命令来获取帮助</p>
+<ol>
+<li>docker network –help</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">Commands:</span><br><span class="line">  connect     Connect a container to a network</span><br><span class="line">  create      Create a network</span><br><span class="line">  disconnect  Disconnect a container from a network</span><br><span class="line">  inspect     Display detailed information on one or more networks</span><br><span class="line">  <span class="built_in">ls</span>          List networks</span><br><span class="line">  prune       Remove all unused networks</span><br><span class="line">  <span class="built_in">rm</span>          Remove one or more networks</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>docker network create –help</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">Options:</span><br><span class="line">      --attachable           Enable manual container attachment</span><br><span class="line">      --aux-address map      Auxiliary IPv4 or IPv6 addresses used by Network driver (default map[])</span><br><span class="line">      --config-from string   The network from <span class="built_in">which</span> to copy the configuration</span><br><span class="line">      --config-only          Create a configuration only network</span><br><span class="line">  -d, --driver string        Driver to manage the Network (default <span class="string">"bridge"</span>)</span><br><span class="line">      --gateway strings      IPv4 or IPv6 Gateway <span class="keyword">for</span> the master subnet   <span class="comment"># 网关</span></span><br><span class="line">      --ingress              Create swarm routing-mesh network</span><br><span class="line">      --internal             Restrict external access to the network</span><br><span class="line">      --ip-range strings     Allocate container ip from a sub-range</span><br><span class="line">      --ipam-driver string   IP Address Management Driver (default <span class="string">"default"</span>)</span><br><span class="line">      --ipam-opt map         Set IPAM driver specific options (default map[])</span><br><span class="line">      --ipv6                 Enable IPv6 networking</span><br><span class="line">      --label list           Set metadata on a network</span><br><span class="line">  -o, --opt map              Set driver specific options (default map[])</span><br><span class="line">      --scope string         Control the network<span class="string">'s scope</span></span><br><span class="line"><span class="string">      --subnet strings       Subnet in CIDR format that represents a network segment  #子网</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="创建网络"><a href="#创建网络" class="headerlink" title="创建网络"></a>创建网络</h2><ul>
+<li>–driver bridge          网络类型，默认bridge网桥</li>
+<li>–subnet 192.168.0.0/16  子网</li>
+<li>–gateway 192.168.0.1    网关</li>
+</ul>
+<h3 id="创建-mynet-网络"><a href="#创建-mynet-网络" class="headerlink" title="创建 mynet 网络"></a>创建 <code>mynet</code> 网络</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker network create --driver bridge --subnet 192.168.0.0/16 --gateway 192.168.0.1 mynet</span><br><span class="line">0096a971fd2c66400e53cbae5e53eceedc2f90d5685917e9534640a3535c0ef1</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="查看网卡"><a href="#查看网卡" class="headerlink" title="查看网卡"></a>查看网卡</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># ip addr</span></span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:16:3e:0a:00:34 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.31.81.32/20 brd 172.31.95.255 scope global dynamic eth0</span><br><span class="line">       valid_lft 291870572sec preferred_lft 291870572sec</span><br><span class="line">3: docker0: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:a4:2f:c5:62 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">140: br-799426d70aa2: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:7f:01:1d:00 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.18.0.1/16 brd 172.18.255.255 scope global br-799426d70aa2     <span class="comment"># test-network</span></span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">176: br-0096a971fd2c: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default</span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:d9:14:c1:d3 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 192.168.0.1/16 brd 192.168.255.255 scope global br-0096a971fd2c   <span class="comment"># mynet</span></span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="查看网络"><a href="#查看网络" class="headerlink" title="查看网络"></a>查看网络</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network ls</span></span><br><span class="line">NETWORK ID     NAME           DRIVER    SCOPE</span><br><span class="line">feafa30d4051   bridge         bridge    <span class="built_in">local</span></span><br><span class="line">e8bf4fced9e2   host           host      <span class="built_in">local</span></span><br><span class="line">0096a971fd2c   mynet          bridge    <span class="built_in">local</span>  <span class="comment"># 自定义bridge网桥</span></span><br><span class="line">6263db0933b9   none           null      <span class="built_in">local</span></span><br><span class="line">799426d70aa2   test-network   bridge    <span class="built_in">local</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="查看-mynet-网络详细信息"><a href="#查看-mynet-网络详细信息" class="headerlink" title="查看 mynet 网络详细信息"></a>查看 <code>mynet</code> 网络详细信息</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network inspect 0096a971fd2c</span></span><br><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        <span class="string">"Name"</span>: <span class="string">"mynet"</span>,</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"0096a971fd2c66400e53cbae5e53eceedc2f90d5685917e9534640a3535c0ef1"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2021-10-04T10:18:09.113847736+08:00"</span>,</span><br><span class="line">        <span class="string">"Scope"</span>: <span class="string">"local"</span>,</span><br><span class="line">        <span class="string">"Driver"</span>: <span class="string">"bridge"</span>,  <span class="comment"># mynet 网络类型</span></span><br><span class="line">        <span class="string">"EnableIPv6"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"IPAM"</span>: {</span><br><span class="line">            <span class="string">"Driver"</span>: <span class="string">"default"</span>,</span><br><span class="line">            <span class="string">"Options"</span>: {},</span><br><span class="line">            <span class="string">"Config"</span>: [</span><br><span class="line">                {</span><br><span class="line">                    <span class="string">"Subnet"</span>: <span class="string">"192.168.0.0/16"</span>,   <span class="comment"># mynet 子网</span></span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"192.168.0.1"</span>      <span class="comment"># mynet 网关</span></span><br><span class="line">                }</span><br><span class="line">            ]</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Internal"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Attachable"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Ingress"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"ConfigFrom"</span>: {</span><br><span class="line">            <span class="string">"Network"</span>: <span class="string">""</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"ConfigOnly"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Containers"</span>: {},</span><br><span class="line">        <span class="string">"Options"</span>: {},</span><br><span class="line">        <span class="string">"Labels"</span>: {}</span><br><span class="line">    }</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="启动容器，并加入mynet网络"><a href="#启动容器，并加入mynet网络" class="headerlink" title="启动容器，并加入mynet网络"></a>启动容器，并加入mynet网络</h2><h3 id="启动-mynet-centos01-mynet-tomcat01-并加入mynet网络"><a href="#启动-mynet-centos01-mynet-tomcat01-并加入mynet网络" class="headerlink" title="启动 mynet-centos01 , mynet-tomcat01 并加入mynet网络"></a>启动 <code>mynet-centos01</code> , <code>mynet-tomcat01</code> 并加入mynet网络</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker run -it -P --name mynet-tomcat01 --net mynet tomcat</span></span><br><span class="line">[root@--- ~]<span class="comment"># docker run -it -P --name mynet-centos01 --net mynet centos</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="查看mynet网桥信息"><a href="#查看mynet网桥信息" class="headerlink" title="查看mynet网桥信息"></a>查看mynet网桥信息</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">[root@--- ~]<span class="comment"># docker network inspect 0096</span></span><br><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        <span class="string">"Name"</span>: <span class="string">"mynet"</span>,</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"0096a971fd2c66400e53cbae5e53eceedc2f90d5685917e9534640a3535c0ef1"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2021-10-04T10:18:09.113847736+08:00"</span>,</span><br><span class="line">        <span class="string">"Scope"</span>: <span class="string">"local"</span>,</span><br><span class="line">        <span class="string">"Driver"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"EnableIPv6"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"IPAM"</span>: {</span><br><span class="line">            <span class="string">"Driver"</span>: <span class="string">"default"</span>,</span><br><span class="line">            <span class="string">"Options"</span>: {},</span><br><span class="line">            <span class="string">"Config"</span>: [</span><br><span class="line">                {</span><br><span class="line">                    <span class="string">"Subnet"</span>: <span class="string">"192.168.0.0/16"</span>,</span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"192.168.0.1"</span></span><br><span class="line">                }</span><br><span class="line">            ]</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Internal"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Attachable"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Ingress"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"ConfigFrom"</span>: {</span><br><span class="line">            <span class="string">"Network"</span>: <span class="string">""</span></span><br><span class="line">        },</span><br><span class="line">        <span class="string">"ConfigOnly"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Containers"</span>: {</span><br><span class="line">            <span class="string">"2fac920eebd505794c4a27ef4efdf531d32805e8663bded93a473bd28236bc27"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"mynet-centos01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"3aff0752e641651a446ec490faa000812417855739086b2edb584ac2a95a26dd"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:c0:a8:00:02"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"192.168.0.2/16"</span>,</span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">"3dceda051252b6970fe2156bac7710ba6489a97aac68c49b1c85a2f130d0556f"</span>: {</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"mynet-tomcat01"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"9f52b19493d35c48fe9b33a319de5dbe54c50de1a5d049103cb4e39bfe645f1b"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:c0:a8:00:03"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"192.168.0.3/16"</span>,</span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            }</span><br><span class="line">        },</span><br><span class="line">        <span class="string">"Options"</span>: {},</span><br><span class="line">        <span class="string">"Labels"</span>: {}</span><br><span class="line">    }</span><br><span class="line">]</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="进入-mynet-centos01-测试连接-mynet-tomcat01"><a href="#进入-mynet-centos01-测试连接-mynet-tomcat01" class="headerlink" title="进入 mynet-centos01 测试连接 mynet-tomcat01"></a>进入 <code>mynet-centos01</code> 测试连接 <code>mynet-tomcat01</code></h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 发现通过容器ip和容器名都可以连接</span></span><br><span class="line"></span><br><span class="line">[root@--- ~]<span class="comment"># docker exec -it 2fac920eebd5 /bin/sh</span></span><br><span class="line">sh-4.4<span class="comment"># ping</span></span><br><span class="line">sh-4.4<span class="comment"># ping 192.168.0.3   # 通过容器ip连接</span></span><br><span class="line">PING 192.168.0.3 (192.168.0.3) 56(84) bytes of data.</span><br><span class="line">64 bytes from 192.168.0.3: icmp_seq=1 ttl=64 time=0.140 ms</span><br><span class="line">64 bytes from 192.168.0.3: icmp_seq=2 ttl=64 time=0.110 ms</span><br><span class="line">^C</span><br><span class="line">--- 192.168.0.3 ping statistics ---</span><br><span class="line">4 packets transmitted, 4 received, 0% packet loss, time 3000ms</span><br><span class="line">rtt min/avg/max/mdev = 0.110/0.121/0.140/0.016 ms</span><br><span class="line"></span><br><span class="line">sh-4.4<span class="comment"># ping mynet-tomcat01   # 通过容器名连接</span></span><br><span class="line">PING mynet-tomcat01 (192.168.0.3) 56(84) bytes of data.</span><br><span class="line">64 bytes from mynet-tomcat01.mynet (192.168.0.3): icmp_seq=1 ttl=64 time=0.078 ms</span><br><span class="line">64 bytes from mynet-tomcat01.mynet (192.168.0.3): icmp_seq=2 ttl=64 time=0.131 ms</span><br><span class="line">^C</span><br><span class="line">--- mynet-tomcat01 ping statistics ---</span><br><span class="line">3 packets transmitted, 3 received, 0% packet loss, time 2001ms</span><br><span class="line">rtt min/avg/max/mdev = 0.078/0.110/0.131/0.026 ms</span><br><span class="line">sh-4.4<span class="comment">#</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><p>在同一网络下的容器，发现通过<code>容器ip</code>和<code>容器名</code>都可以连接</p>
+<h2 id="思考问题："><a href="#思考问题：" class="headerlink" title="思考问题："></a>思考问题：</h2><blockquote>
+<p>其它网络下的容器可以直接访问mynet网络下的容器吗？</p>
+<p>答案：不可以</p>
+<p>解决方法： 让别的网络下的容器加入到<code>mynet</code>网络下</p>
+</blockquote>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/634d69ae16f2c2beb1d5df36.jpg"></p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
       </tags>
   </entry>
   <entry>
@@ -1510,6 +1510,90 @@
       </tags>
   </entry>
   <entry>
+    <title>GitHub Pages 站点建设</title>
+    <url>/posts/899051033.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h2><ul>
+<li><p>GitHub Pages 是通过 GitHub 托管和发布的公共网页，将纯文本转换为静态博客网站。</p>
+</li>
+<li><p>您可以使用 GitHub Pages 来展示一些开源项目、博客甚或分享您的简历，有内存限制，可以绑定个人域名。</p>
+</li>
+<li><p>启动和运行的最快方法是使用 <a href="https://jekyllcn.com/">Jekyll</a> 主题选择器加载预置主题。 然后，您可以修改 GitHub Pages 的内容和样式。👉 <a href="https://docs.github.com/cn/pages/getting-started-with-github-pages/about-github-pages">文档</a></p>
+</li>
+</ul>
+<h2 id="2、创建仓库"><a href="#2、创建仓库" class="headerlink" title="2、创建仓库"></a>2、创建仓库</h2><p>仓库名： <code>&lt;username&gt;.github.io</code><br><code>username</code> 是GitHub的用户名</p>
+<h2 id="3、创建站点"><a href="#3、创建站点" class="headerlink" title="3、创建站点"></a>3、创建站点</h2><p>在 <code>repo</code> 下创建 <code>index.md</code>文件，随便写点东西保存。然后，点击 <code>settings</code>选项卡，单机左侧 <code>Pages</code>进行设置，如下图：</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fae16f2c2beb1e1d288.png"></p>
+<p>🔊 此时站点已经建成，可以访问 <code>https://&lt;username&gt;.github.io/</code> 查看，如果已经有个人域名了，也可以绑定个人域名，继续往下看👇</p>
+<h2 id="4、仓库文件目录"><a href="#4、仓库文件目录" class="headerlink" title="4、仓库文件目录"></a>4、仓库文件目录</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fbe16f2c2beb1e1e89f.png"></p>
+<h2 id="5、绑定域名"><a href="#5、绑定域名" class="headerlink" title="5、绑定域名"></a>5、绑定域名</h2><p>我个人购买的一级域名是 i-xiao ，域名后缀是 space，专门给GitHub Pages 增加一个CNAME记录（blog），解析二级域名，绑定 <username>github.io 域名。</username></p>
+<h3 id="5-1、域名相关知识"><a href="#5-1、域名相关知识" class="headerlink" title="5.1、域名相关知识"></a>5.1、域名相关知识</h3><ul>
+<li>www：主机名，i-xiao : 域名主体(一级域名)，.space : 域名后缀<br>注册一级域名的时候是需要付费的</li>
+<li>二级域名，是依附一级域名的存在而存在的，也就是说要是顶级域名消失了，二级域名也也会不复存在。反而来说，二级域名的网站不做了，主域名网站是不受影响的。</li>
+<li>一级域名、二级域名区别：<br>DNS收录一级域名更快；还有就是解析速度，下一跳路由就不说了，找到目的主机之后，二级域名层级更深，需要多一层计算（其实这是我瞎写的🤣，猜测应该跟 nginx location匹配类似）</li>
+</ul>
+<h3 id="5-2、GitHub上配置自定义域名"><a href="#5-2、GitHub上配置自定义域名" class="headerlink" title="5.2、GitHub上配置自定义域名"></a>5.2、GitHub上配置自定义域名</h3><p>进入 <username>github.io 仓库，进入设置页面，点击左边 Pages 选项卡，进行下面的配置。</username></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6116f2c2beb1e1511a.png"></p>
+<h2 id="6、配置域名映射"><a href="#6、配置域名映射" class="headerlink" title="6、配置域名映射"></a>6、配置域名映射</h2><p><strong>各记录类型使用目的</strong></p>
+<table>
+<thead>
+<tr>
+<th>记录类型</th>
+<th>使用目的</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ce5/">A 记录</a></td>
+<td>将域名指向一个 IP 地址（外网地址）。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9cf9/">CNAME 记录</a></td>
+<td>将域名指向另一个域名，再由另一个域名提供 IP 地址（外网地址）。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9cff/">MX 记录</a></td>
+<td>设置邮箱，让邮箱能收到邮件。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d11/">NS 记录</a></td>
+<td>将子域名交给其他 DNS 服务商解析。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d0b/">AAAA 记录</a></td>
+<td>将域名指向一个 IPv6 地址。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d17/">SRV 记录</a></td>
+<td>用来标识某台服务器使用了某个服务，常见于微软系统的目录管理。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d05/">TXT 记录</a></td>
+<td>对域名进行标识和说明，绝大多数的 TXT 记录是用来做 SPF 记录（反垃圾邮件）。</td>
+</tr>
+<tr>
+<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ced/">隐、显性 URL 记录</a></td>
+<td>将一个域名指向另外一个已经存在的站点。</td>
+</tr>
+</tbody></table>
+<p><strong>如下图</strong></p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6f16f2c2beb1e16954.png"></p>
+<h2 id="7、DNS检测"><a href="#7、DNS检测" class="headerlink" title="7、DNS检测"></a>7、DNS检测</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f7816f2c2beb1e1785b.png"></p>
+<h2 id="8、查看Pages"><a href="#8、查看Pages" class="headerlink" title="8、查看Pages"></a>8、查看Pages</h2><p>成功解析之后，还存在DNS缓存，一般还需要再等待一会（一般十分钟，或许更长时间）才能生效，如下图成功显示👇</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f8c16f2c2beb1e1a34c.png"></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>站点绑定的域名已经更换，访问请到👉 <a href="https://home.i-xiao.space/">这里</a></p>
+<hr>
+<p>🎈🎈🎈</p>
+<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
+</body></html>]]></content>
+      <categories>
+        <category>GitHub</category>
+      </categories>
+      <tags>
+        <tag>GitHub</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker网络模型以及容器通信</title>
     <url>/posts/1604561083.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -1654,90 +1738,6 @@
       </categories>
       <tags>
         <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>GitHub Pages 站点建设</title>
-    <url>/posts/899051033.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h2><ul>
-<li><p>GitHub Pages 是通过 GitHub 托管和发布的公共网页，将纯文本转换为静态博客网站。</p>
-</li>
-<li><p>您可以使用 GitHub Pages 来展示一些开源项目、博客甚或分享您的简历，有内存限制，可以绑定个人域名。</p>
-</li>
-<li><p>启动和运行的最快方法是使用 <a href="https://jekyllcn.com/">Jekyll</a> 主题选择器加载预置主题。 然后，您可以修改 GitHub Pages 的内容和样式。👉 <a href="https://docs.github.com/cn/pages/getting-started-with-github-pages/about-github-pages">文档</a></p>
-</li>
-</ul>
-<h2 id="2、创建仓库"><a href="#2、创建仓库" class="headerlink" title="2、创建仓库"></a>2、创建仓库</h2><p>仓库名： <code>&lt;username&gt;.github.io</code><br><code>username</code> 是GitHub的用户名</p>
-<h2 id="3、创建站点"><a href="#3、创建站点" class="headerlink" title="3、创建站点"></a>3、创建站点</h2><p>在 <code>repo</code> 下创建 <code>index.md</code>文件，随便写点东西保存。然后，点击 <code>settings</code>选项卡，单机左侧 <code>Pages</code>进行设置，如下图：</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fae16f2c2beb1e1d288.png"></p>
-<p>🔊 此时站点已经建成，可以访问 <code>https://&lt;username&gt;.github.io/</code> 查看，如果已经有个人域名了，也可以绑定个人域名，继续往下看👇</p>
-<h2 id="4、仓库文件目录"><a href="#4、仓库文件目录" class="headerlink" title="4、仓库文件目录"></a>4、仓库文件目录</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184fbe16f2c2beb1e1e89f.png"></p>
-<h2 id="5、绑定域名"><a href="#5、绑定域名" class="headerlink" title="5、绑定域名"></a>5、绑定域名</h2><p>我个人购买的一级域名是 i-xiao ，域名后缀是 space，专门给GitHub Pages 增加一个CNAME记录（blog），解析二级域名，绑定 <username>github.io 域名。</username></p>
-<h3 id="5-1、域名相关知识"><a href="#5-1、域名相关知识" class="headerlink" title="5.1、域名相关知识"></a>5.1、域名相关知识</h3><ul>
-<li>www：主机名，i-xiao : 域名主体(一级域名)，.space : 域名后缀<br>注册一级域名的时候是需要付费的</li>
-<li>二级域名，是依附一级域名的存在而存在的，也就是说要是顶级域名消失了，二级域名也也会不复存在。反而来说，二级域名的网站不做了，主域名网站是不受影响的。</li>
-<li>一级域名、二级域名区别：<br>DNS收录一级域名更快；还有就是解析速度，下一跳路由就不说了，找到目的主机之后，二级域名层级更深，需要多一层计算（其实这是我瞎写的🤣，猜测应该跟 nginx location匹配类似）</li>
-</ul>
-<h3 id="5-2、GitHub上配置自定义域名"><a href="#5-2、GitHub上配置自定义域名" class="headerlink" title="5.2、GitHub上配置自定义域名"></a>5.2、GitHub上配置自定义域名</h3><p>进入 <username>github.io 仓库，进入设置页面，点击左边 Pages 选项卡，进行下面的配置。</username></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6116f2c2beb1e1511a.png"></p>
-<h2 id="6、配置域名映射"><a href="#6、配置域名映射" class="headerlink" title="6、配置域名映射"></a>6、配置域名映射</h2><p><strong>各记录类型使用目的</strong></p>
-<table>
-<thead>
-<tr>
-<th>记录类型</th>
-<th>使用目的</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ce5/">A 记录</a></td>
-<td>将域名指向一个 IP 地址（外网地址）。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9cf9/">CNAME 记录</a></td>
-<td>将域名指向另一个域名，再由另一个域名提供 IP 地址（外网地址）。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9cff/">MX 记录</a></td>
-<td>设置邮箱，让邮箱能收到邮件。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d11/">NS 记录</a></td>
-<td>将子域名交给其他 DNS 服务商解析。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d0b/">AAAA 记录</a></td>
-<td>将域名指向一个 IPv6 地址。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d17/">SRV 记录</a></td>
-<td>用来标识某台服务器使用了某个服务，常见于微软系统的目录管理。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4665e8320f1a740d9d05/">TXT 记录</a></td>
-<td>对域名进行标识和说明，绝大多数的 TXT 记录是用来做 SPF 记录（反垃圾邮件）。</td>
-</tr>
-<tr>
-<td><a href="https://docs.dnspod.cn/dns/5f2d4664e8320f1a740d9ced/">隐、显性 URL 记录</a></td>
-<td>将一个域名指向另外一个已经存在的站点。</td>
-</tr>
-</tbody></table>
-<p><strong>如下图</strong></p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f6f16f2c2beb1e16954.png"></p>
-<h2 id="7、DNS检测"><a href="#7、DNS检测" class="headerlink" title="7、DNS检测"></a>7、DNS检测</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f7816f2c2beb1e1785b.png"></p>
-<h2 id="8、查看Pages"><a href="#8、查看Pages" class="headerlink" title="8、查看Pages"></a>8、查看Pages</h2><p>成功解析之后，还存在DNS缓存，一般还需要再等待一会（一般十分钟，或许更长时间）才能生效，如下图成功显示👇</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184f8c16f2c2beb1e1a34c.png"></p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>站点绑定的域名已经更换，访问请到👉 <a href="https://home.i-xiao.space/">这里</a></p>
-<hr>
-<p>🎈🎈🎈</p>
-<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>GitHub</category>
-      </categories>
-      <tags>
-        <tag>GitHub</tag>
       </tags>
   </entry>
   <entry>
@@ -2581,6 +2581,136 @@
       </tags>
   </entry>
   <entry>
+    <title>MongoDB数据库新手入门</title>
+    <url>/posts/87748764.html</url>
+    <content><![CDATA[<html><head></head><body><h1 id="windows安装mongodb-5-0-2"><a href="#windows安装mongodb-5-0-2" class="headerlink" title="windows安装mongodb   5.0.2"></a>windows安装mongodb   5.0.2</h1><p>官网下载<code>msi</code>文件</p>
+<p>自定义安装到 <code>d:/apptoools/mongodb/</code></p>
+<p>不要勾选<code>mongodb compass</code></p>
+<p>报错：<code>verify that you have sufficient privileges to install system services</code><br>权限不足</p>
+<p><strong>解决办法:</strong></p>
+<p>1.默认C盘安装路径</p>
+<p>2.其它磁盘根目录，<code>D:/mongodb/</code></p>
+<h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><p>bin目录添加到path环境变量里面</p>
+<p>创建数据库存储文件 <code>D:/mongoDatabase/</code></p>
+<p>指定数据库存储文件<br><code>mongod --dbpath D:/mongoDatabase/</code></p>
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6360945b16f2c2beb1c47840.jpg"></p>
+<p><code>mongo</code></p>
+<p>或者指定连接本地数据库  <code>mongo 127.0.0.1:27017</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">show dbs</span><br><span class="line">use admin</span><br><span class="line">show collections</span><br><span class="line">db.product.insert({<span class="string">'title'</span>: <span class="string">'aaa'</span>})</span><br><span class="line">db.product.drop() <span class="comment"># 删除集合</span></span><br><span class="line">db.dropDatabase() <span class="comment"># 删除数据库</span></span><br><span class="line">db.createCollection(<span class="string">"runoob"</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="使用SQL命令强迫关闭mongo服务"><a href="#使用SQL命令强迫关闭mongo服务" class="headerlink" title="使用SQL命令强迫关闭mongo服务"></a>使用SQL命令强迫关闭mongo服务</h2><figure class="highlight stata"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> admin</span><br><span class="line"><span class="keyword">db</span>.shutdownServer()</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="创建管理员"><a href="#创建管理员" class="headerlink" title="创建管理员:"></a>创建管理员:</h2><figure class="highlight nsis"><table><tbody><tr><td class="code"><pre><span class="line">use <span class="literal">admin</span></span><br><span class="line"><span class="literal">show</span> users</span><br><span class="line">db.createUser({<span class="literal">user</span>:<span class="string">"root"</span>,pwd:<span class="string">"123456"</span>,roles:[<span class="string">"root"</span>]}) <span class="comment"># 添加管理员</span></span><br><span class="line"></span><br><span class="line">db.dropUser(<span class="string">'grade'</span>) <span class="comment"># 删除用户</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="指定数据库创建用户"><a href="#指定数据库创建用户" class="headerlink" title="指定数据库创建用户"></a>指定数据库创建用户</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">use grade</span><br><span class="line">db.createUser({user:<span class="string">"gradeAdmin"</span>,<span class="built_in">pwd</span>:<span class="string">"123456"</span>,roles:[{role: <span class="string">'dbOwner'</span>,db: <span class="string">'grade'</span>}]})</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="Mongodb数据库角色"><a href="#Mongodb数据库角色" class="headerlink" title="Mongodb数据库角色"></a>Mongodb数据库角色</h2><ol>
+<li>数据库用户角色:</li>
+</ol>
+<p>read、 readWrite</p>
+<ol start="2">
+<li>数据库管理角色:</li>
+</ol>
+<p> dbAdmin、 dbOwner、 userAdmin</p>
+<ol start="3">
+<li>集群管理角色:</li>
+</ol>
+<p>clusterAdmin, clusterManager, clusterMonitor, hostManager</p>
+<ol start="4">
+<li>备份恢复角色:</li>
+</ol>
+<p>backup、 restore;</p>
+<ol start="5">
+<li>所有数据库角色:</li>
+</ol>
+<p>readAnyDatabase, readWriteAnyDatabase、 userAdminAnyDatabase, dbAdminAnyDatabase</p>
+<ol start="6">
+<li>超级用户角色:</li>
+</ol>
+<p>root</p>
+<p><strong>开启认证之后连接数据库：</strong></p>
+<figure class="highlight 1c"><table><tbody><tr><td class="code"><pre><span class="line">use admin</span><br><span class="line">db.auth('root','<span class="number">123456</span>')</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="nodejs连接数据库"><a href="#nodejs连接数据库" class="headerlink" title="nodejs连接数据库"></a>nodejs连接数据库</h2><h3 id="通过client对象连接到MongoDB"><a href="#通过client对象连接到MongoDB" class="headerlink" title="通过client对象连接到MongoDB"></a>通过client对象连接到MongoDB</h3><p>通过实例化一个<code>MongoClient</code>对象连接<code>MongoDB</code>数据库是最常用也是最佳的方式。</p>
+<p>创建MongoClient对象实例的语法：</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title class_">MongoClient</span>( server, options );</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><p>server : 一个serverd对象；</p>
+</li>
+<li><p>options : 数据库连接选项；</p>
+</li>
+</ul>
+<h3 id="通过一个连接字符串连接到MongoDB"><a href="#通过一个连接字符串连接到MongoDB" class="headerlink" title="通过一个连接字符串连接到MongoDB"></a>通过一个连接字符串连接到MongoDB</h3><p>调用<code>MongoClient</code>类的<code>connect()</code>方法</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title class_">MongoClient</span>.<span class="title function_">connect</span>(connString, options, callback)</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>connString：mongodb://username:password@host:port/database?opations</code></p>
+<h2 id="nosqlbooster连接mongodb"><a href="#nosqlbooster连接mongodb" class="headerlink" title="nosqlbooster连接mongodb"></a>nosqlbooster连接mongodb</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6360951416f2c2beb1c60541.jpg"></p>
+<h1 id="linux-安装mongodb，配置以及使用"><a href="#linux-安装mongodb，配置以及使用" class="headerlink" title="linux 安装mongodb，配置以及使用"></a>linux 安装mongodb，配置以及使用</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>官网下载<code>tar</code>包，上传到服务器目录: <code>/usr/local/mongodb</code><br>解压，<code>tar -zxvf  mongodb-linux-x86_64-xxx</code> 并重命名</p>
+<h2 id="创建mongodb数据存储文件和日志文件"><a href="#创建mongodb数据存储文件和日志文件" class="headerlink" title="创建mongodb数据存储文件和日志文件"></a>创建mongodb数据存储文件和日志文件</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/local/mongodb/</span><br><span class="line"><span class="built_in">mkdir</span> data</span><br><span class="line"><span class="built_in">mkdir</span> logs</span><br><span class="line"><span class="built_in">cd</span> ./logs</span><br><span class="line"><span class="built_in">touch</span> mongodb.log</span><br><span class="line"><span class="built_in">cd</span> ../</span><br><span class="line"><span class="built_in">mkdir</span> etc</span><br><span class="line"><span class="built_in">cd</span> etc</span><br><span class="line"><span class="built_in">touch</span> mongodb.conf</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="mongodb-conf配置文件："><a href="#mongodb-conf配置文件：" class="headerlink" title="mongodb.conf配置文件："></a>mongodb.conf配置文件：</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#数据库路径</span></span><br><span class="line">dbpath=/usr/local/mongodb/data</span><br><span class="line"><span class="comment">#日志输出文件路径</span></span><br><span class="line">logpath=/usr/local/mongodb/logs/mongodb.log</span><br><span class="line"><span class="comment">#错误日志采用追加模式</span></span><br><span class="line">logappend=<span class="literal">true</span></span><br><span class="line"><span class="comment">#启用日志文件，默认启用</span></span><br><span class="line">journal=<span class="literal">true</span></span><br><span class="line"><span class="comment">#这个选项可以过滤掉一些无用的日志信息，若需要调试使用请设置为false</span></span><br><span class="line">quiet=<span class="literal">true</span></span><br><span class="line"><span class="comment">#端口号 默认为27017</span></span><br><span class="line">port=27017</span><br><span class="line"><span class="comment">#允许远程访问</span></span><br><span class="line">bind_ip=0.0.0.0</span><br><span class="line"><span class="comment">#开启子进程</span></span><br><span class="line">fork=<span class="literal">true</span></span><br><span class="line"><span class="comment">#开启认证，必选先添加用户，先不开启（不用验证账号密码）</span></span><br><span class="line"><span class="comment">#auth=true</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="配置环境变量-1"><a href="#配置环境变量-1" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><ol>
+<li><p><code>vi /etc/profile</code></p>
+</li>
+<li><p>写入： <code>export PATH=/usr/local/mongodb/bin:$PATH</code><br>保存退出</p>
+</li>
+<li><p>执行 <code>source /etc/profile</code></p>
+</li>
+</ol>
+<h2 id="启动mongodb服务"><a href="#启动mongodb服务" class="headerlink" title="启动mongodb服务"></a>启动mongodb服务</h2><ol>
+<li>方式一</li>
+</ol>
+<p>bin目录下执行：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./mongod --config /usr/local/mongodb/etc/mongodb.conf</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>方式二</li>
+</ol>
+<p>把上面的命令写成脚本文件，我把它放到 <code>~/restartMongo</code> 中，如下：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line">vim restartMongo</span><br><span class="line"></span><br><span class="line"><span class="comment">#写入：</span></span><br><span class="line">mongod --config /usr/local/mongodb/etc/mongodb.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存退出</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行脚本启动</span></span><br><span class="line">./restartMongo</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="查看进程"><a href="#查看进程" class="headerlink" title="查看进程"></a>查看进程</h2><p><code>mongodb</code>默认端口号<code>27017</code></p>
+<p>执行命令查看：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">netstat -ltunp</span><br></pre></td></tr></tbody></table></figure>
+<p>或者使用如下命令</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">netstat -lanp | grep <span class="string">"27017"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>启动之后就可以连接<code>mongo server</code>了</p>
+<h2 id="操作mongo数据库"><a href="#操作mongo数据库" class="headerlink" title="操作mongo数据库"></a>操作mongo数据库</h2><p><code>mongo</code> (或者指定ip:port： <code>mongo ip:port</code>)</p>
+<h2 id="admin数据库添加用户、安全认证"><a href="#admin数据库添加用户、安全认证" class="headerlink" title="admin数据库添加用户、安全认证"></a>admin数据库添加用户、安全认证</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">use admin</span><br><span class="line">show <span class="built_in">users</span></span><br><span class="line">db.createUser({user:<span class="string">"root"</span>,<span class="built_in">pwd</span>:<span class="string">"123456"</span>,roles:[{role:<span class="string">"root"</span>,db:<span class="string">"admin"</span>}]})</span><br><span class="line">show <span class="built_in">users</span></span><br><span class="line">关闭mongo server</span><br><span class="line">db.shutdownServer()</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="启用安全认证"><a href="#启用安全认证" class="headerlink" title="启用安全认证"></a>启用安全认证</h2><ol>
+<li>修改<code>etc/mongodb.conf</code></li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#开启认证，必选先添加用户</span></span><br><span class="line">auth=<span class="literal">true</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>重新开启<code>mongo server</code></li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">mongod --config /usr/local/mongodb/etc/mongodb.conf</span><br></pre></td></tr></tbody></table></figure>
+
+<p>此时<code>show dbs</code>查看不到任何数据库</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">use admin</span><br><span class="line">db.auth(<span class="string">'root'</span>, <span class="string">'123456'</span>) <span class="comment"># 输出1标记访问数据库成功</span></span><br><span class="line">show dbs</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="客户端链接"><a href="#客户端链接" class="headerlink" title="客户端链接"></a>客户端链接</h2><p>开放防火墙端口号，不再赘述。</p>
+<h2 id="开机启动"><a href="#开机启动" class="headerlink" title="开机启动"></a>开机启动</h2><p>配置开机启动脚本文件： <code>/etc/rc.d/init.d/mongod</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="function"><span class="title">start</span></span>() {</span><br><span class="line">/usr/local/mongodb/bin/mongod --config /usr/local/mongodb/etc/mongodb.conf</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">stop</span></span>() {</span><br><span class="line">/usr/local/mongodb/bin/mongod --config /usr/local/mongodb/etc/mongodb.conf --shutdown</span><br><span class="line">}</span><br><span class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span></span><br><span class="line">start)</span><br><span class="line">start</span><br><span class="line">;;</span><br><span class="line"></span><br><span class="line">stop)</span><br><span class="line">stop</span><br><span class="line">;;</span><br><span class="line"></span><br><span class="line">restart)</span><br><span class="line">stop</span><br><span class="line">start</span><br><span class="line">;;</span><br><span class="line">*)</span><br><span class="line"><span class="built_in">echo</span></span><br><span class="line">$<span class="string">"Usage: <span class="variable">$0</span> {start|stop|restart}"</span></span><br><span class="line"><span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端开发，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
+<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。数风流人物还看中国、看今朝、看你我。</p>
+</body></html>]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>MongoDB</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux操作系统学习（运维必会）</title>
     <url>/posts/1915044345.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -2758,136 +2888,6 @@
       </categories>
       <tags>
         <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MongoDB数据库新手入门</title>
-    <url>/posts/87748764.html</url>
-    <content><![CDATA[<html><head></head><body><h1 id="windows安装mongodb-5-0-2"><a href="#windows安装mongodb-5-0-2" class="headerlink" title="windows安装mongodb   5.0.2"></a>windows安装mongodb   5.0.2</h1><p>官网下载<code>msi</code>文件</p>
-<p>自定义安装到 <code>d:/apptoools/mongodb/</code></p>
-<p>不要勾选<code>mongodb compass</code></p>
-<p>报错：<code>verify that you have sufficient privileges to install system services</code><br>权限不足</p>
-<p><strong>解决办法:</strong></p>
-<p>1.默认C盘安装路径</p>
-<p>2.其它磁盘根目录，<code>D:/mongodb/</code></p>
-<h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><p>bin目录添加到path环境变量里面</p>
-<p>创建数据库存储文件 <code>D:/mongoDatabase/</code></p>
-<p>指定数据库存储文件<br><code>mongod --dbpath D:/mongoDatabase/</code></p>
-<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6360945b16f2c2beb1c47840.jpg"></p>
-<p><code>mongo</code></p>
-<p>或者指定连接本地数据库  <code>mongo 127.0.0.1:27017</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">show dbs</span><br><span class="line">use admin</span><br><span class="line">show collections</span><br><span class="line">db.product.insert({<span class="string">'title'</span>: <span class="string">'aaa'</span>})</span><br><span class="line">db.product.drop() <span class="comment"># 删除集合</span></span><br><span class="line">db.dropDatabase() <span class="comment"># 删除数据库</span></span><br><span class="line">db.createCollection(<span class="string">"runoob"</span>)</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="使用SQL命令强迫关闭mongo服务"><a href="#使用SQL命令强迫关闭mongo服务" class="headerlink" title="使用SQL命令强迫关闭mongo服务"></a>使用SQL命令强迫关闭mongo服务</h2><figure class="highlight stata"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> admin</span><br><span class="line"><span class="keyword">db</span>.shutdownServer()</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="创建管理员"><a href="#创建管理员" class="headerlink" title="创建管理员:"></a>创建管理员:</h2><figure class="highlight nsis"><table><tbody><tr><td class="code"><pre><span class="line">use <span class="literal">admin</span></span><br><span class="line"><span class="literal">show</span> users</span><br><span class="line">db.createUser({<span class="literal">user</span>:<span class="string">"root"</span>,pwd:<span class="string">"123456"</span>,roles:[<span class="string">"root"</span>]}) <span class="comment"># 添加管理员</span></span><br><span class="line"></span><br><span class="line">db.dropUser(<span class="string">'grade'</span>) <span class="comment"># 删除用户</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="指定数据库创建用户"><a href="#指定数据库创建用户" class="headerlink" title="指定数据库创建用户"></a>指定数据库创建用户</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">use grade</span><br><span class="line">db.createUser({user:<span class="string">"gradeAdmin"</span>,<span class="built_in">pwd</span>:<span class="string">"123456"</span>,roles:[{role: <span class="string">'dbOwner'</span>,db: <span class="string">'grade'</span>}]})</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="Mongodb数据库角色"><a href="#Mongodb数据库角色" class="headerlink" title="Mongodb数据库角色"></a>Mongodb数据库角色</h2><ol>
-<li>数据库用户角色:</li>
-</ol>
-<p>read、 readWrite</p>
-<ol start="2">
-<li>数据库管理角色:</li>
-</ol>
-<p> dbAdmin、 dbOwner、 userAdmin</p>
-<ol start="3">
-<li>集群管理角色:</li>
-</ol>
-<p>clusterAdmin, clusterManager, clusterMonitor, hostManager</p>
-<ol start="4">
-<li>备份恢复角色:</li>
-</ol>
-<p>backup、 restore;</p>
-<ol start="5">
-<li>所有数据库角色:</li>
-</ol>
-<p>readAnyDatabase, readWriteAnyDatabase、 userAdminAnyDatabase, dbAdminAnyDatabase</p>
-<ol start="6">
-<li>超级用户角色:</li>
-</ol>
-<p>root</p>
-<p><strong>开启认证之后连接数据库：</strong></p>
-<figure class="highlight 1c"><table><tbody><tr><td class="code"><pre><span class="line">use admin</span><br><span class="line">db.auth('root','<span class="number">123456</span>')</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="nodejs连接数据库"><a href="#nodejs连接数据库" class="headerlink" title="nodejs连接数据库"></a>nodejs连接数据库</h2><h3 id="通过client对象连接到MongoDB"><a href="#通过client对象连接到MongoDB" class="headerlink" title="通过client对象连接到MongoDB"></a>通过client对象连接到MongoDB</h3><p>通过实例化一个<code>MongoClient</code>对象连接<code>MongoDB</code>数据库是最常用也是最佳的方式。</p>
-<p>创建MongoClient对象实例的语法：</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title class_">MongoClient</span>( server, options );</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li><p>server : 一个serverd对象；</p>
-</li>
-<li><p>options : 数据库连接选项；</p>
-</li>
-</ul>
-<h3 id="通过一个连接字符串连接到MongoDB"><a href="#通过一个连接字符串连接到MongoDB" class="headerlink" title="通过一个连接字符串连接到MongoDB"></a>通过一个连接字符串连接到MongoDB</h3><p>调用<code>MongoClient</code>类的<code>connect()</code>方法</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="title class_">MongoClient</span>.<span class="title function_">connect</span>(connString, options, callback)</span><br></pre></td></tr></tbody></table></figure>
-
-<p><code>connString：mongodb://username:password@host:port/database?opations</code></p>
-<h2 id="nosqlbooster连接mongodb"><a href="#nosqlbooster连接mongodb" class="headerlink" title="nosqlbooster连接mongodb"></a>nosqlbooster连接mongodb</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic1.imgdb.cn/item/6360951416f2c2beb1c60541.jpg"></p>
-<h1 id="linux-安装mongodb，配置以及使用"><a href="#linux-安装mongodb，配置以及使用" class="headerlink" title="linux 安装mongodb，配置以及使用"></a>linux 安装mongodb，配置以及使用</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>官网下载<code>tar</code>包，上传到服务器目录: <code>/usr/local/mongodb</code><br>解压，<code>tar -zxvf  mongodb-linux-x86_64-xxx</code> 并重命名</p>
-<h2 id="创建mongodb数据存储文件和日志文件"><a href="#创建mongodb数据存储文件和日志文件" class="headerlink" title="创建mongodb数据存储文件和日志文件"></a>创建mongodb数据存储文件和日志文件</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/local/mongodb/</span><br><span class="line"><span class="built_in">mkdir</span> data</span><br><span class="line"><span class="built_in">mkdir</span> logs</span><br><span class="line"><span class="built_in">cd</span> ./logs</span><br><span class="line"><span class="built_in">touch</span> mongodb.log</span><br><span class="line"><span class="built_in">cd</span> ../</span><br><span class="line"><span class="built_in">mkdir</span> etc</span><br><span class="line"><span class="built_in">cd</span> etc</span><br><span class="line"><span class="built_in">touch</span> mongodb.conf</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="mongodb-conf配置文件："><a href="#mongodb-conf配置文件：" class="headerlink" title="mongodb.conf配置文件："></a>mongodb.conf配置文件：</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#数据库路径</span></span><br><span class="line">dbpath=/usr/local/mongodb/data</span><br><span class="line"><span class="comment">#日志输出文件路径</span></span><br><span class="line">logpath=/usr/local/mongodb/logs/mongodb.log</span><br><span class="line"><span class="comment">#错误日志采用追加模式</span></span><br><span class="line">logappend=<span class="literal">true</span></span><br><span class="line"><span class="comment">#启用日志文件，默认启用</span></span><br><span class="line">journal=<span class="literal">true</span></span><br><span class="line"><span class="comment">#这个选项可以过滤掉一些无用的日志信息，若需要调试使用请设置为false</span></span><br><span class="line">quiet=<span class="literal">true</span></span><br><span class="line"><span class="comment">#端口号 默认为27017</span></span><br><span class="line">port=27017</span><br><span class="line"><span class="comment">#允许远程访问</span></span><br><span class="line">bind_ip=0.0.0.0</span><br><span class="line"><span class="comment">#开启子进程</span></span><br><span class="line">fork=<span class="literal">true</span></span><br><span class="line"><span class="comment">#开启认证，必选先添加用户，先不开启（不用验证账号密码）</span></span><br><span class="line"><span class="comment">#auth=true</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="配置环境变量-1"><a href="#配置环境变量-1" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><ol>
-<li><p><code>vi /etc/profile</code></p>
-</li>
-<li><p>写入： <code>export PATH=/usr/local/mongodb/bin:$PATH</code><br>保存退出</p>
-</li>
-<li><p>执行 <code>source /etc/profile</code></p>
-</li>
-</ol>
-<h2 id="启动mongodb服务"><a href="#启动mongodb服务" class="headerlink" title="启动mongodb服务"></a>启动mongodb服务</h2><ol>
-<li>方式一</li>
-</ol>
-<p>bin目录下执行：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./mongod --config /usr/local/mongodb/etc/mongodb.conf</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>方式二</li>
-</ol>
-<p>把上面的命令写成脚本文件，我把它放到 <code>~/restartMongo</code> 中，如下：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line">vim restartMongo</span><br><span class="line"></span><br><span class="line"><span class="comment">#写入：</span></span><br><span class="line">mongod --config /usr/local/mongodb/etc/mongodb.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存退出</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行脚本启动</span></span><br><span class="line">./restartMongo</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="查看进程"><a href="#查看进程" class="headerlink" title="查看进程"></a>查看进程</h2><p><code>mongodb</code>默认端口号<code>27017</code></p>
-<p>执行命令查看：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">netstat -ltunp</span><br></pre></td></tr></tbody></table></figure>
-<p>或者使用如下命令</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">netstat -lanp | grep <span class="string">"27017"</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>启动之后就可以连接<code>mongo server</code>了</p>
-<h2 id="操作mongo数据库"><a href="#操作mongo数据库" class="headerlink" title="操作mongo数据库"></a>操作mongo数据库</h2><p><code>mongo</code> (或者指定ip:port： <code>mongo ip:port</code>)</p>
-<h2 id="admin数据库添加用户、安全认证"><a href="#admin数据库添加用户、安全认证" class="headerlink" title="admin数据库添加用户、安全认证"></a>admin数据库添加用户、安全认证</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">use admin</span><br><span class="line">show <span class="built_in">users</span></span><br><span class="line">db.createUser({user:<span class="string">"root"</span>,<span class="built_in">pwd</span>:<span class="string">"123456"</span>,roles:[{role:<span class="string">"root"</span>,db:<span class="string">"admin"</span>}]})</span><br><span class="line">show <span class="built_in">users</span></span><br><span class="line">关闭mongo server</span><br><span class="line">db.shutdownServer()</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="启用安全认证"><a href="#启用安全认证" class="headerlink" title="启用安全认证"></a>启用安全认证</h2><ol>
-<li>修改<code>etc/mongodb.conf</code></li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#开启认证，必选先添加用户</span></span><br><span class="line">auth=<span class="literal">true</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>重新开启<code>mongo server</code></li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">mongod --config /usr/local/mongodb/etc/mongodb.conf</span><br></pre></td></tr></tbody></table></figure>
-
-<p>此时<code>show dbs</code>查看不到任何数据库</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">use admin</span><br><span class="line">db.auth(<span class="string">'root'</span>, <span class="string">'123456'</span>) <span class="comment"># 输出1标记访问数据库成功</span></span><br><span class="line">show dbs</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="客户端链接"><a href="#客户端链接" class="headerlink" title="客户端链接"></a>客户端链接</h2><p>开放防火墙端口号，不再赘述。</p>
-<h2 id="开机启动"><a href="#开机启动" class="headerlink" title="开机启动"></a>开机启动</h2><p>配置开机启动脚本文件： <code>/etc/rc.d/init.d/mongod</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="function"><span class="title">start</span></span>() {</span><br><span class="line">/usr/local/mongodb/bin/mongod --config /usr/local/mongodb/etc/mongodb.conf</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">stop</span></span>() {</span><br><span class="line">/usr/local/mongodb/bin/mongod --config /usr/local/mongodb/etc/mongodb.conf --shutdown</span><br><span class="line">}</span><br><span class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span></span><br><span class="line">start)</span><br><span class="line">start</span><br><span class="line">;;</span><br><span class="line"></span><br><span class="line">stop)</span><br><span class="line">stop</span><br><span class="line">;;</span><br><span class="line"></span><br><span class="line">restart)</span><br><span class="line">stop</span><br><span class="line">start</span><br><span class="line">;;</span><br><span class="line">*)</span><br><span class="line"><span class="built_in">echo</span></span><br><span class="line">$<span class="string">"Usage: <span class="variable">$0</span> {start|stop|restart}"</span></span><br><span class="line"><span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端开发，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚。本号主要致力于分享个人经验总结，希望可以给一小部分人一些微小帮助。</p>
-<p>希望能和大家一起努力营造一个良好的学习氛围，为了个人和家庭、为了我国的互联网物联网技术、数字化转型、数字经济发展做一点点贡献。数风流人物还看中国、看今朝、看你我。</p>
-</body></html>]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>MongoDB</tag>
       </tags>
   </entry>
   <entry>
@@ -3147,6 +3147,56 @@
       </tags>
   </entry>
   <entry>
+    <title>.env.[mode]文件中如何添加注释？</title>
+    <url>/posts/2584380968.html</url>
+    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>Vue-Cli</code> 允许我们在项目根目录创建<code>.env.[mode]</code>文件来设置一些打包编译的启动参数，通过执行脚本的时候加<code>mode</code>参数，指定不同环境需要加载的配置文件</p>
+<p>形如： <code>.env.prod</code></p>
+<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>怎么在 <code>.env.prod</code> 文件中添加注释呢？</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这要看<code>vue</code>是怎么解析 <code>.env.prod</code> 文件的</p>
+<p>通过启动脚本参数 <code>--mode prod</code>，一路找到了处理 <code>.env.prod</code> 文件的逻辑，让我们一块看下</p>
+<p><code>path：node_modules\@vue\cli-service\lib\Service.js</code></p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> dotenv = <span class="built_in">require</span>(<span class="string">'dotenv'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">loadEnv (mode) {</span><br><span class="line">    <span class="keyword">const</span> logger = <span class="title function_">debug</span>(<span class="string">'vue:env'</span>)</span><br><span class="line">    <span class="keyword">const</span> basePath = path.<span class="title function_">resolve</span>(<span class="variable language_">this</span>.<span class="property">context</span>, <span class="string">`.env<span class="subst">${mode ? <span class="string">`.<span class="subst">${mode}</span>`</span> : <span class="string">``</span>}</span>`</span>)</span><br><span class="line">    <span class="keyword">const</span> localPath = <span class="string">`<span class="subst">${basePath}</span>.local`</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="title function_">load</span> = envPath =&gt; {</span><br><span class="line">      <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">const</span> env = dotenv.<span class="title function_">config</span>({ <span class="attr">path</span>: envPath, <span class="attr">debug</span>: process.<span class="property">env</span>.<span class="property">DEBUG</span> })</span><br><span class="line">        <span class="title function_">dotenvExpand</span>(env)</span><br><span class="line">        <span class="title function_">logger</span>(envPath, env)</span><br><span class="line">      } <span class="keyword">catch</span> (err) {</span><br><span class="line">        <span class="comment">// only ignore error if file is not found</span></span><br><span class="line">        <span class="keyword">if</span> (err.<span class="title function_">toString</span>().<span class="title function_">indexOf</span>(<span class="string">'ENOENT'</span>) &lt; <span class="number">0</span>) {</span><br><span class="line">          <span class="title function_">error</span>(err)</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="title function_">load</span>(localPath)</span><br><span class="line">    <span class="title function_">load</span>(basePath)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// by default, NODE_ENV and BABEL_ENV are set to "development" unless mode</span></span><br><span class="line">    <span class="comment">// is production or test. However the value in .env files will take higher</span></span><br><span class="line">    <span class="comment">// priority.</span></span><br><span class="line">    <span class="keyword">if</span> (mode) {</span><br><span class="line">      <span class="comment">// always set NODE_ENV during tests</span></span><br><span class="line">      <span class="comment">// as that is necessary for tests to not be affected by each other</span></span><br><span class="line">      <span class="keyword">const</span> shouldForceDefaultEnv = (</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST</span> &amp;&amp;</span><br><span class="line">        !process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST_TESTING_ENV</span></span><br><span class="line">      )</span><br><span class="line">      <span class="keyword">const</span> defaultNodeEnv = (mode === <span class="string">'production'</span> || mode === <span class="string">'test'</span>)</span><br><span class="line">        ? mode</span><br><span class="line">        : <span class="string">'development'</span></span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">NODE_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">NODE_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br></pre></td></tr></tbody></table></figure>
+
+<p>从上面的代码，可以得知，<code>vue</code>使用<code>dotenv</code>解析<code> .env.prod</code> 文件，并将环境变量从 <code>.env[mode]</code> 文件中加载到 <code>process.env</code> 环境变量中</p>
+<h2 id="解决（dotenv）"><a href="#解决（dotenv）" class="headerlink" title="解决（dotenv）"></a>解决（dotenv）</h2><p><code>dotenv</code>插件已经被 <code>Vue-Cli</code> 集成了</p>
+<p><a href="https://github.com/motdotla/dotenv#rules">GitHub地址</a></p>
+<p><code>README.md</code> 中有这么一段话：</p>
+<ul>
+<li>“# marks the beginning of a comment (unless when the value is wrapped in quotes)”</li>
+</ul>
+<p>这就是我们要找的，在<code>.env.[mode]</code> 文件中，可以使用 <code>#</code> 进行注释</p>
+<h3 id="使用测试"><a href="#使用测试" class="headerlink" title="使用测试"></a>使用测试</h3><ol>
+<li><code>path: .env.prod</code> 参数配置</li>
+</ol>
+<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="comment"># VUE_APP_PATH='/pc/'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li><code>package.json</code> 文件脚本命令配置<code>--mode</code>参数</li>
+</ol>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: {</span><br><span class="line">    <span class="string">"build"</span>: <span class="string">"vue-cli-service build --mode prod"</span>,</span><br><span class="line">  },</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>执行 <code>npm run build</code> 命令，输出如下：</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">NODE_ENV=== production</span><br><span class="line">VUE_APP_PATH=== ./</span><br></pre></td></tr></tbody></table></figure>
+
+<p>本文到此为止，要想了解更多<code>dotenv</code>请自行探索，感谢观看😉</p>
+<hr>
+<p><img data-src="/images/base/loading03.svg" data-original="https://img-blog.csdnimg.cn/img_convert/bd14318dfe358078af5f56cdf6895446.gif"></p>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker常用命令——排错很有帮助😏</title>
     <url>/posts/1627929391.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -3237,56 +3287,6 @@
       </categories>
       <tags>
         <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>.env.[mode]文件中如何添加注释？</title>
-    <url>/posts/2584380968.html</url>
-    <content><![CDATA[<html><head></head><body><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><code>Vue-Cli</code> 允许我们在项目根目录创建<code>.env.[mode]</code>文件来设置一些打包编译的启动参数，通过执行脚本的时候加<code>mode</code>参数，指定不同环境需要加载的配置文件</p>
-<p>形如： <code>.env.prod</code></p>
-<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>怎么在 <code>.env.prod</code> 文件中添加注释呢？</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>这要看<code>vue</code>是怎么解析 <code>.env.prod</code> 文件的</p>
-<p>通过启动脚本参数 <code>--mode prod</code>，一路找到了处理 <code>.env.prod</code> 文件的逻辑，让我们一块看下</p>
-<p><code>path：node_modules\@vue\cli-service\lib\Service.js</code></p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> dotenv = <span class="built_in">require</span>(<span class="string">'dotenv'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">loadEnv (mode) {</span><br><span class="line">    <span class="keyword">const</span> logger = <span class="title function_">debug</span>(<span class="string">'vue:env'</span>)</span><br><span class="line">    <span class="keyword">const</span> basePath = path.<span class="title function_">resolve</span>(<span class="variable language_">this</span>.<span class="property">context</span>, <span class="string">`.env<span class="subst">${mode ? <span class="string">`.<span class="subst">${mode}</span>`</span> : <span class="string">``</span>}</span>`</span>)</span><br><span class="line">    <span class="keyword">const</span> localPath = <span class="string">`<span class="subst">${basePath}</span>.local`</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="title function_">load</span> = envPath =&gt; {</span><br><span class="line">      <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">const</span> env = dotenv.<span class="title function_">config</span>({ <span class="attr">path</span>: envPath, <span class="attr">debug</span>: process.<span class="property">env</span>.<span class="property">DEBUG</span> })</span><br><span class="line">        <span class="title function_">dotenvExpand</span>(env)</span><br><span class="line">        <span class="title function_">logger</span>(envPath, env)</span><br><span class="line">      } <span class="keyword">catch</span> (err) {</span><br><span class="line">        <span class="comment">// only ignore error if file is not found</span></span><br><span class="line">        <span class="keyword">if</span> (err.<span class="title function_">toString</span>().<span class="title function_">indexOf</span>(<span class="string">'ENOENT'</span>) &lt; <span class="number">0</span>) {</span><br><span class="line">          <span class="title function_">error</span>(err)</span><br><span class="line">        }</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="title function_">load</span>(localPath)</span><br><span class="line">    <span class="title function_">load</span>(basePath)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// by default, NODE_ENV and BABEL_ENV are set to "development" unless mode</span></span><br><span class="line">    <span class="comment">// is production or test. However the value in .env files will take higher</span></span><br><span class="line">    <span class="comment">// priority.</span></span><br><span class="line">    <span class="keyword">if</span> (mode) {</span><br><span class="line">      <span class="comment">// always set NODE_ENV during tests</span></span><br><span class="line">      <span class="comment">// as that is necessary for tests to not be affected by each other</span></span><br><span class="line">      <span class="keyword">const</span> shouldForceDefaultEnv = (</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST</span> &amp;&amp;</span><br><span class="line">        !process.<span class="property">env</span>.<span class="property">VUE_CLI_TEST_TESTING_ENV</span></span><br><span class="line">      )</span><br><span class="line">      <span class="keyword">const</span> defaultNodeEnv = (mode === <span class="string">'production'</span> || mode === <span class="string">'test'</span>)</span><br><span class="line">        ? mode</span><br><span class="line">        : <span class="string">'development'</span></span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">NODE_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">NODE_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">if</span> (shouldForceDefaultEnv || process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> == <span class="literal">null</span>) {</span><br><span class="line">        process.<span class="property">env</span>.<span class="property">BABEL_ENV</span> = defaultNodeEnv</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br></pre></td></tr></tbody></table></figure>
-
-<p>从上面的代码，可以得知，<code>vue</code>使用<code>dotenv</code>解析<code> .env.prod</code> 文件，并将环境变量从 <code>.env[mode]</code> 文件中加载到 <code>process.env</code> 环境变量中</p>
-<h2 id="解决（dotenv）"><a href="#解决（dotenv）" class="headerlink" title="解决（dotenv）"></a>解决（dotenv）</h2><p><code>dotenv</code>插件已经被 <code>Vue-Cli</code> 集成了</p>
-<p><a href="https://github.com/motdotla/dotenv#rules">GitHub地址</a></p>
-<p><code>README.md</code> 中有这么一段话：</p>
-<ul>
-<li>“# marks the beginning of a comment (unless when the value is wrapped in quotes)”</li>
-</ul>
-<p>这就是我们要找的，在<code>.env.[mode]</code> 文件中，可以使用 <code>#</code> 进行注释</p>
-<h3 id="使用测试"><a href="#使用测试" class="headerlink" title="使用测试"></a>使用测试</h3><ol>
-<li><code>path: .env.prod</code> 参数配置</li>
-</ol>
-<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">NODE_ENV</span>=<span class="string">'production'</span></span><br><span class="line"><span class="comment"># VUE_APP_PATH='/pc/'</span></span><br><span class="line"><span class="attr">VUE_APP_PATH</span>=<span class="string">'./'</span></span><br><span class="line"><span class="attr">VUE_APP_RUNTIME</span>=<span class="string">'prod'</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li><code>package.json</code> 文件脚本命令配置<code>--mode</code>参数</li>
-</ol>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: {</span><br><span class="line">    <span class="string">"build"</span>: <span class="string">"vue-cli-service build --mode prod"</span>,</span><br><span class="line">  },</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="3">
-<li>执行 <code>npm run build</code> 命令，输出如下：</li>
-</ol>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">NODE_ENV=== production</span><br><span class="line">VUE_APP_PATH=== ./</span><br></pre></td></tr></tbody></table></figure>
-
-<p>本文到此为止，要想了解更多<code>dotenv</code>请自行探索，感谢观看😉</p>
-<hr>
-<p><img data-src="/images/base/loading03.svg" data-original="https://img-blog.csdnimg.cn/img_convert/bd14318dfe358078af5f56cdf6895446.gif"></p>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<p>我排斥“新人迷茫，老人看戏”的现象，希望能和大家一起努力破局。营造一个良好的技术氛围，为了个人、为了我国的数字化转型、互联网物联网技术、数字经济发展做一点点贡献。<strong>数风流人物还看中国、看今朝、看你我。</strong></p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>vue</tag>
       </tags>
   </entry>
   <entry>
@@ -3419,6 +3419,41 @@
       </tags>
   </entry>
   <entry>
+    <title>nginx配置文件</title>
+    <url>/posts/220664946.html</url>
+    <content><![CDATA[<html><head></head><body><p>云服务器到期了，备份一下<code>nginx</code>的配置文件😊</p>
+<figure class="highlight nginx"><table><tbody><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#user  nobody;</span></span><br><span class="line"><span class="comment"># 启动进程，通常设置成和cpu数量相等</span></span><br><span class="line"><span class="attribute">worker_processes</span>  <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">#error_log  logs/error.log;</span></span><br><span class="line"><span class="comment">#error_log  logs/error.log  notice;</span></span><br><span class="line"><span class="comment">#error_log  logs/error.log  info;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#pid        logs/nginx.pid;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 起到 ulimit -a 的作用</span></span><br><span class="line"><span class="attribute">worker_rlimit_nofile</span> <span class="number">65535</span>;</span><br><span class="line"></span><br><span class="line"><span class="section">events</span> {</span><br><span class="line">	<span class="comment"># epoll 是多路复用IO(I/O Multiplexing)中的一种方式</span></span><br><span class="line">	<span class="comment"># use epoll;</span></span><br><span class="line">	<span class="comment"># 单个worker processes 进程最大并发连接数，worker_connections小于work_rlimit_nofile</span></span><br><span class="line">    <span class="attribute">worker_connections</span>  <span class="number">1024</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="section">http</span> {</span><br><span class="line">    <span class="attribute">include</span>       mime.types;</span><br><span class="line">    <span class="attribute">default_type</span>  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '</span></span><br><span class="line">    <span class="comment">#                  '$status $body_bytes_sent "$http_referer" '</span></span><br><span class="line">    <span class="comment">#                  '"$http_user_agent" "$http_x_forwarded_for"';</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#access_log  logs/access.log  main;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># 关闭在错误页面中nginx的版本信息</span></span><br><span class="line">  <span class="attribute">server_tokens</span>   <span class="literal">off</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment"># 反向代理设置为on, fastdfs设置为off</span></span><br><span class="line">  <span class="attribute">sendfile</span>        <span class="literal">on</span>;</span><br><span class="line">  <span class="comment"># 在一个数据包里发送所有头文件</span></span><br><span class="line">  <span class="attribute">tcp_nopush</span>     <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">   <span class="attribute">keepalive_timeout</span>  <span class="number">65</span>;</span><br><span class="line">	 <span class="attribute">tcp_nodelay</span>        <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">gzip</span>  <span class="literal">on</span>;</span><br><span class="line">	<span class="attribute">gzip_static</span> <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="attribute">gzip_min_length</span> <span class="number">1k</span>;</span><br><span class="line">	<span class="attribute">gzip_types</span> text/plain application/javascript application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png;</span><br><span class="line">	<span class="attribute">gzip_disable</span> <span class="string">"MSIE [1-6]."</span>;</span><br><span class="line">	<span class="comment"># 打开缓存的同时也指定了缓存最大数目，以及缓存的时间。我们可以设置一个相对高的最大时间，这样我们可以在它们不活动超过20秒后清除掉。</span></span><br><span class="line">	<span class="attribute">open_file_cache</span> max=<span class="number">65535</span> inactive=<span class="number">60s</span>;</span><br><span class="line">	<span class="comment"># 在open_file_cache中指定检测正确信息的间隔时间。</span></span><br><span class="line">	<span class="attribute">open_file_cache_valid</span> <span class="number">80s</span>;</span><br><span class="line">	<span class="comment"># 定义了open_file_cache中指令参数不活动时间期间里最小的文件数。</span></span><br><span class="line">	<span class="attribute">open_file_cache_min_uses</span> <span class="number">1</span>;</span><br><span class="line">	<span class="comment"># 指定了当搜索一个文件时是否缓存错误信息，也包括再次给配置中添加文件。我们也包括了服务器模缺，这些是在不同文件中定义的，如果你的服务模块不再这些位置，你就得修正这一行来指定正确的位置</span></span><br><span class="line">	<span class="attribute">open_file_cache_errors</span> <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 设置请求头缓冲</span></span><br><span class="line">	<span class="comment"># 客户端请求头部的缓冲区大小，这个可以根据你的系统分页大小来设置，一般一个请求头的大小不会超过1x，不过由于一般系统分页都要大于1k，所以这里设置分页大小。分页大小用命令 getconf PAGESIZE 获得</span></span><br><span class="line">	<span class="attribute">client_header_buffer_size</span> <span class="number">4096</span>;</span><br><span class="line">	<span class="attribute">client_body_buffer_size</span> <span class="number">512k</span>;</span><br><span class="line">	<span class="comment"># 缓冲区代理缓冲用户端请求的最大字节数,如果请求大于指定的大小，则NGINX发回HTTP 413（Raquest Entity too large）错误.</span></span><br><span class="line">	<span class="attribute">client_max_body_size</span> <span class="number">128m</span>;</span><br><span class="line">	<span class="attribute">large_client_header_buffers</span> <span class="number">4</span> <span class="number">128k</span>;</span><br><span class="line">	<span class="attribute">client_header_timeout</span> <span class="number">15</span>;</span><br><span class="line">	<span class="attribute">client_body_timeout</span> <span class="number">15</span>;</span><br><span class="line">	<span class="comment"># 指定客户端的响应超时时间</span></span><br><span class="line">	<span class="attribute">send_timeout</span> <span class="number">30</span>;</span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> {</span><br><span class="line">        <span class="attribute">listen</span>       <span class="number">18600</span>;</span><br><span class="line">        <span class="attribute">server_name</span>  <span class="number">0.0.0.0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">#charset koi8-r;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#access_log  logs/host.access.log  main;</span></span><br><span class="line"></span><br><span class="line">        <span class="section">location</span> / {</span><br><span class="line">            <span class="attribute">root</span>   D:\mine-project\pc-web\dist;</span><br><span class="line">            <span class="attribute">index</span>  index.html index.htm;</span><br><span class="line">			<span class="attribute">try_files</span>  <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.html;</span><br><span class="line">			<span class="comment"># add_header Cache-Control no-cache;</span></span><br><span class="line">			<span class="comment"># add_header Content-Encoding gzip;</span></span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">		<span class="section">location</span> /pcApi/ {</span><br><span class="line">			<span class="attribute">rewrite</span><span class="regexp"> ^/pcApi/(.*)$</span> /<span class="variable">$1</span> <span class="literal">break</span>;</span><br><span class="line">			<span class="attribute">proxy_pass</span> http://172.15.37.225:3000;</span><br><span class="line">		}</span><br><span class="line"></span><br><span class="line">        <span class="comment">#error_page  404              /404.html;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># redirect server error pages to the static page /50x.html</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="attribute">error_page</span>   <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span>  /50x.html;</span><br><span class="line">        <span class="section">location</span> = /50x.html {</span><br><span class="line">            <span class="attribute">root</span>   html;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment"># proxy the PHP scripts to Apache listening on 127.0.0.1:80</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment">#location ~ \.php$ {</span></span><br><span class="line">        <span class="comment">#    proxy_pass   http://127.0.0.1;</span></span><br><span class="line">        <span class="comment">#}</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment">#location ~ \.php$ {</span></span><br><span class="line">        <span class="comment">#    root           html;</span></span><br><span class="line">        <span class="comment">#    fastcgi_pass   127.0.0.1:9000;</span></span><br><span class="line">        <span class="comment">#    fastcgi_index  index.php;</span></span><br><span class="line">        <span class="comment">#    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</span></span><br><span class="line">        <span class="comment">#    include        fastcgi_params;</span></span><br><span class="line">        <span class="comment">#}</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># deny access to .htaccess files, if Apache's document root</span></span><br><span class="line">        <span class="comment"># concurs with nginx's one</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment">#location ~ /\.ht {</span></span><br><span class="line">        <span class="comment">#    deny  all;</span></span><br><span class="line">        <span class="comment">#}</span></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">	<span class="comment"># server {</span></span><br><span class="line">	<span class="comment">#	listen 80;</span></span><br><span class="line">	<span class="comment">#	server_name 123.123.123.123;</span></span><br><span class="line">	<span class="comment">#	server_name my.example.com t.example.com;</span></span><br><span class="line">	<span class="comment">#	rewrite ^/(.*) https://${host}:1900/$1 redirect;</span></span><br><span class="line">	<span class="comment">#}</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"># another virtual host using mix of IP-, name-, and port-based configuration</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#server {</span></span><br><span class="line">    <span class="comment">#    listen       8000;</span></span><br><span class="line">    <span class="comment">#    listen       somename:8080;</span></span><br><span class="line">    <span class="comment">#    server_name  somename  alias  another.alias;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    location / {</span></span><br><span class="line">    <span class="comment">#        root   html;</span></span><br><span class="line">    <span class="comment">#        index  index.html index.htm;</span></span><br><span class="line">    <span class="comment">#    }</span></span><br><span class="line">    <span class="comment">#}</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"># HTTPS server</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment">#server {</span></span><br><span class="line">    <span class="comment">#    listen       443 ssl;</span></span><br><span class="line">    <span class="comment">#    server_name  localhost;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    ssl_certificate      cert.pem;</span></span><br><span class="line">    <span class="comment">#    ssl_certificate_key  cert.key;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    ssl_session_cache    shared:SSL:1m;</span></span><br><span class="line">    <span class="comment">#    ssl_session_timeout  5m;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    ssl_ciphers  HIGH:!aNULL:!MD5;</span></span><br><span class="line">    <span class="comment">#    ssl_prefer_server_ciphers  on;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    location / {</span></span><br><span class="line">    <span class="comment">#        root   html;</span></span><br><span class="line">    <span class="comment">#        index  index.html index.htm;</span></span><br><span class="line">    <span class="comment">#    }</span></span><br><span class="line">    <span class="comment">#}</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#server {</span></span><br><span class="line">      <span class="comment">#    listen        80;</span></span><br><span class="line">      <span class="comment">#    server_name   www.i-xiao.space;</span></span><br><span class="line">      <span class="comment">#    #server_name   118.190.59.105;</span></span><br><span class="line">      <span class="comment">#    rewrite       ^ https://$server_name$request_uri permanent; # http -&gt; https 80端口转发443端口</span></span><br><span class="line">      <span class="comment">#    # rewrite       ^ https://$server_name:8090 permanent;</span></span><br><span class="line">      <span class="comment">#    #charset koi8-r;</span></span><br><span class="line">      <span class="comment">#    add_header Cache-Control no-cache;</span></span><br><span class="line">    <span class="comment">#}</span></span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> {</span><br><span class="line">       <span class="comment">#监听443端口</span></span><br><span class="line">       <span class="attribute">listen</span>               <span class="number">443</span>;</span><br><span class="line">       <span class="comment">#你的域名</span></span><br><span class="line">       <span class="comment">#server_name          i-xiao.space;</span></span><br><span class="line">       <span class="attribute">ssl</span>                  <span class="literal">on</span>;</span><br><span class="line">       <span class="attribute">root</span>                 /usr/local/nginx/html;</span><br><span class="line">       <span class="comment">#index index.html index.htm;</span></span><br><span class="line">       <span class="attribute">ssl_certificate</span>      /usr/local/nginx/cert/i-xiao.space.pem;</span><br><span class="line">       <span class="attribute">ssl_certificate_key</span>  /usr/local/nginx/cert/i-xiao.space.key;</span><br><span class="line">       <span class="attribute">ssl_session_timeout</span>  <span class="number">5m</span>;</span><br><span class="line">       <span class="attribute">ssl_ciphers</span>          ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;</span><br><span class="line">       <span class="attribute">ssl_protocols</span>        TLSv1 TLSv1.<span class="number">1</span> TLSv1.<span class="number">2</span>;</span><br><span class="line">       <span class="attribute">ssl_prefer_server_ciphers</span> <span class="literal">on</span>;</span><br><span class="line">       <span class="section">location</span> / {</span><br><span class="line">           <span class="attribute">index</span> index.html index.htm;</span><br><span class="line">	       <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.html;</span><br><span class="line"></span><br><span class="line">           <span class="comment"># To allow POST on static pages 允许静态页使用POST方法</span></span><br><span class="line">           <span class="attribute">error_page</span>  <span class="number">405</span> =<span class="number">200</span> <span class="variable">$uri</span>;</span><br><span class="line">       }</span><br><span class="line"></span><br><span class="line">       <span class="comment"># 禁用缓存</span></span><br><span class="line">       <span class="section">location</span> = /index.html {</span><br><span class="line">            <span class="attribute">add_header</span> Cache-Control <span class="string">"no-cache, no-store"</span>;</span><br><span class="line">       }</span><br><span class="line">       <span class="section">location</span> /lily {</span><br><span class="line">             <span class="comment">#alias /usr/local/nginx/html/lily/;#把匹配到的路径重写, 注意要以/结尾</span></span><br><span class="line">             <span class="attribute">root</span> /usr/local/nginx/html; <span class="comment">#在匹配到的路径前面，增加root基础路径配置</span></span><br><span class="line">             <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /lily/index.html; <span class="comment"># 指定特定路径</span></span><br><span class="line">             <span class="attribute">index</span> index.html index.htm;</span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /mimosa {</span><br><span class="line">             <span class="comment">#alias /usr/local/nginx/html/mimosa/;</span></span><br><span class="line">             <span class="attribute">root</span> /usr/local/nginx/html;</span><br><span class="line">             <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /mimosa/index.html;</span><br><span class="line">             <span class="attribute">index</span> index.html index.htm;</span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /pcApi/ {</span><br><span class="line">             <span class="attribute">proxy_pass</span> http://118.190.59.105:3000/;</span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /supervisor/ {</span><br><span class="line">             <span class="attribute">proxy_pass</span> http://118.190.59.105:9001/;</span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /pc/ {</span><br><span class="line">            <span class="attribute">proxy_pass</span> http://118.190.59.105:8090/;</span><br><span class="line">            <span class="comment"># try_files $uri $uri/ /index.html;</span></span><br><span class="line">            <span class="comment"># index index.html index.htm;</span></span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /h5/ {</span><br><span class="line">            <span class="attribute">proxy_pass</span> http://118.190.59.105:8001/;</span><br><span class="line">            <span class="attribute">add_header</span> Cache-Control <span class="literal">no</span>-cache;</span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /student/ {</span><br><span class="line">            <span class="comment"># 暂时不正确访问</span></span><br><span class="line">            <span class="attribute">proxy_pass</span> http://118.190.59.105:3000/;</span><br><span class="line">        }</span><br><span class="line">        <span class="comment"># 静态文件-人脸识别模型文件</span></span><br><span class="line">        <span class="section">location</span> /model-face/ {</span><br><span class="line">            <span class="attribute">root</span> /var/pc-h5/static;</span><br><span class="line">            <span class="attribute">add_header</span> <span class="string">'Access-Control-Allow-Origin'</span> <span class="string">'*'</span>;</span><br><span class="line">            <span class="attribute">add_header</span> <span class="string">'Access-Control-Allow-Credentials'</span> <span class="string">'true'</span>;</span><br><span class="line">            <span class="attribute">add_header</span> <span class="string">'Access-Control-Allow-Methods'</span> <span class="string">'GET, POST, OPTIONS'</span>;</span><br><span class="line">            <span class="attribute">add_header</span> Cache-Control <span class="literal">no</span>-cache;</span><br><span class="line">            <span class="comment"># add_header Content-Encoding gzip;</span></span><br><span class="line">            <span class="comment"># add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';</span></span><br><span class="line">        }</span><br><span class="line">        <span class="section">location</span> /static/ {</span><br><span class="line">            <span class="attribute">root</span> /var/pc-h5;</span><br><span class="line">            <span class="attribute">add_header</span> <span class="string">'Access-Control-Allow-Origin'</span> <span class="string">'*'</span>;</span><br><span class="line">            <span class="attribute">add_header</span> Cache-Control <span class="literal">no</span>-cache;</span><br><span class="line">        }</span><br><span class="line">       <span class="attribute">error_page</span>  <span class="number">404</span>              /<span class="number">404</span>.html;</span><br><span class="line">       <span class="attribute">error_page</span>  <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span>  /50x.html;</span><br><span class="line">       <span class="section">location</span> = /50x.html {</span><br><span class="line">             <span class="attribute">root</span>   html;</span><br><span class="line">       }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+</body></html>]]></content>
+      <categories>
+        <category>nginx</category>
+      </categories>
+      <tags>
+        <tag>nginx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>低代码和数字化</title>
+    <url>/posts/4121106976.html</url>
+    <content><![CDATA[<html><head></head><body><p>读“<a href="https://mp.weixin.qq.com/s/rU0455dOafob-TPkVzaBsA">有头有脸的老板，都开始盯数字化了</a>”有感</p>
+<p>一个转身就是另一番景象。</p>
+<p>存量数据比重占大头了吗？怎么适应呢，钉钉开始收缩边界，余力转化效率。</p>
+<p>我的工作是前端开发，本能的从低代码在我所涉及的前端领域的应用上看待低代码的价值，甚至昨天还在自己的一篇文章中提了一句不看好低代码。现实情况是工作属性和接触面限制了我对低代码的猜想，当看到这篇文章时，忽然想起来前段业务同事在钉钉上使用低代码工具搭建了一个应用程序。低代码平台做出来开放之后，众多的玩家带着他们纷繁的需求往往能够挖掘出巨大的潜在价值。</p>
+<p>低代码和数字化结合才能创造更多的价值，前提是不能把低代码局限于公司内部，开放会注入更多的活力、生命力。低代码平台建设只是起步，要和PaaS关联起来，才可以发挥更大的作用</p>
+<p>生态的归生态，平台的归平台。</p>
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<center>欢迎微信扫码关注 "看见另一种可能"！</center>
+
+<img data-src="/images/base/loading03.svg" data-original="/images/contact/qrcode_wechat.jpg" alt="wechat：看见另一种可能"></body></html>]]></content>
+      <categories>
+        <category>数字化</category>
+      </categories>
+      <tags>
+        <tag>低代码</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>perttier+eslint+husky——代码规范以及commit扫描代码</title>
     <url>/posts/1784044162.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -3473,28 +3508,6 @@
       </categories>
       <tags>
         <tag>代码规范</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>低代码和数字化</title>
-    <url>/posts/4121106976.html</url>
-    <content><![CDATA[<html><head></head><body><p>读“<a href="https://mp.weixin.qq.com/s/rU0455dOafob-TPkVzaBsA">有头有脸的老板，都开始盯数字化了</a>”有感</p>
-<p>一个转身就是另一番景象。</p>
-<p>存量数据比重占大头了吗？怎么适应呢，钉钉开始收缩边界，余力转化效率。</p>
-<p>我的工作是前端开发，本能的从低代码在我所涉及的前端领域的应用上看待低代码的价值，甚至昨天还在自己的一篇文章中提了一句不看好低代码。现实情况是工作属性和接触面限制了我对低代码的猜想，当看到这篇文章时，忽然想起来前段业务同事在钉钉上使用低代码工具搭建了一个应用程序。低代码平台做出来开放之后，众多的玩家带着他们纷繁的需求往往能够挖掘出巨大的潜在价值。</p>
-<p>低代码和数字化结合才能创造更多的价值，前提是不能把低代码局限于公司内部，开放会注入更多的活力、生命力。低代码平台建设只是起步，要和PaaS关联起来，才可以发挥更大的作用</p>
-<p>生态的归生态，平台的归平台。</p>
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<center>欢迎微信扫码关注 "看见另一种可能"！</center>
-
-<img data-src="/images/base/loading03.svg" data-original="/images/contact/qrcode_wechat.jpg" alt="wechat：看见另一种可能"></body></html>]]></content>
-      <categories>
-        <category>数字化</category>
-      </categories>
-      <tags>
-        <tag>低代码</tag>
       </tags>
   </entry>
   <entry>
@@ -4311,6 +4324,25 @@
       </tags>
   </entry>
   <entry>
+    <title>捕获404页面，并重定向页面</title>
+    <url>/posts/3730822077.html</url>
+    <content><![CDATA[<html><head></head><body><p>话不多说，直接上代码：</p>
+<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 捕获404页面，并重定向</span></span><br><span class="line"><span class="keyword">const</span> isRunUrl = <span class="keyword">function</span> (<span class="params">url</span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="keyword">function</span> (<span class="params">resolve, reject</span>) {</span><br><span class="line">    <span class="comment">// 测试链接连通性, 主要检测404错误</span></span><br><span class="line">    <span class="comment">// 由于AJAX通常无法区分404和跨域问题，所以只能用script 或者 link标签，link比script更容易捕获错误</span></span><br><span class="line">    <span class="keyword">var</span> dom = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">'link'</span>);</span><br><span class="line">    dom.<span class="property">href</span> = url;</span><br><span class="line">    dom.<span class="property">rel</span> = <span class="string">'stylesheet'</span>;</span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">appendChild</span>(dom);</span><br><span class="line">    dom.<span class="property">onload</span> = <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">removeChild</span>(dom);</span><br><span class="line">      <span class="title function_">resolve</span>();</span><br><span class="line">    }</span><br><span class="line">    dom.<span class="property">onerror</span> = reject;</span><br><span class="line">  });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="title function_">isRunUrl</span>(<span class="string">"your url"</span>).<span class="title function_">then</span>(</span><br><span class="line">  <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理resolve的代码</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"ok"</span>, data);;</span><br><span class="line">  }, <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理reject的代码，重定向逻辑</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"err"</span>, err);</span><br><span class="line">  }</span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
+<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
+<center>欢迎微信扫码关注 "看见另一种可能"！</center>
+
+<img data-src="/images/base/loading03.svg" data-original="/images/contact/qrcode_wechat.jpg" alt="wechat：看见另一种可能"></body></html>]]></content>
+      <categories>
+        <category>Javascript</category>
+      </categories>
+      <tags>
+        <tag>404</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>常用的SSH，你了解多少？（长文警告）</title>
     <url>/posts/184663689.html</url>
     <content><![CDATA[<html><head></head><body><h1 id="1、SSH工作原理"><a href="#1、SSH工作原理" class="headerlink" title="1、SSH工作原理"></a>1、SSH工作原理</h1><p>从ssh的<strong>加密方式</strong>说开去，看下文👇</p>
@@ -4457,25 +4489,6 @@
       </categories>
       <tags>
         <tag>SSH</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>捕获404页面，并重定向页面</title>
-    <url>/posts/3730822077.html</url>
-    <content><![CDATA[<html><head></head><body><p>话不多说，直接上代码：</p>
-<figure class="highlight js"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">// 捕获404页面，并重定向</span></span><br><span class="line"><span class="keyword">const</span> isRunUrl = <span class="keyword">function</span> (<span class="params">url</span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="keyword">function</span> (<span class="params">resolve, reject</span>) {</span><br><span class="line">    <span class="comment">// 测试链接连通性, 主要检测404错误</span></span><br><span class="line">    <span class="comment">// 由于AJAX通常无法区分404和跨域问题，所以只能用script 或者 link标签，link比script更容易捕获错误</span></span><br><span class="line">    <span class="keyword">var</span> dom = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">'link'</span>);</span><br><span class="line">    dom.<span class="property">href</span> = url;</span><br><span class="line">    dom.<span class="property">rel</span> = <span class="string">'stylesheet'</span>;</span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">appendChild</span>(dom);</span><br><span class="line">    dom.<span class="property">onload</span> = <span class="keyword">function</span> (<span class="params"></span>) {</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">head</span>.<span class="title function_">removeChild</span>(dom);</span><br><span class="line">      <span class="title function_">resolve</span>();</span><br><span class="line">    }</span><br><span class="line">    dom.<span class="property">onerror</span> = reject;</span><br><span class="line">  });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="title function_">isRunUrl</span>(<span class="string">"your url"</span>).<span class="title function_">then</span>(</span><br><span class="line">  <span class="function">(<span class="params">res</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理resolve的代码</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"ok"</span>, data);;</span><br><span class="line">  }, <span class="function">(<span class="params">err</span>) =&gt;</span> {</span><br><span class="line">    <span class="comment">// 处理reject的代码，重定向逻辑</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">"err"</span>, err);</span><br><span class="line">  }</span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<p>我是 <a href="https://blog.i-xiao.space/"><strong>甜点cc</strong></a></p>
-<p>热爱前端，也喜欢专研各种跟本职工作关系不大的技术，技术、产品兴趣广泛且浓厚，等待着一个创业机会。主要致力于分享实用技术干货，希望可以给一小部分人一些微小帮助。</p>
-<center>欢迎微信扫码关注 "看见另一种可能"！</center>
-
-<img data-src="/images/base/loading03.svg" data-original="/images/contact/qrcode_wechat.jpg" alt="wechat：看见另一种可能"></body></html>]]></content>
-      <categories>
-        <category>Javascript</category>
-      </categories>
-      <tags>
-        <tag>404</tag>
       </tags>
   </entry>
   <entry>
