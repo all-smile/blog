@@ -1,9 +1,10 @@
 ---
 title: git代码数据统计
-date: 2022-12-23 16:53:34
 tags: Git
 categories: Git
 description: 统计代码提交量、贡献值等等，方便实用
+abbrlink: 389559366
+date: 2022-12-23 16:53:34
 ---
 ## gitbash 终端执行如下命令
 

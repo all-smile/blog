@@ -242,3 +242,17 @@ leancloud_counter_security:
   app_key: oO7PKRrUJLDX0g8FQ5aSLUJR
   username: # <your username> # Will be asked while deploying if is left blank
   password: # <your password> # Recommmended to be left blank. Will be asked while deploying if is left blank
+
+# 无效
+# 最后一段是需要添加的，主要是用来支持latex的，找了半天，也就这个事情费的少点。后面详述
+## Docs: https://github.com/CHENXCHEN/hexo-renderer-markdown-it-plus
+# markdown_it_plus:
+#     highlight: true
+#     html: true
+#     xhtmlOut: true
+#     breaks: true
+#     langPrefix:
+#     linkify: true
+#     typographer:
+#     quotes: “”‘’
+#     pre_class: highlight
