@@ -1,11 +1,12 @@
 ---
 title: nginx部署多个前端项目
-date: 2023-06-29 10:57:50
 tags:
   - nginx
   - 前端
 categories: nginx
 description: 通过访问不同的子路径部署多个前端项目，并结合`vue-router`的不同路由模式，给出不同的配置。
+abbrlink: 1377411827
+date: 2023-06-29 10:57:50
 ---
 > 前端采用vue框架，主要介绍在同一个`ip+port`下（或域名），通过访问不同的**子路径**部署多个项目
 
