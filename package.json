@@ -1,6 +1,6 @@
 {
   "name": "hexo-site",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "netlify": "git clone https://github.com/next-theme/hexo-theme-next themes/next && hexo generate",
