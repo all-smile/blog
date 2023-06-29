@@ -5,10 +5,13 @@ on:
     branches:
       - master  # default branch
 jobs:
-  pages:
+  pages1:
     runs-on: ubuntu-latest # 定运行所需要的虚拟机环境
     permissions:
       contents: write
+      pages: write
+      id-token: write
+    environment: github-pages
     steps:
       - uses: actions/checkout@v2
         # with:
