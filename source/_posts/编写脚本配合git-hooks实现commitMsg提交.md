@@ -1,11 +1,12 @@
 ---
 title: 编写脚本配合git hooks实现commitMsg提交
-date: 2023-06-07 15:22:00
 tags:
-    - shell
-    - git hooks
+  - shell
+  - git hooks
 categories: Git
 description: 编写脚本实现git提交信息的拼接，主要利用git hooks实现。
+abbrlink: 3797932790
+date: 2023-06-07 15:22:00
 ---
 # 背景
 系统上线流程里，每次发版都要拆单，生成系统变更号，配合 commitlint 实现提交信息必须关联当前版本的系统变更号，当发版结束的时候，这个系统变更号就失效了，再次使用就会报错。

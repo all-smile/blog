@@ -1,9 +1,10 @@
 ---
 title: React Native项目设置路径别名
-date: 2023-05-22 16:29:52
 tags: React Native
 categories: React Native
 description: 设置路径别名让代码引用变得更加简洁
+abbrlink: 984917644
+date: 2023-05-22 16:29:52
 ---
 
 没有设置路径别名之前代码是这样的：

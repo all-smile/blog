@@ -1,9 +1,10 @@
 ---
 title: react-naive工作原理
-date: 2023-05-22 16:31:12
 tags: React Native
 categories: React Native
 description: react-naive工作原理是从react的工作原理衍生出来的，核心是Bridge桥接、vDom。
+abbrlink: 3691909616
+date: 2023-05-22 16:31:12
 ---
 
 react-naive工作原理是从react的工作原理衍生出来的
