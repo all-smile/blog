@@ -4557,80 +4557,6 @@
       </tags>
   </entry>
   <entry>
-    <title>多路由复用页面组件问题</title>
-    <url>/posts/3277520678.html</url>
-    <content><![CDATA[<html><head></head><body><hr>
-<h2 id="theme-channing-cyan"><a href="#theme-channing-cyan" class="headerlink" title="theme: channing-cyan"></a>theme: channing-cyan</h2><p>携手创作，共同成长！这是我参与「掘金日新计划 · 8 月更文挑战」的第20天，<a href="https://juejin.cn/post/7123120819437322247" title="https://juejin.cn/post/7123120819437322247">点击查看活动详情</a></p>
-<blockquote>
-<p>本文围绕 <code>Vue Router</code> 中路由组件复用问题展开</p>
-</blockquote>
-<h2 id="场景复现"><a href="#场景复现" class="headerlink" title="场景复现"></a>场景复现</h2><p>项目中经常会遇到<code>增改查</code>的需求，通常采用不同的路由指向同一个页面组件，以此到达复用页面的功能，但是复用页面存在一些状态问题。</p>
-<p><strong>以下情况均不缓存页面：</strong></p>
-<p>分两种情况，均为动态路由匹配</p>
-<ul>
-<li><p>(1) 路由a: <code>/detail/1</code>， 路由b: <code>/detail/2</code> 。   路由表里匹配<code>/detail/:id</code></p>
-</li>
-<li><p>(2) 路由A: <code>/new-detail/1</code>， 路由B: <code>/edit-detail/1</code> 。 路由表里匹配<code>/new-detail/:id</code>， 和  <code>/edit-detail/:id</code></p>
-</li>
-</ul>
-<p><em>这四个不同的url，注册的是同一个页面组件</em></p>
-<p>在场景（1）中，切换页面，只调用<code>beforeRouteUpdate</code>钩子函数，不调用<code>beforeRouteEnter、mounted</code>等，可以监听到<code>$route</code>，并获取到激活组件里面的数据，不会错乱</p>
-<p>在场景（2）中，切换页面，调用<code>beforeRouteEnter</code>钩子函数，不调用<code>created、mounted</code>等生命周期钩子</p>
-<h2 id="beforeRouteUpdate重用的组件官方解释（指的是动态路由匹配）"><a href="#beforeRouteUpdate重用的组件官方解释（指的是动态路由匹配）" class="headerlink" title="beforeRouteUpdate重用的组件官方解释（指的是动态路由匹配）"></a>beforeRouteUpdate重用的组件官方解释（指的是动态路由匹配）</h2><p>在当前路由改变，但是该组件被复用时调用，举例来说，对于一个带有动态参数的路径 <code>/foo/:id</code>，在 <code>/foo/1</code> 和 <code>/foo/2</code> 之间跳转的时候</p>
-<h2 id="动态路由匹配"><a href="#动态路由匹配" class="headerlink" title="动态路由匹配"></a>动态路由匹配</h2><p>文档请看<a href="https://router.vuejs.org/zh/guide/essentials/dynamic-matching.html">这里</a></p>
-<h3 id="响应路由参数的变化"><a href="#响应路由参数的变化" class="headerlink" title="响应路由参数的变化"></a>响应路由参数的变化</h3><p>当使用路由参数时，例如从 <code>/user/foo</code> 导航到 <code>/user/bar</code>，原来的组件实例会被复用。因为两个路由都渲染同个组件，比起销毁再创建，复用则显得更加高效。不过，这也意味着组件的生命周期钩子不会再被调用。</p>
-<p>复用组件时，想对路由参数的变化作出响应的话，有两种方法</p>
-<ol>
-<li><p><em>watch (监测变化) $route 对象</em></p>
-</li>
-<li><p><em>使用 2.2 中引入的 beforeRouteUpdate 导航守卫</em></p>
-</li>
-</ol>
-<p>使用<code>beforeRouteUpdate</code>的时候，如果路由里面通过<a href="https://router.vuejs.org/zh/guide/essentials/passing-props.html#%E5%B8%83%E5%B0%94%E6%A8%A1%E5%BC%8F">布尔模式</a>：<code>props: true</code> <em>将组件和路由解耦</em>，这个时候会出现<code>props</code>获取错误的情况，比方说从<code>/foo/1</code>页面切换到<code>/foo/2</code>页面的时候，在<code>beforeRouteUpdate</code>获取到的还是失活页面组件的id</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184d5416f2c2beb1de9bfd.png" alt="image.png"></p>
-<blockquote>
-<p><em>在<code>beforeRouteUpdate</code>钩子中，在<code>next</code>回调函数中编写代码并没有执行，仿佛没有调用，但是去掉<code>next()</code>，路由就不会放行，有点奇怪。需要阅读源码实现逻辑…</em></p>
-</blockquote>
-<h2 id="完整的导航解析流程"><a href="#完整的导航解析流程" class="headerlink" title="完整的导航解析流程"></a>完整的导航解析流程</h2><ol>
-<li><p>导航被触发</p>
-</li>
-<li><p>beforeRouteLeave（失活组件里调用） 可以访问组件实例 <code>this</code></p>
-</li>
-<li><p>beforeEach（全局前置钩子）</p>
-</li>
-<li><p>beforeRouteUpdate（如果是重用组件，则调用） 可以访问组件实例 <code>this</code></p>
-</li>
-<li><p>beforeEnter（路由配置里，路由独享的）</p>
-</li>
-<li><p>解析异步路由组件（如果有）</p>
-</li>
-<li><p>beforeRouteEnter（被激活组件里调用）</p>
-</li>
-<li><p>beforeResolve（全局解析守卫）</p>
-</li>
-<li><p>导航被确认</p>
-</li>
-<li><p>afterEach（全局后置钩子）</p>
-</li>
-<li><p>触发 DOM 更新。</p>
-</li>
-<li><p><em>beforeRouteEnter （调用守卫中传给 next 的回调函数，创建好的组件实例会作为回调函数的参数传入。next(vm) =&gt; {}）</em></p>
-</li>
-</ol>
-<p>接着调用<code>created、mounted</code>等等</p>
-<hr>
-<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>前端</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>团队和技术建设的方法论</title>
     <url>/posts/917299999.html</url>
     <content><![CDATA[<html><head></head><body><h2 id="制定规范、规矩"><a href="#制定规范、规矩" class="headerlink" title="制定规范、规矩"></a>制定规范、规矩</h2><p>似乎总是从新人对接开始说事，这事整的，好像每个公司人员流动性都很大，带来的问题也已经从侧面说明了。团队总是具有不稳定性，团队要继续高速前行势必需要早做准备，需要做一些不依赖人员的东西、跟团队业务发展相关的东西，这也仅仅是制定规范的好处之一，更多的还是为了更好、更舒服的工作。</p>
@@ -4845,6 +4771,80 @@
       <tags>
         <tag>前端基建</tag>
         <tag>技术条线</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>多路由复用页面组件问题</title>
+    <url>/posts/3277520678.html</url>
+    <content><![CDATA[<html><head></head><body><hr>
+<h2 id="theme-channing-cyan"><a href="#theme-channing-cyan" class="headerlink" title="theme: channing-cyan"></a>theme: channing-cyan</h2><p>携手创作，共同成长！这是我参与「掘金日新计划 · 8 月更文挑战」的第20天，<a href="https://juejin.cn/post/7123120819437322247" title="https://juejin.cn/post/7123120819437322247">点击查看活动详情</a></p>
+<blockquote>
+<p>本文围绕 <code>Vue Router</code> 中路由组件复用问题展开</p>
+</blockquote>
+<h2 id="场景复现"><a href="#场景复现" class="headerlink" title="场景复现"></a>场景复现</h2><p>项目中经常会遇到<code>增改查</code>的需求，通常采用不同的路由指向同一个页面组件，以此到达复用页面的功能，但是复用页面存在一些状态问题。</p>
+<p><strong>以下情况均不缓存页面：</strong></p>
+<p>分两种情况，均为动态路由匹配</p>
+<ul>
+<li><p>(1) 路由a: <code>/detail/1</code>， 路由b: <code>/detail/2</code> 。   路由表里匹配<code>/detail/:id</code></p>
+</li>
+<li><p>(2) 路由A: <code>/new-detail/1</code>， 路由B: <code>/edit-detail/1</code> 。 路由表里匹配<code>/new-detail/:id</code>， 和  <code>/edit-detail/:id</code></p>
+</li>
+</ul>
+<p><em>这四个不同的url，注册的是同一个页面组件</em></p>
+<p>在场景（1）中，切换页面，只调用<code>beforeRouteUpdate</code>钩子函数，不调用<code>beforeRouteEnter、mounted</code>等，可以监听到<code>$route</code>，并获取到激活组件里面的数据，不会错乱</p>
+<p>在场景（2）中，切换页面，调用<code>beforeRouteEnter</code>钩子函数，不调用<code>created、mounted</code>等生命周期钩子</p>
+<h2 id="beforeRouteUpdate重用的组件官方解释（指的是动态路由匹配）"><a href="#beforeRouteUpdate重用的组件官方解释（指的是动态路由匹配）" class="headerlink" title="beforeRouteUpdate重用的组件官方解释（指的是动态路由匹配）"></a>beforeRouteUpdate重用的组件官方解释（指的是动态路由匹配）</h2><p>在当前路由改变，但是该组件被复用时调用，举例来说，对于一个带有动态参数的路径 <code>/foo/:id</code>，在 <code>/foo/1</code> 和 <code>/foo/2</code> 之间跳转的时候</p>
+<h2 id="动态路由匹配"><a href="#动态路由匹配" class="headerlink" title="动态路由匹配"></a>动态路由匹配</h2><p>文档请看<a href="https://router.vuejs.org/zh/guide/essentials/dynamic-matching.html">这里</a></p>
+<h3 id="响应路由参数的变化"><a href="#响应路由参数的变化" class="headerlink" title="响应路由参数的变化"></a>响应路由参数的变化</h3><p>当使用路由参数时，例如从 <code>/user/foo</code> 导航到 <code>/user/bar</code>，原来的组件实例会被复用。因为两个路由都渲染同个组件，比起销毁再创建，复用则显得更加高效。不过，这也意味着组件的生命周期钩子不会再被调用。</p>
+<p>复用组件时，想对路由参数的变化作出响应的话，有两种方法</p>
+<ol>
+<li><p><em>watch (监测变化) $route 对象</em></p>
+</li>
+<li><p><em>使用 2.2 中引入的 beforeRouteUpdate 导航守卫</em></p>
+</li>
+</ol>
+<p>使用<code>beforeRouteUpdate</code>的时候，如果路由里面通过<a href="https://router.vuejs.org/zh/guide/essentials/passing-props.html#%E5%B8%83%E5%B0%94%E6%A8%A1%E5%BC%8F">布尔模式</a>：<code>props: true</code> <em>将组件和路由解耦</em>，这个时候会出现<code>props</code>获取错误的情况，比方说从<code>/foo/1</code>页面切换到<code>/foo/2</code>页面的时候，在<code>beforeRouteUpdate</code>获取到的还是失活页面组件的id</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184d5416f2c2beb1de9bfd.png" alt="image.png"></p>
+<blockquote>
+<p><em>在<code>beforeRouteUpdate</code>钩子中，在<code>next</code>回调函数中编写代码并没有执行，仿佛没有调用，但是去掉<code>next()</code>，路由就不会放行，有点奇怪。需要阅读源码实现逻辑…</em></p>
+</blockquote>
+<h2 id="完整的导航解析流程"><a href="#完整的导航解析流程" class="headerlink" title="完整的导航解析流程"></a>完整的导航解析流程</h2><ol>
+<li><p>导航被触发</p>
+</li>
+<li><p>beforeRouteLeave（失活组件里调用） 可以访问组件实例 <code>this</code></p>
+</li>
+<li><p>beforeEach（全局前置钩子）</p>
+</li>
+<li><p>beforeRouteUpdate（如果是重用组件，则调用） 可以访问组件实例 <code>this</code></p>
+</li>
+<li><p>beforeEnter（路由配置里，路由独享的）</p>
+</li>
+<li><p>解析异步路由组件（如果有）</p>
+</li>
+<li><p>beforeRouteEnter（被激活组件里调用）</p>
+</li>
+<li><p>beforeResolve（全局解析守卫）</p>
+</li>
+<li><p>导航被确认</p>
+</li>
+<li><p>afterEach（全局后置钩子）</p>
+</li>
+<li><p>触发 DOM 更新。</p>
+</li>
+<li><p><em>beforeRouteEnter （调用守卫中传给 next 的回调函数，创建好的组件实例会作为回调函数的参数传入。next(vm) =&gt; {}）</em></p>
+</li>
+</ol>
+<p>接着调用<code>created、mounted</code>等等</p>
+<hr>
+<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>前端</tag>
       </tags>
   </entry>
   <entry>
