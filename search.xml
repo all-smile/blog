@@ -2799,6 +2799,54 @@
       </tags>
   </entry>
   <entry>
+    <title>Jenkins pipeline对接新节点</title>
+    <url>/posts/3226602976.html</url>
+    <content><![CDATA[<html><head></head><body><h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>最近开发过程中部署新的节点，由于pipeline（流水线）中没有相关配置，所以需要新增参数、脚本以及ssh免密登录配置</p>
+<blockquote>
+<p>Jenkins流水线采用参数化构建，主要两个参数，一个是分支名： <code>branch</code>，一个是部署环境（也就是节点ip）： <code>buildENV</code></p>
+</blockquote>
+<h1 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h1><h2 id="1、新增节点参数"><a href="#1、新增节点参数" class="headerlink" title="1、新增节点参数"></a>1、新增节点参数</h2><p>参数化构建中新增主机ip选项到<code>buildENV</code>参数中</p>
+<h2 id="2、修改流水线脚本"><a href="#2、修改流水线脚本" class="headerlink" title="2、修改流水线脚本"></a>2、修改流水线脚本</h2><p>复制原有节点的脚本，修改即可</p>
+<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line">node(<span class="string">"master"</span>) {</span><br><span class="line">    withEnv([<span class="string">'PATH+bin=/home/xiao/node-v10.15.3-linux-x64/bin/bin:/usr/local/bin:/usr/bin/:/bin'</span>]) {</span><br><span class="line">        stage(<span class="string">"拉取代码"</span>){</span><br><span class="line">            <span class="built_in">echo</span>  <span class="string">"WORKSPACE:<span class="variable">${WORKSPACE}</span>"</span></span><br><span class="line">            <span class="built_in">echo</span>  <span class="string">"JENKINS_HOME:<span class="variable">${JENKINS_HOME}</span>"</span></span><br><span class="line">            <span class="built_in">echo</span>  <span class="string">"JOB_NAME:<span class="variable">${JOB_NAME}</span>"</span></span><br><span class="line">            <span class="built_in">echo</span>  <span class="string">"WORKSPACE_TMP:<span class="variable">${WORKSPACE_TMP}</span>"</span></span><br><span class="line">            <span class="built_in">echo</span>  <span class="string">"WORKSPACE:<span class="variable">${WORKSPACE}</span>"</span></span><br><span class="line">            checkout(</span><br><span class="line">                [</span><br><span class="line">                  <span class="variable">$class</span>: <span class="string">'GitSCM'</span>,</span><br><span class="line">                  branches: [[name: <span class="string">"*/<span class="variable">${branch}</span>"</span>]],</span><br><span class="line">                  doGenerateSubmoduleConfigurations: <span class="literal">false</span>,</span><br><span class="line">                  extensions: [],</span><br><span class="line">                  submoduleCfg: [],</span><br><span class="line">                  userRemoteConfigs: [</span><br><span class="line">                      [url: <span class="string">'ssh://git@xx.xx/projectName.git'</span>]</span><br><span class="line">                  ]</span><br><span class="line">                ]</span><br><span class="line">            )</span><br><span class="line">        }</span><br><span class="line">        stage(<span class="string">"代码编译"</span>){</span><br><span class="line">            sh <span class="string">"npm run build"</span></span><br><span class="line">        }</span><br><span class="line">        stage(<span class="string">"代码发布"</span>){</span><br><span class="line">            def machine</span><br><span class="line">            def IP</span><br><span class="line">            <span class="keyword">if</span> (env.buildENV == <span class="string">"11.11.11.11"</span>) {</span><br><span class="line">                machine = <span class="string">"xiao@11.11.11.11"</span></span><br><span class="line">                IP = <span class="string">"11.11.11.11"</span></span><br><span class="line">                def path = <span class="string">"/opt/web/tengine/data"</span></span><br><span class="line"></span><br><span class="line">                sh <span class="string">"ssh <span class="variable">${IP}</span> \"cd <span class="variable">${path}</span> &amp;&amp; rm -rf dist_bak &amp;&amp; mv dist dist_bak\""</span></span><br><span class="line">                sh <span class="string">"scp -r <span class="variable">${WORKSPACE}</span>/dist <span class="variable">${machine}</span>:<span class="variable">${path}</span>"</span></span><br><span class="line">                sh <span class="string">"ssh <span class="variable">${IP}</span> \"cd <span class="variable">${path}</span> &amp;&amp; sh replace.sh\""</span></span><br><span class="line">            } <span class="keyword">else</span> <span class="keyword">if</span> (env.buildENV == <span class="string">"22.22.22.22"</span>) {</span><br><span class="line">                // 新节点配置参考</span><br><span class="line">                machine = <span class="string">"xiao@22.22.22.22"</span></span><br><span class="line">                IP = <span class="string">"22.22.22.22"</span></span><br><span class="line">                def path = <span class="string">"/opt/web/tengine/data"</span></span><br><span class="line"></span><br><span class="line">                sh <span class="string">"ssh <span class="variable">${IP}</span> \"cd <span class="variable">${path}</span> &amp;&amp; rm -rf dist_bak &amp;&amp; mv dist dist_bak\""</span></span><br><span class="line">                sh <span class="string">"scp -r <span class="variable">${WORKSPACE}</span>/dist <span class="variable">${machine}</span>:<span class="variable">${path}</span>"</span></span><br><span class="line">                sh <span class="string">"ssh <span class="variable">${IP}</span> \"cd <span class="variable">${path}</span> &amp;&amp; sh replace.sh\""</span></span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>更多配置请参考：<a href="https://www.jenkins.io/doc/pipeline/steps/ssh-steps/">Jenkins CD SSH Pipeline</a></p>
+<h2 id="3、新增节点的ssh免密登录配置"><a href="#3、新增节点的ssh免密登录配置" class="headerlink" title="3、新增节点的ssh免密登录配置"></a>3、新增节点的ssh免密登录配置</h2><p><strong>最关键的一步</strong>，主要用于在执行 <code>pipeline</code> 脚本过程中，能够使用<code>ssh</code>命令登录到目的主机上进行前端的一系列部署操作。</p>
+<h3 id="1-沿用老节点的配置，不用生成新的rsa公私钥"><a href="#1-沿用老节点的配置，不用生成新的rsa公私钥" class="headerlink" title="1. 沿用老节点的配置，不用生成新的rsa公私钥"></a>1. 沿用老节点的配置，不用生成新的rsa公私钥</h3><h3 id="2-把-id-rsa-pub-添加到-新主机的-ssh-authorized-keys文件里"><a href="#2-把-id-rsa-pub-添加到-新主机的-ssh-authorized-keys文件里" class="headerlink" title="2. 把 id_rsa.pub 添加到 新主机的 ~/.ssh/authorized_keys文件里"></a>2. 把 id_rsa.pub 添加到 新主机的 <code>~/.ssh/authorized_keys</code>文件里</h3><ol>
+<li><p>登录到 Jenkins 主机</p>
+</li>
+<li><p>配置ssh免密登录新主机</p>
+</li>
+</ol>
+<figure class="highlight llvm"><table><tbody><tr><td class="code"><pre><span class="line">cd ~/.ssh/</span><br><span class="line">ssh-copy-id -i id_rsa.pub u<span class="number">8</span><span class="title">@192</span>.<span class="keyword">x</span>.<span class="keyword">x</span>.<span class="keyword">x</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>输入主机密码后，即可在目的主机的 <code>~/.ssh/authorized_keys</code>文件里查看到 Jenkins 主机上的 <code>id_rsa.pub</code></p>
+<ol start="3">
+<li>重启Jenkins主机的 sshd 服务</li>
+</ol>
+<figure class="highlight maxima"><table><tbody><tr><td class="code"><pre><span class="line">sudo systemctl <span class="built_in">restart</span> sshd</span><br><span class="line"></span><br><span class="line">或者： sudo service sshd <span class="built_in">restart</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="4、触发Jenkins-构建"><a href="#4、触发Jenkins-构建" class="headerlink" title="4、触发Jenkins 构建"></a>4、触发Jenkins 构建</h2><p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/64dd77d3661c6c8e543b9cdc.jpg"></p>
+<h1 id="问题及Reference"><a href="#问题及Reference" class="headerlink" title="问题及Reference"></a>问题及Reference</h1><ol>
+<li><p>如果不是root用户，执行命令的时候可以在命令前加 <code>sudo</code></p>
+</li>
+<li><p><a href="https://blog.csdn.net/b_x_p/article/details/78534423">SSH无密钥登陆 与 配置公钥后仍需要输入密码的解决方案</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/mhl1003/p/9442898.html">Linux主机之间ssh免密登录配置方法</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/weixin_42480153/article/details/104788790">使用sshpass命令来进行明文免密登录</a></p>
+</li>
+<li><p><a href="https://www.jianshu.com/p/f6990f3a52eb">使用代理服务器跳转连接远程Server</a></p>
+</li>
+</ol>
+</body></html>]]></content>
+      <categories>
+        <category>Jenkins</category>
+      </categories>
+      <tags>
+        <tag>Jenkins</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux操作系统学习（运维必会）</title>
     <url>/posts/1915044345.html</url>
     <content><![CDATA[<html><head></head><body><blockquote>
@@ -4557,6 +4605,80 @@
       </tags>
   </entry>
   <entry>
+    <title>多路由复用页面组件问题</title>
+    <url>/posts/3277520678.html</url>
+    <content><![CDATA[<html><head></head><body><hr>
+<h2 id="theme-channing-cyan"><a href="#theme-channing-cyan" class="headerlink" title="theme: channing-cyan"></a>theme: channing-cyan</h2><p>携手创作，共同成长！这是我参与「掘金日新计划 · 8 月更文挑战」的第20天，<a href="https://juejin.cn/post/7123120819437322247" title="https://juejin.cn/post/7123120819437322247">点击查看活动详情</a></p>
+<blockquote>
+<p>本文围绕 <code>Vue Router</code> 中路由组件复用问题展开</p>
+</blockquote>
+<h2 id="场景复现"><a href="#场景复现" class="headerlink" title="场景复现"></a>场景复现</h2><p>项目中经常会遇到<code>增改查</code>的需求，通常采用不同的路由指向同一个页面组件，以此到达复用页面的功能，但是复用页面存在一些状态问题。</p>
+<p><strong>以下情况均不缓存页面：</strong></p>
+<p>分两种情况，均为动态路由匹配</p>
+<ul>
+<li><p>(1) 路由a: <code>/detail/1</code>， 路由b: <code>/detail/2</code> 。   路由表里匹配<code>/detail/:id</code></p>
+</li>
+<li><p>(2) 路由A: <code>/new-detail/1</code>， 路由B: <code>/edit-detail/1</code> 。 路由表里匹配<code>/new-detail/:id</code>， 和  <code>/edit-detail/:id</code></p>
+</li>
+</ul>
+<p><em>这四个不同的url，注册的是同一个页面组件</em></p>
+<p>在场景（1）中，切换页面，只调用<code>beforeRouteUpdate</code>钩子函数，不调用<code>beforeRouteEnter、mounted</code>等，可以监听到<code>$route</code>，并获取到激活组件里面的数据，不会错乱</p>
+<p>在场景（2）中，切换页面，调用<code>beforeRouteEnter</code>钩子函数，不调用<code>created、mounted</code>等生命周期钩子</p>
+<h2 id="beforeRouteUpdate重用的组件官方解释（指的是动态路由匹配）"><a href="#beforeRouteUpdate重用的组件官方解释（指的是动态路由匹配）" class="headerlink" title="beforeRouteUpdate重用的组件官方解释（指的是动态路由匹配）"></a>beforeRouteUpdate重用的组件官方解释（指的是动态路由匹配）</h2><p>在当前路由改变，但是该组件被复用时调用，举例来说，对于一个带有动态参数的路径 <code>/foo/:id</code>，在 <code>/foo/1</code> 和 <code>/foo/2</code> 之间跳转的时候</p>
+<h2 id="动态路由匹配"><a href="#动态路由匹配" class="headerlink" title="动态路由匹配"></a>动态路由匹配</h2><p>文档请看<a href="https://router.vuejs.org/zh/guide/essentials/dynamic-matching.html">这里</a></p>
+<h3 id="响应路由参数的变化"><a href="#响应路由参数的变化" class="headerlink" title="响应路由参数的变化"></a>响应路由参数的变化</h3><p>当使用路由参数时，例如从 <code>/user/foo</code> 导航到 <code>/user/bar</code>，原来的组件实例会被复用。因为两个路由都渲染同个组件，比起销毁再创建，复用则显得更加高效。不过，这也意味着组件的生命周期钩子不会再被调用。</p>
+<p>复用组件时，想对路由参数的变化作出响应的话，有两种方法</p>
+<ol>
+<li><p><em>watch (监测变化) $route 对象</em></p>
+</li>
+<li><p><em>使用 2.2 中引入的 beforeRouteUpdate 导航守卫</em></p>
+</li>
+</ol>
+<p>使用<code>beforeRouteUpdate</code>的时候，如果路由里面通过<a href="https://router.vuejs.org/zh/guide/essentials/passing-props.html#%E5%B8%83%E5%B0%94%E6%A8%A1%E5%BC%8F">布尔模式</a>：<code>props: true</code> <em>将组件和路由解耦</em>，这个时候会出现<code>props</code>获取错误的情况，比方说从<code>/foo/1</code>页面切换到<code>/foo/2</code>页面的时候，在<code>beforeRouteUpdate</code>获取到的还是失活页面组件的id</p>
+<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184d5416f2c2beb1de9bfd.png" alt="image.png"></p>
+<blockquote>
+<p><em>在<code>beforeRouteUpdate</code>钩子中，在<code>next</code>回调函数中编写代码并没有执行，仿佛没有调用，但是去掉<code>next()</code>，路由就不会放行，有点奇怪。需要阅读源码实现逻辑…</em></p>
+</blockquote>
+<h2 id="完整的导航解析流程"><a href="#完整的导航解析流程" class="headerlink" title="完整的导航解析流程"></a>完整的导航解析流程</h2><ol>
+<li><p>导航被触发</p>
+</li>
+<li><p>beforeRouteLeave（失活组件里调用） 可以访问组件实例 <code>this</code></p>
+</li>
+<li><p>beforeEach（全局前置钩子）</p>
+</li>
+<li><p>beforeRouteUpdate（如果是重用组件，则调用） 可以访问组件实例 <code>this</code></p>
+</li>
+<li><p>beforeEnter（路由配置里，路由独享的）</p>
+</li>
+<li><p>解析异步路由组件（如果有）</p>
+</li>
+<li><p>beforeRouteEnter（被激活组件里调用）</p>
+</li>
+<li><p>beforeResolve（全局解析守卫）</p>
+</li>
+<li><p>导航被确认</p>
+</li>
+<li><p>afterEach（全局后置钩子）</p>
+</li>
+<li><p>触发 DOM 更新。</p>
+</li>
+<li><p><em>beforeRouteEnter （调用守卫中传给 next 的回调函数，创建好的组件实例会作为回调函数的参数传入。next(vm) =&gt; {}）</em></p>
+</li>
+</ol>
+<p>接着调用<code>created、mounted</code>等等</p>
+<hr>
+<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
+<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
+<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
+</body></html>]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>前端</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>团队和技术建设的方法论</title>
     <url>/posts/917299999.html</url>
     <content><![CDATA[<html><head></head><body><h2 id="制定规范、规矩"><a href="#制定规范、规矩" class="headerlink" title="制定规范、规矩"></a>制定规范、规矩</h2><p>似乎总是从新人对接开始说事，这事整的，好像每个公司人员流动性都很大，带来的问题也已经从侧面说明了。团队总是具有不稳定性，团队要继续高速前行势必需要早做准备，需要做一些不依赖人员的东西、跟团队业务发展相关的东西，这也仅仅是制定规范的好处之一，更多的还是为了更好、更舒服的工作。</p>
@@ -4771,80 +4893,6 @@
       <tags>
         <tag>前端基建</tag>
         <tag>技术条线</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>多路由复用页面组件问题</title>
-    <url>/posts/3277520678.html</url>
-    <content><![CDATA[<html><head></head><body><hr>
-<h2 id="theme-channing-cyan"><a href="#theme-channing-cyan" class="headerlink" title="theme: channing-cyan"></a>theme: channing-cyan</h2><p>携手创作，共同成长！这是我参与「掘金日新计划 · 8 月更文挑战」的第20天，<a href="https://juejin.cn/post/7123120819437322247" title="https://juejin.cn/post/7123120819437322247">点击查看活动详情</a></p>
-<blockquote>
-<p>本文围绕 <code>Vue Router</code> 中路由组件复用问题展开</p>
-</blockquote>
-<h2 id="场景复现"><a href="#场景复现" class="headerlink" title="场景复现"></a>场景复现</h2><p>项目中经常会遇到<code>增改查</code>的需求，通常采用不同的路由指向同一个页面组件，以此到达复用页面的功能，但是复用页面存在一些状态问题。</p>
-<p><strong>以下情况均不缓存页面：</strong></p>
-<p>分两种情况，均为动态路由匹配</p>
-<ul>
-<li><p>(1) 路由a: <code>/detail/1</code>， 路由b: <code>/detail/2</code> 。   路由表里匹配<code>/detail/:id</code></p>
-</li>
-<li><p>(2) 路由A: <code>/new-detail/1</code>， 路由B: <code>/edit-detail/1</code> 。 路由表里匹配<code>/new-detail/:id</code>， 和  <code>/edit-detail/:id</code></p>
-</li>
-</ul>
-<p><em>这四个不同的url，注册的是同一个页面组件</em></p>
-<p>在场景（1）中，切换页面，只调用<code>beforeRouteUpdate</code>钩子函数，不调用<code>beforeRouteEnter、mounted</code>等，可以监听到<code>$route</code>，并获取到激活组件里面的数据，不会错乱</p>
-<p>在场景（2）中，切换页面，调用<code>beforeRouteEnter</code>钩子函数，不调用<code>created、mounted</code>等生命周期钩子</p>
-<h2 id="beforeRouteUpdate重用的组件官方解释（指的是动态路由匹配）"><a href="#beforeRouteUpdate重用的组件官方解释（指的是动态路由匹配）" class="headerlink" title="beforeRouteUpdate重用的组件官方解释（指的是动态路由匹配）"></a>beforeRouteUpdate重用的组件官方解释（指的是动态路由匹配）</h2><p>在当前路由改变，但是该组件被复用时调用，举例来说，对于一个带有动态参数的路径 <code>/foo/:id</code>，在 <code>/foo/1</code> 和 <code>/foo/2</code> 之间跳转的时候</p>
-<h2 id="动态路由匹配"><a href="#动态路由匹配" class="headerlink" title="动态路由匹配"></a>动态路由匹配</h2><p>文档请看<a href="https://router.vuejs.org/zh/guide/essentials/dynamic-matching.html">这里</a></p>
-<h3 id="响应路由参数的变化"><a href="#响应路由参数的变化" class="headerlink" title="响应路由参数的变化"></a>响应路由参数的变化</h3><p>当使用路由参数时，例如从 <code>/user/foo</code> 导航到 <code>/user/bar</code>，原来的组件实例会被复用。因为两个路由都渲染同个组件，比起销毁再创建，复用则显得更加高效。不过，这也意味着组件的生命周期钩子不会再被调用。</p>
-<p>复用组件时，想对路由参数的变化作出响应的话，有两种方法</p>
-<ol>
-<li><p><em>watch (监测变化) $route 对象</em></p>
-</li>
-<li><p><em>使用 2.2 中引入的 beforeRouteUpdate 导航守卫</em></p>
-</li>
-</ol>
-<p>使用<code>beforeRouteUpdate</code>的时候，如果路由里面通过<a href="https://router.vuejs.org/zh/guide/essentials/passing-props.html#%E5%B8%83%E5%B0%94%E6%A8%A1%E5%BC%8F">布尔模式</a>：<code>props: true</code> <em>将组件和路由解耦</em>，这个时候会出现<code>props</code>获取错误的情况，比方说从<code>/foo/1</code>页面切换到<code>/foo/2</code>页面的时候，在<code>beforeRouteUpdate</code>获取到的还是失活页面组件的id</p>
-<p><img data-src="/images/base/loading03.svg" data-original="https://pic.imgdb.cn/item/63184d5416f2c2beb1de9bfd.png" alt="image.png"></p>
-<blockquote>
-<p><em>在<code>beforeRouteUpdate</code>钩子中，在<code>next</code>回调函数中编写代码并没有执行，仿佛没有调用，但是去掉<code>next()</code>，路由就不会放行，有点奇怪。需要阅读源码实现逻辑…</em></p>
-</blockquote>
-<h2 id="完整的导航解析流程"><a href="#完整的导航解析流程" class="headerlink" title="完整的导航解析流程"></a>完整的导航解析流程</h2><ol>
-<li><p>导航被触发</p>
-</li>
-<li><p>beforeRouteLeave（失活组件里调用） 可以访问组件实例 <code>this</code></p>
-</li>
-<li><p>beforeEach（全局前置钩子）</p>
-</li>
-<li><p>beforeRouteUpdate（如果是重用组件，则调用） 可以访问组件实例 <code>this</code></p>
-</li>
-<li><p>beforeEnter（路由配置里，路由独享的）</p>
-</li>
-<li><p>解析异步路由组件（如果有）</p>
-</li>
-<li><p>beforeRouteEnter（被激活组件里调用）</p>
-</li>
-<li><p>beforeResolve（全局解析守卫）</p>
-</li>
-<li><p>导航被确认</p>
-</li>
-<li><p>afterEach（全局后置钩子）</p>
-</li>
-<li><p>触发 DOM 更新。</p>
-</li>
-<li><p><em>beforeRouteEnter （调用守卫中传给 next 的回调函数，创建好的组件实例会作为回调函数的参数传入。next(vm) =&gt; {}）</em></p>
-</li>
-</ol>
-<p>接着调用<code>created、mounted</code>等等</p>
-<hr>
-<p>🌹 持续更文，关注我，你会发现一个踏实努力的宝藏前端😊，让我们一起学习，共同成长吧。</p>
-<p>🎉 喜欢的小伙伴记得点赞关注收藏哟，回看不迷路 😉</p>
-<p>🎁 欢迎大家评论交流, 蟹蟹😊</p>
-</body></html>]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>前端</tag>
       </tags>
   </entry>
   <entry>
